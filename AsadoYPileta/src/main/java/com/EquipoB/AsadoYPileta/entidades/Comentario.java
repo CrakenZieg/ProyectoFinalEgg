@@ -1,23 +1,24 @@
-
 package com.EquipoB.AsadoYPileta.entidades;
 
 import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
+import javax.persistence.OneToMany;
 import org.hibernate.annotations.GenericGenerator;
-
 
 @Entity
 public class Comentario {
+
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
-     private String comentario;
-     private ArrayList <Imagen> imagen;
-   
+    private String cuerpo;
+    @OneToMany
+    private List<Imagen> imagenes;
+
     public Comentario() {
     }
 
@@ -29,21 +30,20 @@ public class Comentario {
         this.id = id;
     }
 
-    public String getComentario() {
-        return comentario;
+    public String getCuerpo() {
+        return cuerpo;
     }
 
-    public void setComentario(String comentario) {
-        this.comentario = comentario;
+    public void setCuerpo(String cuerpo) {
+        this.cuerpo = cuerpo;
     }
 
-    public ArrayList<Imagen> getImagen() {
-        return imagen;
+    public List<Imagen> getImagenes() {
+        return imagenes;
     }
 
-    public void setImagen(ArrayList<Imagen> imagen) {
-        this.imagen = imagen;
+    public void setImagenes(List<Imagen> imagenes) {
+        this.imagenes = imagenes;
     }
 
- 
 }
