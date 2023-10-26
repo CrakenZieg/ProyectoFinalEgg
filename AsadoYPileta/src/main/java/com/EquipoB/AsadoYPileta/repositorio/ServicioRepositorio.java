@@ -1,5 +1,5 @@
 
-package com.EquipoB.AsadoYPileta.repositorios;
+package com.EquipoB.AsadoYPileta.repositorio;
 
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
 import java.util.List;
