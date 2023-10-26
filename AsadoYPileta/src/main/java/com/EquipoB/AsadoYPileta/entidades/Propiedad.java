@@ -1,6 +1,7 @@
 
 package com.EquipoB.AsadoYPileta.entidades;
 
+import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
