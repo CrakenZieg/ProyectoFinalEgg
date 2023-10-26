@@ -1,8 +1,7 @@
 
 package com.EquipoB.AsadoYPileta.entidades;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -23,12 +22,12 @@ public class Reserva {
     private String mensaje;
     
     @Temporal(TemporalType.DATE)
-    private LocalDate fechaInicio;
+    private Date fechaInicio;
     @Temporal(TemporalType.DATE)
-    private LocalDate fechaFin;
+    private Date fechaFin;
    
     
-    private List <Servicio>serviciosElegidas;
+    //private List<Servicio>serviciosElegidas;
     private Double montoTotal;
     private Boolean disponible;
     
