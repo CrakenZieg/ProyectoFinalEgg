@@ -24,7 +24,7 @@ public class Propiedad {
     private String ubicacion;
     private String direccion;
     @Enumerated(EnumType.STRING)
-    private Tipo tipo;
+    private TipoPropiedad tipo;
     @ManyToOne
     private List<Servicio> servicios;
     private Double valor;
