@@ -25,15 +25,14 @@ public class Propiedad {
     private String ubicacion;
     private String direccion;
     @Enumerated(EnumType.STRING)
-    private TipoPropiedad tipo;    
+    private TipoPropiedad tipo;   
+    private Double valor;
+    @OneToMany
     private List<Servicio> servicios;
     @OneToMany
     private List<Imagen> imagenes;
-    private Double valor;
     @OneToMany
     private List<Reserva> reservas;
+    @OneToMany
     private List<Comentario> comentarios;
-    
-    
-    
 }
