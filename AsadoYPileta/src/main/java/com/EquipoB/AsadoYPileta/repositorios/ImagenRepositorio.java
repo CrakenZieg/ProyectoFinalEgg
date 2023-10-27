@@ -1,9 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.EquipoB.AsadoYPileta.repositorio;
+
+package com.EquipoB.AsadoYPileta.repositorios;
 
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import org.springframework.data.jpa.repository.JpaRepository;
