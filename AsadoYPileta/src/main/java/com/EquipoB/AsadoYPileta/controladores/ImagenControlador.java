@@ -9,7 +9,8 @@ package com.EquipoB.AsadoYPileta.controladores;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.servicios.ImagenServicio;
-import java.util.ArrayList;
+import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
+import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -30,19 +31,17 @@ import org.springframework.stereotype.Controller;
 @Controller
 @RequestMapping("/imagen")
 public class ImagenControlador {
-     //@Autowired
-    //private PropiedadServicio propiedadServicio;
-    //@Autowired
-    //private UsuarioServicio usuarioServicio;
-     @Autowired
-    private ImagenServicio imagenServicio;
+
+    @Autowired
+    private PropiedadServicio propiedadServicio;
+    @Autowired
+    private UsuarioServicio usuarioServicio;
     
     
-    @GetMapping("/propiedad/{id}/{id}") //<a><img th:if="${propiedad.imagen != null}" th:src="@{/imagen/propiedad/__${propiedad.id}__}/__${imagen.id}__}"></a>
-    public ResponseEntity <byte[]> imagenPropiedad(@PathVariable String id){
-        Imagen imagen = imagenServicio.getOne(id);
-        
-        byte[] imagen1= imagen.getContenido();
+    @GetMapping("/propiedad/{id}")
+    public ResponseEntity<byte[]> imagenPropiedad(@PathVariable String id){
+        Propiedad propiedad= propiedadServicio.getOne(id);
+        byte[] imagen=propiedad.getImagenes().getContenido();
         HttpHeaders headers =new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
         

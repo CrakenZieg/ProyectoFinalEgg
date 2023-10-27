@@ -19,7 +19,7 @@ public enum TipoPropiedad {
         this.tipo = tipo;
     }
     
-    public String tipo(){
-        return this.tipo;
+    public String getTipo(){
+        return tipo;
     }
 }
