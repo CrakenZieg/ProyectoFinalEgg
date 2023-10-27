@@ -22,6 +22,8 @@ public class Reserva {
     private String id;
    
     private String mensaje;
+    private Double montoTotal;
+    private Boolean disponible;
     
     @Temporal(TemporalType.DATE)
     private Date fechaInicio;
@@ -29,9 +31,6 @@ public class Reserva {
     private Date fechaFin;
    
     @OneToMany
-    private List<Servicio>serviciosElegidas;
-    private Double montoTotal;
-    private Boolean disponible;
-    
+    private List<Servicio>serviciosElegidas;    
     
 }
