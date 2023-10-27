@@ -7,9 +7,10 @@ package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.Comentario;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
+import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.ComentarioRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.ImagenRepositorio;
-import com.egg.news.excepciones.MiException;
+
 import java.util.ArrayList;
 
 import java.util.List;
