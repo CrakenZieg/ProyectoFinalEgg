@@ -6,7 +6,11 @@
 
 package com.EquipoB.AsadoYPileta.controladores;
 
+import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
+import com.EquipoB.AsadoYPileta.servicios.ImagenServicio;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,16 +34,36 @@ public class ImagenControlador {
     //private PropiedadServicio propiedadServicio;
     //@Autowired
     //private UsuarioServicio usuarioServicio;
+     @Autowired
+    private ImagenServicio imagenServicio;
     
     
-    @GetMapping("/propiedad/{id}")
+    @GetMapping("/propiedad/{id}/{id}") //<a><img th:if="${propiedad.imagen != null}" th:src="@{/imagen/propiedad/__${propiedad.id}__}/__${imagen.id}__}"></a>
     public ResponseEntity <byte[]> imagenPropiedad(@PathVariable String id){
-        Propiedad propiedad= propiedadServicio.getOne(id);
-        byte[] imagen=propiedad.getImagen().getContenido();
+        Imagen imagen = imagenServicio.getOne(id);
+        
+        byte[] imagen1= imagen.getContenido();
         HttpHeaders headers =new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
         
-        return new ResponseEntity <>(imagen,headers,HttpStatus.OK);
+        return new ResponseEntity <>(imagen1,headers,HttpStatus.OK);
+    }
+    
+    
+    @GetMapping("/propiedad/{id}") //<a><img th:if="${propiedad.imagen != null}" th:src="@{/imagen/propiedad/__${propiedad.id}__}/__${imagen.id}__}"></a>
+    public ResponseEntity <ArrayList<byte[]>> imagenesPropiedad(@PathVariable String id){
+        Propiedad propiedad = propiedadServicio.getOne(id);
+        List<Imagen> imagenes = propiedad.getImagenes();
+        ArrayList<byte[]> cont =new ArrayList();
+        for (Imagen imag : imagenes) {
+            byte[] imagen1= imag.getContenido();
+            cont.add(imagen1);
+        }
+       
+        HttpHeaders headers =new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        
+        return new ResponseEntity <>(cont,headers,HttpStatus.OK);
     }
     
     @GetMapping("/perfil/{id}")
