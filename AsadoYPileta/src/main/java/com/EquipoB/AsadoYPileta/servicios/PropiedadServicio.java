@@ -8,6 +8,7 @@ import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
 import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
+import com.EquipoB.AsadoYPileta.repositorio.PropiedadRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
@@ -53,7 +54,7 @@ public class PropiedadServicio {
     
     List<Propiedad> propiedades = new ArrayList();
     
-    return propiedadRepositorio.finAll();
+    return propiedadRepositorio.findAll();
     
     }
     
