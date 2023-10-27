@@ -4,8 +4,10 @@ package com.EquipoB.AsadoYPileta.servicios;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.repositorio.ImagenRepositorio;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -17,6 +19,7 @@ public class ImagenServicio {
      @Autowired
     private ImagenRepositorio imagenRepositorio;
     
+     @Transactional
     public Imagen guardar (MultipartFile archivo) throws Exception{
         if(archivo != null){
             try{
@@ -31,7 +34,7 @@ public class ImagenServicio {
         }
         return null;
     }
-    
+    @Transactional
     public Imagen actualizar (MultipartFile archivo, String id) throws Exception{
           if(archivo != null){
             try{
@@ -55,4 +58,14 @@ public class ImagenServicio {
         }
         return null;
     }
+   @Transactional(readOnly = true)
+    public Imagen getOne(String id) {
+
+        return imagenRepositorio.getOne(id);
+    
+    }
+    
+  
+    
+    
 }
