@@ -8,7 +8,7 @@ import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
 import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
-import com.EquipoB.AsadoYPileta.repositorio.PropiedadRepositorio;
+import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
@@ -58,8 +58,9 @@ public class PropiedadServicio {
     
     }
     
-    
-    
+    public Propiedad getOne(String id){
+       return propiedadRepositorio.getOne(id);
+    }    
     
     public void validar(String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo,
        List<Servicio> servicios, List<Imagen> imagenes, Double valor, List<Reserva> reservas, List<Comentario> comentarios) throws MiException{

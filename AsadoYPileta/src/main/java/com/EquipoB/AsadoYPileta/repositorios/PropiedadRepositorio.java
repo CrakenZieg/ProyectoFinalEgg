@@ -1,5 +1,5 @@
 
-package com.EquipoB.AsadoYPileta.repositorio;
+package com.EquipoB.AsadoYPileta.repositorios;
 
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
