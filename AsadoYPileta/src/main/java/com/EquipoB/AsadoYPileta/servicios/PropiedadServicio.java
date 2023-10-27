@@ -10,6 +10,7 @@ import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,55 @@ public class PropiedadServicio {
     List<Propiedad> propiedades = new ArrayList();
     
     return propiedadRepositorio.finAll();
+    
+    }
+    
+    @Transactional
+    public void modificarPropiedad(String id, String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo,
+     List<Servicio> servicios, List<Imagen> imagenes, Double valor, List<Reserva> reservas, List<Comentario> comentario) throws MiException{
+    
+        validar(titulo, descripcion,  ubicacion,  direccion,  tipo, servicios, imagenes, valor, reservas, comentario);
+    
+         Optional<Propiedad> respuesta = propiedadRepositorio.findById(id);
+        
+        if (respuesta.isPresent()) {
+            
+            Propiedad propiedad = respuesta.get();
+            
+            propiedad.setTitulo(titulo);
+            propiedad.setDescripcion(descripcion);
+            propiedad.setUbicacion(ubicacion);
+            propiedad.setDireccion(direccion);
+            propiedad.setTipo(tipo);
+            propiedad.setServicios(servicios);
+            propiedad.setImagenes(imagenes);
+            propiedad.setValor(valor);
+            propiedad.setReservas(reservas);
+            propiedad.setComentarios(comentario);
+            
+        }
+        
+    }
+    
+    
+    @Transactional
+    public void eliminarPropiedad(String id, String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo,
+     List<Servicio> servicios, List<Imagen> imagenes, Double valor, List<Reserva> reservas, List<Comentario> comentario) throws MiException{
+    
+        try {
+            validar(titulo, descripcion,  ubicacion,  direccion,  tipo, servicios, imagenes, valor, reservas, comentario);
+            propiedadRepositorio.deleteById(id);
+            
+        } catch (MiException ex) {
+            ex.getMessage();
+        }
+    
+    }
+    
+    
+    public Propiedad getOne(String id) {
+
+        return propiedadRepositorio.getOne(id);
     
     }
     
