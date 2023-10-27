@@ -3,7 +3,7 @@ package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
-import com.EquipoB.AsadoYPileta.repositorio.ServicioRepositorio;
+import com.EquipoB.AsadoYPileta.repositorios.ServicioRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
