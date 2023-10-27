@@ -2,9 +2,11 @@
 package com.EquipoB.AsadoYPileta.entidades;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
@@ -26,8 +28,8 @@ public class Reserva {
     @Temporal(TemporalType.DATE)
     private Date fechaFin;
    
-    
-    //private List<Servicio>serviciosElegidas;
+    @OneToMany
+    private List<Servicio>serviciosElegidas;
     private Double montoTotal;
     private Boolean disponible;
     
