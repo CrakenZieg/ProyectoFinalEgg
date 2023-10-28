@@ -14,7 +14,6 @@ public interface ServicioRepositorio extends JpaRepository<Servicio, String> {
     @Query("SELECT s FROM Servicio s WHERE s.tipoComodidad = :tipoComodidad")
     public Servicio buscarPorTipoServicio(@Param("tipoComodidad") String tipoComodidad);
     
-    @Query("SELECT l FROM Libro l WHERE l.autor.nombre = :nombre")
-    public List<Servicio> buscarPorAutor(@Param("nombre") String nombre);
+ 
     
 }

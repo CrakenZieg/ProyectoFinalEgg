@@ -1,11 +1,222 @@
-
 *{
     box-sizing: border-box;
-    padding: 0;
+    padding:0;
     margin:0;
 }
 
+  
+  .navbar {
+    display: flex;
+    flex-direction: row;
+    padding: 1.3rem;
+    background-color: rgba(0, 0, 0, 0.1);
+    justify-content: space-between;
+    align-items: center;
+  
+  }
+  
+  #icon {
+    display: absolute;
+    left:.8px;
+    height: 50px;
+  }
+  #icon img{
+    height: 100%;
+    width:100%;
+  }
+  
+  #links  {
+    display: flex;
+    flex-direction: row;
+    
+    align-items: center;
+  }
+  #links li {
+    background-color: #f0e3c0;
+    margin-left: 1.4rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size: 1.4rem;
+    border: 1.1rem #7a7a80;
+    border-radius: 17%;
+    list-style: none;
+    box-shadow: 0 1px 1px #7a7a80;
+  }
+  
+  #links li a {
+    font-size: 1.4rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: #222222;
+  }
+  
+  #btn {
+    cursor: pointer;
+    height: 40px;
+    background-color: #222222;
+    color: aliceblue;
+    margin-left:20px;
+    padding: 10px 15px;
+    font-weight: bold;
+    border: 1.4px solid #222222;
+    border-radius: 17%;
+    box-shadow: 0 6px 6px #222222;
+  }
+  #menu{
+    display:none;
+    position: absolute;
+    right:0.8rem;
+    top:2rem;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+  }
+  
+  #menu .barra {
+    
+    height:10px;
+    width: 100%;
+    background-color: #222222;
+    border-radius:12px;
+    margin-top: 2px;
+  }
+  
+  
+  #links li:hover {
+    background-color: white;
+  }
+  
+  #icon:hover {
+    transform: scale(1.2);
+  }
+  
+  #btn:hover {
+    background-color: aliceblue;
+    color: #222222;
+  }
+  
+  
+  
+  
+  
 
+
+
+/* login*/
+.login-contenedor{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    background-color: #050505
+    ;
+    justify-content: center;
+    
+
+}
+
+.login{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:flex-start;
+    height:400px;
+    width: 450px;
+    padding: 1.2rem;
+    background-color: #d1d1d1;
+    border: 1px solid #222222;
+    border-radius: .5rem;
+    box-shadow: 6px 8px 10px  #222222;
+
+}
+
+
+
+
+.login-contenedor h2{
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: beige;
+
+}
+
+.login-form{
+
+    display: flex;
+    position: relative;
+    top:40px;
+    height: 200px;
+    width: 300px;
+    align-items: center;
+    justify-content: center; 
+}
+
+.login-form form{
+    display: flex;
+    flex-direction: column;
+    padding:1.3rem;
+    margin: 10px;
+    align-items: center;
+}
+
+.login-form input {
+
+    height: 20px;
+    width:350px ;
+    padding: 1.2rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    border: 2px solid #646566;
+    border-radius: 0 14px 13px ;
+    background-color: rgba(0,0,0,0.5);
+    color: lightgreen;
+    box-shadow: 0 2px 2px #222222;
+}
+
+.login-form input::placeholder{
+    color: white;
+    font-size: 1rem;
+
+}
+
+.login-form input:hover{
+    border: 3.5px solid lightgreen;
+}
+
+.login-form button {
+
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #646566;
+    height: 50px;
+    width: 80px;
+    margin: 0.9rem;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-right: 16px;
+    padding-left: 12px;
+    border-radius: 20px;
+    background-color: aliceblue;
+    box-shadow: 0 1px 1px white;
+}
+
+.login-form button:hover{
+    transform: scale(1.1) rotate(0.3deg);
+    background-color: #646566;
+    color: aliceblue;
+    box-shadow: 0 2px 2px #222222;
+    cursor:pointer;
+}
+
+
+/*   Contenedor de cartas*/
 .contenedor{
 
 
@@ -21,7 +232,7 @@
     display: flex;
     flex-direction: column;
     float:left;
-    height: auto;
+    height: 400px;
     width: 350px;
     background-color: #222222;
     padding:.75rem;
@@ -49,7 +260,7 @@
     color:wheat;
     margin-bottom: .5rem;
 }
-.btn{
+.bton{
     
     height: auto;
     width: 90px;
@@ -58,6 +269,7 @@
     padding-right: .5rem;
     padding-left: .5rem;
     font-size: 1.1rem;
+    text-decoration: none;
     text-align: center;
     color:aliceblue;
     cursor:pointer;
