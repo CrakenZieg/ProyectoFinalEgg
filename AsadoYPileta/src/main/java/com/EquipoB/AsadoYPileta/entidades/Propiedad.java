@@ -8,7 +8,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -26,12 +25,14 @@ public class Propiedad {
     private String ubicacion;
     private String direccion;
     @Enumerated(EnumType.STRING)
-    private TipoPropiedad tipo;    
-    //private List<Servicio> servicios;
-    @OneToMany
-    private List<Imagen> imagenes;
+    private TipoPropiedad tipo;   
     private Double valor;
     @OneToMany
+    private List<Servicio> servicios;
+    @OneToMany
+    private List<Imagen> imagenes;
+    @OneToMany
     private List<Reserva> reservas;
-    //private List<Comentario> comentarioervas;
+    @OneToMany
+    private List<Comentario> comentarios;
 }
