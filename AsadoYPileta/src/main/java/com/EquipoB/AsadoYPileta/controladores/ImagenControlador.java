@@ -45,7 +45,7 @@ public class ImagenControlador {
     private ImagenServicio imagenServicio;
     
     
-    @GetMapping("/propiedad/{id}/{id}") //<a><img th:if="${propiedad.imagen != null}" th:src="@{/imagen/propiedad/__${propiedad.id}__}/__${imagen.id}__}"></a>
+    @GetMapping("/propiedad/{id}")//<a th:if="${propiedad.imagenes != null}" th:each="imagen : ${propiedad.imagenes}"><img th:src="@{/imagen/propiedad/__${imagen.id}__}"></a>
     public ResponseEntity <byte[]> imagenPropiedad(@PathVariable String id){
         Imagen imagen = imagenServicio.getOne(id);
         
@@ -56,41 +56,31 @@ public class ImagenControlador {
         return new ResponseEntity <>(imagen1,headers,HttpStatus.OK);
     }
     
+//    @GetMapping("/propiedad/{id}")
+//    public ResponseEntity <ArrayList<byte[]>> imagenesPropiedad(@PathVariable String id){
+//        Propiedad propiedad = propiedadServicio.getOne(id);
+//        List<Imagen> imagenes = propiedad.getImagenes();
+//        ArrayList<byte[]> cont =new ArrayList();
+//        for (Imagen imag : imagenes) {
+//            byte[] imagen1= imag.getContenido();
+//            cont.add(imagen1);
+//        }
+//       
+//        HttpHeaders headers =new HttpHeaders();
+//        headers.setContentType(MediaType.IMAGE_JPEG);
+//        
+//        return new ResponseEntity <>(cont,headers,HttpStatus.OK);
+//    }
     
-    @GetMapping("/propiedad/{id}") //<a><img th:if="${propiedad.imagen != null}" th:src="@{/imagen/propiedad/__${propiedad.id}__}/__${imagen.id}__}"></a>
-    public ResponseEntity <ArrayList<byte[]>> imagenesPropiedad(@PathVariable String id){
-        Propiedad propiedad = propiedadServicio.getOne(id);
-        List<Imagen> imagenes = propiedad.getImagenes();
-        ArrayList<byte[]> cont =new ArrayList();
-        for (Imagen imag : imagenes) {
-            byte[] imagen1= imag.getContenido();
-            cont.add(imagen1);
-        }
-       
-        HttpHeaders headers =new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);
-        
-        return new ResponseEntity <>(cont,headers,HttpStatus.OK);
-    }
-    
-    @GetMapping("/perfil/{id}")
-    public ResponseEntity <byte[]> imagenUsuario(@PathVariable String id){
-        Usuario usuario= usuarioServicio.getOne(id);
-        byte[] imagen=usuario.getImagen().getContenido();
-        HttpHeaders headers =new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);
-        
-        return new ResponseEntity <>(imagen,headers,HttpStatus.OK);
-    }
-    
-//    @GetMapping("/comentario/{id}")
-//    public ResponseEntity <byte[]> imagenComentario(@PathVariable String id){
-//        Comentario comentario= comentarioServicio.getOne(id);
+//    @GetMapping("/perfil/{id}")
+//    public ResponseEntity <byte[]> imagenUsuario(@PathVariable String id){
+//        Usuario usuario= usuarioServicio.getOne(id);
 //        byte[] imagen=usuario.getImagen().getContenido();
 //        HttpHeaders headers =new HttpHeaders();
 //        headers.setContentType(MediaType.IMAGE_JPEG);
 //        
 //        return new ResponseEntity <>(imagen,headers,HttpStatus.OK);
-//        
 //    }
+//    
+
 }
