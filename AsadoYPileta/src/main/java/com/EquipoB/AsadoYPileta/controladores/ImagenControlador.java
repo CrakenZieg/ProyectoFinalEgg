@@ -8,6 +8,7 @@ package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
+
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
 
 import com.EquipoB.AsadoYPileta.servicios.ImagenServicio;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
+
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,7 @@ public class ImagenControlador {
     private PropiedadServicio propiedadServicio;
     @Autowired
     private UsuarioServicio usuarioServicio;
+
     @Autowired
     private ImagenServicio imagenServicio;
     
@@ -50,6 +53,8 @@ public class ImagenControlador {
         Imagen imagen = imagenServicio.getOne(id);
         
         byte[] imagen1= imagen.getContenido();
+
+
         HttpHeaders headers =new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
         

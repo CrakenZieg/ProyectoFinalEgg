@@ -3,9 +3,6 @@ package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
 
-import com.EquipoB.AsadoYPileta.entidades.Propiedad;
-import java.util.List;
-
 import com.EquipoB.AsadoYPileta.repositorios.ImagenRepositorio;
 
 import java.util.Optional;
