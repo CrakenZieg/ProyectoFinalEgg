@@ -6,10 +6,10 @@
 
 package com.EquipoB.AsadoYPileta.controladores;
 
+import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
-import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
+import com.EquipoB.AsadoYPileta.servicios.ImagenServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,31 +30,31 @@ import org.springframework.stereotype.Controller;
 @RequestMapping("/imagen")
 public class ImagenControlador {
     @Autowired
-    private PropiedadServicio propiedadServicio;
+    private ImagenServicio imagenServicio;
     @Autowired
     private UsuarioServicio usuarioServicio;
     
     
-    @GetMapping("/propiedad/{id}")
+    @GetMapping("/{id}")//<a th:if="${propiedad.imagenes != null}" th:each="imagen : ${propiedad.imagenes}"><img th:src="@{/imagen/__${imagen.id}__}"></a>
     public ResponseEntity<byte[]> imagenPropiedad(@PathVariable String id){
-        Propiedad propiedad= propiedadServicio.getOne(id);
-        byte[] imagen=propiedad.getImagenes().getContenido();
-        HttpHeaders headers =new HttpHeaders();
+        Imagen img = imagenServicio.getOne(id);
+        byte[] imagen = img.getContenido();
+        HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
         
         return new ResponseEntity <>(imagen,headers,HttpStatus.OK);
     }
     
-    @GetMapping("/perfil/{id}")
-    public ResponseEntity <byte[]> imagenUsuario(@PathVariable String id){
-        Usuario usuario= usuarioServicio.getOne(id);
-        byte[] imagen=usuario.getImagen().getContenido();
-        HttpHeaders headers =new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);
-        
-        return new ResponseEntity <>(imagen,headers,HttpStatus.OK);
-    }
-    
+//    @GetMapping("/perfil/{id}")
+//    public ResponseEntity <byte[]> imagenUsuario(@PathVariable String id){
+//        Usuario usuario= usuarioServicio.getOne(id);
+//        byte[] imagen=usuario.getImagen().getContenido();
+//        HttpHeaders headers =new HttpHeaders();
+//        headers.setContentType(MediaType.IMAGE_JPEG);
+//        
+//        return new ResponseEntity <>(imagen,headers,HttpStatus.OK);
+//    }
+//    
 //    @GetMapping("/comentario/{id}")
 //    public ResponseEntity <byte[]> imagenComentario(@PathVariable String id){
 //        Comentario comentario= comentarioServicio.getOne(id);

@@ -23,10 +23,10 @@ public class PropiedadServicio {
     
     @Transactional
     public void crearPropiedad(String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo,
-     List<Servicio> servicios, List<Imagen> imagenes, Double valor, List<Reserva> reservas, List<Comentario> comentarios) throws MiException{
+     List<Servicio> servicios, List<Imagen> imagenes, Double valor) throws MiException{
         
         try {
-            validar(titulo, descripcion, ubicacion, direccion, tipo, servicios, imagenes, valor, reservas, comentarios);
+            validar(titulo, descripcion, ubicacion, direccion, tipo, servicios, imagenes, valor);
             
             Propiedad propiedad = new Propiedad();
         
@@ -38,8 +38,6 @@ public class PropiedadServicio {
         propiedad.setServicios(servicios);
         propiedad.setImagenes(imagenes);
         propiedad.setValor(valor);
-        propiedad.setReservas(reservas);
-        propiedad.setComentarios(comentarios);
         
         
         propiedadRepositorio.save(propiedad);
@@ -50,12 +48,16 @@ public class PropiedadServicio {
            
     }
     
-    public List<Propiedad> listarPropiedades(){
+    public List<Propiedad> listarPropiedades(){ 
+        List<Propiedad> propiedades = new ArrayList<>();
+        propiedades = propiedadRepositorio.findAll();
+        return propiedades;    
+    }
     
-    List<Propiedad> propiedades = new ArrayList();
-    
-    return propiedadRepositorio.findAll();
-    
+    public List<Propiedad> listarPropiedadesPorTipo(String tipo){
+        List<Propiedad> propiedades = new ArrayList<>();
+        propiedades = propiedadRepositorio.buscarPorTipo(tipo);
+        return propiedades;    
     }
     
     public Propiedad getOne(String id){
@@ -63,7 +65,7 @@ public class PropiedadServicio {
     }    
     
     public void validar(String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo,
-       List<Servicio> servicios, List<Imagen> imagenes, Double valor, List<Reserva> reservas, List<Comentario> comentarios) throws MiException{
+       List<Servicio> servicios, List<Imagen> imagenes, Double valor) throws MiException{
     
     if (titulo.isEmpty() || titulo == null) {
 
@@ -104,18 +106,6 @@ public class PropiedadServicio {
 
             throw new MiException("El valor de  no puede ser nulo o estar vacio");
         }
-    
-    if (reservas.isEmpty() || reservas == null) {
-
-            throw new MiException("Las reservas no pueden ser nulas o estar vacias");
-        }
-    
-    if (comentarios.isEmpty() || comentarios == null) {
-
-            throw new MiException("El titulo no puede ser nulo o estar vacio");
-        }
-    
-    
     
     }
     

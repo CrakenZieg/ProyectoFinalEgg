@@ -25,3 +25,6 @@ replay_pid*
 
 #application.properties
 application.properties
+
+#nbactions.xml
+nbactions.xml
