@@ -5,8 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
+@Data
 @Entity
 public class Comentario {
 
@@ -18,31 +20,6 @@ public class Comentario {
     @OneToMany
     private List<Imagen> imagenes;
 
-    public Comentario() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getCuerpo() {
-        return cuerpo;
-    }
-
-    public void setCuerpo(String cuerpo) {
-        this.cuerpo = cuerpo;
-    }
-
-    public List<Imagen> getImagenes() {
-        return imagenes;
-    }
-
-    public void setImagenes(List<Imagen> imagenes) {
-        this.imagenes = imagenes;
-    }
+    
 
 }

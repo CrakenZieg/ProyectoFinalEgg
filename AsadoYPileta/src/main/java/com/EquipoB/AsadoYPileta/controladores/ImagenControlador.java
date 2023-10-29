@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
@@ -17,13 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.stereotype.Controller;
 
-/**
- *
- * @author Tamara
- */
 @Controller
 @RequestMapping("/imagen")
 public class ImagenControlador {
@@ -31,21 +20,20 @@ public class ImagenControlador {
     @Autowired
     private ImagenServicio imagenServicio;
     @Autowired
-    private UsuarioServicio usuarioServicio;    
-    
-    @GetMapping("/propiedad/{id}")//<a th:if="${propiedad.imagenes != null}" th:each="imagen : ${propiedad.imagenes}"><img th:src="@{/imagen/propiedad/__${imagen.id}__}"></a>
-    public ResponseEntity <byte[]> imagenPropiedad(@PathVariable String id){
+    private UsuarioServicio usuarioServicio;
+
+    @GetMapping("/propiedad/{id}")
+    public ResponseEntity<byte[]> imagenPropiedad(@PathVariable String id) {
         Imagen imagen = imagenServicio.getOne(id);
-        
-        byte[] imagen1= imagen.getContenido();
 
+        byte[] imagen1 = imagen.getContenido();
 
-        HttpHeaders headers =new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
-        
-        return new ResponseEntity <>(imagen1,headers,HttpStatus.OK);
+
+        return new ResponseEntity<>(imagen1, headers, HttpStatus.OK);
     }
-    
+//<a th:if="${propiedad.imagenes != null}" th:each="imagen : ${propiedad.imagenes}"><img th:src="@{/imagen/propiedad/__${imagen.id}__}"></a>
 //    @GetMapping("/propiedad/{id}")
 //    public ResponseEntity <ArrayList<byte[]>> imagenesPropiedad(@PathVariable String id){
 //        Propiedad propiedad = propiedadServicio.getOne(id);
@@ -61,7 +49,6 @@ public class ImagenControlador {
 //        
 //        return new ResponseEntity <>(cont,headers,HttpStatus.OK);
 //    }
-    
 //    @GetMapping("/perfil/{id}")
 //    public ResponseEntity <byte[]> imagenUsuario(@PathVariable String id){
 //        Usuario usuario= usuarioServicio.getOne(id);
@@ -72,5 +59,4 @@ public class ImagenControlador {
 //        return new ResponseEntity <>(imagen,headers,HttpStatus.OK);
 //    }
 //    
-
 }

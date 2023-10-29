@@ -1,29 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.Comentario;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.ComentarioRepositorio;
-
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- *
- * @author Gabriela Rivadero
- */
+
 @Service
 public class ComentarioServicio {
 
