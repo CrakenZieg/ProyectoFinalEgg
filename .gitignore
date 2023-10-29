@@ -24,7 +24,7 @@ hs_err_pid*
 replay_pid*
 
 #application.properties
-resources/application.properties
+application.properties
 
 #nbactions.xml
 nbactions.xml
