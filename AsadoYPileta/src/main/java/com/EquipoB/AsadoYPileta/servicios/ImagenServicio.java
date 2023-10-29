@@ -2,7 +2,9 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
+
 import com.EquipoB.AsadoYPileta.repositorios.ImagenRepositorio;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class ImagenServicio {
      @Autowired
     private ImagenRepositorio imagenRepositorio;
+     
+     
     
      @Transactional
     public Imagen guardar (MultipartFile archivo) throws Exception{
@@ -65,6 +69,20 @@ public class ImagenServicio {
     
     }
     
+     @Transactional()
+     public void borrar (String id){
+         try{
+             Optional <Imagen> respuesta = imagenRepositorio.findById(id);
+                    
+                    if (respuesta.isPresent()){
+                        imagenRepositorio.deleteById(id);
+                    }
+                    
+           }catch (Exception e){
+               e.getMessage();
+           }
+     }
+  
   
     
     
