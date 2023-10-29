@@ -2,7 +2,6 @@
 package com.EquipoB.AsadoYPileta.repositorios;
 
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
-import com.EquipoB.AsadoYPileta.entidades.Servicio;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
