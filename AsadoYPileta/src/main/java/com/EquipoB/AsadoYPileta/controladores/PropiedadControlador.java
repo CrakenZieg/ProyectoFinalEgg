@@ -16,7 +16,7 @@ public class PropiedadControlador {
     
     @GetMapping("/registrar")
     public String registrar(){
-        return "propiedad_registrar.html";
+        return "registro_propiedad.html";
     }
     
 }
