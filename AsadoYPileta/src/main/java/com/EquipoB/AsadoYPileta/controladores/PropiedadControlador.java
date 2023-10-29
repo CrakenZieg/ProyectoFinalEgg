@@ -53,6 +53,16 @@ public class PropiedadControlador {
         return "registro_propiedad.html";
     }
     
+    @GetMapping("/{id}")
+    public String propiedad(@PathVariable String id, ModelMap model){
+        List<Servicio> servicios = new ArrayList<>();
+        servicios = servicioServicio.listarServicios();
+        model.addAttribute("propiedad", propiedadServicio.getOne(id));
+        model.addAttribute("tipos", tipos);
+        model.addAttribute("servicios", servicios);
+        return "propiedad.html";
+    }
+    
     @PostMapping("/registro")
     public String registro(@RequestParam String titulo, @RequestParam String descripcion, 
             @RequestParam String ubicacion, @RequestParam String direccion, 
@@ -73,6 +83,34 @@ public class PropiedadControlador {
         return "index.html";
     }
     
+    @GetMapping("/modificar/{id}")
+    public String modificar(@PathVariable String id, ModelMap model){        
+        List<Servicio> servicios = new ArrayList<>();
+        servicios = servicioServicio.listarServicios();
+        model.addAttribute("propiedad", propiedadServicio.getOne(id));
+        model.addAttribute("tipos", tipos);
+        model.addAttribute("servicios", servicios);
+        return "modificar_propiedad.html";
+    }
     
-    
+    @PostMapping("/modificar/{id}")
+    public String modificar(@PathVariable String id, @RequestParam String titulo, 
+            @RequestParam String descripcion, @RequestParam String ubicacion, 
+            @RequestParam String direccion, @RequestParam TipoPropiedad tipo, 
+            @RequestParam(required = false) String[] serviciosInput, 
+            @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor){            
+            List<Servicio> servicios = new ArrayList<>();
+            List<Imagen> imagenes = new ArrayList<>();
+        try{
+            if(serviciosInput != null){
+                servicios = servicioServicio.listarServiciosArray(serviciosInput);
+            }
+            imagenes = imagenServicio.guardarVarias(imagenesInput);
+            propiedadServicio.modificarPropiedad(id, titulo, descripcion, ubicacion, 
+                    direccion, tipo, servicios, imagenes, valor);
+        }catch(Exception ex){
+            System.out.println("Excepcion: "+ex);
+        }
+        return "index.html";
+    }
 }
