@@ -29,7 +29,7 @@ public class ImagenServicio {
             try {
                 Imagen imagen = new Imagen();
                 imagen.setMime(archivo.getContentType());
-                imagen.setNombre(archivo.getName());
+                imagen.setNombre(archivo.getOriginalFilename());
                 imagen.setContenido(archivo.getBytes());
                 return imagenRepositorio.save(imagen);
             } catch (Exception e) {
@@ -47,7 +47,7 @@ public class ImagenServicio {
                 for (MultipartFile imagenElem : imagenInput) {
                     Imagen imagen = new Imagen();
                     imagen.setMime(imagenElem.getContentType());
-                    imagen.setNombre(imagenElem.getName());
+                    imagen.setNombre(imagenElem.getOriginalFilename());
                     imagen.setContenido(imagenElem.getBytes());
                     imagenes.add(imagenRepositorio.save(imagen));
                 }
@@ -74,7 +74,7 @@ public class ImagenServicio {
                 }
 
                 imagen.setMime(archivo.getContentType());
-                imagen.setNombre(archivo.getName());
+                imagen.setNombre(archivo.getOriginalFilename());
                 imagen.setContenido(archivo.getBytes());
                 return imagenRepositorio.save(imagen);
             } catch (Exception e) {
