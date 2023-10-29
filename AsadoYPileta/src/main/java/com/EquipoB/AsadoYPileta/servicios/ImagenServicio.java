@@ -2,10 +2,9 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
-import com.EquipoB.AsadoYPileta.entidades.Propiedad;
-import com.EquipoB.AsadoYPileta.repositorio.ImagenRepositorio;
-import java.util.ArrayList;
-import java.util.List;
+
+import com.EquipoB.AsadoYPileta.repositorios.ImagenRepositorio;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,7 @@ public class ImagenServicio {
      @Autowired
     private ImagenRepositorio imagenRepositorio;
      
-     @Autowired
-     private PropiedadRepositorio propiedadRepositorio;
+     
     
      @Transactional
     public Imagen guardar (MultipartFile archivo) throws Exception{
@@ -71,16 +69,20 @@ public class ImagenServicio {
     
     }
     
-     @Transactional(readOnly = true)
-    public List<Imagen> listarImagenesPropiedad (String id){
-        Propiedad propiedad = propiedadRepositorio.findById(id);
-        
-        List<Imagen> listaImagenes = propiedad.getImagenes();
-        
-       
-        return listaImagenes;
-    }
-    
+     @Transactional()
+     public void borrar (String id){
+         try{
+             Optional <Imagen> respuesta = imagenRepositorio.findById(id);
+                    
+                    if (respuesta.isPresent()){
+                        imagenRepositorio.deleteById(id);
+                    }
+                    
+           }catch (Exception e){
+               e.getMessage();
+           }
+     }
+  
   
     
     
