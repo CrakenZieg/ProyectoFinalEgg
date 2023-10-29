@@ -24,6 +24,7 @@ public class Propiedad {
     private String descripcion;
     private String ubicacion;
     private String direccion;
+    private Boolean estado;    
     @Enumerated(EnumType.STRING)
     private TipoPropiedad tipo;   
     private Double valor;
