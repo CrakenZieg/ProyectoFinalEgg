@@ -21,7 +21,7 @@ public class ServicioControlador {
     @Autowired
     private ServicioServicio servicioServicio;
     
-    @GetMapping("/registrar")  //localhost:8080/servicio/registrar
+    @GetMapping("/registrar")  
     public String registrar() {
 
         return "servicio_form.html";

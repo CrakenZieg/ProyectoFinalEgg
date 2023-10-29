@@ -1,4 +1,3 @@
-
 package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
@@ -27,5 +26,4 @@ public class PortalControlador {
         model.addAttribute("tipos", tipos);
         return "index.html";
     }
-
 }

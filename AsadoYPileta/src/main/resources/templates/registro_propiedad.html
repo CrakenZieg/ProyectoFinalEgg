@@ -6,9 +6,9 @@
         <header th:replace="fragmentos/frags :: header"></header>
         <main>
             <div class="main_container">
-                <h2 class="h1 text-center display-2">Registrar Propiedad</h2>
+                <h2 class="h1 text-center">Registrar Propiedad</h2>
                 <div  class="container">
-                    <form th:action="@{/propiedad/registro}" method="POST" enctype="multipart/form-data">
+                    <form th:action="@{~/propiedad/registro}" method="POST" enctype="multipart/form-data">
                         <div class="row g-2 align-items-center">
                             <div class="form-group">
                                 <label for="titulo" class="form-label"><span class="h3">Título</span></label>                           

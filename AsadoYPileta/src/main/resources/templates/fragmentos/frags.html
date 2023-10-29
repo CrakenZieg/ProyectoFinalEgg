@@ -39,8 +39,8 @@
                 <li><a href="#" class="nav-link px-2 text-white">Nosotros</a></li>
             </ul>
             <div class="text-end">
-                <button type="button" class="btn btn-outline-light me-2">Ingresar</button>
-                <button type="button" th:href="@{/propiedad/registrar}" class="btn btn-warning">Registrar Propiedad</button>
+                 <a th:if="${session.usuariosession == null}" class="btn btn-outline-white" style="border: 0px" role="button">Ingresar</a>
+                 <a th:if="${session.usuariosession == null}" class="btn btn-outline-warning" style="border: 0px" role="button" th:href="@{~/propiedad/registrar}">Registrar Propiedad</a>
             </div>
         </div>
     </div>
