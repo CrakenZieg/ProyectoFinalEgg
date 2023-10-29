@@ -30,17 +30,17 @@ public class PropiedadServicio {
             
             Propiedad propiedad = new Propiedad();
         
-        propiedad.setTitulo(titulo);
-        propiedad.setDescripcion(descripcion);
-        propiedad.setUbicacion(ubicacion);
-        propiedad.setDireccion(direccion);
-        propiedad.setTipo(tipo);
-        propiedad.setServicios(servicios);
-        propiedad.setImagenes(imagenes);
-        propiedad.setValor(valor);
+            propiedad.setTitulo(titulo);
+            propiedad.setDescripcion(descripcion);
+            propiedad.setUbicacion(ubicacion);
+            propiedad.setDireccion(direccion);
+            propiedad.setTipo(tipo);
+            propiedad.setServicios(servicios);
+            propiedad.setImagenes(imagenes);
+            propiedad.setValor(valor);
         
         
-        propiedadRepositorio.save(propiedad);
+            propiedadRepositorio.save(propiedad);
             
         } catch (MiException ex) {
             ex.getMessage();

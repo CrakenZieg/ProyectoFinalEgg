@@ -74,11 +74,21 @@ public class ServicioServicio {
     }
     
     public Servicio getOne(String id) {
-
-        return servicioRepositorio.getOne(id);
-    
+        return servicioRepositorio.getOne(id);    
     }
     
+    public Servicio servicioPorTipo(String tipo){
+        return servicioRepositorio.buscarTipoServicio(tipo);
+    }
+    
+    public List<Servicio> listarServiciosArray(String[] serviciosInput){
+        List<Servicio> servicios = new ArrayList<>();            
+        for (String servicioElem : serviciosInput) {
+            Servicio servicio = servicioPorTipo(servicioElem);
+            servicios.add(servicio);
+        }
+        return servicios;
+    }
     
     @Transactional
     public void eliminarServicio(String id, String tipoComodidad, Double valor) throws MiException{
