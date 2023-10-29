@@ -7,24 +7,13 @@
 package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
-import com.EquipoB.AsadoYPileta.entidades.Propiedad;
-
-import com.EquipoB.AsadoYPileta.entidades.Usuario;
-
 import com.EquipoB.AsadoYPileta.servicios.ImagenServicio;
-import java.util.ArrayList;
-
-import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
-
-
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,13 +29,9 @@ import org.springframework.stereotype.Controller;
 public class ImagenControlador {
 
     @Autowired
-    private PropiedadServicio propiedadServicio;
-    @Autowired
-    private UsuarioServicio usuarioServicio;
-
-    @Autowired
     private ImagenServicio imagenServicio;
-    
+    @Autowired
+    private UsuarioServicio usuarioServicio;    
     
     @GetMapping("/propiedad/{id}")//<a th:if="${propiedad.imagenes != null}" th:each="imagen : ${propiedad.imagenes}"><img th:src="@{/imagen/propiedad/__${imagen.id}__}"></a>
     public ResponseEntity <byte[]> imagenPropiedad(@PathVariable String id){

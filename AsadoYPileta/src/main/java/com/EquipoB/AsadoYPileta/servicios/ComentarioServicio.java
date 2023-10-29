@@ -9,16 +9,15 @@ import com.EquipoB.AsadoYPileta.entidades.Comentario;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.ComentarioRepositorio;
-import com.EquipoB.AsadoYPileta.repositorios.ImagenRepositorio;
 
 import java.util.ArrayList;
 
 import java.util.List;
 import java.util.Optional;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -31,11 +30,7 @@ public class ComentarioServicio {
     @Autowired
     private ComentarioRepositorio comentarioRepositorio;
     @Autowired
-    private ImagenRepositorio imagenRepositorio;
-    @Autowired
     private ImagenServicio imagenServicio;
-    @Autowired
-    private Imagen imagen;
 
     @Transactional
     public void crearComentario(List<MultipartFile> archivos, String cuerpo) throws MiException, Exception {
