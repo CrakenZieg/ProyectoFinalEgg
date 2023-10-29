@@ -22,4 +22,5 @@ public enum TipoPropiedad {
     public String getTipo(){
         return tipo;
     }
+    
 }
