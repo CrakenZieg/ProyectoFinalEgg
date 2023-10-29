@@ -8,9 +8,16 @@ package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
+
+import com.EquipoB.AsadoYPileta.entidades.Usuario;
+
 import com.EquipoB.AsadoYPileta.servicios.ImagenServicio;
+import java.util.ArrayList;
+
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
+
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -36,53 +43,49 @@ public class ImagenControlador {
     private PropiedadServicio propiedadServicio;
     @Autowired
     private UsuarioServicio usuarioServicio;
+
+    @Autowired
+    private ImagenServicio imagenServicio;
     
     
-    @GetMapping("/propiedad/{id}")
-    public ResponseEntity<byte[]> imagenPropiedad(@PathVariable String id){
-        Propiedad propiedad= propiedadServicio.getOne(id);
-        byte[] imagen=propiedad.getImagenes().getContenido();
+    @GetMapping("/propiedad/{id}")//<a th:if="${propiedad.imagenes != null}" th:each="imagen : ${propiedad.imagenes}"><img th:src="@{/imagen/propiedad/__${imagen.id}__}"></a>
+    public ResponseEntity <byte[]> imagenPropiedad(@PathVariable String id){
+        Imagen imagen = imagenServicio.getOne(id);
+        
+        byte[] imagen1= imagen.getContenido();
+
+
         HttpHeaders headers =new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
         
         return new ResponseEntity <>(imagen1,headers,HttpStatus.OK);
     }
     
+//    @GetMapping("/propiedad/{id}")
+//    public ResponseEntity <ArrayList<byte[]>> imagenesPropiedad(@PathVariable String id){
+//        Propiedad propiedad = propiedadServicio.getOne(id);
+//        List<Imagen> imagenes = propiedad.getImagenes();
+//        ArrayList<byte[]> cont =new ArrayList();
+//        for (Imagen imag : imagenes) {
+//            byte[] imagen1= imag.getContenido();
+//            cont.add(imagen1);
+//        }
+//       
+//        HttpHeaders headers =new HttpHeaders();
+//        headers.setContentType(MediaType.IMAGE_JPEG);
+//        
+//        return new ResponseEntity <>(cont,headers,HttpStatus.OK);
+//    }
     
-    @GetMapping("/propiedad/{id}") //<a><img th:if="${propiedad.imagen != null}" th:src="@{/imagen/propiedad/__${propiedad.id}__}/__${imagen.id}__}"></a>
-    public ResponseEntity <ArrayList<byte[]>> imagenesPropiedad(@PathVariable String id){
-        Propiedad propiedad = propiedadServicio.getOne(id);
-        List<Imagen> imagenes = propiedad.getImagenes();
-        ArrayList<byte[]> cont =new ArrayList();
-        for (Imagen imag : imagenes) {
-            byte[] imagen1= imag.getContenido();
-            cont.add(imagen1);
-        }
-       
-        HttpHeaders headers =new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);
-        
-        return new ResponseEntity <>(cont,headers,HttpStatus.OK);
-    }
-    
-    @GetMapping("/perfil/{id}")
-    public ResponseEntity <byte[]> imagenUsuario(@PathVariable String id){
-        Usuario usuario= usuarioServicio.getOne(id);
-        byte[] imagen=usuario.getImagen().getContenido();
-        HttpHeaders headers =new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);
-        
-        return new ResponseEntity <>(imagen,headers,HttpStatus.OK);
-    }
-    
-//    @GetMapping("/comentario/{id}")
-//    public ResponseEntity <byte[]> imagenComentario(@PathVariable String id){
-//        Comentario comentario= comentarioServicio.getOne(id);
+//    @GetMapping("/perfil/{id}")
+//    public ResponseEntity <byte[]> imagenUsuario(@PathVariable String id){
+//        Usuario usuario= usuarioServicio.getOne(id);
 //        byte[] imagen=usuario.getImagen().getContenido();
 //        HttpHeaders headers =new HttpHeaders();
 //        headers.setContentType(MediaType.IMAGE_JPEG);
 //        
 //        return new ResponseEntity <>(imagen,headers,HttpStatus.OK);
-//        
 //    }
+//    
+
 }
