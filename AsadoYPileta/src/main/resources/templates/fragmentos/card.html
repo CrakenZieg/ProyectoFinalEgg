@@ -3,7 +3,7 @@
 
     <div class="carta"  th:each="propiedad: ${propiedades}">
         
-        <img class="carta-img" th:src="@{/imagen/_${propiedad.imagenes.get(0).id}_}" alt="imagen de propiedad" >
+        <img class="carta-img" th:src="@{/imagen/__${propiedad.imagenes.get(0).id}__}" alt="imagen de propiedad" >
         <div class="carta-cuerpo">
             <h5 class="carta-titulo" th:text="${propiedad.titulo}"></h5>
             <p class="carta-texto" th:text="${propiedad.descripcion}">2 habitaciones 2 baños linda vista.</p>

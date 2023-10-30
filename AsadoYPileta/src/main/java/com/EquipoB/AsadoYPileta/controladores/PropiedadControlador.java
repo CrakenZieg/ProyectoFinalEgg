@@ -34,7 +34,7 @@ public class PropiedadControlador {
 
     private TipoPropiedad tipos;
 
-    @GetMapping("/{tipo}")
+    @GetMapping("/tipo/{tipo}")
     public String listar(@PathVariable String tipo, ModelMap model) {
         List<Propiedad> propiedades = new ArrayList<>();
         propiedades = propiedadServicio.listarPropiedadesPorTipo(tipo);

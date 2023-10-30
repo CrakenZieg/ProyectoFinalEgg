@@ -3,14 +3,11 @@ package com.EquipoB.AsadoYPileta.entidades;
 
 import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import lombok.Data;
@@ -44,7 +41,7 @@ public class Propiedad {
     public Propiedad() {
     }
 
-    public Propiedad(String id, String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo, Double valor, List<Servicio> servicios, List<Imagen> imagenes, List<Reserva> reservas, List<Comentario> comentarios) {
+    public Propiedad(String id, String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo, Double valor, List<Servicio> servicios, List<Imagen> imagenes) {
         this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -54,8 +51,6 @@ public class Propiedad {
         this.valor = valor;
         this.servicios = servicios;
         this.imagenes = imagenes;
-        this.reservas = reservas;
-        this.comentarios = comentarios;
     }
     
     
