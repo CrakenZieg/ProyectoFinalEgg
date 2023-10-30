@@ -93,6 +93,7 @@ public class ImagenServicio {
                 if(imagenesRepo.contains(imagen)){
                     imagenesRepo.remove(imagen);
                 }
+                borrar(imagen.getId());
             }
         }
     }
