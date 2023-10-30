@@ -29,9 +29,6 @@ public class PropiedadControlador {
     @Autowired
     private ServicioServicio servicioServicio;
 
-    @Autowired
-    private ImagenServicio imagenServicio;
-
     private TipoPropiedad tipos;
 
     @GetMapping("/tipo/{tipo}")
@@ -66,7 +63,7 @@ public class PropiedadControlador {
     public String registro(@RequestParam String titulo, @RequestParam String descripcion,
             @RequestParam String ubicacion, @RequestParam String direccion,
             @RequestParam TipoPropiedad tipo, @RequestParam(required = false) String[] serviciosInput,
-            @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor) {
+            @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor) {        
         try {
             propiedadServicio.crearPropiedad(titulo, descripcion, ubicacion,
                     direccion, tipo, serviciosInput, imagenesInput, valor);
@@ -99,6 +96,12 @@ public class PropiedadControlador {
         } catch (Exception ex) {
             System.out.println("Excepcion: " + ex);
         }
+        return "index.html";
+    }
+    
+    @GetMapping("/eliminar/{id}")
+    public String modificar(@PathVariable String id) {        
+        propiedadServicio.eliminar(id);
         return "index.html";
     }
 }

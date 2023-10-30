@@ -19,7 +19,7 @@ public class ImagenControlador {
     @Autowired
     private ImagenServicio imagenServicio;
 
-    @GetMapping("/{id}")//<img th:src="@{/imagen/__${propiedad.imagenes.get(0).id}__}" >
+    @GetMapping("/{id}")
     public ResponseEntity<byte[]> imagen(@PathVariable String id) {
         Imagen imagen = imagenServicio.getOne(id);
         byte[] imagen1 = imagen.getContenido();

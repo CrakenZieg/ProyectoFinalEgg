@@ -6,7 +6,24 @@
         <header th:replace="fragmentos/frags :: header"></header>
         
         <main>
-            <div th:replace="/fragmentos/card :: div"></div>
+            <div class="container">
+                <div class="row row-cols-md-3 row-cols-sm-1 g-4">
+                    <div class="col" th:each="propiedad: ${propiedades}">
+                        <div class="card h-100">
+                            <img th:src="@{/imagen/__${propiedad.imagenes.get(0).id}__}" class="card-img-top" alt="imagen de propiedad">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${propiedad.titulo}"></h5>
+                                <p class="card-text text-truncate" th:text="${propiedad.descripcion}"></p>
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-body-secondary">$ <span th:text="${propiedad.valor}"></span></small>
+                                <small><a class="btn btn-info"  th:href="@{/propiedad/__${propiedad.id}__}">Ver</a></small>
+                                <small><a class="btn btn-warning"  th:href="@{/propiedad/modificar/__${propiedad.id}__}">Modificar</a></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
      
         <footer th:replace="fragmentos/frags :: footer"></footer>
