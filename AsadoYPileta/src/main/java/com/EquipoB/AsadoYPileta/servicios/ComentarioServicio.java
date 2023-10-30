@@ -34,8 +34,7 @@ public class ComentarioServicio {
     private ImagenRepositorio imagenRepositorio;
     @Autowired
     private ImagenServicio imagenServicio;
-    @Autowired
-    private Imagen imagen;
+  
 
     @Transactional
     public void crearComentario(List<MultipartFile> archivos, String cuerpo) throws MiException, Exception {
