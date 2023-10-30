@@ -305,6 +305,7 @@
 .bton:hover{
     transform: scale(.9);
 }
+
 @media (max-width : 1536px ){
 
   .carta{

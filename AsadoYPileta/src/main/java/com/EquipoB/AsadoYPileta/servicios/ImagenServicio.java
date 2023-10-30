@@ -84,7 +84,8 @@ public class ImagenServicio {
 
     }
     
-    public List<Imagen> filtrar(List<Imagen> imagenesRepo, String[] imagenesViejas){
+    @Transactional
+    public void filtrar(List<Imagen> imagenesRepo, String[] imagenesViejas){
         for (String imagenVieja : imagenesViejas) {
             Optional<Imagen> respuesta = imagenRepositorio.findById(imagenVieja);
             if (respuesta.isPresent()) {
@@ -92,10 +93,8 @@ public class ImagenServicio {
                 if(imagenesRepo.contains(imagen)){
                     imagenesRepo.remove(imagen);
                 }
-                borrar(imagen.getId());
             }
         }
-        return imagenesRepo;        
     }
 
     @Transactional

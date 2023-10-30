@@ -57,8 +57,6 @@ public class PropiedadServicio {
             String direccion, TipoPropiedad tipo, String[] serviciosInput, MultipartFile[] imagenesInput,
             Double valor, String[] imagenesViejas) throws MiException, Exception {
 
-        validar(titulo, descripcion, ubicacion, direccion, tipo, imagenesInput, valor);
-
         Optional<Propiedad> propiedadRepo = propiedadRepositorio.findById(id);
 
         List<Servicio> servicios = new ArrayList<>();
@@ -73,16 +71,20 @@ public class PropiedadServicio {
             
             if(imagenesViejas != null){ 
                 if(imagenesViejas.length != 0){
-                    imagenes = imagenServicio.filtrar(imagenes, 
-                            imagenesViejas);
+                    imagenServicio.filtrar(imagenes, imagenesViejas);
                 }
             }     
             if(imagenesInput != null){
                 if(imagenesInput.length != 0){
+                    if(imagenes == null){
+                        imagenes = new ArrayList<>();
+                    }
                     imagenes.addAll(imagenServicio.guardarVarias(imagenesInput));
                 } 
             }
 
+            validarM(titulo, descripcion, ubicacion, direccion, tipo, imagenes, valor);
+            
             propiedad.setTitulo(titulo);
             propiedad.setDescripcion(descripcion);
             propiedad.setUbicacion(ubicacion);
@@ -151,4 +153,36 @@ public class PropiedadServicio {
         }
     }
 
+    public void validarM(String titulo, String descripcion, String ubicacion, String direccion,
+            TipoPropiedad tipo, List<Imagen> imagenes, Double valor) throws MiException {
+        
+        if (titulo.isEmpty() || titulo == null) {
+            throw new MiException("El titulo no puede ser nulo o estar vacio");
+        }
+
+        if (descripcion.isEmpty() || descripcion == null) {
+            throw new MiException("La descripcion no puede ser nulo o estar vacio");
+        }
+
+        if (ubicacion.isEmpty() || ubicacion == null) {
+            throw new MiException("La ubicacion no puede ser nulo o estar vacio");
+        }
+
+        if (direccion.isEmpty() || direccion == null) {
+            throw new MiException("La direccion no puede ser nulo o estar vacio");
+        }
+
+        if (tipo == null) {
+            throw new MiException("El tipo no puede ser nulo");
+        }
+
+        if (imagenes.size() == 0 || imagenes == null) {
+            throw new MiException("Las imagenes no puede ser nulas o estar vacias");
+        }
+
+        if (valor == null) {
+            throw new MiException("El valor no puede ser 0");
+        }
+    }
+    
 }
