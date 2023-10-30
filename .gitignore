@@ -23,6 +23,10 @@
 hs_err_pid*
 replay_pid*
 
-#Spring
+
+#application.properties
 application.properties
+
+#nbactions.xml
 nbactions.xml
+
