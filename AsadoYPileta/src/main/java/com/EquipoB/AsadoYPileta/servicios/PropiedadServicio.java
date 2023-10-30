@@ -69,9 +69,19 @@ public class PropiedadServicio {
         if (propiedadRepo.isPresent()) {
 
             Propiedad propiedad = propiedadRepo.get();
-            List<Imagen> imagenes = new ArrayList<>();
-            imagenes = imagenServicio.filtrar(propiedad.getImagenes(), imagenesViejas);
-            imagenes.addAll(imagenServicio.guardarVarias(imagenesInput));
+            List<Imagen> imagenes = propiedad.getImagenes();
+            
+            if(imagenesViejas != null){ 
+                if(imagenesViejas.length != 0){
+                    imagenes = imagenServicio.filtrar(imagenes, 
+                            imagenesViejas);
+                }
+            }     
+            if(imagenesInput != null){
+                if(imagenesInput.length != 0){
+                    imagenes.addAll(imagenServicio.guardarVarias(imagenesInput));
+                } 
+            }
 
             propiedad.setTitulo(titulo);
             propiedad.setDescripcion(descripcion);
