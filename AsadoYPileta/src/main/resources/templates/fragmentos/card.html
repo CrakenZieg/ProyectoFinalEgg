@@ -3,11 +3,11 @@
 
     <div class="carta"  th:each="propiedad: ${propiedades}">
         
-        <img class="carta-img" th:src="@{/imagen/__${propiedad.imagenes.get(0).id}__}" alt="imagen de propiedad" >
+        <a   th:href="@{/propiedad/__${propiedad.id}__}"><img class="carta-img" th:src="@{/imagen/__${propiedad.imagenes.get(0).id}__}" alt="imagen de propiedad" ></a>
         <div class="carta-cuerpo">
             <h5 class="carta-titulo" th:text="${propiedad.titulo}"></h5>
-            <p class="carta-texto" th:text="${propiedad.descripcion}">2 habitaciones 2 baños linda vista.</p>
-            <p class="carta-texto" th:text="${propiedad.valor}">$2000</p>
+            <p class="carta-texto" th:text="${propiedad.descripcion}"></p>
+            <p class="carta-texto" th:text="${propiedad.valor}"></p>
 
             <a class="bton"  th:href="@{/propiedad/__${propiedad.id}__}">ver propiedad</a>
         </div>
