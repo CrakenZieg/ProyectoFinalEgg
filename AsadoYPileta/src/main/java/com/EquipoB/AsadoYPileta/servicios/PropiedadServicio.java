@@ -12,18 +12,30 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class PropiedadServicio {
 
     @Autowired
     private PropiedadRepositorio propiedadRepositorio;
+    
+    @Autowired
+    private ServicioServicio servicioServicio;
+
+    @Autowired
+    private ImagenServicio imagenServicio;
 
     @Transactional
     public void crearPropiedad(String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo,
-            List<Servicio> servicios, List<Imagen> imagenes, Double valor) throws MiException {
-
-        validar(titulo, descripcion, ubicacion, direccion, tipo, servicios, imagenes, valor);
+            String[] serviciosInput, MultipartFile[] imagenesInput, Double valor) throws MiException, Exception {
+                
+        validar(titulo, descripcion, ubicacion, direccion, tipo, imagenesInput, valor);
+        
+        List<Servicio> servicios = new ArrayList<>(); 
+        servicios = servicioServicio.listarServiciosArray(serviciosInput);
+        List<Imagen> imagenes = new ArrayList<>();
+        imagenes = imagenServicio.guardarVarias(imagenesInput);
 
         Propiedad propiedad = new Propiedad();
 
@@ -39,13 +51,26 @@ public class PropiedadServicio {
     }
 
     @Transactional
-    public void modificarPropiedad(String id, String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo,
-            List<Servicio> servicios, List<Imagen> imagenes, Double valor) throws MiException {
-
-        validar(titulo, descripcion, ubicacion, direccion, tipo, servicios, imagenes, valor);
+    public void modificarPropiedad(String id, String titulo, String descripcion, String ubicacion, 
+            String direccion, TipoPropiedad tipo, String[] serviciosInput, MultipartFile[] imagenesInput, 
+            Double valor, String[] imagenesViejas) throws MiException, Exception {
+        
+        validar(titulo, descripcion, ubicacion, direccion, tipo, imagenesInput, valor);
+        
         Optional<Propiedad> propiedadRepo = propiedadRepositorio.findById(id);
-        if (propiedadRepo.isPresent()) {
+        
+            List<Servicio> servicios = new ArrayList<>(); 
+            if(serviciosInput != null){
+                servicios = servicioServicio.listarServiciosArray(serviciosInput);
+            }
+        
+        if (propiedadRepo.isPresent()) {                    
+            
             Propiedad propiedad = propiedadRepo.get();
+            List<Imagen> imagenes = new ArrayList<>();
+            imagenes = imagenServicio.filtrar(propiedad.getImagenes(), imagenesViejas);
+            imagenes.addAll(imagenServicio.guardarVarias(imagenesInput));
+        
             propiedad.setTitulo(titulo);
             propiedad.setDescripcion(descripcion);
             propiedad.setUbicacion(ubicacion);
@@ -74,8 +99,8 @@ public class PropiedadServicio {
         return propiedadRepositorio.getOne(id);
     }
 
-    public void validar(String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo,
-            List<Servicio> servicios, List<Imagen> imagenes, Double valor) throws MiException {
+    public void validar(String titulo, String descripcion, String ubicacion, String direccion, 
+            TipoPropiedad tipo, MultipartFile[] imagenes, Double valor) throws MiException {
 
         if (titulo.isEmpty() || titulo == null) {
 
@@ -102,19 +127,14 @@ public class PropiedadServicio {
             throw new MiException("El tipo no puede ser nulo");
         }
 
-        if (servicios.isEmpty() || servicios == null) {
-
-            throw new MiException("Los servicios no puede ser nulos o estar vacios");
-        }
-
-        if (imagenes.isEmpty() || imagenes == null) {
+        if (imagenes.length == 0 || imagenes == null) {
 
             throw new MiException("Las imagenes no puede ser nulas o estar vacias");
         }
 
         if (valor == null) {
 
-            throw new MiException("El valor de  no puede ser nulo o estar vacio");
+            throw new MiException("El valor no puede ser 0");
         }
 
     }
