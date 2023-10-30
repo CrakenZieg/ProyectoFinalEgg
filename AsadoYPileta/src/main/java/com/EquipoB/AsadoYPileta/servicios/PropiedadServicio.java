@@ -66,7 +66,7 @@ public class PropiedadServicio {
     public void modificarPropiedad(String id, String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo,
      List<Servicio> servicios, List<Imagen> imagenes, Double valor, List<Reserva> reservas, List<Comentario> comentario) throws MiException{
     
-        validar(titulo, descripcion,  ubicacion,  direccion,  tipo, servicios, imagenes, valor, reservas, comentario);
+        validar(titulo, descripcion,  ubicacion,  direccion,  tipo, servicios, imagenes, valor);
     
          Optional<Propiedad> respuesta = propiedadRepositorio.findById(id);
         
@@ -95,7 +95,7 @@ public class PropiedadServicio {
      List<Servicio> servicios, List<Imagen> imagenes, Double valor, List<Reserva> reservas, List<Comentario> comentario) throws MiException{
     
         try {
-            validar(titulo, descripcion,  ubicacion,  direccion,  tipo, servicios, imagenes, valor, reservas, comentario);
+            validar(titulo, descripcion,  ubicacion,  direccion,  tipo, servicios, imagenes, valor);
             propiedadRepositorio.deleteById(id);
             
         } catch (MiException ex) {
