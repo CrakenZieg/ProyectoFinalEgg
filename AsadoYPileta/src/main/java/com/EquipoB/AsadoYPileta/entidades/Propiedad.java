@@ -33,10 +33,6 @@ public class Propiedad {
     private List<Servicio> servicios;
     @OneToMany
     private List<Imagen> imagenes;
-    @OneToMany
-    private List<Reserva> reservas;
-    @OneToMany
-    private List<Comentario> comentarios;
 
     public Propiedad() {
     }

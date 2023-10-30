@@ -70,7 +70,7 @@ public class PropiedadControlador {
         } catch (Exception ex) {
             System.out.println("Excepcion: " + ex);
         }
-        return "index.html";
+        return "redirect:../";
     }
 
     @GetMapping("/modificar/{id}")
@@ -96,12 +96,12 @@ public class PropiedadControlador {
         } catch (Exception ex) {
             System.out.println("Excepcion: " + ex);
         }
-        return "index.html";
+        return "redirect:../";
     }
     
     @GetMapping("/eliminar/{id}")
     public String modificar(@PathVariable String id) {        
         propiedadServicio.eliminar(id);
-        return "index.html";
+        return "redirect:../";
     }
 }
