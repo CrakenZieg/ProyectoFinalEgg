@@ -83,8 +83,22 @@ public class ImagenServicio {
         return imagenRepositorio.getOne(id);
 
     }
+    
+    public List<Imagen> filtrar(List<Imagen> imagenesRepo, String[] imagenesViejas){
+        for (String imagenVieja : imagenesViejas) {
+            Optional<Imagen> respuesta = imagenRepositorio.findById(imagenVieja);
+            if (respuesta.isPresent()) {
+                Imagen imagen = respuesta.get();
+                if(imagenesRepo.contains(imagen)){
+                    imagenesRepo.remove(imagen);
+                }
+                borrar(imagen.getId());
+            }
+        }
+        return imagenesRepo;        
+    }
 
-    @Transactional()
+    @Transactional
     public void borrar(String id) {
         try {
             Optional<Imagen> respuesta = imagenRepositorio.findById(id);
