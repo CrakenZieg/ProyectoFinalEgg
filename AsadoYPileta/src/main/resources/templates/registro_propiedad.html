@@ -5,10 +5,17 @@
     <body>
         <header th:replace="fragmentos/frags :: header"></header>
         <main>
+            <section class="volver-eliminar">
+                <div class="volver">
+                    <a class="btn btn-outline-secondary" th:href="@{/}">
+                        <i class="bi bi-arrow-left"></i>
+                    </a>
+                </div>            
+            </section>
             <div class="main_container">
                 <h2 class="h1 text-center">Registrar Propiedad</h2>
                 <div  class="container">
-                    <form th:action="@{~/propiedad/registro}" method="POST" enctype="multipart/form-data">
+                    <form th:action="@{/propiedad/registro}" method="POST" enctype="multipart/form-data">
                         <div class="row g-2 align-items-center">
                             <div class="form-group">
                                 <label for="titulo" class="form-label"><span class="h3">Título</span></label>                           
@@ -34,13 +41,13 @@
                             <div class="form-group">
                                 <span class="h3 form-label">Servicios</span>                
                                 <div th:each="servicioElem : ${servicios}" class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="${servicioElem.tipoComodidad}" th:value="${servicioElem}" name="serviciosInput"/>
-                                    <label class="form-check-label" for="${servicioElem.tipoComodidad}" th:text="${servicioElem.tipoComodidad}">Comodidad</label>
+                                    <input class="form-check-input" type="checkbox" th:id="${servicioElem.tipoComodidad}" th:value="${servicioElem.tipoComodidad}" name="serviciosInput"/>
+                                    <label class="form-check-label" th:for="${servicioElem.tipoComodidad}" th:text="${servicioElem.tipoComodidad}">Comodidad</label>
                                 </div>
                             </div>                            
                             <div class="form-group">
                                 <label for="imagenes" class="form-label"><span class="h3">Imágenes</span></label>                           
-                                <input type="file" class="form-control" id="imagenes" name="imagenesInput" multiple="true"/>
+                                <input type="file" class="form-control" id="imagenes" name="imagenesInput" multiple="multiple"/>
                             </div>
                             <div class="form-group">
                                 <label for="descripcion" class="form-label"><span class="h3">Descripción</span></label>                            
