@@ -1,7 +1,7 @@
    
 <div class="contenedor">
-
-    <div class="carta"  th:each="propiedad: ${propiedades}">
+    <div class="contenedor-carta">
+         <div class="carta"  th:each="propiedad: ${propiedades}">
         
         <a   th:href="@{/propiedad/__${propiedad.id}__}"><img class="carta-img" th:src="@{/imagen/__${propiedad.imagenes.get(0).id}__}" alt="imagen de propiedad" ></a>
         <div class="carta-cuerpo">
@@ -13,6 +13,8 @@
         </div>
     </div>
 
+    </div>
+   
      
 </div>
 
