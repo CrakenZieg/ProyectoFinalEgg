@@ -3,34 +3,25 @@ package com.EquipoB.AsadoYPileta.controladores;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/error")
 public class ErrorControlador implements ErrorController {
     
-    @GetMapping("/")
-    public String getError(ModelMap model, HttpServletRequest httpRequest){
-        int codigo = getCodigoError(httpRequest);
-        String mensaje = getMensajeError(codigo);
-        model.addAttribute("codigo", codigo);
-        model.addAttribute("mensaje", mensaje);        
-        return "error.html";
-    }
-    
-    @PostMapping("/")
-    public String postError(ModelMap model, HttpServletRequest httpRequest){
-        int codigo = getCodigoError(httpRequest);
-        String mensaje = getMensajeError(codigo);
-        model.addAttribute("codigo", codigo);
-        model.addAttribute("mensaje", mensaje);        
-        return "error.html";
-    }
+    @RequestMapping(value = "/error", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
 
+		ModelAndView errorPage = new ModelAndView("error");
+                
+		int httpErrorCode = getCodigoError(httpRequest);
+		String errorMsg = getMensajeError(httpErrorCode);
+		
+		errorPage.addObject("codigo", httpErrorCode);
+		errorPage.addObject("mensaje", errorMsg);
+		return errorPage;
+	}
     private int getCodigoError(HttpServletRequest httpRequest) {
         return (Integer) httpRequest.getAttribute("javax.servlet.error.status_code");
     }

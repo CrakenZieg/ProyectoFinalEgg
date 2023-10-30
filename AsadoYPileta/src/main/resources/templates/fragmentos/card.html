@@ -1,15 +1,18 @@
+  
 <div class="contenedor">
-
-    <div class="carta"  >
-        <img src="https://plus.unsplash.com/premium_photo-1661879569342-1dd6195c15bf?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="carta-img" alt="...">
+    <div class="contenedor-carta">
+         <div class="carta"  th:each="propiedad: ${propiedades}">
+        
+        <a   th:href="@{/propiedad/__${propiedad.id}__}"><img class="carta-img" th:src="@{/imagen/__${propiedad.imagenes.get(0).id}__}" alt="imagen de propiedad" ></a>
         <div class="carta-cuerpo">
-            <h5 class="carta-titulo" >Cabaña al sur</h5>
-            <p class="carta-texto">2 habitaciones 2 baños linda vistaaaaaaaaaaaaa.</p>
-            <p class="carta-texto">$2000</p>
+            <h5 class="carta-titulo" th:text="${propiedad.titulo}"></h5>
+            <p class="carta-texto" th:text="${propiedad.descripcion}"></p>
+            <p class="carta-texto" th:text="${propiedad.valor}"></p>
 
-            <a class="bton" >ver propiedad</a>
+            <a class="bton"  th:href="@{/propiedad/__${propiedad.id}__}">ver propiedad</a>
         </div>
     </div>
 
+    </div>
+     
 </div>
-

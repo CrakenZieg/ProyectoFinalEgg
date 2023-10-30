@@ -1,22 +1,15 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
-
 import com.EquipoB.AsadoYPileta.repositorios.ImagenRepositorio;
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- *
- * @author Tamara
- */
 @Service
 public class ImagenServicio {
 
@@ -29,7 +22,7 @@ public class ImagenServicio {
             try {
                 Imagen imagen = new Imagen();
                 imagen.setMime(archivo.getContentType());
-                imagen.setNombre(archivo.getName());
+                imagen.setNombre(archivo.getOriginalFilename());
                 imagen.setContenido(archivo.getBytes());
                 return imagenRepositorio.save(imagen);
             } catch (Exception e) {
@@ -47,7 +40,7 @@ public class ImagenServicio {
                 for (MultipartFile imagenElem : imagenInput) {
                     Imagen imagen = new Imagen();
                     imagen.setMime(imagenElem.getContentType());
-                    imagen.setNombre(imagenElem.getName());
+                    imagen.setNombre(imagenElem.getOriginalFilename());
                     imagen.setContenido(imagenElem.getBytes());
                     imagenes.add(imagenRepositorio.save(imagen));
                 }
@@ -74,7 +67,7 @@ public class ImagenServicio {
                 }
 
                 imagen.setMime(archivo.getContentType());
-                imagen.setNombre(archivo.getName());
+                imagen.setNombre(archivo.getOriginalFilename());
                 imagen.setContenido(archivo.getBytes());
                 return imagenRepositorio.save(imagen);
             } catch (Exception e) {
@@ -90,8 +83,22 @@ public class ImagenServicio {
         return imagenRepositorio.getOne(id);
 
     }
+    
+    public List<Imagen> filtrar(List<Imagen> imagenesRepo, String[] imagenesViejas){
+        for (String imagenVieja : imagenesViejas) {
+            Optional<Imagen> respuesta = imagenRepositorio.findById(imagenVieja);
+            if (respuesta.isPresent()) {
+                Imagen imagen = respuesta.get();
+                if(imagenesRepo.contains(imagen)){
+                    imagenesRepo.remove(imagen);
+                }
+                borrar(imagen.getId());
+            }
+        }
+        return imagenesRepo;        
+    }
 
-    @Transactional()
+    @Transactional
     public void borrar(String id) {
         try {
             Optional<Imagen> respuesta = imagenRepositorio.findById(id);
