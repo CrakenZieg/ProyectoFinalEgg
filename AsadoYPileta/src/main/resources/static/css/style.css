@@ -4,6 +4,20 @@
     margin:0;
 }
 
+/* scroll */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
   
   .navbar {
     display: flex;
@@ -16,7 +30,7 @@
   }
   
   #icon {
-    display: absolute;
+    
     left:.8px;
     height: 50px;
   }
@@ -217,9 +231,6 @@
 
 
 /*   Contenedor de cartas*/
-main{
-  padding-left: 200px;
-}
 
 .contenedor{
 
@@ -296,10 +307,6 @@ main{
   transform: scale(.9);
 }
 @media (max-width : 1536px ){
-  
- main{
-  padding-left: 180px;
-}
   .carta{
      transform: scale(0.8);
   }
@@ -308,10 +315,6 @@ main{
 
 @media (max-width : 1280px ){
   
-  
-  main{
-  padding-left: 160px;
-}
   .carta{
      transform: scale(0.9);
   }
@@ -319,9 +322,6 @@ main{
 }
 @media (max-width : 1024px ){
   
- main{
-  padding-left: 120px;
-}
   .carta{
      transform: scale(1);
   }
@@ -329,10 +329,6 @@ main{
 }
 
 @media (max-width : 768px ){
-  
-  main{
-  padding-left: 80px;
-}
   
   .contenedor{
      
@@ -349,10 +345,6 @@ main{
 }
 @media (max-width : 600px ){
   
- main{
-  padding-left: 60px;
-}
-  
   .contenedor{
       display: flex;
       flex-direction: column;
@@ -366,3 +358,28 @@ main{
   
 }
 
+/* propiedad */
+
+#carouselPropiedad{
+    height: 75vh;
+    .carousel-inner{
+        display: flex;
+        flex-wrap: wrap;
+        align-content: center;
+        justify-content: center;
+        height: 100%;
+        .carousel-item{
+            object-fit: cover;
+            margin:0%;
+            >img{
+                height: 100%;
+            }
+        }
+    }
+}
+
+.volver-eliminar{
+    position: fixed;
+    top: 20vh;
+    width: 100%;
+}
