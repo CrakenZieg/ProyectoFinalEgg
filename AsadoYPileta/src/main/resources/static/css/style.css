@@ -236,15 +236,16 @@ main{
   display: flex;
   flex-direction: column;
   float:left;
-  transform: scale(0.9);
-  background-color: aliceblue;
+  height:380px;
+  width: 300px;
+  background-color:#ffffff;
   padding:.15rem;
-  margin:0.1rem;
-  align-items: center;
+  margin:0.6rem;
+  
 
-  border: 1px solid white;
+  
   border-radius: .80rem;
-  box-shadow: 0 3px 3px #222222;
+  
   
 }
 
