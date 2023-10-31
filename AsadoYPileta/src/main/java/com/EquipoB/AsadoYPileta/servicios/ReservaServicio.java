@@ -62,6 +62,21 @@ public class ReservaServicio {
         }
 
     }
+    
+    @Transactional
+    public void borrar(String id){
+        
+        try {
+            Optional <Reserva> respuesta = reservaRepositorio.findById(id);
+            
+            if(respuesta.isPresent()){
+                reservaRepositorio.deleteById(id);
+            }
+        } catch(Exception e){
+            e.getMessage();
+        }
+        
+    }
 
     private void validar(String mensaje, Date fechaInicio, Date fechaFin, Boolean disponible) throws MiException {
 
