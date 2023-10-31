@@ -21,10 +21,6 @@ public class ComentarioServicio {
     private ComentarioRepositorio comentarioRepositorio;
     @Autowired
     private ImagenServicio imagenServicio;
-<<<<<<< HEAD
-  
-=======
->>>>>>> desarrollo
 
     @Transactional
     public void crearComentario(List<MultipartFile> archivos, String cuerpo) throws MiException, Exception {
