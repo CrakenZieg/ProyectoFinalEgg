@@ -5,8 +5,19 @@
     <body>
         <header th:replace="fragmentos/frags :: header"></header>
         <main>
-            <h2 th:text="'Error: ' + ${codigo}">AYP</h2>
-            <p th:text="${mensaje}"></p>
+            <section>
+                <div class="container">
+                    <div class="row">
+                        <h2 th:text="'Error: ' + ${codigo}">AYP</h2>
+                        <p th:text="${mensaje}"></p>                    
+                    </div>
+                    <div class="row volver">
+                        <a class="btn btn-outline-secondary" th:href="@{/}">
+                            <i class="bi bi-arrow-left"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
         </main>
         <footer th:replace="fragmentos/frags :: footer"></footer>
 
