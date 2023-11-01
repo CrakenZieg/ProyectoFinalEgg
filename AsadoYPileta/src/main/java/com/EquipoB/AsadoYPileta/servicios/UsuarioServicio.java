@@ -56,7 +56,7 @@ public class UsuarioServicio implements UserDetailsService {
         usuario.setPassword(password);
         usuario.setRol(rol);
         usuario.setFechaAlta(fechaAlta);
-        usuario.setActivo(activo);
+        usuario.setAlta(activo);
 
         usuarioRepositorio.save(usuario);
 
@@ -86,7 +86,7 @@ public class UsuarioServicio implements UserDetailsService {
             usuario.setPassword(password);
             usuario.setRol(rol);
             usuario.setFechaAlta(fechaAlta);
-            usuario.setActivo(activo);
+            usuario.setAlta(activo);
 
             usuarioRepositorio.save(usuario);
         }
@@ -105,6 +105,28 @@ public class UsuarioServicio implements UserDetailsService {
         
         usuarioRepositorio.deleteById(id);
     
+    }
+      public void eliminarUsuarioG(String id, String email, String password, Rol rol, Date fechaAlta, Boolean activo) throws MiException{
+        Optional<Usuario> respuesta= usuarioRepositorio.findById(id);
+        
+       validar(email, password, rol, fechaAlta, activo);
+            Usuario usuario = new Usuario();
+            usuario = respuesta.get();
+           
+            usuario.setAlta(false);
+          
+            usuarioRepositorio.save(usuario);
+    }
+    public void recuperarUsuario(String id, String email, String password, Rol rol, Date fechaAlta, Boolean activo) throws MiException{
+        Optional<Usuario> respuesta= usuarioRepositorio.findById(id);
+         validar(email, password, rol, fechaAlta, activo);
+       
+            Usuario usuario = new Usuario();
+            usuario = respuesta.get();
+            
+            usuario.setAlta(true);
+          
+            usuarioRepositorio.save(usuario);
     }
 
     private void validar(String email, String password, Rol rol, Date fechaAlta, Boolean activo) throws MiException {

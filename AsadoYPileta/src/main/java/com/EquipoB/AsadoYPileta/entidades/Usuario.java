@@ -27,7 +27,8 @@ public class Usuario {
     private Rol rol;
     @Temporal(TemporalType.DATE)
     private Date fechaAlta;
-    private Boolean activo;
+    
+    private Boolean alta;
 
     public Usuario() {
     }
