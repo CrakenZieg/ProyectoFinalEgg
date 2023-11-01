@@ -26,4 +26,9 @@ public class PortalControlador {
         model.addAttribute("tipos", tipos);
         return "index.html";
     }
+    
+    @GetMapping("/login1")
+    public String login(ModelMap model){        
+        return "login.html";
+    }
 }
