@@ -4,6 +4,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
@@ -20,6 +21,11 @@ public class Comentario {
     @OneToMany
     private List<Imagen> imagenes;
 
-    
+    @ManyToOne
+    private Propiedad propiedad;
+    @ManyToOne
+    private Usuario Usuario;
 
+    
+    
 }
