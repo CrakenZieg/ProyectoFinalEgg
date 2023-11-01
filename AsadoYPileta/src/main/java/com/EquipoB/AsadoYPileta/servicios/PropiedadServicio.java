@@ -2,6 +2,7 @@ package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
+import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
 import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
@@ -31,7 +32,7 @@ public class PropiedadServicio {
 
     @Transactional
     public void crearPropiedad(String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo,
-            String[] serviciosInput, MultipartFile[] imagenesInput, Double valor) throws MiException, Exception {
+            String[] serviciosInput, MultipartFile[] imagenesInput, Double valor, Propietario propietario) throws MiException, Exception {
 
         validar(titulo, descripcion, ubicacion, direccion, tipo, imagenesInput, valor);
 
@@ -53,6 +54,7 @@ public class PropiedadServicio {
         propiedad.setServicios(servicios);
         propiedad.setImagenes(imagenes);
         propiedad.setValor(valor);
+        propietario.getPropiedades().add(propiedad);
         propiedadRepositorio.save(propiedad);
     }
 
