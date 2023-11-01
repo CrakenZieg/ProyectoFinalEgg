@@ -1,6 +1,7 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
+import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -32,7 +33,7 @@ public class UsuarioServicio implements UserDetailsService {
         Usuario usuario = usuarioRepositorio.buscarPorEmail(email);
         if (usuario != null) {
             List<GrantedAuthority> permisos = new ArrayList();
-            GrantedAuthority p = new SimpleGrantedAuthority("ROLE_" + usuario.getRol().toString());
+            GrantedAuthority p = new SimpleGrantedAuthority("ROLE_"+usuario.getRol().toString());
             permisos.add(p);
             ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
             HttpSession session = attr.getRequest().getSession(true);
@@ -118,7 +119,7 @@ public class UsuarioServicio implements UserDetailsService {
             throw new MiException("La contraseña no puede ser nulo o estar vacio");
         }
 
-        if (rol.isEmpty() || rol == null) {
+        if ( rol == null) {
 
             throw new MiException("El Rol no puede ser nulo o estar vacio");
         }

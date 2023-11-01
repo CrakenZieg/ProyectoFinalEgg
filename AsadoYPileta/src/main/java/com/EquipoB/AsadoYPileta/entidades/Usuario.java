@@ -1,6 +1,7 @@
 
 package com.EquipoB.AsadoYPileta.entidades;
 
+import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
