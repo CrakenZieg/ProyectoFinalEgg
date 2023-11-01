@@ -31,6 +31,12 @@ public class Reserva {
     private Date fechaFin;
    
     @OneToMany
-    private List<Servicio>serviciosElegidas;    
+    private List<Servicio>serviciosElegidas;  
+    
+    @OneToMany
+    private List<Propiedad> propiedadElegidas;
+    
+    @OneToMany
+    private List<Usuario> usuarioElegido;
     
 }
