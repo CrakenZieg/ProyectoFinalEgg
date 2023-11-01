@@ -15,6 +15,10 @@ public enum TipoPropiedad {
     
     private String tipo;
     private String emoji;
+    
+    private TipoPropiedad(String tipo){
+        this.tipo = tipo;
+    }
 
     private TipoPropiedad(String tipo, String emoji) {
         this.tipo = tipo;
