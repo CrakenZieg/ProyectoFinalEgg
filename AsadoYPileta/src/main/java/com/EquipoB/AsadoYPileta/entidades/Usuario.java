@@ -1,6 +1,7 @@
 
 package com.EquipoB.AsadoYPileta.entidades;
 
+import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -26,7 +27,8 @@ public class Usuario {
     private Rol rol;
     @Temporal(TemporalType.DATE)
     private Date fechaAlta;
-    private Boolean activo;
+    
+    private Boolean alta;
 
     public Usuario() {
     }
