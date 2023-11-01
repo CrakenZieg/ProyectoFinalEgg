@@ -62,7 +62,29 @@
                                 <label for="descripcion" class="form-label"><span class="h3">Descripción</span></label>                            
                                 <textarea class="form-control" rows="6" id="descripcion" name="descripcion" th:field="*{propiedad.descripcion}"></textarea>
                             </div>
+                            <div >
+                                
+                           <div class="form-group" th:if="${propiedad.estado}==true">
+                          <input th:value="true" type="radio"  id="estado" name="estado" th:checked="true">
+                         <label th:for="alta">Alta</label> 
+                         <br>
+                         <input th:value="false" type="radio" id="estado2" name="estado"  >
+                         <label th:for="alta2" >Baja</label>  
+                         </div>   
+
+                          <div class="form-group" th:if="${propiedad.estado}!=true">
+                         <input th:value="true" type="radio"  id="estado" name="estado">
+                         <label th:for="alta" >Alta</label> 
+                         <br>
+                        <input th:value="false" type="radio" id="estado2" name="estado" th:checked="true" >
+                         <label th:for="alta2" >Baja</label>  
+
+                         </div>
+                         </div>   
+                            
                         </div>
+                        
+                        
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary"><span class="h3">Guardar</span></button>
                         </div>

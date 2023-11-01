@@ -89,10 +89,10 @@ public class PropiedadControlador {
             @RequestParam String direccion, @RequestParam TipoPropiedad tipo,
             @RequestParam(required = false) String[] serviciosInput,
             @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor,
-            @RequestParam(required = false) String[] imagenesViejas) {
+            @RequestParam(required = false) String[] imagenesViejas, @RequestParam String estado) {
         try {
             propiedadServicio.modificarPropiedad(id, titulo, descripcion, ubicacion,
-                    direccion, tipo, serviciosInput, imagenesInput, valor, imagenesViejas);
+                    direccion, tipo, serviciosInput, imagenesInput, valor, imagenesViejas, estado);
         } catch (Exception ex) {
             System.out.println("Excepcion: " + ex);
         }
