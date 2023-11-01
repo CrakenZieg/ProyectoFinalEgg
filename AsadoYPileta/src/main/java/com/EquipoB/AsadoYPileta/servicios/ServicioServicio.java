@@ -95,11 +95,11 @@ public class ServicioServicio {
     
         try {
             validar(tipoComodidad, valor);
+            servicioRepositorio.deleteById(id);
+            
         } catch (MiException ex) {
             ex.getMessage();
         }
-        
-        servicioRepositorio.deleteById(id);
     
     }
     
