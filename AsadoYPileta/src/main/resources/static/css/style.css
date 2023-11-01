@@ -392,3 +392,29 @@
 
 }
 
+
+/* propiedad */
+
+#carouselPropiedad{
+    height: 75vh;
+    .carousel-inner{
+        display: flex;
+        flex-wrap: wrap;
+        align-content: center;
+        justify-content: center;
+        height: 100%;
+        .carousel-item{
+            object-fit: cover;
+            margin:0%;
+            >img{
+                height: 100%;
+            }
+        }
+    }
+}
+
+.volver-eliminar{
+    position: fixed;
+    top: 20vh;
+    width: 100%;
+}

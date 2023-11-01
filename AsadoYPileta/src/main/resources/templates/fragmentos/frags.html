@@ -25,13 +25,9 @@
                             Buscá tu dia ideal
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Quincho</a></li>
-                            <li><a class="dropdown-item" href="#">Jardin</a></li>
-                            <li><a class="dropdown-item" href="#">Fin de semana</a></li>
-                            <li><a class="dropdown-item" href="#">Quinta</a></li>
-                            <li><a class="dropdown-item" href="#">Casa con Pileta</a></li>
-                            <li><a class="dropdown-item" href="#">Chacra</a></li>
-                            <li><a class="dropdown-item" href="#">Estancia</a></li>
+                            <li th:each="tipo : ${T(com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad).values()}">
+                                <a class="dropdown-item" th:text="${tipo.getTipo()}" th:href="@{/propiedad/tipo/${tipo}}">Quincho</a>
+                            </li>                            
                         </ul>
                     </div>
                 </li>
