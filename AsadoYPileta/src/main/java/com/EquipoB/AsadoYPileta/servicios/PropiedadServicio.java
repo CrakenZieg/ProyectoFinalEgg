@@ -46,6 +46,7 @@ public class PropiedadServicio {
         propiedad.setUbicacion(ubicacion);
         propiedad.setDireccion(direccion);
         propiedad.setTipo(tipo);
+        propiedad.setEstado(true);
         propiedad.setServicios(servicios);
         propiedad.setImagenes(imagenes);
         propiedad.setValor(valor);
@@ -55,7 +56,7 @@ public class PropiedadServicio {
     @Transactional
     public void modificarPropiedad(String id, String titulo, String descripcion, String ubicacion,
             String direccion, TipoPropiedad tipo, String[] serviciosInput, MultipartFile[] imagenesInput,
-            Double valor, String[] imagenesViejas) throws MiException, Exception {
+            Double valor, String[] imagenesViejas, String estado) throws MiException, Exception {
 
         validar(titulo, descripcion, ubicacion, direccion, tipo, imagenesInput, valor);
 
@@ -77,6 +78,13 @@ public class PropiedadServicio {
             propiedad.setDescripcion(descripcion);
             propiedad.setUbicacion(ubicacion);
             propiedad.setDireccion(direccion);
+            System.out.println("////////////////////////////////////////////////////////////////////////////"+estado);
+            if("true".equals(estado)){
+                propiedad.setEstado(true);
+           }else{
+              propiedad.setEstado(false); 
+           }
+            propiedad.setEstado(Boolean.valueOf(estado));
             propiedad.setTipo(tipo);
             propiedad.setServicios(servicios);
             propiedad.setImagenes(imagenes);
