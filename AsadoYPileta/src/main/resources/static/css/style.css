@@ -120,116 +120,115 @@
 
 
 /* login*/
-.login-contenedor{
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    background-color: #050505
-        ;
-    justify-content: center;
-
-
+.login-contenedor {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-image: url("https://images.unsplash.com/photo-1602343168117-bb8ffe3e2e9f?auto=format&fit=crop&q=80&w=1450&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background-repeat: none;
+  background-position: center;
+  background-size: cover;
 }
 
-.login{
+.login {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  width: 450px;
+  padding: 1.2rem;
+  background-color: rgba(0, 0, 0, .13);
+  border: 1px solid #222222;
+  border-radius: 0.5rem;
+  box-shadow: 6px 8px 10px #222222;
+}
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content:flex-start;
-    height:400px;
-    width: 450px;
-    padding: 1.2rem;
-    background-color: #d1d1d1;
-    border: 1px solid #222222;
-    border-radius: .5rem;
-    box-shadow: 6px 8px 10px  #222222;
-
+.login h2 {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #ffffff;
 }
 
 
-
-
-.login-contenedor h2{
-    font-size: 1.6rem;
-    font-weight: bold;
-    color: beige;
-
+.inpt-cont{
+  position: relative;
+  width: 300px;
+  border-bottom: 1px solid #ffffff;
+  margin: 20px 0;
 }
 
-.login-form{
 
-    display: flex;
-    position: relative;
-    top:40px;
-    height: 200px;
-    width: 300px;
-    align-items: center;
-    justify-content: center; 
+.inpt-cont label{
+  position: absolute;
+  color: #ffffff;
+  top:50%;
+  left: 5px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  transition: .3s;
+}
+input:focus ~ label,
+input:valid ~ label{
+  top: -1px;
+}
+.inpt-cont input {
+  height: 40px;
+  width: 100%;
+  padding-left: 0;
+  outline: none;
+  font-size: 1.2rem;
+  border: none;
+  background:transparent; 
+  color: 
+  #fffcfc
+  ;
 }
 
-.login-form form{
-    display: flex;
-    flex-direction: column;
-    padding:1.3rem;
-    margin: 10px;
-    align-items: center;
-}
 
-.login-form input {
-
-    height: 20px;
-    width:350px ;
-    padding: 1.2rem;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    text-align: center;
-    border: 2px solid #646566;
-    border-radius: 0 14px 13px ;
-    background-color: rgba(0,0,0,0.5);
-    color: lightgreen;
-    box-shadow: 0 2px 2px #222222;
-}
-
-.login-form input::placeholder{
-    color: white;
-    font-size: 1rem;
-
-}
-
-.login-form input:hover{
-    border: 3.5px solid lightgreen;
-}
 
 .login-form button {
-
-    text-align: center;
-    font-weight: bold;
-    font-size: 0.9rem;
-    color: #646566;
-    height: 50px;
-    width: 80px;
-    margin: 0.9rem;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    padding-right: 16px;
-    padding-left: 12px;
-    border-radius: 20px;
-    background-color: aliceblue;
-    box-shadow: 0 1px 1px white;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #ffffff;
+  height: 50px;
+  width: 100%;
+  margin: 0.9rem;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-right: 16px;
+  padding-left: 12px;
+  border-radius: 20px;
+  background-color: #222222;
+  box-shadow: 0 1px 1px white;
 }
 
-.login-form button:hover{
-    transform: scale(1.1) rotate(0.3deg);
-    background-color: #646566;
-    color: aliceblue;
-    box-shadow: 0 2px 2px #222222;
-    cursor:pointer;
+.login-form button:hover {
+  transform: scale(1.1) rotate(0.3deg);
+  background-color: #646566;
+  color: aliceblue;
+  box-shadow: 0 2px 2px #222222;
+  cursor: pointer;
 }
 
 
+.login-form p {
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+.login-form p a{
+  font-size: 1.2rem;
+  text-decoration: none;
+  color: 
+  #1508ff
+  ;
+}
 /*   Contenedor de cartas*/
 
 
@@ -391,3 +390,29 @@
 
 }
 
+
+/* propiedad */
+
+#carouselPropiedad{
+    height: 75vh;
+    .carousel-inner{
+        display: flex;
+        flex-wrap: wrap;
+        align-content: center;
+        justify-content: center;
+        height: 100%;
+        .carousel-item{
+            object-fit: cover;
+            margin:0%;
+            >img{
+                height: 100%;
+            }
+        }
+    }
+}
+
+.volver-eliminar{
+    position: fixed;
+    top: 20vh;
+    width: 100%;
+}

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import com.EquipoB.AsadoYPileta.entidades.Propiedad;
+import com.EquipoB.AsadoYPileta.entidades.Usuario;
 
 @Controller
 @RequestMapping("/comentario")
@@ -30,9 +32,10 @@ public class ComentarioControlador {
     }
 
     @PostMapping("/registro")
-    public String registro(@RequestParam() String cuerpo, List<MultipartFile> archivos, ModelMap modelo) throws Exception {
+    public String registro(@RequestParam() String cuerpo, @RequestParam MultipartFile[] archivos,@RequestParam Usuario usuario,@RequestParam Propiedad propiedad, ModelMap modelo) throws Exception {
         try {
-            comentarioServicio.crearComentario(archivos, cuerpo);
+            comentarioServicio.crearComentario(archivos, cuerpo, propiedad, usuario);
+            
             modelo.put("exito", "El comentario fue registrado correctamente!");
         } catch (MiException ex) {
 
@@ -60,10 +63,10 @@ public class ComentarioControlador {
     }
 
     @PostMapping("/modificar/{id}")
-    public String actualizar(List<MultipartFile> archivos, @PathVariable String id, @RequestParam String cuerpo, ModelMap modelo) throws Exception {
+    public String actualizar( @RequestParam MultipartFile[] archivos, @PathVariable String id, @RequestParam String cuerpo, Usuario usuario,@RequestParam Propiedad propiedad, @RequestParam(required = false) String [] imagenesViejas, ModelMap modelo) throws Exception {
 
         try {
-            comentarioServicio.modificarComentario(archivos, id, cuerpo);
+            comentarioServicio.modificarComentario(archivos, id, cuerpo, propiedad, usuario, imagenesViejas);
 
             modelo.put("exito", "comentario actualizado correctamente!");
 
