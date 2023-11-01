@@ -77,8 +77,7 @@ public class PropiedadServicio {
             propiedad.setTitulo(titulo);
             propiedad.setDescripcion(descripcion);
             propiedad.setUbicacion(ubicacion);
-            propiedad.setDireccion(direccion);
-            System.out.println("////////////////////////////////////////////////////////////////////////////"+estado);
+            propiedad.setDireccion(direccion);            
             if("true".equals(estado)){
                 propiedad.setEstado(true);
            }else{
