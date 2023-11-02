@@ -4,7 +4,7 @@ package com.EquipoB.AsadoYPileta.entidades;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -16,7 +16,7 @@ public class Contacto {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
-    @ManyToMany
+    @ManyToOne
     private TipoContacto tipo;
     private String contacto;
     

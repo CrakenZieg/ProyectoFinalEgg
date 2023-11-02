@@ -1,6 +1,5 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
-import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.UsuarioRepositorio;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 
@@ -75,7 +73,7 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     @Transactional
-    public void modificarUsuario(String id, String email, String password, Rol rol, LocalDate fechaAlta, Boolean activo) throws MiException {
+    public void modificarUsuario(String id, String email, String password, Rol rol, Date fechaAlta, Boolean activo) throws MiException {
 
         validar(email, password, rol, activo);
 
@@ -119,7 +117,7 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Transactional
     public void bajaUsuario(String id, String email, String password, Rol rol, 
-            LocalDate fechaAlta, Boolean activo) throws MiException{
+            Date fechaAlta, Boolean activo) throws MiException{
 
         Optional<Usuario> respuesta= usuarioRepositorio.findById(id);
          if(respuesta.isPresent()){
@@ -135,7 +133,7 @@ public class UsuarioServicio implements UserDetailsService {
     
     @Transactional
     public void recuperarUsuario(String id, String email, String password, 
-            Rol rol, LocalDate fechaAlta, Boolean activo) throws MiException{
+            Rol rol, Date fechaAlta, Boolean activo) throws MiException{
         Optional<Usuario> respuesta= usuarioRepositorio.findById(id);
          validar(email, password, rol, activo);
        
