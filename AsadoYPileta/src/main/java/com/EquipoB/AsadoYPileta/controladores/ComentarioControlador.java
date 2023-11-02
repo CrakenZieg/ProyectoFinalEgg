@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/comentario")
@@ -32,9 +33,10 @@ public class ComentarioControlador {
     }
 
     @PostMapping("/registro")
-    public String registro(@RequestParam() String cuerpo, @RequestParam MultipartFile[] archivos,@RequestParam Usuario usuario,@RequestParam Propiedad propiedad, ModelMap modelo) throws Exception {
+    public String registro(@RequestParam() String cuerpo,HttpSession session, @RequestParam MultipartFile[] archivos,@RequestParam Usuario usuario,@RequestParam String stringIdpropiedad, ModelMap modelo) throws Exception {
         try {
-            comentarioServicio.crearComentario(archivos, cuerpo, propiedad, usuario);
+             
+            comentarioServicio.crearComentario(session, archivos, cuerpo, stringIdpropiedad);
             
             modelo.put("exito", "El comentario fue registrado correctamente!");
         } catch (MiException ex) {
@@ -63,10 +65,10 @@ public class ComentarioControlador {
     }
 
     @PostMapping("/modificar/{id}")
-    public String actualizar( @RequestParam MultipartFile[] archivos, @PathVariable String id, @RequestParam String cuerpo, Usuario usuario,@RequestParam Propiedad propiedad, @RequestParam(required = false) String [] imagenesViejas, ModelMap modelo) throws Exception {
+    public String actualizar( @RequestParam MultipartFile[] archivos, @PathVariable String id,HttpSession session,  @RequestParam String cuerpo, Usuario usuario,@RequestParam String stringIdpropiedad, @RequestParam(required = false) String [] imagenesViejas, ModelMap modelo) throws Exception {
 
         try {
-            comentarioServicio.modificarComentario(archivos, id, cuerpo, propiedad, usuario, imagenesViejas);
+            comentarioServicio.modificarComentario(session, archivos, id, cuerpo, stringIdpropiedad, imagenesViejas);
 
             modelo.put("exito", "comentario actualizado correctamente!");
 

@@ -106,7 +106,7 @@ public class UsuarioServicio implements UserDetailsService {
         usuarioRepositorio.deleteById(id);
     
     }
-      public void eliminarUsuarioG(String id, String email, String password, Rol rol, Date fechaAlta, Boolean activo) throws MiException{
+      public void bajaUsuario(String id, String email, String password, Rol rol, Date fechaAlta, Boolean activo) throws MiException{
         Optional<Usuario> respuesta= usuarioRepositorio.findById(id);
         
        validar(email, password, rol, fechaAlta, activo);
