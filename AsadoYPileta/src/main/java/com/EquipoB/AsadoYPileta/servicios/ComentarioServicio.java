@@ -9,6 +9,7 @@ import com.EquipoB.AsadoYPileta.repositorios.ComentarioRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,23 +22,24 @@ public class ComentarioServicio {
     private ComentarioRepositorio comentarioRepositorio;
     @Autowired
     private ImagenServicio imagenServicio;
-     @Autowired
+    @Autowired
     private PropiedadServicio propiedadServicio;
-      @Autowired
+    @Autowired
     private UsuarioServicio usuarioServicio;
 
     @Transactional
-    public void crearComentario(MultipartFile[] archivos, String cuerpo, Propiedad propiedad, Usuario usuario) throws MiException, Exception {
-        validar(cuerpo, archivos, propiedad, usuario);
+    public void crearComentario(HttpSession session, MultipartFile[] archivos, String cuerpo, String stringIdpropiedad) throws MiException, Exception {
+        validar(cuerpo, archivos, stringIdpropiedad);
 
         Comentario comentario = new Comentario();
         comentario.setCuerpo(cuerpo);
         List<Imagen> imagenes = new ArrayList<>();
         imagenes = imagenServicio.guardarVarias(archivos);
         comentario.setImagenes(imagenes);
-        Propiedad Propiedad = propiedadServicio.getOne(usuario.getId());
+        Propiedad propiedad = propiedadServicio.getOne(stringIdpropiedad);
         comentario.setPropiedad(propiedad);
-        comentario.setUsuario(usuario);
+        Usuario logueado = (Usuario) session.getAttribute("usuariosession");
+        comentario.setUsuario(logueado);
 
         comentarioRepositorio.save(comentario);
 
@@ -52,32 +54,33 @@ public class ComentarioServicio {
         return comentarios;
     }
 
-    public void modificarComentario(MultipartFile[] archivos, String id, String cuerpo, Propiedad propiedad, Usuario usuario, String[] imagenesViejas) throws MiException, Exception {
-         validar(cuerpo, archivos, propiedad, usuario);
+    public void modificarComentario(HttpSession session, MultipartFile[] archivos, String id, String cuerpo, String stringIdpropiedad, String[] imagenesViejas) throws MiException, Exception {
+        validar(cuerpo, archivos, stringIdpropiedad);
         Optional<Comentario> respuesta = comentarioRepositorio.findById(id);
-
         if (respuesta.isPresent()) {
 
             Comentario comentario = respuesta.get();
             comentario.setCuerpo(cuerpo);
-             List<Imagen> imagenes = propiedad.getImagenes();
-            
-            if(imagenesViejas != null){ 
-                if(imagenesViejas.length != 0){
-                    imagenes = imagenServicio.filtrar(imagenes, 
+            List<Imagen> imagenes = comentario.getImagenes();
+
+            if (imagenesViejas != null) {
+                if (imagenesViejas.length != 0) {
+                    imagenes = imagenServicio.filtrar(imagenes,
                             imagenesViejas);
                 }
-            }     
-            if(archivos != null){
-                if(archivos.length != 0){
-                    imagenes.addAll(imagenServicio.guardarVarias(archivos));
-                } 
             }
-
-            comentario.setImagenes(imagenes);
+            if (archivos != null) {
+                if (archivos.length != 0) {
+                    imagenes.addAll(imagenServicio.guardarVarias(archivos));
+                }
+            }
+            Propiedad propiedad = propiedadServicio.getOne(stringIdpropiedad);
             comentario.setPropiedad(propiedad);
-            comentario.setUsuario(usuario);
-            
+            comentario.setImagenes(imagenes);
+
+            Usuario logueado = (Usuario) session.getAttribute("usuariosession");
+            comentario.setUsuario(logueado);
+
             comentarioRepositorio.save(comentario);
         }
     }
@@ -87,7 +90,7 @@ public class ComentarioServicio {
         return comentarioRepositorio.getById(id);
     }
 
-    private void validar(String cuerpo, MultipartFile[] imagenes, Propiedad propiedad, Usuario usuario) throws MiException {
+    private void validar(String cuerpo, MultipartFile[] imagenes, String stringIdpropiedad) throws MiException {
 
         if (cuerpo.isEmpty() || cuerpo == null) {
             throw new MiException("el comentario no puede ser nulo o estar vacío");
@@ -95,12 +98,10 @@ public class ComentarioServicio {
         if (imagenes.length == 0 || imagenes == null) {
             throw new MiException("Las imagenes no puede ser nulas o estar vacias");
         }
-        if (propiedad == null) {
+        if (stringIdpropiedad.isEmpty() || stringIdpropiedad == null) {
             throw new MiException("la propiedad no puede no estar cargada");
         }
-        if (usuario == null) {
-            throw new MiException("el usuario no puede estar vacío");
-        }
+
     }
 
 }
