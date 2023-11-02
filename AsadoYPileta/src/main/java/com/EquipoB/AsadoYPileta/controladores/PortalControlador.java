@@ -54,10 +54,10 @@ public class PortalControlador {
     }
     
     @PostMapping("/registro")
-    public String registro(@RequestParam String email, @RequestParam String password, @RequestParam Rol rol, MultipartFile imagen, ModelMap modelo) throws Exception {
+    public String registro(@RequestParam String email, @RequestParam String password, @RequestParam Rol rol, ModelMap modelo) throws Exception {
 
         try {
-            usuarioServicio.crearUsuario(email, password, rol,imagen);
+            usuarioServicio.crearUsuario(email, password, rol);
 
             
             return "index.html";

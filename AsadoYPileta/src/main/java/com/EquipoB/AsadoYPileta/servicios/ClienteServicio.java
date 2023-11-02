@@ -1,6 +1,7 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
+import com.EquipoB.AsadoYPileta.entidades.Contacto;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.ClienteRepositorio;
@@ -17,10 +18,10 @@ public class ClienteServicio {
     private ClienteRepositorio clienteRepositorio;
     
     @Transactional
-    public void crearCliente(String nombre, String apellido, ArrayList<Imagen> imagenes, String descripcion,
-            List<String> contactoTel, List<String> contactoEmail,List<String> contactoRedes, List<Contacto> contactos) throws MiException{
+    public void crearCliente(String nombre, String apellido, List<Imagen> imagenes, 
+            String descripcion, List<Contacto> contactos) throws MiException{
         
-        validar(nombre,apellido,imagenes, descripcion, contactoTel, contactoEmail, contactoRedes, contactos);
+        validar(nombre, apellido, imagenes, descripcion, contactos);
         
         Cliente cliente = new Cliente();
         
@@ -28,9 +29,6 @@ public class ClienteServicio {
         cliente.setApellido(apellido);
         cliente.setImagenes(imagenes);
         cliente.setDescripcion(descripcion);
-        cliente.setContactoTel(contactoTel);
-        cliente.setContactoEmail(contactoEmail);
-        cliente.setContactoRedes(contactoRedes);
         cliente.setContactos(contactos);
         
         clienteRepositorio.save(cliente);
@@ -46,11 +44,8 @@ public class ClienteServicio {
         return clientes;
     }
     
-    
-    
-    
-
-    private void validar(String nombre, String apellido, ArrayList<Imagen> imagenes, String descripcion, List<String> contactoTel, List<String> contactoEmail, List<String> contactoRedes, List<Contacto> contactos) throws MiException {
+    private void validar(String nombre, String apellido, List<Imagen> imagenes, 
+            String descripcion, List<Contacto> contactos) throws MiException {
 
         if (nombre.isEmpty() || nombre == null) {
 
@@ -70,22 +65,7 @@ public class ClienteServicio {
         if (descripcion.isEmpty() || descripcion == null) {
 
             throw new MiException("La descripcion no puede ser nulo o estar vacia");
-        }
-
-        if (contactoTel.isEmpty() || contactoTel == null) {
-
-            throw new MiException("El telefono no puede ser nulo o estar vacia");
-        }
-        
-         if (contactoEmail.isEmpty() || contactoEmail == null) {
-
-            throw new MiException("El Email no puede ser nulo o estar vacia");
-        }
-         
-         if (contactoRedes.isEmpty() || contactoRedes == null) {
-
-            throw new MiException("Las redes sociales no puede ser nulo o estar vacia");
-        } 
+        }      
          
           if (contactos.isEmpty() || contactos == null) {
 
