@@ -27,8 +27,6 @@ public class PropiedadServicio {
     @Autowired
     private ImagenServicio imagenServicio;
     
-    @Autowired
-    private UsuarioServicio usuarioServicio;
 
     @Transactional
     public void crearPropiedad(String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo,
