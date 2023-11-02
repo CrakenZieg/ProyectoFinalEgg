@@ -1,5 +1,6 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
+import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import java.util.ArrayList;
@@ -15,11 +16,14 @@ import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.UsuarioRepositorio;
 import java.util.Date;
 import java.util.Optional;
-import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
+//import org.springframework.web.multipart.MultipartFile;
 
 @Service
 
@@ -27,6 +31,8 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
+    @Autowired
+    private ImagenServicio imagenServicio;
   
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -46,22 +52,26 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     @Transactional
-    public void crearUsuario(String email, String password, Rol rol, Date fechaAlta, Boolean activo) throws MiException {
+    public void crearUsuario(String email, String password, Rol rol,MultipartFile imagen) throws MiException, Exception {
 
-        validar(email, password, rol, fechaAlta, activo);
+        validar(email, password, rol, true);
 
         Usuario usuario = new Usuario();
 
         usuario.setEmail(email);
         usuario.setPassword(password);
         usuario.setRol(rol);
-        usuario.setFechaAlta(fechaAlta);
-        usuario.setAlta(activo);
+        usuario.setFechaAlta(new Date());
+        usuario.setAlta(true);
+        Imagen imagenUsuario =imagenServicio.guardar(imagen);
+        
+//        usuario.setImagen(imagen);
 
         usuarioRepositorio.save(usuario);
 
     }
-
+    
+     @Transactional(readOnly = true)
     public List<Usuario> listarUsuarios() {
 
         List<Usuario> usuarios = new ArrayList();
@@ -74,7 +84,7 @@ public class UsuarioServicio implements UserDetailsService {
     @Transactional
     public void modificarUsuario(String id, String email, String password, Rol rol, Date fechaAlta, Boolean activo) throws MiException {
 
-        validar(email, password, rol, fechaAlta, activo);
+        validar(email, password, rol, activo);
 
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
 
@@ -91,7 +101,7 @@ public class UsuarioServicio implements UserDetailsService {
             usuarioRepositorio.save(usuario);
         }
     }
-    
+     @Transactional(readOnly = true)
     public Usuario getOne(String id){
         
         return usuarioRepositorio.getOne(id);
@@ -99,27 +109,34 @@ public class UsuarioServicio implements UserDetailsService {
     
     
      @Transactional
-    public void eliminarUsuario(String id, String email, String password, Rol rol, Date fechaAlta, Boolean activo) throws MiException{
+    public void eliminarUsuario(String id) throws MiException{
     
-        validar(email, password, rol, fechaAlta, activo);
-        
-        usuarioRepositorio.deleteById(id);
-    
-    }
-      public void eliminarUsuarioG(String id, String email, String password, Rol rol, Date fechaAlta, Boolean activo) throws MiException{
         Optional<Usuario> respuesta= usuarioRepositorio.findById(id);
-        
-       validar(email, password, rol, fechaAlta, activo);
+        if(respuesta.isPresent()){
+             usuarioRepositorio.deleteById(id);
+        }else{
+            throw new MiException ("No se encontro el usuario");
+        }
+       
+    }
+     @Transactional
+      public void eliminarUsuarioG(String id) throws MiException{
+          
+        Optional<Usuario> respuesta= usuarioRepositorio.findById(id);
+         if(respuesta.isPresent()){
             Usuario usuario = new Usuario();
             usuario = respuesta.get();
            
             usuario.setAlta(false);
-          
-            usuarioRepositorio.save(usuario);
+             usuarioRepositorio.save(usuario);
+        }else{
+            throw new MiException ("No se encontro el usuario");
+        }
     }
+     @Transactional
     public void recuperarUsuario(String id, String email, String password, Rol rol, Date fechaAlta, Boolean activo) throws MiException{
         Optional<Usuario> respuesta= usuarioRepositorio.findById(id);
-         validar(email, password, rol, fechaAlta, activo);
+         validar(email, password, rol, activo);
        
             Usuario usuario = new Usuario();
             usuario = respuesta.get();
@@ -129,7 +146,7 @@ public class UsuarioServicio implements UserDetailsService {
             usuarioRepositorio.save(usuario);
     }
 
-    private void validar(String email, String password, Rol rol, Date fechaAlta, Boolean activo) throws MiException {
+    private void validar(String email, String password, Rol rol, Boolean activo) throws MiException {
 
         if (email.isEmpty() || email == null) {
 
@@ -144,11 +161,6 @@ public class UsuarioServicio implements UserDetailsService {
         if ( rol == null) {
 
             throw new MiException("El Rol no puede ser nulo o estar vacio");
-        }
-
-        if (fechaAlta == null) {
-
-            throw new MiException("La fecha de alta no puede ser nulo ");
         }
 
         if (activo == false) {
