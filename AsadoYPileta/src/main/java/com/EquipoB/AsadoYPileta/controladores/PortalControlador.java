@@ -35,6 +35,7 @@ public class PortalControlador {
         return "index.html";
     }
     
+
     @GetMapping("/registrar")
     public String registrar (ModelMap modelo){
         return "registro.html";
@@ -58,4 +59,5 @@ public class PortalControlador {
             return "registro.html";
         }
     }
+
 }
