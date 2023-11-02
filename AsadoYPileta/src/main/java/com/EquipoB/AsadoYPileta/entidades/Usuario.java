@@ -2,12 +2,13 @@
 package com.EquipoB.AsadoYPileta.entidades;
 
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
-import java.util.Date;
+import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
@@ -28,11 +29,16 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private Rol rol;
     @Temporal(TemporalType.DATE)
-    private Date fechaAlta;
+    private LocalDate fechaAlta;
     
     private Boolean alta;
 
     public Usuario() {
     }
+    
+    @PrePersist
+    protected void onCreate() {
+        this.fechaAlta = LocalDate.now();
+    }    
     
 }

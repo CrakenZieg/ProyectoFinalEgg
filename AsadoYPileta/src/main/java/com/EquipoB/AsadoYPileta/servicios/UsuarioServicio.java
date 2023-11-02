@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.UsuarioRepositorio;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +30,6 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
-    @Autowired
-    private ImagenServicio imagenServicio;
   
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -51,7 +49,7 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     @Transactional
-    public void crearUsuario(String email, String password, Rol rol,MultipartFile imagen) throws MiException, Exception {
+    public void crearUsuario(String email, String password, Rol rol) throws MiException, Exception {
 
         validar(email, password, rol, true);
 
@@ -60,11 +58,7 @@ public class UsuarioServicio implements UserDetailsService {
         usuario.setEmail(email);
         usuario.setPassword(password);
         usuario.setRol(rol);
-        usuario.setFechaAlta(new Date());
         usuario.setAlta(true);
-        Imagen imagenUsuario =imagenServicio.guardar(imagen);
-        
-//        usuario.setImagen(imagen);
 
         usuarioRepositorio.save(usuario);
 
@@ -81,7 +75,7 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     @Transactional
-    public void modificarUsuario(String id, String email, String password, Rol rol, Date fechaAlta, Boolean activo) throws MiException {
+    public void modificarUsuario(String id, String email, String password, Rol rol, LocalDate fechaAlta, Boolean activo) throws MiException {
 
         validar(email, password, rol, activo);
 
@@ -119,15 +113,13 @@ public class UsuarioServicio implements UserDetailsService {
        
     }
 
-  
    @Transactional
     public void eliminarUsuarioG(String id) throws MiException{
-    
     }
 
-      @Transactional
-    public void bajaUsuario(String id, String email, String password, Rol rol, Date fechaAlta, Boolean activo) throws MiException{
-
+    @Transactional
+    public void bajaUsuario(String id, String email, String password, Rol rol, 
+            LocalDate fechaAlta, Boolean activo) throws MiException{
 
         Optional<Usuario> respuesta= usuarioRepositorio.findById(id);
          if(respuesta.isPresent()){
@@ -140,8 +132,10 @@ public class UsuarioServicio implements UserDetailsService {
             throw new MiException ("No se encontro el usuario");
         }
     }
-     @Transactional
-    public void recuperarUsuario(String id, String email, String password, Rol rol, Date fechaAlta, Boolean activo) throws MiException{
+    
+    @Transactional
+    public void recuperarUsuario(String id, String email, String password, 
+            Rol rol, LocalDate fechaAlta, Boolean activo) throws MiException{
         Optional<Usuario> respuesta= usuarioRepositorio.findById(id);
          validar(email, password, rol, activo);
        
