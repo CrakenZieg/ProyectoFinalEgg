@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
-//import org.springframework.web.multipart.MultipartFile;
 
 @Service
 
@@ -119,9 +118,17 @@ public class UsuarioServicio implements UserDetailsService {
         }
        
     }
-     @Transactional
-      public void eliminarUsuarioG(String id) throws MiException{
-          
+
+  
+   @Transactional
+    public void eliminarUsuarioG(String id) throws MiException{
+    
+    }
+
+      @Transactional
+    public void bajaUsuario(String id, String email, String password, Rol rol, Date fechaAlta, Boolean activo) throws MiException{
+
+
         Optional<Usuario> respuesta= usuarioRepositorio.findById(id);
          if(respuesta.isPresent()){
             Usuario usuario = new Usuario();
