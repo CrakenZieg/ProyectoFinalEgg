@@ -1,14 +1,15 @@
 package com.EquipoB.AsadoYPileta.controladores;
 
-import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
+import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
+import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
-import com.EquipoB.AsadoYPileta.servicios.ImagenServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -63,10 +64,11 @@ public class PropiedadControlador {
     public String registro(@RequestParam String titulo, @RequestParam String descripcion,
             @RequestParam String ubicacion, @RequestParam String direccion,
             @RequestParam TipoPropiedad tipo, @RequestParam(required = false) String[] serviciosInput,
-            @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor) {        
+            @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor, HttpSession session) {        
         try {
+            Propietario logueado = (Propietario) session.getAttribute("usuariosession");
             propiedadServicio.crearPropiedad(titulo, descripcion, ubicacion,
-                    direccion, tipo, serviciosInput, imagenesInput, valor);
+                    direccion, tipo, serviciosInput, imagenesInput, valor, logueado);
         } catch (Exception ex) {
             System.out.println("Excepcion: " + ex);
         }
