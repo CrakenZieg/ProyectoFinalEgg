@@ -35,6 +35,7 @@ public class PortalControlador {
         return "index.html";
     }
     
+
     @GetMapping("/registrar")
     public String registrar (ModelMap modelo){
         
@@ -67,4 +68,5 @@ public class PortalControlador {
         }
 
     }
+
 }
