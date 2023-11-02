@@ -21,6 +21,8 @@ public class Usuario {
     @GeneratedValue (generator= "uuid")
     @GenericGenerator (name= "uuid", strategy = "uuid2")
     private String id;
+    private String nombre;
+    private String apellido;    
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
@@ -32,7 +34,5 @@ public class Usuario {
 
     public Usuario() {
     }
-    
-    
     
 }
