@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="/fragmentos/frags :: head"></head>
+    <body>
+        <header th:replace="fragmentos/frags :: header"></header>
+        
+        <main>
+            
+            
+
+    <h1 class="text-center">Panel de Administración</h1>
+    <div class="container-sm">
+      <div id="carouselExampleIndicators" class="carousel slide">
+
+        <div class="position-relative">
+
+          <!--                    menú panel Administrador                             -->
+
+          <ul class="nav nav-pills nav-fill gap-2 p-1 small bg-black rounded-5 shadow-sm" id="pillNav2" role="tablist"
+            style="
+                --bs-nav-link-color: var(--bs-white);
+                --bs-nav-pills-link-active-color: var(--bs-primary);
+                --bs-nav-pills-link-active-bg: var(--bs-white);
+              ">
+            <li class="nav-item" role="presentation" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0">
+              <button class="nav-link active rounded-5" id="home-tab2" data-bs-toggle="tab" type="button" role="tab"
+                aria-selected="true">
+                Usuarios
+              </button>
+            </li>
+            <li class="nav-item" role="presentation" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1">
+              <button class="nav-link rounded-5" id="profile-tab2" data-bs-toggle="tab" type="button" role="tab"
+                aria-selected="false">
+                Comentarios
+              </button>
+            </li>
+            <li class="nav-item" role="presentation" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2">
+              <button class="nav-link rounded-5" id="contact-tab2" data-bs-toggle="tab" type="button" role="tab"
+                aria-selected="false">
+                Propiedades
+              </button>
+            </li>
+          </ul>
+
+          <!--                    menú panel Administrador                             -->
+
+        </div>
+
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+
+            <!--                                  barra de busqueda Usuarios                   -->
+
+            <br>
+
+            <div class="container-sm" style="width: 300px">
+              <form class="form-inline my-2 my-lg-0">
+                <select id="searchUser" name="buscarPor..." class="form-select bg-dark text-primary"
+                  aria-label="Default select example">
+                  <option name="todo" value="todo">todo</option>
+                  <option name="nombre" value="nombre">Nombre</option>
+                  <option nombre="apellido" value="apellido">Apellido</option>
+                  <option nombre="mail" value="mail">E-mail</option>
+                </select>
+                <input class="form-control mr-sm-2" type="search" placeholder="Buscar Usuarios" aria-label="Buscar" />
+                <button class="btn btn-outline-black bg-dark text-primary my-2 my-sm-0" type="submit">
+                  Buscar usuario
+                </button>
+              </form>
+            </div>
+
+            <!--                                  barra de busqueda usuarios                   -->
+
+            <br />
+            <!--                                  barra de usuarios                   -->
+            <div class="accordion" id="barraUsuarioId">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="barraUsuario">
+                  <button class="accordion-button collapsed position-relative bg-dark text-white" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#barraUsuarioDiv" aria-expanded="false"
+                    aria-controls="barraUsuarioDiv">
+                    <p class="h3 position-absolute top-50 start-50 translate-middle ">
+                      <i class="bi bi-people"></i>
+                      Ver y Modificar Usuarios
+                    </p>
+                  </button>
+                </h2>
+                <div id="barraUsuarioDiv" class="accordion-collapse collapse" aria-labelledby="barraUsuario"
+                  data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <div class="container">
+                      <table class="table table-dark table-striped text-center">
+                        <thead>
+                          <tr>
+                            <th scope="col" class="h4">Nombre</th>
+                            <th scope="col" class="h4">Apellido</th>
+                            <th scope="col" class="h4">E-Mail</th>
+                            <th scope="col" class="h4">Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td scope="row" class="h5"></td>
+                            <td class="h5"></td>
+                            <td class="h5"></td>
+                            <td>
+                              <a><i class="bi bi-feather"></i><span class="h5">Modificar</span></a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--                                  barra de usuarios                   -->
+          </div>
+
+          <div class="carousel-item">
+            <br />
+            <!--                                  barra de busqueda de comentarios                   -->
+
+            <div class="container-sm" style="width: 300px">
+              <form class="form-inline my-2 my-lg-0">
+                <select id="searchComentario" name="tipoBusqueda" class="form-select bg-dark text-primary"
+                  aria-label="Default select example">
+                  <option name="todo" value="todo">todo</option>
+                  <option name="propiedad" value="propiedad">Propiedad</option>
+                  <option nombre="usuario" value="usuario">Usuario</option>
+                </select>
+                <input class="form-control mr-sm-2" type="search" placeholder="Buscar Usuarios" aria-label="Buscar" />
+                <button class="btn btn-outline-black bg-dark text-primary my-2 my-sm-0" type="submit">
+                  Buscar comentario
+                </button>
+              </form>
+            </div>
+
+            <!--                                  barra de busqueda de comentarios                   -->
+
+            <br />
+            <!--                                  barra de comentarios                   -->
+            <div class="accordion" id="accordionExample2">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="h2Comentario">
+                  <button class="accordion-button collapsed position-relative bg-dark text-white" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#comentarioButton" aria-expanded="false" aria-controls="comentarioButton">
+                    <p class="h3 position-absolute top-50 start-50 translate-middle">
+                      <i class="bi bi-chat-dots"></i>
+                      Ver y Modificar Comentarios
+                    </p>
+                  </button>
+                </h2>
+                <div id="comentarioButton" class="accordion-collapse collapse" aria-labelledby="h2Comentario"
+                  data-bs-parent="#accordionExample2">
+                  <div class="accordion-body">
+                    <div class="container">
+                      <table class="table table-dark table-striped text-center">
+                        <thead>
+                          <tr>
+                            <th scope="col" class="h4">Usuario</th>
+                            <th scope="col" class="h4">Propiedad</th>
+                            <th scope="col" class="h4">Cuerpo</th>
+                            <th scope="col" class="h4">Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td scope="row" class="h5"></td>
+                            <td class="h5"></td>
+                            <td class="h5"></td>
+                            <td>
+                              <a><i class="bi bi-feather"></i><span class="h5">Modificar</span></a>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--                                  barra de comentarios                   -->
+          <div class="carousel-item">
+            <br />
+            <div class="container-sm" style="width: 300px">
+
+              <!--                                  barra de busqueda propiedades                    -->
+
+              <form class="form-inline my-2 my-lg-0">
+                <select id="searchPublicaciones" name="tipoBusqueda" class="form-select bg-dark text-primary"
+                  aria-label="Default select example">
+                  <option name="todo" value="todo">todo</option>
+                  <option name="titulo" value="titulo">Título</option>
+                  <option nombre="ubicacion" value="ubicacion">Ubicación</option>
+                  <option nombre="tipo" value="tipo">Tipo de Propiedad</option>
+                </select>
+                <input class="form-control mr-sm-2" type="search" placeholder="Buscar Propiedades"
+                  aria-label="Buscar" />
+                <button class="btn btn-outline-black bg-dark text-primary my-2 my-sm-0" type="submit">
+                  Buscar propiedades
+                </button>
+              </form>
+            </div>
+
+            <!--                                  barra de busqueda  propiedades                  -->
+
+            <br />
+            <!--                                  barra de  propiedades                -->
+            <div class="accordion" id="accordionExample2">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="h2Propiedad">
+                  <button class="accordion-button collapsed position-relative bg-dark text-white" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#propiedadButton" aria-expanded="false" aria-controls="propiedadButton">
+                    <p class="h3 position-absolute top-50 start-50 translate-middle">
+                      <i class="bi bi-house-gear"></i>
+                      Ver y Modificar Propiedades
+                    </p>
+                  </button>
+                </h2>
+                <div id="propiedadButton" class="accordion-collapse collapse" aria-labelledby="h2Propiedad"
+                  data-bs-parent="#accordionExample2">
+                  <div class="accordion-body">
+                    <div class="container">
+                    <table class="table table-dark table-striped text-center">
+                      <thead>
+                        <tr>
+                          <th scope="col" class="h4">Título</th>
+                          <th scope="col" class="h4">Ubicación</th>
+                          <th scope="col" class="h4">Estado</th>
+                          <th scope="col" class="h4">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td scope="row" class="h5"></td>
+                          <td class="h5"></td>
+                          <td class="h5"></td>
+                          <td>
+                            <a><i class="bi bi-feather"></i><span class="h5">Modificar</span></a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--                                  barra de usuarios propiedades                -->
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+
+
+            
+            
+                
+        </main>
+     
+        <footer th:replace="fragmentos/frags :: footer"></footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>        
+    </body>
+</html>
