@@ -47,6 +47,7 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     @Transactional
+    
     public void crearUsuario(String email, String password, Rol rol) throws MiException, Exception {
 
         validar(email, password, rol, true);
@@ -61,7 +62,6 @@ public class UsuarioServicio implements UserDetailsService {
         usuarioRepositorio.save(usuario);
 
     }
-    
      @Transactional(readOnly = true)
     public List<Usuario> listarUsuarios() {
 
@@ -110,9 +110,23 @@ public class UsuarioServicio implements UserDetailsService {
         }
        
     }
-
-   @Transactional
-    public void eliminarUsuarioG(String id) throws MiException{
+    
+    @Transactional
+    public void cambiarRol(String id){
+        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
+    	
+    	if(respuesta.isPresent()) {
+    		
+    		Usuario usuario = respuesta.get();
+    		
+    		if(usuario.getRol().equals(Rol.PROPIETARIO)) {
+    			
+    		usuario.setRol(Rol.CLIENTE);
+    		
+    		}else if(usuario.getRol().equals(Rol.CLIENTE)) {
+    			usuario.setRol(Rol.PROPIETARIO);
+    		}
+    	}
     }
 
     @Transactional
