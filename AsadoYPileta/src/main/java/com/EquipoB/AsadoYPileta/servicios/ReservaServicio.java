@@ -47,7 +47,11 @@ public class ReservaServicio {
 
     public void modificarReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible) throws MiException {
 
+        validar(mensaje, fechaInicio, fechaFin, disponible);
+        
         Optional<Reserva> respuesta = reservaRepositorio.findById(id);
+        
+     
 
         if (respuesta.isPresent()) {
 
@@ -62,6 +66,13 @@ public class ReservaServicio {
         }
 
     }
+    
+    public Reserva getOne(String id){
+        
+        return reservaRepositorio.getOne(id);
+    }
+    
+    
     
     @Transactional
     public void borrar(String id){
