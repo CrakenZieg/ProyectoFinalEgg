@@ -10,6 +10,8 @@ public class Cliente extends Usuario {
 
     @OneToMany
     private List<Imagen> imagenes;
+    private String nombre;
+    private String apellido;
     private String descripcion;
     @OneToMany
     private List<Contacto> contactos;

@@ -47,10 +47,12 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     @Transactional
-    public void crearUsuario(String nombre, String apellido, String email, String password, Rol rol, Date fechaAlta,
-            Boolean alta) throws MiException, Exception {
 
-        validar(nombre, apellido, email, password, rol, alta);
+    
+    public void crearUsuario(String email, String password, Rol rol) throws MiException, Exception {
+
+
+        validar( email, password, rol);
 
         Usuario usuario = new Usuario();
 
@@ -62,7 +64,6 @@ public class UsuarioServicio implements UserDetailsService {
         usuarioRepositorio.save(usuario);
 
     }
-    
      @Transactional(readOnly = true)
     public List<Usuario> listarUsuarios() {
 
@@ -77,7 +78,7 @@ public class UsuarioServicio implements UserDetailsService {
     public void modificarUsuario(String id, String nombre, String apellido, String email, String password, Rol rol, Date fechaAlta,
             Boolean alta) throws MiException {
 
-        validar(nombre, apellido, email, password, rol, alta);
+        validar(email, password, rol);
 
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
 
@@ -112,9 +113,23 @@ public class UsuarioServicio implements UserDetailsService {
         }
        
     }
-
-   @Transactional
-    public void eliminarUsuarioG(String id) throws MiException{
+    
+    @Transactional
+    public void cambiarRol(String id){
+        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
+    	
+    	if(respuesta.isPresent()) {
+    		
+    		Usuario usuario = respuesta.get();
+    		
+    		if(usuario.getRol().equals(Rol.PROPIETARIO)) {
+    			
+    		usuario.setRol(Rol.CLIENTE);
+    		
+    		}else if(usuario.getRol().equals(Rol.CLIENTE)) {
+    			usuario.setRol(Rol.PROPIETARIO);
+    		}
+    	}
     }
 
     @Transactional
@@ -137,7 +152,7 @@ public class UsuarioServicio implements UserDetailsService {
     public void recuperarUsuario(String id, String nombre, String apellido, String email, String password, Rol rol, Date fechaAlta,
             Boolean alta) throws MiException{
         Optional<Usuario> respuesta= usuarioRepositorio.findById(id);
-         validar(nombre, apellido, email, password, rol, alta);
+         validar( email, password, rol);
        
             Usuario usuario = new Usuario();
             usuario = respuesta.get();
@@ -147,17 +162,9 @@ public class UsuarioServicio implements UserDetailsService {
             usuarioRepositorio.save(usuario);
     }
 
-    private void validar(String nombre, String apellido, String email, String password, Rol rol, Boolean activo) throws MiException {
+    private void validar(String email, String password, Rol rol) throws MiException {
 
-         if (nombre.isEmpty() || nombre == null) {
-
-            throw new MiException("El nombre no puede ser nulo o estar vacio");
-        }
-         
-          if (apellido.isEmpty() || apellido == null) {
-
-            throw new MiException("El apellido no puede ser nulo o estar vacio");
-        }
+      
         
         if (email.isEmpty() || email == null) {
 
@@ -174,11 +181,7 @@ public class UsuarioServicio implements UserDetailsService {
             throw new MiException("El Rol no puede ser nulo o estar vacio");
         }
 
-        if (activo == false) {
-
-            throw new MiException("El usuario tiene que estar activo");
-        }
-
+       
     }
 
 }
