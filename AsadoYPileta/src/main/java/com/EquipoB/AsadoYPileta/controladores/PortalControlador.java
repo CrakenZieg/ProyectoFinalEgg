@@ -26,7 +26,7 @@ public class PortalControlador {
     private UsuarioServicio usuarioServicio;
     
     private TipoPropiedad tipos;
-
+    
     @GetMapping("/")
     public String index(ModelMap model){        
         List<Propiedad> propiedades = propiedadServicio.listarPropiedades();
@@ -53,7 +53,7 @@ public class PortalControlador {
     public String registro(@RequestParam String email, @RequestParam String password, 
             @RequestParam Rol rol, ModelMap modelo) throws Exception {
         try {
-            usuarioServicio.crearUsuario(email, password, rol);            
+            usuarioServicio.crearUsuario(email, email, email, password, password, rol);
             return "index.html";
         } catch (MiException ex) {           
             return "registro.html";
