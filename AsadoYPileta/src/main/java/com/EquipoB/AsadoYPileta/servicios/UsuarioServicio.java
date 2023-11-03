@@ -93,11 +93,9 @@ public class UsuarioServicio implements UserDetailsService {
         }
     }
      @Transactional(readOnly = true)
-    public Usuario getOne(String id){
-        
+    public Usuario getOne(String id){        
         return usuarioRepositorio.getOne(id);
     }
-    
     
      @Transactional
     public void eliminarUsuario(String id) throws MiException{
