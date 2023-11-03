@@ -88,6 +88,7 @@ public class ImagenServicio {
 
     }
     
+    @Transactional
     public List<Imagen> filtrar(List<Imagen> imagenesRepo, String[] imagenesViejas){
         for (String imagenVieja : imagenesViejas) {
             Optional<Imagen> respuesta = imagenRepositorio.findById(imagenVieja);
