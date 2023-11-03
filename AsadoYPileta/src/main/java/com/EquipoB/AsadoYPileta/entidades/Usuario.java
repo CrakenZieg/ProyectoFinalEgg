@@ -39,6 +39,7 @@ public class Usuario {
     @PrePersist
     protected void onCreate() {
         this.fechaAlta = new Date();
+        this.alta= true;
     }    
     
 }
