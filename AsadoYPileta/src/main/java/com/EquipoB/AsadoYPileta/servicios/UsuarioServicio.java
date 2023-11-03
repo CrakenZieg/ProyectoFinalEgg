@@ -47,6 +47,7 @@ public class UsuarioServicio implements UserDetailsService {
     @Transactional
     public void crearUsuario(String nombre, String apellido, String email, String password, String password2, Rol rol) throws MiException, Exception {
         validar(nombre, apellido, email, password, password2, rol, Boolean.TRUE);
+
         Usuario usuario = new Usuario();
         usuario.setNombre(nombre);
         usuario.setApellido(apellido);
@@ -59,7 +60,7 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Transactional(readOnly = true)
     public List<Usuario> listarUsuarios() {
-        List<Usuario> usuarios = usuarioRepositorio.findAll(); 
+        List<Usuario> usuarios = usuarioRepositorio.findAll();
         return usuarios;
     }
 
@@ -87,12 +88,33 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Transactional
     public void eliminarUsuario(String id) throws MiException {
+
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
             usuarioRepositorio.deleteById(id);
         } else {
             throw new MiException("No se encontro el usuario");
         }
+
+    }
+
+    @Transactional
+    public void cambiarRol(String id) {
+        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
+
+        if (respuesta.isPresent()) {
+
+            Usuario usuario = respuesta.get();
+
+            if (usuario.getRol().equals(Rol.PROPIETARIO)) {
+
+                usuario.setRol(Rol.CLIENTE);
+
+            } else if (usuario.getRol().equals(Rol.CLIENTE)) {
+                usuario.setRol(Rol.PROPIETARIO);
+            }
+        }
+
     }
 
     @Transactional

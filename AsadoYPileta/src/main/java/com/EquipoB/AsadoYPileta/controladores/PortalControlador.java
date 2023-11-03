@@ -4,6 +4,7 @@ import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
+import com.EquipoB.AsadoYPileta.servicios.ClienteServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
 import java.util.List;
@@ -22,8 +23,9 @@ public class PortalControlador {
     
     @Autowired
     private PropiedadServicio propiedadServicio;
-    @Autowired
-    private UsuarioServicio usuarioServicio;
+   
+      @Autowired
+    private ClienteServicio clienteServicio;
     
     private TipoPropiedad tipos;
     
@@ -50,14 +52,21 @@ public class PortalControlador {
     }
     
     @PostMapping("/registro")
-    public String registro(@RequestParam String email, @RequestParam String password, 
-            @RequestParam Rol rol, ModelMap modelo) throws Exception {
+    public String registro(@RequestParam String email,@RequestParam String nombre,@RequestParam String apellido,
+            @RequestParam String password,@RequestParam String password2,@RequestParam String descripcion,@RequestParam String numeroCelular,@RequestParam MultipartFile[] imagenesInput) throws Exception {
+
         try {
-            usuarioServicio.crearUsuario(email, email, email, password, password, rol);
+
+            clienteServicio.crearCliente(nombre, apellido,password,password2, imagenesInput, descripcion, numeroCelular);
+            
+
             return "index.html";
-        } catch (MiException ex) {           
+        } catch (MiException ex) {
+          
             return "registro.html";
         }
+     
+
     }
 
 }
