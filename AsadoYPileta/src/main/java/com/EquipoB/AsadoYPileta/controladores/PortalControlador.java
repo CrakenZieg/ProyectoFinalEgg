@@ -37,33 +37,26 @@ public class PortalControlador {
     
 
     @GetMapping("/registrar")
-    public String registrar (ModelMap modelo){
-        
-       
+    public String registrar (ModelMap modelo){  
         return "registro.html";
     }
     
     
     @GetMapping("/login")
     public String login(@RequestParam(required = false) String error, ModelMap modelo ) {
-
         if (error != null) {
             modelo.put("error", "Usuario o Contraseña invalidos!");
         }
-
         return "login.html";
     }
     
     @PostMapping("/registro")
-    public String registro(@RequestParam String email, @RequestParam String password, @RequestParam Rol rol, ModelMap modelo) throws Exception {
-
+    public String registro(@RequestParam String email, @RequestParam String password, 
+            @RequestParam Rol rol, ModelMap modelo) throws Exception {
         try {
-            usuarioServicio.crearUsuario(email, password, rol);
-
-            
+            usuarioServicio.crearUsuario(email, password, rol);            
             return "index.html";
-        } catch (MiException ex) {
-           
+        } catch (MiException ex) {           
             return "registro.html";
         }
 
