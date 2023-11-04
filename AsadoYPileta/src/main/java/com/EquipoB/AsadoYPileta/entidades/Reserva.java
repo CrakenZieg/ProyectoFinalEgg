@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,6 +32,12 @@ public class Reserva {
     private Date fechaFin;
    
     @OneToMany
-    private List<Servicio>serviciosElegidas;    
+    private List<Servicio>serviciosElegidas;  
+    
+    @ManyToOne
+    private Propiedad propiedad;
+    
+    @ManyToOne
+    private Usuario usuario;
     
 }

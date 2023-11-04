@@ -47,7 +47,11 @@ public class ReservaServicio {
 
     public void modificarReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible) throws MiException {
 
+        validar(mensaje, fechaInicio, fechaFin, disponible);
+        
         Optional<Reserva> respuesta = reservaRepositorio.findById(id);
+        
+     
 
         if (respuesta.isPresent()) {
 
@@ -62,6 +66,13 @@ public class ReservaServicio {
         }
 
     }
+    
+    public Reserva getOne(String id){
+        
+        return reservaRepositorio.getOne(id);
+    }
+    
+    
     
     @Transactional
     public void borrar(String id){
@@ -80,7 +91,7 @@ public class ReservaServicio {
 
     private void validar(String mensaje, Date fechaInicio, Date fechaFin, Boolean disponible) throws MiException {
 
-        if (mensaje.isEmpty() || mensaje == null) {
+        if (mensaje == null || mensaje.trim().isEmpty() ) {
 
             throw new MiException("El mensaje no puede estar vacio, tiene que ingresar un mensaje");
         }
