@@ -1,9 +1,11 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
+import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
+import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
@@ -26,11 +28,12 @@ public class PropiedadServicio {
 
     @Autowired
     private ImagenServicio imagenServicio;
-    
+    @Autowired
+    private ClienteServicio clienteServicio;
 
     @Transactional
     public void crearPropiedad(String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo,
-            String[] serviciosInput, MultipartFile[] imagenesInput, Double valor, Propietario propietario) throws MiException, Exception {
+            String[] serviciosInput, MultipartFile[] imagenesInput, Double valor, Cliente cliente) throws MiException, Exception {
 
         validar(titulo, descripcion, ubicacion, direccion, tipo, imagenesInput, valor);
 
@@ -42,7 +45,7 @@ public class PropiedadServicio {
         imagenes = imagenServicio.guardarVarias(imagenesInput);
 
         Propiedad propiedad = new Propiedad();
-        
+
         propiedad.setTitulo(titulo);
         propiedad.setDescripcion(descripcion);
         propiedad.setUbicacion(ubicacion);
@@ -52,7 +55,14 @@ public class PropiedadServicio {
         propiedad.setServicios(servicios);
         propiedad.setImagenes(imagenes);
         propiedad.setValor(valor);
-        propietario.getPropiedades().add(propiedad);
+        
+        Propietario propietario = clienteServicio.cambiarPropietario(cliente);
+        
+        List<Propiedad> propiedades = propietario.getPropiedades();
+        propiedades.add(propiedad);
+        propietario.setPropiedades(propiedades);
+
+        propietario.setRol(Rol.PROPIETARIO);
         propiedadRepositorio.save(propiedad);
     }
 
@@ -74,28 +84,28 @@ public class PropiedadServicio {
 
             Propiedad propiedad = propiedadRepo.get();
             List<Imagen> imagenes = propiedad.getImagenes();
-            
-            if(imagenesViejas != null){ 
-                if(imagenesViejas.length != 0){
-                    imagenes = imagenServicio.filtrar(imagenes, 
+
+            if (imagenesViejas != null) {
+                if (imagenesViejas.length != 0) {
+                    imagenes = imagenServicio.filtrar(imagenes,
                             imagenesViejas);
                 }
-            }     
-            if(imagenesInput != null){
-                if(imagenesInput.length != 0){
+            }
+            if (imagenesInput != null) {
+                if (imagenesInput.length != 0) {
                     imagenes.addAll(imagenServicio.guardarVarias(imagenesInput));
-                } 
+                }
             }
 
             propiedad.setTitulo(titulo);
             propiedad.setDescripcion(descripcion);
             propiedad.setUbicacion(ubicacion);
-            propiedad.setDireccion(direccion);            
-            if("true".equals(estado)){
+            propiedad.setDireccion(direccion);
+            if ("true".equals(estado)) {
                 propiedad.setEstado(true);
-           }else{
-              propiedad.setEstado(false); 
-           }
+            } else {
+                propiedad.setEstado(false);
+            }
             propiedad.setEstado(Boolean.valueOf(estado));
             propiedad.setTipo(tipo);
             propiedad.setServicios(servicios);
@@ -123,15 +133,15 @@ public class PropiedadServicio {
 
     public void eliminar(String id) {
         Optional<Propiedad> propiedadRepo = propiedadRepositorio.findById(id);
-        if (propiedadRepo.isPresent()){
+        if (propiedadRepo.isPresent()) {
             Propiedad propiedad = propiedadRepo.get();
             propiedadRepositorio.delete(propiedad);
-        }        
+        }
     }
 
     public void validar(String titulo, String descripcion, String ubicacion, String direccion,
             TipoPropiedad tipo, MultipartFile[] imagenes, Double valor) throws MiException {
-        
+
         if (titulo.isEmpty() || titulo == null) {
             throw new MiException("El titulo no puede ser nulo o estar vacio");
         }

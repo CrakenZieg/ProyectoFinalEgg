@@ -1,5 +1,6 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
+import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import java.util.ArrayList;
@@ -47,7 +48,6 @@ public class UsuarioServicio implements UserDetailsService {
     @Transactional
     public void crearUsuario(String nombre, String apellido, String email, String password, String password2, Rol rol) throws MiException, Exception {
         validar(nombre, apellido, email, password, password2, rol, Boolean.TRUE);
-
         Usuario usuario = new Usuario();
         usuario.setNombre(nombre);
         usuario.setApellido(apellido);
@@ -57,7 +57,7 @@ public class UsuarioServicio implements UserDetailsService {
         usuario.setAlta(true);
         usuarioRepositorio.save(usuario);
     }
-
+       
     @Transactional(readOnly = true)
     public List<Usuario> listarUsuarios() {
         List<Usuario> usuarios = usuarioRepositorio.findAll();

@@ -1,5 +1,6 @@
 package com.EquipoB.AsadoYPileta.controladores;
 
+import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
@@ -64,9 +65,9 @@ public class PropiedadControlador {
     public String registro(@RequestParam String titulo, @RequestParam String descripcion,
             @RequestParam String ubicacion, @RequestParam String direccion,
             @RequestParam TipoPropiedad tipo, @RequestParam(required = false) String[] serviciosInput,
-            @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor, HttpSession session) {        
+            @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor, HttpSession session) {
         try {
-            Propietario logueado = (Propietario) session.getAttribute("usuariosession");
+            Cliente logueado = (Cliente) session.getAttribute("usuariosession");
             propiedadServicio.crearPropiedad(titulo, descripcion, ubicacion,
                     direccion, tipo, serviciosInput, imagenesInput, valor, logueado);
         } catch (Exception ex) {
@@ -100,9 +101,9 @@ public class PropiedadControlador {
         }
         return "index.html";
     }
-    
+
     @GetMapping("/eliminar/{id}")
-    public String modificar(@PathVariable String id) {        
+    public String modificar(@PathVariable String id) {
         propiedadServicio.eliminar(id);
         return "index.html";
     }

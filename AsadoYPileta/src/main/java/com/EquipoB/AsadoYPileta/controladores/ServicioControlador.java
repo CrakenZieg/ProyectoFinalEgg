@@ -1,4 +1,3 @@
-
 package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
@@ -17,90 +16,60 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/servicio")
 public class ServicioControlador {
-    
+
     @Autowired
     private ServicioServicio servicioServicio;
-    
-    @GetMapping("/registrar")  
-    public String registrar() {
 
+    @GetMapping("/registrar")
+    public String registrar() {
         return "servicio_form.html";
     }
-    
+
     @PostMapping("/registro")
     public String registro(@RequestParam String tipoComodidad, @RequestParam Double valor, ModelMap modelo) {
-
         try {
-
             servicioServicio.crearSercicio(tipoComodidad, valor);
-
             modelo.put("exito", "La comodidad fue cargado correctamente");
-
         } catch (MiException ex) {
-
             modelo.put("error", ex.getMessage());
-
             return "servicio_form.html";
         }
-
         return "index.html";
     }
-    
+
     @GetMapping("/lista")
     public String listar(ModelMap modelo) {
-
         List<Servicio> servicios = servicioServicio.listarServicios();
-
         modelo.addAttribute("servicios", servicios);
-
         return "servicio_list.html";
-
     }
-    
+
     @GetMapping("/modificar/{id}")
     public String modificar(@PathVariable String id, ModelMap modelo) {
-
         modelo.put("servicio", servicioServicio.getOne(id));
-
         return "servicio_modificar.html";
-
     }
-    
-    
+
     @PostMapping("/modificar/{id}")
-    public String modificar(@PathVariable String id, String tipoComodidad, Double valor,  ModelMap modelo) throws MiException{
-        
+    public String modificar(@PathVariable String id, String tipoComodidad, Double valor, ModelMap modelo) throws MiException {
         try {
             servicioServicio.modificarServicio(tipoComodidad, id, valor);
-            
             return "redirect:../lista";
-            
         } catch (MiException ex) {
-            
             modelo.put("error", ex.getMessage());
-            
             return "servicio_modificar.html";
-            
         }
-        
+
     }
-    
+
     @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable String id, String tipoComodidad, Double valor,  ModelMap modelo) throws MiException{
-    
+    public String eliminar(@PathVariable String id, String tipoComodidad, Double valor, ModelMap modelo) throws MiException {
         try {
             servicioServicio.eliminarServicio(id, tipoComodidad, valor);
-            
             return "redirect:../lista";
-            
         } catch (MiException ex) {
-            
             modelo.put("error", "No se elimino el servicio");
-            
             return "servicio_eliminar.html";
         }
-    
     }
-    
-    
 }
