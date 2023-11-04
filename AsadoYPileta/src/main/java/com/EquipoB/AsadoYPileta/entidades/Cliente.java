@@ -4,41 +4,21 @@ package com.EquipoB.AsadoYPileta.entidades;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import lombok.Data;
 
+@Data
 @Entity
-public class Cliente extends Usuario {
+public class Cliente extends Usuario{
 
+    private String nombre;
+    private String apellido; 
+    private String descripcion;
     @OneToMany
     private List<Imagen> imagenes;
-    private String descripcion;
     @OneToMany
     private List<Contacto> contactos;
 
     public Cliente() {
-    }
-    
-    public List<Imagen> getImagenes() {
-        return imagenes;
-    }
-
-    public void setImagenes(List<Imagen> imagenes) {
-        this.imagenes = imagenes;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public List<Contacto> getContactos() {
-        return contactos;
-    }
-
-    public void setContactos(List<Contacto> contactos) {
-        this.contactos = contactos;
-    }
+    }    
     
 }

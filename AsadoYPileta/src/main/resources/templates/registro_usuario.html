@@ -12,7 +12,7 @@ and open the template in the editor.
         <div class="registro">
           <h2>Registrate!</h2>
           <div class="registro-form">
-            <form th:action="@{/logincheck}" method="POST" enctype="multipart/form-data">
+            <form th:action="@{/registro}" method="POST" enctype="multipart/form-data">
                 <div class="registro-inptcont">
                     <input type="text" name="nombre" required/>
                     <label for="nombre">Nombre</label>
@@ -26,9 +26,13 @@ and open the template in the editor.
                   <input type="email" name="email" required/>
                   <label for="email">Email</label>
                 </div>
+                <div class="registro-inptcont">
+                   <p><textarea name="descripcion" placeholder="Ingresa una descripcion "></textarea></p>
+                   <label>Cuerpo:</label> <br>
+                </div>
                 
               <div class="registro-inptcont">
-                <input type="number" name="numeroCelular" />
+                <input type="text" name="numeroCelular" />
                 <label for="numeroCelular" id="lbl-celu">Ingrese numero de telefono</label>
               </div>
               <div class="registro-inptcont">
@@ -42,8 +46,9 @@ and open the template in the editor.
               </div>
 
               <div class="input-img" >
-                <label for="archivo" >Imagen de perfil:</label>
-                <input type="file" name="archivo" />
+                 <label for="imagenes" class="form-label"><span class="h3">Imágenes de perfil:</span></label>                           
+                 <input type="file"  id="imagenes" name="imagenesInput" multiple="multiple"/>
+                
               </div>
               <button >Registrarse</button>
               <p>Tienes cuenta? <a href="#">Ingresa</a></p>

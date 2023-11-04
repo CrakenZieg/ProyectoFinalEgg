@@ -26,6 +26,8 @@ public class PropiedadServicio {
 
     @Autowired
     private ImagenServicio imagenServicio;
+    @Autowired
+    private ReservaServicio reservaServicio;
     
 
     @Transactional
@@ -93,8 +95,14 @@ public class PropiedadServicio {
             propiedad.setDireccion(direccion);            
             if("true".equals(estado)){
                 propiedad.setEstado(true);
-           }else{
-              propiedad.setEstado(false); 
+            }else{
+                boolean busqueda= reservaServicio.validarReservasPropiedad(id);
+                if(busqueda == true){
+                    throw new MiException("No puede darse de baja si tiene reservas activas!");
+                }else{
+                    propiedad.setEstado(false);
+                }
+             
            }
             propiedad.setEstado(Boolean.valueOf(estado));
             propiedad.setTipo(tipo);
@@ -132,19 +140,19 @@ public class PropiedadServicio {
     public void validar(String titulo, String descripcion, String ubicacion, String direccion,
             TipoPropiedad tipo, MultipartFile[] imagenes, Double valor) throws MiException {
         
-        if (titulo.isEmpty() || titulo == null) {
+        if (titulo == null || titulo.trim().isEmpty()) {
             throw new MiException("El titulo no puede ser nulo o estar vacio");
         }
 
-        if (descripcion.isEmpty() || descripcion == null) {
+        if ( descripcion == null || descripcion.trim().isEmpty() ) {
             throw new MiException("La descripcion no puede ser nulo o estar vacio");
         }
 
-        if (ubicacion.isEmpty() || ubicacion == null) {
+        if (ubicacion == null || ubicacion.trim().isEmpty() ) {
             throw new MiException("La ubicacion no puede ser nulo o estar vacio");
         }
 
-        if (direccion.isEmpty() || direccion == null) {
+        if ( direccion == null || direccion.trim().isEmpty() ) {
             throw new MiException("La direccion no puede ser nulo o estar vacio");
         }
 

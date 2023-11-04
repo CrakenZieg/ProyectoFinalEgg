@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ReservaServicio {
@@ -35,7 +35,8 @@ public class ReservaServicio {
         reservaRepositorio.save(reserva);
 
     }
-
+    
+     @Transactional(readOnly = true) 
     public List<Reserva> listarReserva() {
 
         List<Reserva> reservas = new ArrayList();
@@ -44,10 +45,14 @@ public class ReservaServicio {
 
         return reservas;
     }
-
+    @Transactional
     public void modificarReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible) throws MiException {
 
+        validar(mensaje, fechaInicio, fechaFin, disponible);
+        
         Optional<Reserva> respuesta = reservaRepositorio.findById(id);
+        
+     
 
         if (respuesta.isPresent()) {
 
@@ -61,6 +66,22 @@ public class ReservaServicio {
             reservaRepositorio.save(reserva);
         }
 
+    }
+    
+     @Transactional(readOnly = true)
+    public Reserva getOne(String id){
+        
+        return reservaRepositorio.getOne(id);
+    }
+    
+    @Transactional
+    public boolean validarReservasCliente(String id){
+        return reservaRepositorio.buscarReservaCliente(id);
+    }
+    
+    @Transactional
+    public boolean validarReservasPropiedad(String id){
+        return reservaRepositorio.buscarReservaPropiedad(id);
     }
     
     @Transactional
@@ -80,7 +101,7 @@ public class ReservaServicio {
 
     private void validar(String mensaje, Date fechaInicio, Date fechaFin, Boolean disponible) throws MiException {
 
-        if (mensaje.isEmpty() || mensaje == null) {
+        if (mensaje == null || mensaje.trim().isEmpty() ) {
 
             throw new MiException("El mensaje no puede estar vacio, tiene que ingresar un mensaje");
         }
