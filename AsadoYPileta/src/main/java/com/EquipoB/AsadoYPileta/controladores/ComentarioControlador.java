@@ -62,6 +62,15 @@ public class ComentarioControlador {
 
         return "comentario_list.html";
     }
+    
+    @GetMapping("/listaIdUsuario")
+    public String listarIdUsuario(ModelMap modelo, HttpSession session) {
+   Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+        List<Comentario> comentarios = comentarioServicio.findComentariosByUserId(usuario.getId());
+        modelo.addAttribute("comentarios", comentarios);
+
+        return "comentario_list.html";
+    }
 
     @GetMapping("/modificar/{id}")
     public String modificarComentario(@PathVariable String id, HttpSession session, ModelMap modelo) {
