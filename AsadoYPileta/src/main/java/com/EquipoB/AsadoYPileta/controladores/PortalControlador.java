@@ -24,7 +24,7 @@ public class PortalControlador {
     @Autowired
     private PropiedadServicio propiedadServicio;
    
-      @Autowired
+    @Autowired
     private ClienteServicio clienteServicio;
     
     private TipoPropiedad tipos;

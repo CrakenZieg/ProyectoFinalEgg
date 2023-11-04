@@ -36,13 +36,14 @@ public class ClienteServicio {
         validar(nombre, apellido, descripcion, password, password2, imagenesInput,
                 tipoContactoInput, contactosInput);
 
+
         Cliente cliente = new Cliente();
 
         List<Imagen> imagenes = new ArrayList<>();
         imagenes = imagenServicio.guardarVarias(imagenesInput);
 
         cliente.setNombre(nombre);
-        cliente.setApellido(apellido);
+        cliente.setApellido(apellido);   
         cliente.setPassword(new BCryptPasswordEncoder().encode(password));
         cliente.setImagenes(imagenes);
         cliente.setDescripcion(descripcion);
