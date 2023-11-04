@@ -39,12 +39,13 @@ public class ClienteServicio {
             String[] tipoContactoInput, String[] contactosInput) throws MiException, Exception {
         validar(nombre, apellido, descripcion, password, password2, imagenesInput,
                 tipoContactoInput, contactosInput);
+
         Cliente cliente = new Cliente();
         List<Imagen> imagenes = new ArrayList<>();
         imagenes = imagenServicio.guardarVarias(imagenesInput);
         
         cliente.setNombre(nombre);
-        cliente.setApellido(apellido);
+        cliente.setApellido(apellido);   
         cliente.setPassword(new BCryptPasswordEncoder().encode(password));
         cliente.setImagenes(imagenes);
         cliente.setDescripcion(descripcion);
@@ -111,16 +112,15 @@ public class ClienteServicio {
             clienteRepositorio.save(cliente);
         }
     }
-    
+
+
     @Transactional(readOnly = true)
     public Cliente getOne(String id) {
-        
         return clienteRepositorio.getOne(id);
     }
     
     @Transactional
     public void eliminarCliente(String id) throws MiException {
-        
         Optional<Cliente> respuesta = clienteRepositorio.findById(id);
         if (respuesta.isPresent()) {
             clienteRepositorio.deleteById(id);
@@ -132,7 +132,6 @@ public class ClienteServicio {
     @Transactional
     public void bajaCliente(String id, String nombre, String apellido, List<Imagen> imagenes,
             String descripcion, List<Contacto> contactos) throws MiException {
-        
         Optional<Cliente> respuesta = clienteRepositorio.findById(id);
         if (respuesta.isPresent()) {
             Cliente cliente = new Cliente();
@@ -148,7 +147,6 @@ public class ClienteServicio {
     @Transactional
     public void recuperarCliente(String id, String nombre, String apellido, List<Imagen> imagenes,
             String descripcion, List<Contacto> contactos) throws MiException {
-        
         Optional<Cliente> respuesta = clienteRepositorio.findById(id);
         if (respuesta.isPresent()) {
             Cliente cliente = new Cliente();
@@ -164,7 +162,6 @@ public class ClienteServicio {
     private void validar(String nombre, String apellido, String descripcion,
             String password, String password2, MultipartFile[] imagenesInput,
             String[] tipoContactoInput, String[] contactosInput) throws MiException {
-        
         if (nombre == null || nombre.trim().isEmpty()) {
             throw new MiException("La nombre no puede ser nulo o estar vacio");
         }

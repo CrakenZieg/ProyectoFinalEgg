@@ -55,7 +55,8 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Transactional
     public void crearUsuario(String email, String password, Rol rol) throws MiException, Exception {
-        validar(email, password, rol, Boolean.FALSE);
+
+        validar(email, password, rol);
         Usuario usuario = new Usuario();
         usuario.setEmail(email);
         usuario.setPassword(password);
@@ -73,7 +74,8 @@ public class UsuarioServicio implements UserDetailsService {
     @Transactional
     public void modificarUsuario(String id, String email, String password, Rol rol,
             Date fechaAlta, Boolean alta) throws MiException {
-        validar(email, password, rol, Boolean.FALSE);
+        validar(email, password, rol);
+
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
             Usuario usuario = respuesta.get();
@@ -91,15 +93,6 @@ public class UsuarioServicio implements UserDetailsService {
     @Transactional(readOnly = true)
     public Usuario getOne(String id) {
         return usuarioRepositorio.getOne(id);
-    }
-
-    @Transactional
-    public void cambiarRol(String id) {
-        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
-        if (respuesta.isPresent()) {
-
-        }
-
     }
 
     public void bajaUsuario(String id) throws MiException {
@@ -207,8 +200,9 @@ public class UsuarioServicio implements UserDetailsService {
         }
     }
 
-    private void validar(String email, String password, Rol rol, Boolean activo) throws MiException {
+    private void validar(String email, String password, Rol rol) throws MiException {
         if (email == null || email.trim().isEmpty()) {
+
             throw new MiException("El Email no puede ser nulo o estar vacio");
         }
         if (password == null || password.trim().isEmpty()) {

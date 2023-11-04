@@ -29,6 +29,9 @@ public class PropiedadServicio {
     private ImagenServicio imagenServicio;
     @Autowired
     private ClienteServicio clienteServicio;
+    private ReservaServicio reservaServicio;
+    
+
 
     @Transactional
     public void crearPropiedad(String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo,
@@ -98,9 +101,17 @@ public class PropiedadServicio {
             propiedad.setDireccion(direccion);
             if ("true".equals(estado)) {
                 propiedad.setEstado(true);
-            } else {
-                propiedad.setEstado(false);
-            }
+
+            }else{
+                boolean busqueda= reservaServicio.validarReservasPropiedad(id);
+                if(busqueda == true){
+                    throw new MiException("No puede darse de baja si tiene reservas activas!");
+                }else{
+                    propiedad.setEstado(false);
+                }
+             
+           }
+
             propiedad.setEstado(Boolean.valueOf(estado));
             propiedad.setTipo(tipo);
             propiedad.setServicios(servicios);

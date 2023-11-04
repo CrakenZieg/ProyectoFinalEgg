@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +41,7 @@ public class PropiedadControlador {
         return "index.html";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_PROPIETARIO')")
     @GetMapping("/registrar")
     public String registrar(ModelMap model) {
         List<Servicio> servicios = new ArrayList<>();
@@ -59,6 +61,7 @@ public class PropiedadControlador {
         return "propiedad.html";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @PostMapping("/registro")
     public String registro(@RequestParam String titulo, @RequestParam String descripcion,
             @RequestParam String ubicacion, @RequestParam String direccion,
