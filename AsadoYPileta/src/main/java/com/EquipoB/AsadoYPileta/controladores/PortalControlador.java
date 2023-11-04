@@ -24,7 +24,7 @@ public class PortalControlador {
     @Autowired
     private PropiedadServicio propiedadServicio;
    
-      @Autowired
+    @Autowired
     private ClienteServicio clienteServicio;
     
     private TipoPropiedad tipos;
@@ -49,22 +49,6 @@ public class PortalControlador {
             modelo.put("error", "Usuario o Contraseña invalidos!");
         }
         return "login.html";
-    }
-    
-    @PostMapping("/registro")
-    public String registro(@RequestParam String email,@RequestParam String nombre,@RequestParam String apellido,
-            @RequestParam String password,@RequestParam String password2,@RequestParam String descripcion,@RequestParam String numeroCelular,@RequestParam MultipartFile[] imagenesInput) throws Exception {
-
-        try {
-            clienteServicio.crearCliente(email,nombre, apellido,password,password2, imagenesInput, descripcion, numeroCelular);
-            
-            return "index.html";
-        } catch (MiException ex) {
-          
-            return "registro.html";
-        }
-     
-
     }
 
 }

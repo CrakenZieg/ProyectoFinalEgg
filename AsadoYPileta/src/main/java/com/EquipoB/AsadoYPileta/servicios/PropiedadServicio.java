@@ -140,19 +140,19 @@ public class PropiedadServicio {
     public void validar(String titulo, String descripcion, String ubicacion, String direccion,
             TipoPropiedad tipo, MultipartFile[] imagenes, Double valor) throws MiException {
         
-        if (titulo.isEmpty() || titulo == null) {
+        if (titulo == null || titulo.trim().isEmpty()) {
             throw new MiException("El titulo no puede ser nulo o estar vacio");
         }
 
-        if (descripcion.isEmpty() || descripcion == null) {
+        if ( descripcion == null || descripcion.trim().isEmpty() ) {
             throw new MiException("La descripcion no puede ser nulo o estar vacio");
         }
 
-        if (ubicacion.isEmpty() || ubicacion == null) {
+        if (ubicacion == null || ubicacion.trim().isEmpty() ) {
             throw new MiException("La ubicacion no puede ser nulo o estar vacio");
         }
 
-        if (direccion.isEmpty() || direccion == null) {
+        if ( direccion == null || direccion.trim().isEmpty() ) {
             throw new MiException("La direccion no puede ser nulo o estar vacio");
         }
 
