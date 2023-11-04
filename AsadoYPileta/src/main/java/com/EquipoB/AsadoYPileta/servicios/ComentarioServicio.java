@@ -44,6 +44,7 @@ public class ComentarioServicio {
         comentarioRepositorio.save(comentario);
 
     }
+    
 
     public List<Comentario> listarComentario() {
 
@@ -93,21 +94,28 @@ public class ComentarioServicio {
         return comentarioRepositorio.getById(id);
     }
 
+
     private void validar(HttpSession session, String cuerpo, MultipartFile[] imagenes, String stringIdpropiedad) throws MiException {
         Usuario logueado = (Usuario) session.getAttribute("usuariosession");
         if (logueado == null) {
             throw new MiException("el usuario debe estar logueado");
         }
         if (cuerpo.isEmpty() || cuerpo == null) {
+
+        if ( cuerpo == null || cuerpo.trim().isEmpty() ) {
+
             throw new MiException("el comentario no puede ser nulo o estar vacío");
         }
         if (imagenes.length == 0 || imagenes == null) {
             throw new MiException("Las imagenes no puede ser nulas o estar vacias");
         }
-        if (stringIdpropiedad.isEmpty() || stringIdpropiedad == null) {
-            throw new MiException("la propiedad no existe");
+
+        if (stringIdpropiedad == null|| stringIdpropiedad.trim().isEmpty()  ) {
+            throw new MiException("la propiedad no puede  estar vacia");
+
         }
 
     }
 
+}
 }

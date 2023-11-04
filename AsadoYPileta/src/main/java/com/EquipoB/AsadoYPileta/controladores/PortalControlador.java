@@ -50,21 +50,5 @@ public class PortalControlador {
         }
         return "login.html";
     }
-    
-    @PostMapping("/registro")
-    public String registro(@RequestParam String email,@RequestParam String nombre,@RequestParam String apellido,
-            @RequestParam String password,@RequestParam String password2,@RequestParam String descripcion,@RequestParam String numeroCelular,@RequestParam MultipartFile[] imagenesInput) throws Exception {
-
-        try {
-            clienteServicio.crearCliente(nombre, apellido,password,password2, imagenesInput, descripcion, numeroCelular);
-            
-            return "index.html";
-        } catch (MiException ex) {
-          
-            return "registro.html";
-        }
-     
-
-    }
 
 }
