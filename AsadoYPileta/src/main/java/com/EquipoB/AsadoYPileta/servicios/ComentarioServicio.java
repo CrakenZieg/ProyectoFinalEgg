@@ -29,7 +29,7 @@ public class ComentarioServicio {
 
     @Transactional
     public void crearComentario(HttpSession session, MultipartFile[] archivos, String cuerpo, String stringIdpropiedad) throws MiException, Exception {
-        validar(cuerpo, archivos, stringIdpropiedad);
+        validar(session,cuerpo, archivos, stringIdpropiedad);
 
         Comentario comentario = new Comentario();
         comentario.setCuerpo(cuerpo);
@@ -53,9 +53,12 @@ public class ComentarioServicio {
 
         return comentarios;
     }
+    public List<Comentario> findComentariosByUserId(String userId) {
+        return comentarioRepositorio.findByUserId(userId);
+    }
 
     public void modificarComentario(HttpSession session, MultipartFile[] archivos, String id, String cuerpo, String stringIdpropiedad, String[] imagenesViejas) throws MiException, Exception {
-        validar(cuerpo, archivos, stringIdpropiedad);
+        validar(session,cuerpo, archivos, stringIdpropiedad);
         Optional<Comentario> respuesta = comentarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
 
@@ -90,8 +93,11 @@ public class ComentarioServicio {
         return comentarioRepositorio.getById(id);
     }
 
-    private void validar(String cuerpo, MultipartFile[] imagenes, String stringIdpropiedad) throws MiException {
-
+    private void validar(HttpSession session, String cuerpo, MultipartFile[] imagenes, String stringIdpropiedad) throws MiException {
+        Usuario logueado = (Usuario) session.getAttribute("usuariosession");
+        if (logueado == null) {
+            throw new MiException("el usuario debe estar logueado");
+        }
         if (cuerpo.isEmpty() || cuerpo == null) {
             throw new MiException("el comentario no puede ser nulo o estar vacío");
         }
@@ -99,7 +105,7 @@ public class ComentarioServicio {
             throw new MiException("Las imagenes no puede ser nulas o estar vacias");
         }
         if (stringIdpropiedad.isEmpty() || stringIdpropiedad == null) {
-            throw new MiException("la propiedad no puede no estar cargada");
+            throw new MiException("la propiedad no existe");
         }
 
     }
