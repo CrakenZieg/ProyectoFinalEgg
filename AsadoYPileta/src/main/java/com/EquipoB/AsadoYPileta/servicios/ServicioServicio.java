@@ -61,7 +61,7 @@ public class ServicioServicio {
     
     private void validar(String tipoComodidad, Double valor) throws MiException {
 
-        if (tipoComodidad.isEmpty() || tipoComodidad == null) {
+        if ( tipoComodidad == null || tipoComodidad.trim().isEmpty() ) {
 
             throw new MiException("El tipo de comodidad no puede ser nulo o estar vacio");
         }

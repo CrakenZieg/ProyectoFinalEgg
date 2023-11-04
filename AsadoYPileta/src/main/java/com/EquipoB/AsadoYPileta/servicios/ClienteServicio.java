@@ -66,12 +66,12 @@ public class ClienteServicio {
     private void validar(String nombre, String apellido, MultipartFile[] imagenesInput, 
             String descripcion, String password,String password2) throws MiException {
 
-        if (nombre.isEmpty() || nombre == null) {
+        if (nombre == null || nombre.trim().isEmpty() ) {
 
             throw new MiException("El nombre no puede ser nulo o estar vacio");
         }
 
-        if (apellido.isEmpty() || apellido == null) {
+        if (apellido == null || apellido.trim().isEmpty() ) {
 
             throw new MiException("La contraseña no puede ser nulo o estar vacio");
         }
@@ -81,12 +81,12 @@ public class ClienteServicio {
             throw new MiException("La imagen no puede ser nulo o estar vacio");
         }
 
-        if (descripcion.isEmpty() || descripcion == null) {
+        if ( descripcion == null || descripcion.trim().isEmpty()  ) {
 
             throw new MiException("La descripcion no puede ser nulo o estar vacia");
         }      
          
-         if(password.isEmpty() || password==null ){
+         if(password==null || password.trim().isEmpty()){
             throw new MiException ("el password no puede ser nulo, estar vacio o tener una longirud menos a 5 caracteres");
         }
         if(!password.equals(password2)){

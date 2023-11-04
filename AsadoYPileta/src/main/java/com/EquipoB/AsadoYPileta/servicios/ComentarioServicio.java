@@ -92,13 +92,13 @@ public class ComentarioServicio {
 
     private void validar(String cuerpo, MultipartFile[] imagenes, String stringIdpropiedad) throws MiException {
 
-        if (cuerpo.isEmpty() || cuerpo == null) {
+        if ( cuerpo == null || cuerpo.trim().isEmpty() ) {
             throw new MiException("el comentario no puede ser nulo o estar vacío");
         }
         if (imagenes.length == 0 || imagenes == null) {
             throw new MiException("Las imagenes no puede ser nulas o estar vacias");
         }
-        if (stringIdpropiedad.isEmpty() || stringIdpropiedad == null) {
+        if (stringIdpropiedad == null|| stringIdpropiedad.trim().isEmpty()  ) {
             throw new MiException("la propiedad no puede no estar cargada");
         }
 
