@@ -17,8 +17,7 @@ public class Cliente extends Usuario {
     private List<Imagen> imagenes;
     @OneToMany
     private List<Contacto> contactos;
-
-    public Cliente() {
-    }    
+    @OneToMany
+    private List<Propiedad> propiedades;    
     
 }

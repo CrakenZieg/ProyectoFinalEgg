@@ -2,9 +2,7 @@ package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
-import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
-import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;

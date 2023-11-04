@@ -3,7 +3,6 @@ package com.EquipoB.AsadoYPileta.servicios;
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
-import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
@@ -41,9 +40,9 @@ public class PropiedadServicio {
         if (serviciosInput != null) {
             servicios = servicioServicio.listarServiciosArray(serviciosInput);
         }
+
         List<Imagen> imagenes = new ArrayList<>();
         imagenes = imagenServicio.guardarVarias(imagenesInput);
-
         Propiedad propiedad = new Propiedad();
 
         propiedad.setTitulo(titulo);
@@ -55,14 +54,10 @@ public class PropiedadServicio {
         propiedad.setServicios(servicios);
         propiedad.setImagenes(imagenes);
         propiedad.setValor(valor);
-        
-        Propietario propietario = clienteServicio.cambiarPropietario(cliente);
-        
-        List<Propiedad> propiedades = propietario.getPropiedades();
-        propiedades.add(propiedad);
-        propietario.setPropiedades(propiedades);
+        cliente.setRol(Rol.PROPIETARIO);
 
-        propietario.setRol(Rol.PROPIETARIO);
+        clienteServicio.cambiarPropietario(cliente.getId());
+        clienteServicio.agregarPropiedades(cliente.getId(), propiedad);
         propiedadRepositorio.save(propiedad);
     }
 
@@ -147,15 +142,15 @@ public class PropiedadServicio {
             throw new MiException("El titulo no puede ser nulo o estar vacio");
         }
 
-        if ( descripcion == null || descripcion.trim().isEmpty() ) {
+        if (descripcion == null || descripcion.trim().isEmpty()) {
             throw new MiException("La descripcion no puede ser nulo o estar vacio");
         }
 
-        if (ubicacion == null || ubicacion.trim().isEmpty() ) {
+        if (ubicacion == null || ubicacion.trim().isEmpty()) {
             throw new MiException("La ubicacion no puede ser nulo o estar vacio");
         }
 
-        if ( direccion == null || direccion.trim().isEmpty() ) {
+        if (direccion == null || direccion.trim().isEmpty()) {
             throw new MiException("La direccion no puede ser nulo o estar vacio");
         }
 

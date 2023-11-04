@@ -3,7 +3,7 @@ package com.EquipoB.AsadoYPileta.servicios;
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Contacto;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
-import com.EquipoB.AsadoYPileta.entidades.Propietario;
+import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.TipoContacto;
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
@@ -12,8 +12,6 @@ import com.EquipoB.AsadoYPileta.repositorios.PropietarioRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,19 +20,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ClienteServicio {
-
+    
     @Autowired
     private ClienteRepositorio clienteRepositorio;
-
+    
     @Autowired
-
+    
     private PropietarioRepositorio propiedadRepositorio;
-
+    
     private TipoContactoServicio tipoContactoServicio;
-
+    
     @Autowired
     private ImagenServicio imagenServicio;
-
+    
     @Transactional
     public void crearCliente(String nombre, String apellido, String descripcion,
             String password, String password2, MultipartFile[] imagenesInput,
@@ -44,7 +42,7 @@ public class ClienteServicio {
         Cliente cliente = new Cliente();
         List<Imagen> imagenes = new ArrayList<>();
         imagenes = imagenServicio.guardarVarias(imagenesInput);
-
+        
         cliente.setNombre(nombre);
         cliente.setApellido(apellido);
         cliente.setPassword(new BCryptPasswordEncoder().encode(password));
@@ -62,27 +60,27 @@ public class ClienteServicio {
         cliente.setRol(Rol.CLIENTE);
         clienteRepositorio.save(cliente);
     }
-
+    
     public List<Cliente> listarCientes() {
         List<Cliente> clientes = new ArrayList();
         clientes = clienteRepositorio.findAll();
         return clientes;
     }
-
+    
     @Transactional
-    private void modificarCliente(String id, String nombre, String apellido, String descripcion,
+    public void modificarCliente(String id, String nombre, String apellido, String descripcion,
             String password, String password2, MultipartFile[] imagenesInput,
             String[] tipoContactoInput, String[] contactosInput, String[] imagenesViejas) throws MiException, Exception {
-
+        
         validar(nombre, apellido, descripcion, password, password2, imagenesInput,
                 tipoContactoInput, contactosInput);
-
+        
         Optional<Cliente> respuesta = clienteRepositorio.findById(id);
         if (respuesta.isPresent()) {
-
+            
             Cliente cliente = respuesta.get();
             List<Imagen> imagenes = cliente.getImagenes();
-
+            
             if (imagenesViejas != null) {
                 if (imagenesViejas.length != 0) {
                     imagenes = imagenServicio.filtrar(imagenes,
@@ -94,7 +92,7 @@ public class ClienteServicio {
                     imagenes.addAll(imagenServicio.guardarVarias(imagenesInput));
                 }
             }
-
+            
             cliente.setNombre(nombre);
             cliente.setApellido(apellido);
             cliente.setPassword(new BCryptPasswordEncoder().encode(password));
@@ -113,16 +111,16 @@ public class ClienteServicio {
             clienteRepositorio.save(cliente);
         }
     }
-
+    
     @Transactional(readOnly = true)
     public Cliente getOne(String id) {
-
+        
         return clienteRepositorio.getOne(id);
     }
-
+    
     @Transactional
     public void eliminarCliente(String id) throws MiException {
-
+        
         Optional<Cliente> respuesta = clienteRepositorio.findById(id);
         if (respuesta.isPresent()) {
             clienteRepositorio.deleteById(id);
@@ -130,43 +128,43 @@ public class ClienteServicio {
             throw new MiException("No se encontro el cliente");
         }
     }
-
+    
     @Transactional
     public void bajaCliente(String id, String nombre, String apellido, List<Imagen> imagenes,
             String descripcion, List<Contacto> contactos) throws MiException {
-
+        
         Optional<Cliente> respuesta = clienteRepositorio.findById(id);
         if (respuesta.isPresent()) {
             Cliente cliente = new Cliente();
             cliente = respuesta.get();
-
+            
             cliente.setAlta(false);
             clienteRepositorio.save(cliente);
         } else {
             throw new MiException("No se encontro el usuario");
         }
     }
-
+    
     @Transactional
     public void recuperarCliente(String id, String nombre, String apellido, List<Imagen> imagenes,
             String descripcion, List<Contacto> contactos) throws MiException {
-
+        
         Optional<Cliente> respuesta = clienteRepositorio.findById(id);
         if (respuesta.isPresent()) {
             Cliente cliente = new Cliente();
             cliente = respuesta.get();
-
+            
             cliente.setAlta(true);
             clienteRepositorio.save(cliente);
         } else {
             throw new MiException("No se encontro el usuario");
         }
     }
-
+    
     private void validar(String nombre, String apellido, String descripcion,
             String password, String password2, MultipartFile[] imagenesInput,
             String[] tipoContactoInput, String[] contactosInput) throws MiException {
-
+        
         if (nombre == null || nombre.trim().isEmpty()) {
             throw new MiException("La nombre no puede ser nulo o estar vacio");
         }
@@ -192,27 +190,32 @@ public class ClienteServicio {
             throw new MiException("Debes ingresar por lo menos un contacto");
         }
     }
-
+    
     @Transactional
-    public Propietario cambiarPropietario(Cliente cliente) {
-        Cliente logueado = clienteRepositorio.getOne(cliente.getId());
-        Propietario propietario = new Propietario();
-        try {
-            eliminarCliente(logueado.getId());
-        } catch (MiException ex) {
-            ex.printStackTrace();
+    public void cambiarPropietario(String id) throws MiException {
+        Optional<Cliente> respuesta = clienteRepositorio.findById(id);
+        if (respuesta.isPresent()) {
+            Cliente cliente = new Cliente();
+            cliente = respuesta.get();
+            
+            cliente.setRol(Rol.PROPIETARIO);
+            clienteRepositorio.save(cliente);
+        } else {
+            throw new MiException("No se encontro el usuario");
         }
-        propietario.setNombre(logueado.getNombre());
-        propietario.setApellido(logueado.getApellido());
-        propietario.setEmail(logueado.getEmail());
-        propietario.setPassword(logueado.getPassword());
-        propietario.setAlta(logueado.getAlta());
-        propietario.setContactos(logueado.getContactos());
-        propietario.setRol(logueado.getRol());
-        propietario.setImagenes(logueado.getImagenes());
-        propietario.setDescripcion(logueado.getDescripcion());
-
-        propiedadRepositorio.save(propietario);
-        return propietario;
+    }
+    
+    @Transactional
+    public void agregarPropiedades(String id, Propiedad propiedad) throws MiException {
+        Optional<Cliente> respuesta = clienteRepositorio.findById(id);
+        if (respuesta.isPresent()) {
+            Cliente cliente = new Cliente();
+            cliente = respuesta.get();
+            
+            cliente.getPropiedades().add(propiedad);
+            clienteRepositorio.save(cliente);
+        } else {
+            throw new MiException("No se encontro el usuario");
+        }
     }
 }
