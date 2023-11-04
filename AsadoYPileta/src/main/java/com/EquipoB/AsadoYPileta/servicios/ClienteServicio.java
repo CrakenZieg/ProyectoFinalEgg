@@ -25,7 +25,7 @@ public class ClienteServicio {
     private ImagenServicio imagenServicio;
     
     @Transactional
-    public void crearCliente(String nombre, String apellido,String password,String password2, MultipartFile[] imagenesInput, 
+    public void crearCliente(String email,String nombre, String apellido,String password,String password2, MultipartFile[] imagenesInput, 
             String descripcion, String numeroCelular) throws MiException, Exception{
         
         validar(nombre, apellido, imagenesInput, descripcion,password,password2);
@@ -37,6 +37,7 @@ public class ClienteServicio {
         
         cliente.setNombre(nombre);
         cliente.setApellido(apellido);
+        cliente.setEmail(email);
         cliente.setPassword(new BCryptPasswordEncoder().encode(password));
         cliente.setImagenes(imagenes);
         cliente.setDescripcion(descripcion);

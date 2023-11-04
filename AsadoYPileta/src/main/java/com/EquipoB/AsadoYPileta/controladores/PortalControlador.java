@@ -56,7 +56,7 @@ public class PortalControlador {
             @RequestParam String password,@RequestParam String password2,@RequestParam String descripcion,@RequestParam String numeroCelular,@RequestParam MultipartFile[] imagenesInput) throws Exception {
 
         try {
-            clienteServicio.crearCliente(nombre, apellido,password,password2, imagenesInput, descripcion, numeroCelular);
+            clienteServicio.crearCliente(email,nombre, apellido,password,password2, imagenesInput, descripcion, numeroCelular);
             
             return "index.html";
         } catch (MiException ex) {
