@@ -37,6 +37,7 @@ public class UsuarioServicio implements UserDetailsService {
     @Autowired
     private PropietarioRepositorio propietarioRepositorio;
 
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Usuario usuario = usuarioRepositorio.buscarPorEmail(email);
@@ -55,7 +56,9 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Transactional
     public void crearUsuario(String email, String password, Rol rol) throws MiException, Exception {
+
         validar(email, password, rol);
+
         Usuario usuario = new Usuario();
         usuario.setEmail(email);
         usuario.setPassword(password);
@@ -75,6 +78,7 @@ public class UsuarioServicio implements UserDetailsService {
     public void modificarUsuario(String id, String email, String password, Rol rol,
             Date fechaAlta, Boolean alta) throws MiException {
         validar(email, password, rol);
+
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
             Usuario usuario = respuesta.get();
@@ -94,7 +98,6 @@ public class UsuarioServicio implements UserDetailsService {
         return usuarioRepositorio.getOne(id);
     }
 
-    @Transactional
     public void cambiarRol(String id, Rol rol) throws MiException {
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
@@ -199,8 +202,7 @@ public class UsuarioServicio implements UserDetailsService {
         }        
     }
 
-
-    private void validar(String email, String password, Rol rol, Boolean activo) throws MiException {
+    private void validar(String email, String password, Rol rol) throws MiException {
         if ( email == null || email.trim().isEmpty() ) {
             throw new MiException("El Email no puede ser nulo o estar vacio");
         }

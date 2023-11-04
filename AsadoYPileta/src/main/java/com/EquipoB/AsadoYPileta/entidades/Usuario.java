@@ -21,15 +21,15 @@ public class Usuario {
     @Id
     @GeneratedValue (generator= "uuid")
     @GenericGenerator (name= "uuid", strategy = "uuid2")
-    private String id;   
-    private String email;
-    private String password;
+    protected String id;   
+    protected String email;
+    protected String password;
     @Enumerated(EnumType.STRING)
-    private Rol rol;
+    protected Rol rol;
     @Temporal(TemporalType.DATE)
-    private Date fechaAlta;
+    protected Date fechaAlta;
     
-    private Boolean alta;
+    protected Boolean alta;
 
     public Usuario() {
     }
@@ -37,9 +37,7 @@ public class Usuario {
     @PrePersist
     protected void onCreate() {
         this.fechaAlta = new Date();
-
-        this.alta= true;
-
+        this.alta = true;
     }    
     
 }
