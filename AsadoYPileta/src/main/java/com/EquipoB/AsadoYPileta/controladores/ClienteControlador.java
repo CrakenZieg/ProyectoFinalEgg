@@ -1,16 +1,10 @@
 
 package com.EquipoB.AsadoYPileta.controladores;
 
-
-import com.EquipoB.AsadoYPileta.entidades.Contacto;
-import com.EquipoB.AsadoYPileta.entidades.Imagen;
-import com.EquipoB.AsadoYPileta.entidades.TipoContacto;
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.servicios.ClienteServicio;
 import com.EquipoB.AsadoYPileta.servicios.TipoContactoServicio;
-import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
