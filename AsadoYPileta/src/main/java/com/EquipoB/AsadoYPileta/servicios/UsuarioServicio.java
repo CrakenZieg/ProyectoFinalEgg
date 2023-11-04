@@ -199,11 +199,12 @@ public class UsuarioServicio implements UserDetailsService {
         }        
     }
 
-    private void validar(String email, String password, Rol rol) throws MiException {
-        if (email.isEmpty() || email == null) {
+
+    private void validar(String email, String password, Rol rol, Boolean activo) throws MiException {
+        if ( email == null || email.trim().isEmpty() ) {
             throw new MiException("El Email no puede ser nulo o estar vacio");
         }
-        if (password.isEmpty() || password == null) {
+        if ( password == null || password.trim().isEmpty()) {
             throw new MiException("La contraseña no puede ser nulo o estar vacio");
         }
         if (rol == null) {

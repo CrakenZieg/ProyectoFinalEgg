@@ -64,7 +64,7 @@ public class ClienteServicio {
         clientes = clienteRepositorio.findAll();
         return clientes;
     }
-
+  
     @Transactional
     private void modificarCliente(String id, String nombre, String apellido, String descripcion,
             String password, String password2, MultipartFile[] imagenesInput,
@@ -109,8 +109,6 @@ public class ClienteServicio {
             clienteRepositorio.save(cliente);
         }
 
-    }
-
     @Transactional(readOnly = true)
     public Cliente getOne(String id) {
 
@@ -126,7 +124,6 @@ public class ClienteServicio {
         } else {
             throw new MiException("No se encontro el cliente");
         }
-
     }
 
     @Transactional
