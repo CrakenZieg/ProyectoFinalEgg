@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Propietario extends Usuario {
+public class Propietario extends Cliente {
 
     @OneToMany
     private List<Propiedad> propiedades;
