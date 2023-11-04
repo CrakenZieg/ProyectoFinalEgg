@@ -4,6 +4,7 @@ import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
+import com.EquipoB.AsadoYPileta.servicios.ClienteServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
 import java.util.List;
@@ -22,8 +23,9 @@ public class PortalControlador {
     
     @Autowired
     private PropiedadServicio propiedadServicio;
-    @Autowired
-    private UsuarioServicio usuarioServicio;
+   
+      @Autowired
+    private ClienteServicio clienteServicio;
     
     private TipoPropiedad tipos;
 
@@ -47,17 +49,6 @@ public class PortalControlador {
             modelo.put("error", "Usuario o Contraseña invalidos!");
         }
         return "login.html";
-    }
-    
-    @PostMapping("/registro")
-    public String registro(@RequestParam String email, @RequestParam String password, 
-            @RequestParam Rol rol, ModelMap modelo) throws Exception {
-        try {
-            usuarioServicio.crearUsuario(email, password, rol);            
-            return "index.html";
-        } catch (MiException ex) {           
-            return "registro.html";
-        }
     }
 
 }
