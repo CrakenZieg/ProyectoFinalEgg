@@ -3,16 +3,18 @@ package com.EquipoB.AsadoYPileta.entidades;
 
 import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import lombok.Data;
 
 @Data
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Cliente extends Usuario{
+public class Cliente{
 
+    @Id
+    private String id;
+    private Usuario usuario;
     private String nombre;
     private String apellido; 
     private String descripcion;
@@ -22,6 +24,11 @@ public class Cliente extends Usuario{
     private List<Contacto> contactos;
 
     public Cliente() {
+    }    
+    
+    @PrePersist
+    protected void onCreate() {
+        this.id = usuario.getId();
     }    
     
 }

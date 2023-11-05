@@ -37,7 +37,7 @@ public class ClienteControlador {
           @RequestParam Boolean alta, @RequestParam MultipartFile[] imagenesInput, @RequestParam String descrpcion, 
           @RequestParam String[] tipoContactoInput, @RequestParam String[] contactosInput){        
         try {
-            clienteServicio.crearCliente(nombre, apellido, descrpcion, 
+            clienteServicio.crearCliente(email, nombre, apellido, descrpcion, 
                     password, password, imagenesInput, tipoContactoInput, contactosInput);
         } catch (Exception ex) {
             Logger.getLogger(ClienteControlador.class.getName()).log(Level.SEVERE, null, ex);

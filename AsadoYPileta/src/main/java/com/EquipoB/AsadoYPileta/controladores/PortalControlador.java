@@ -24,9 +24,6 @@ public class PortalControlador {
     
     @Autowired
     private PropiedadServicio propiedadServicio;
-   
-    @Autowired
-    private ClienteServicio clienteServicio;
     
     private TipoPropiedad tipos;
 
@@ -36,11 +33,6 @@ public class PortalControlador {
         model.addAttribute("propiedades", propiedades);        
         model.addAttribute("tipos", tipos);
         return "index.html";
-    }
-    
-    @GetMapping("/registrar")
-    public String registrar (ModelMap modelo){        
-        return "registro.html";
     }
     
     @GetMapping("/login")

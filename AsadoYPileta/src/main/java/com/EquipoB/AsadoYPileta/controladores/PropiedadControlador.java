@@ -4,9 +4,12 @@ import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
+import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
+import com.EquipoB.AsadoYPileta.servicios.PropietarioServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
+import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -24,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequestMapping("/propiedad")
 public class PropiedadControlador {
-
+    
     @Autowired
     private PropiedadServicio propiedadServicio;
 
@@ -42,7 +45,7 @@ public class PropiedadControlador {
         return "index.html";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_PROPIETARIO')")
+    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @GetMapping("/registrar")
     public String registrar(ModelMap model) {
         List<Servicio> servicios = new ArrayList<>();
@@ -69,7 +72,7 @@ public class PropiedadControlador {
             @RequestParam TipoPropiedad tipo, @RequestParam(required = false) String[] serviciosInput,
             @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor, HttpSession session) {        
         try {
-            Propietario logueado = (Propietario) session.getAttribute("usuariosession");
+            Usuario logueado = (Usuario) session.getAttribute("usuariosession");            
             propiedadServicio.crearPropiedad(titulo, descripcion, ubicacion,
                     direccion, tipo, serviciosInput, imagenesInput, valor, logueado);
         } catch (Exception ex) {
