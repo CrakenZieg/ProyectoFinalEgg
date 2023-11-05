@@ -12,7 +12,7 @@ and open the template in the editor.
         <div class="registro">
           <h2>Registrate!</h2>
           <div class="registro-form">
-            <form th:action="@{/registro}" method="POST" enctype="multipart/form-data">
+            <form th:action="@{/cliente/registro}" method="POST" enctype="multipart/form-data">
                 <div class="registro-inptcont">
                     <input type="text" name="nombre" required/>
                     <label for="nombre">Nombre</label>
@@ -31,9 +31,10 @@ and open the template in the editor.
                    <label>Cuerpo:</label> <br>
                 </div>
                 
-              <div class="registro-inptcont">
-                <input type="text" name="numeroCelular" />
-                <label for="numeroCelular" id="lbl-celu">Ingrese numero de telefono</label>
+              <div class="registro-inptcont" th:each="tipoContacto : ${tipoContacto}" >
+                <input hidden type="text" name="tipoContactoInput" th:value="${tipoContacto.tipo}"/>
+                <input type="text" name="contactosInput"/>
+                <label for="tipoContactoInput" id="lbl-celu" th:text="${tipoContacto.tipo}">Ingrese numero de telefono</label>
               </div>
               <div class="registro-inptcont">
                 <input type="password" name="password" required/>
