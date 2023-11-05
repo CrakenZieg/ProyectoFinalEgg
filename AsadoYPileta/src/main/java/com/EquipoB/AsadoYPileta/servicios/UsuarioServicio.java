@@ -95,63 +95,47 @@ public class UsuarioServicio implements UserDetailsService {
         return usuarioRepositorio.getOne(id);
     }
 
-    public void bajaUsuario(String id) throws MiException {
-        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
-        if (respuesta.isPresent()) {
-            Usuario usuario = new Usuario();
-            usuario = respuesta.get();
-            usuario.setAlta(false);
-            usuarioRepositorio.save(usuario);
-        } else {
-            throw new MiException("No se encontro el usuario");
-        }
-    }
-
     @Transactional
     public void cambiarRol(String id, Rol rol) throws MiException {
-        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
-        if (respuesta.isPresent()) {
-            Usuario usuario = new Usuario();
-            usuario = respuesta.get();
-            if (usuario.getRol().equals(Rol.PROPIETARIO)) {
-                Propietario propietario = propietarioRepositorio.getById(usuario.getId());
-                if (propietario.getPropiedades().size() == 0) {
-                    propietario.setRol(rol);
-                    Cliente cliente = new Cliente();
-                    cliente.setId(propietario.getId());
-                    cliente.setEmail(propietario.getEmail());
-                    cliente.setPassword(propietario.getPassword());
-                    cliente.setNombre(propietario.getNombre());
-                    cliente.setApellido(propietario.getApellido());
-                    cliente.setDescripcion(propietario.getDescripcion());
-                    cliente.setFechaAlta(propietario.getFechaAlta());
-                    cliente.setContactos(propietario.getContactos());
-                    cliente.setImagenes(propietario.getImagenes());
-                    cliente.setRol(propietario.getRol());
-                    clienteRepositorio.save(cliente);
-                } else {
-                    throw new MiException("No es posible modificar el rol del cliente si este tiene propiedades");
-                }
-            } else if (usuario.getRol().equals(Rol.CLIENTE)) {
-                Cliente cliente = clienteRepositorio.getById(usuario.getId());
-                cliente.setRol(rol);
-                Propietario propietario = new Propietario();
-                propietario.setId(cliente.getId());
-                propietario.setEmail(cliente.getEmail());
-                propietario.setPassword(cliente.getPassword());
-                propietario.setNombre(cliente.getNombre());
-                propietario.setApellido(cliente.getApellido());
-                propietario.setDescripcion(cliente.getDescripcion());
-                propietario.setFechaAlta(cliente.getFechaAlta());
-                propietario.setContactos(cliente.getContactos());
-                propietario.setImagenes(cliente.getImagenes());
-                propietario.setRol(cliente.getRol());
-                propietarioRepositorio.save(propietario);
-            } else {
-                usuario.setRol(rol);
-                usuarioRepositorio.save(usuario);
-            }
+        if (rol.equals(Rol.PROPIETARIO)) {
+            Propietario propietario = propietarioRepositorio.getById(id);
+            if (propietario.getPropiedades().size() == 0) {
+                propietario.setRol(rol);
+                Cliente cliente = new Cliente();
+                cliente.setId(propietario.getId());
+                cliente.setEmail(propietario.getEmail());
+                cliente.setPassword(propietario.getPassword());
+                cliente.setNombre(propietario.getNombre());
+                cliente.setApellido(propietario.getApellido());
+                cliente.setDescripcion(propietario.getDescripcion());
+                cliente.setFechaAlta(propietario.getFechaAlta());
+                cliente.setContactos(propietario.getContactos());
+                cliente.setImagenes(propietario.getImagenes());
+                cliente.setRol(propietario.getRol());
+                propietarioRepositorio.delete(propietario);
+                clienteRepositorio.save(cliente);
 
+            } else {
+                throw new MiException("No es posible modificar el rol del cliente si este tiene propiedades");
+            }
+        } else if (rol.equals(Rol.CLIENTE)) {
+            Cliente cliente = clienteRepositorio.getById(id);
+            cliente.setRol(rol);
+            Propietario propietario = new Propietario();
+            propietario.setId(cliente.getId());
+            propietario.setEmail(cliente.getEmail());
+            propietario.setPassword(cliente.getPassword());
+            propietario.setNombre(cliente.getNombre());
+            propietario.setApellido(cliente.getApellido());
+            propietario.setDescripcion(cliente.getDescripcion());
+            propietario.setFechaAlta(cliente.getFechaAlta());
+            propietario.setContactos(cliente.getContactos());
+            propietario.setImagenes(cliente.getImagenes());
+            propietario.setRol(cliente.getRol());
+            clienteRepositorio.delete(cliente);
+            propietarioRepositorio.save(propietario);
+        } else {
+            throw new MiException("No es posible modificar el rol de un administrador");
         }
     }
 
