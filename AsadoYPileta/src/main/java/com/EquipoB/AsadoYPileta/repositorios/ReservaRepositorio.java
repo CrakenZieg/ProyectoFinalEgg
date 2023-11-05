@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReservaRepositorio extends JpaRepository <Reserva,String> {
     
-    @Query("SELECT r FROM Reserva r WHERE r.disponible=1 AND r.usuario.id = :id")
+    @Query("SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END FROM Reserva r WHERE r.disponible=true AND r.usuario.id = :id")
     public boolean buscarReservaCliente(@Param("id") String id);
     
-    @Query("SELECT r FROM Reserva r WHERE r.disponible=1 AND r.propiedad.id = :id")
+    @Query("SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END FROM Reserva r WHERE r.disponible=true AND r.propiedad.id = :id")
     public boolean buscarReservaPropiedad(@Param("id") String id);
     
 }
