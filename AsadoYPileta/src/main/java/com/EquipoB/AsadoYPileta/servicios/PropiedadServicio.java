@@ -153,11 +153,20 @@ public class PropiedadServicio {
         return propiedadRepositorio.getOne(id);
     }
 
-    public void eliminar(String id) {
+    @Transactional
+    public void eliminar(String id, Usuario logueado) {
         Optional<Propiedad> propiedadRepo = propiedadRepositorio.findById(id);
-        if (propiedadRepo.isPresent()){
+        Optional<Propietario> propietarioRepo = propietarioRepositorio.findById(logueado.getId());
+        if (propiedadRepo.isPresent() && propietarioRepo.isPresent()){
             Propiedad propiedad = propiedadRepo.get();
-            propiedadRepositorio.delete(propiedad);
+            Propietario propietario = propietarioRepo.get();
+            List<Propiedad> propiedades = propietario.getPropiedades();
+            if(propiedades.contains(propiedad)){
+                propiedades.remove(propiedad);
+                propietario.setPropiedades(propiedades);
+                propietarioRepositorio.save(propietario);
+                propiedadRepositorio.delete(propiedad);
+            }
         }        
     }
 
