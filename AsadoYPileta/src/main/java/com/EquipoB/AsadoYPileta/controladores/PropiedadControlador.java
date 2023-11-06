@@ -42,7 +42,7 @@ public class PropiedadControlador {
         return "index.html";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_PROPIETARIO')")
+    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @GetMapping("/registrar")
     public String registrar(ModelMap model) {
         List<Servicio> servicios = new ArrayList<>();
