@@ -202,18 +202,24 @@ public class UsuarioServicio implements UserDetailsService {
                     } else {
                         throw new MiException("No es posible eliminar el propietario si este tiene propiedades");
                     }
+                    Cliente cliente = clienteRepositorio.getById(usuario.getId());
+                    /* Metodo que controle que no haya reservas activas */
+                    if (true) {
+                        clienteRepositorio.delete(cliente);
+                    }
                     break;
                 }
                 case CLIENTE: {
                     Cliente cliente = clienteRepositorio.getById(usuario.getId());
                     /* Metodo que controle que no haya reservas activas */
-                    if (false) {
+                    if (true) {
                         clienteRepositorio.delete(cliente);
                     }
                     break;
                 }
                 case ADMIN: {
 
+                    /* Metodo que controle que este habilitada la eliminacion */
                 }
             }
             usuarioRepositorio.delete(usuario);
