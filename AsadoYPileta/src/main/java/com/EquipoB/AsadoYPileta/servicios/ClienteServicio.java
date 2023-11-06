@@ -13,27 +13,16 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-<<<<<<< HEAD
 import org.springframework.transaction.annotation.Transactional;
-=======
 import org.springframework.web.multipart.MultipartFile;
->>>>>>> desarrollo
+
 
 @Service
 public class ClienteServicio {
 
     @Autowired
     private ClienteRepositorio clienteRepositorio;
-<<<<<<< HEAD
 
-    @Transactional
-    public void crearCliente( List<Imagen> imagenes, String descripcion, List<Contacto> contactos) throws MiException {
-
-        validar(imagenes, descripcion, contactos);
-
-        Cliente cliente = new Cliente();
-
-=======
     
     @Autowired
     private ImagenServicio imagenServicio;
@@ -52,7 +41,6 @@ public class ClienteServicio {
         cliente.setNombre(nombre);
         cliente.setApellido(apellido);
         cliente.setPassword(new BCryptPasswordEncoder().encode(password));
->>>>>>> desarrollo
         cliente.setImagenes(imagenes);
         cliente.setDescripcion(descripcion);
         TipoContacto tipoContacto = new TipoContacto();
@@ -63,12 +51,10 @@ public class ClienteServicio {
         ArrayList<Contacto> contactos = new ArrayList();
         
         cliente.setContactos(contactos);
-<<<<<<< HEAD
 
-=======
         cliente.setRol(Rol.CLIENTE);
         
->>>>>>> desarrollo
+
         clienteRepositorio.save(cliente);
 
     }
@@ -81,18 +67,18 @@ public class ClienteServicio {
 
         return clientes;
     }
-<<<<<<< HEAD
+
 
     @Transactional
     public void modificarCliente(String id, List<Imagen> imagenes,
             String descripcion, List<Contacto> contactos) throws MiException {
-=======
+
     
     private void validar(String nombre, String apellido, MultipartFile[] imagenesInput, 
             String descripcion, String password,String password2) throws MiException {
->>>>>>> desarrollo
 
-        validar(imagenes, descripcion, contactos);
+
+        
 
         Optional<Cliente> respuesta = clienteRepositorio.findById(id);
 
@@ -126,7 +112,6 @@ public class ClienteServicio {
             throw new MiException("No se encontro el cliente");
         }
 
-<<<<<<< HEAD
     }
 
     @Transactional
@@ -166,9 +151,9 @@ public class ClienteServicio {
       
 
         if (imagenes.isEmpty() || imagenes == null) {
-=======
+
         if (imagenesInput == null) {
->>>>>>> desarrollo
+
 
             throw new MiException("La imagen no puede ser nulo o estar vacio");
         }
@@ -176,13 +161,13 @@ public class ClienteServicio {
         if (descripcion.isEmpty() || descripcion == null) {
 
             throw new MiException("La descripcion no puede ser nulo o estar vacia");
-<<<<<<< HEAD
+
         }
 
         if (contactos.isEmpty() || contactos == null) {
 
             throw new MiException("El contacto no puede ser nulo o estar vacia");
-=======
+
         }      
          
          if(password.isEmpty() || password==null ){
@@ -190,7 +175,7 @@ public class ClienteServicio {
         }
         if(!password.equals(password2)){
              throw new MiException ("Los passwords deben ser iguales!");
->>>>>>> desarrollo
+
         }
 
     }

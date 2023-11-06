@@ -28,13 +28,13 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
-  
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Usuario usuario = usuarioRepositorio.buscarPorEmail(email);
         if (usuario != null) {
             List<GrantedAuthority> permisos = new ArrayList();
-            GrantedAuthority p = new SimpleGrantedAuthority("ROLE_"+usuario.getRol().toString());
+            GrantedAuthority p = new SimpleGrantedAuthority("ROLE_" + usuario.getRol().toString());
             permisos.add(p);
             ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
             HttpSession session = attr.getRequest().getSession(true);
@@ -48,11 +48,9 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Transactional
 
-    
     public void crearUsuario(String email, String password, Rol rol) throws MiException, Exception {
 
-
-        validar( email, password, rol);
+        validar(email, password, rol);
 
         Usuario usuario = new Usuario();
 
@@ -64,7 +62,8 @@ public class UsuarioServicio implements UserDetailsService {
         usuarioRepositorio.save(usuario);
 
     }
-     @Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     public List<Usuario> listarUsuarios() {
 
         List<Usuario> usuarios = new ArrayList();
@@ -95,77 +94,75 @@ public class UsuarioServicio implements UserDetailsService {
             usuarioRepositorio.save(usuario);
         }
     }
+
     @Transactional(readOnly = true)
-    public Usuario getOne(String id){
-        
+    public Usuario getOne(String id) {
+
         return usuarioRepositorio.getOne(id);
     }
-    
-    
+
     @Transactional
-    public void eliminarUsuario(String id) throws MiException{
-    
-        Optional<Usuario> respuesta= usuarioRepositorio.findById(id);
-        if(respuesta.isPresent()){
-             usuarioRepositorio.deleteById(id);
-        }else{
-            throw new MiException ("No se encontro el usuario");
-        }
-       
-    }
-    
-    @Transactional
-    public void cambiarRol(String id){
+    public void eliminarUsuario(String id) throws MiException {
+
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
-    	
-    	if(respuesta.isPresent()) {
-    		
-    		Usuario usuario = respuesta.get();
-    		
-    		if(usuario.getRol().equals(Rol.PROPIETARIO)) {
-    			
-    		usuario.setRol(Rol.CLIENTE);
-    		
-    		}else if(usuario.getRol().equals(Rol.CLIENTE)) {
-    			usuario.setRol(Rol.PROPIETARIO);
-    		}
-    	}
+        if (respuesta.isPresent()) {
+            usuarioRepositorio.deleteById(id);
+        } else {
+            throw new MiException("No se encontro el usuario");
+        }
+
     }
 
     @Transactional
-    public void bajaUsuario(String id, String email, String password, Rol rol, 
-            Date fechaAlta, Boolean activo) throws MiException{
+    public void cambiarRol(String id) {
+        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
 
-        Optional<Usuario> respuesta= usuarioRepositorio.findById(id);
-         if(respuesta.isPresent()){
+        if (respuesta.isPresent()) {
+
+            Usuario usuario = respuesta.get();
+
+            if (usuario.getRol().equals(Rol.PROPIETARIO)) {
+
+                usuario.setRol(Rol.CLIENTE);
+
+            } else if (usuario.getRol().equals(Rol.CLIENTE)) {
+                usuario.setRol(Rol.PROPIETARIO);
+            }
+        }
+    }
+
+    @Transactional
+    public void bajaUsuario(String id, String email, String password, Rol rol,
+            Date fechaAlta, Boolean activo) throws MiException {
+
+        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
+        if (respuesta.isPresent()) {
             Usuario usuario = new Usuario();
             usuario = respuesta.get();
-           
+
             usuario.setAlta(false);
-             usuarioRepositorio.save(usuario);
-        }else{
-            throw new MiException ("No se encontro el usuario");
+            usuarioRepositorio.save(usuario);
+        } else {
+            throw new MiException("No se encontro el usuario");
         }
     }
-    
+
     @Transactional
     public void recuperarUsuario(String id, String nombre, String apellido, String email, String password, Rol rol, Date fechaAlta,
-            Boolean alta) throws MiException{
-        Optional<Usuario> respuesta= usuarioRepositorio.findById(id);
-         validar( email, password, rol);
-       
-            Usuario usuario = new Usuario();
-            usuario = respuesta.get();
-            
-            usuario.setAlta(true);
-          
-            usuarioRepositorio.save(usuario);
+            Boolean alta) throws MiException {
+        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
+        validar(email, password, rol);
+
+        Usuario usuario = new Usuario();
+        usuario = respuesta.get();
+
+        usuario.setAlta(true);
+
+        usuarioRepositorio.save(usuario);
     }
 
     private void validar(String email, String password, Rol rol) throws MiException {
 
-      
-        
         if (email.isEmpty() || email == null) {
 
             throw new MiException("El Email no puede ser nulo o estar vacio");
@@ -176,12 +173,11 @@ public class UsuarioServicio implements UserDetailsService {
             throw new MiException("La contraseña no puede ser nulo o estar vacio");
         }
 
-        if ( rol == null) {
+        if (rol == null) {
 
             throw new MiException("El Rol no puede ser nulo o estar vacio");
         }
 
-       
     }
 
 }
