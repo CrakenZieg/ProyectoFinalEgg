@@ -27,6 +27,7 @@ public class ClienteServicio {
     @Autowired
     private UsuarioServicio usuarioServicio;
 
+    @Autowired
     private TipoContactoServicio tipoContactoServicio;
     
     @Autowired
@@ -45,7 +46,6 @@ public class ClienteServicio {
 
         validar(email, nombre, apellido, descripcion, password, password2, imagenesInput,
                 tipoContactoInput, contactosInput);
-
 
         usuarioServicio.crearUsuario(email, password, rol.CLIENTE);
         Usuario usuario = usuarioServicio.getPorEmail(email);
@@ -79,7 +79,7 @@ public class ClienteServicio {
         clientes = clienteRepositorio.findAll();
         return clientes;
     }
-
+  
     @Transactional
     private void modificarCliente(String email, String id, String nombre, String apellido, 
             String descripcion, String password, String password2, MultipartFile[] imagenesInput,
@@ -90,20 +90,23 @@ public class ClienteServicio {
 
         Optional<Cliente> respuesta = clienteRepositorio.findById(id);
         if (respuesta.isPresent()) {
-
-            Cliente cliente = respuesta.get();
+            
+            Cliente cliente = respuesta.get();            
             List<Imagen> imagenes = cliente.getImagenes();
-
-            if (imagenesViejas != null) {
-                if (imagenesViejas.length != 0) {
-                    imagenes = imagenServicio.filtrar(imagenes,
+            
+            if(imagenesViejas != null){ 
+                if(imagenesViejas.length != 0){
+                    imagenes = imagenServicio.filtrar(imagenes, 
                             imagenesViejas);
                 }
+            }     
+            if(imagenesInput != null){
+                if(imagenesInput.length != 0){
+                    imagenes.addAll(imagenServicio.guardarVarias(imagenesInput));
+                } 
             }
-
             cliente.getUsuario().setEmail(email);
             cliente.getUsuario().setPassword(new BCryptPasswordEncoder().encode(password));
-
             cliente.setNombre(nombre);
             cliente.setApellido(apellido);
             cliente.setImagenes(imagenes);
@@ -170,6 +173,5 @@ public class ClienteServicio {
             throw new MiException("Debes ingresar por lo menos un contacto");
         }
     }
-
 
 }

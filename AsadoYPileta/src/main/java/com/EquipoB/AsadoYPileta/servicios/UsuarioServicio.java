@@ -31,7 +31,6 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
-
     @Autowired
     private ClienteRepositorio clienteRepositorio;
     @Autowired
@@ -57,19 +56,19 @@ public class UsuarioServicio implements UserDetailsService {
     public void crearUsuario(String email, String password, Rol rol) throws MiException, Exception {
 
         validar(email, password, rol);
+
         Usuario usuario = new Usuario();
         usuario.setEmail(email);
-
         usuario.setPassword(new BCryptPasswordEncoder().encode(password));
         usuario.setRol(rol);
-
         usuario.setAlta(true);
         usuarioRepositorio.save(usuario);
     }
 
     @Transactional(readOnly = true)
     public List<Usuario> listarUsuarios() {
-        List<Usuario> usuarios = usuarioRepositorio.findAll();
+        List<Usuario> usuarios = new ArrayList();
+        usuarios = usuarioRepositorio.findAll();
         return usuarios;
     }
 
@@ -175,6 +174,19 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     @Transactional
+    public void bajaUsuario(String id) throws MiException {
+        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
+        if (respuesta.isPresent()) {
+            Usuario usuario = new Usuario();
+            usuario = respuesta.get();
+            usuario.setAlta(false);
+            usuarioRepositorio.save(usuario);
+        } else {
+            throw new MiException("No se encontro el usuario");
+        }
+    }
+
+    @Transactional
     public void recuperarUsuario(String id) throws MiException {
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
@@ -218,18 +230,15 @@ public class UsuarioServicio implements UserDetailsService {
                     break;
                 }
                 case ADMIN: {
-
                     /* Metodo que controle que este habilitada la eliminacion */
                 }
             }
             usuarioRepositorio.delete(usuario);
-
         }
     }
 
     private void validar(String email, String password, Rol rol) throws MiException {
         if (email == null || email.trim().isEmpty()) {
-
             throw new MiException("El Email no puede ser nulo o estar vacio");
         }
         if (password == null || password.trim().isEmpty()) {
@@ -238,6 +247,5 @@ public class UsuarioServicio implements UserDetailsService {
         if (rol == null) {
             throw new MiException("El Rol no puede ser nulo o estar vacio");
         }
-
     }
 }

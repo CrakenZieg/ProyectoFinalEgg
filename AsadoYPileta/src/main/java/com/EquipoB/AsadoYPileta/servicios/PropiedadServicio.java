@@ -39,25 +39,18 @@ public class PropiedadServicio {
     @Transactional
     public void crearPropiedad(String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo,
             String[] serviciosInput, MultipartFile[] imagenesInput, Double valor, Usuario usuario) throws MiException, Exception {
-
-
         validar(titulo, descripcion, ubicacion, direccion, tipo, imagenesInput, valor);
-        
         Optional<Propietario> respuesta = propietarioRepositorio.findById(usuario.getId());
         Propietario propietario = null;
-
         if(respuesta.isPresent()){
-
             propietario = respuesta.get();
         } else {
             propietario = propietarioServicio.crearPropietario(usuario);
         }        
-
         List<Servicio> servicios = new ArrayList<>();
         if (serviciosInput != null) {
             servicios = servicioServicio.listarServiciosArray(serviciosInput);
         }
-
         List<Imagen> imagenes = new ArrayList<>();
         imagenes = imagenServicio.guardarVarias(imagenesInput);
         Propiedad propiedad = new Propiedad();

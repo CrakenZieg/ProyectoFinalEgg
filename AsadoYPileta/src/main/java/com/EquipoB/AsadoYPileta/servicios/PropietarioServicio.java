@@ -24,7 +24,6 @@ public class PropietarioServicio {
     @Autowired
     private PropietarioRepositorio propietarioRepositorio;
 
-
     @Autowired
     private ClienteRepositorio clienteRepositorio;
     
