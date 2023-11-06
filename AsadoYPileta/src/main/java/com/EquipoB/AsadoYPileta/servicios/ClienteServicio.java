@@ -7,6 +7,7 @@ import com.EquipoB.AsadoYPileta.entidades.TipoContacto;
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.ClienteRepositorio;
+import com.EquipoB.AsadoYPileta.repositorios.ContactoRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,12 +27,15 @@ public class ClienteServicio {
 
     @Autowired
     private ImagenServicio imagenServicio;
+    @Autowired
+    private ContactoRepositorio contactoRepositorio;
 
     @Transactional
-    public void crearCliente(String email, String nombre, String apellido, String descripcion,
+    public void crearCliente(String email,String nombre, String apellido, String descripcion,
             String password, String password2, MultipartFile[] imagenesInput,
             String[] tipoContactoInput, String[] contactosInput) throws MiException, Exception {
-        validar(nombre, apellido, descripcion, password, password2, imagenesInput,
+
+        validar(email,nombre, apellido, descripcion, password, password2, imagenesInput,
                 tipoContactoInput, contactosInput);
 
         Cliente cliente = new Cliente();
@@ -39,7 +43,7 @@ public class ClienteServicio {
         imagenes = imagenServicio.guardarVarias(imagenesInput);
 
         cliente.setNombre(nombre);
-        cliente.setApellido(apellido);
+        cliente.setApellido(apellido);  
         cliente.setEmail(email);
         cliente.setPassword(new BCryptPasswordEncoder().encode(password));
         cliente.setImagenes(imagenes);
@@ -50,6 +54,7 @@ public class ClienteServicio {
             Contacto contacto = new Contacto();
             contacto.setTipo(tipo);
             contacto.setContacto(contactosInput[i]);
+            contactoRepositorio.save(contacto);
             contactos.add(contacto);
         }
         cliente.setContactos(contactos);
@@ -64,11 +69,11 @@ public class ClienteServicio {
     }
 
     @Transactional
-    public void modificarCliente(String id, String nombre, String apellido, String descripcion,
+    private void modificarCliente(String email,String id, String nombre, String apellido, String descripcion,
             String password, String password2, MultipartFile[] imagenesInput,
             String[] tipoContactoInput, String[] contactosInput, String[] imagenesViejas) throws MiException, Exception {
 
-        validar(nombre, apellido, descripcion, password, password2, imagenesInput,
+        validar(email,nombre, apellido, descripcion, password, password2, imagenesInput,
                 tipoContactoInput, contactosInput);
 
         Optional<Cliente> respuesta = clienteRepositorio.findById(id);
@@ -153,7 +158,7 @@ public class ClienteServicio {
         }
     }
 
-    private void validar(String nombre, String apellido, String descripcion,
+    private void validar(String email,String nombre, String apellido, String descripcion,
             String password, String password2, MultipartFile[] imagenesInput,
             String[] tipoContactoInput, String[] contactosInput) throws MiException {
         if (nombre == null || nombre.trim().isEmpty()) {
@@ -163,6 +168,9 @@ public class ClienteServicio {
             throw new MiException("El apellido no puede ser nulo o estar vacio");
         }
         if (descripcion == null || descripcion.trim().isEmpty()) {
+            throw new MiException("La descripcion no puede ser nulo o estar vacio");
+        }
+        if (email == null || email.trim().isEmpty()) {
             throw new MiException("La descripcion no puede ser nulo o estar vacio");
         }
         if (password == null || password.trim().isEmpty()) {
