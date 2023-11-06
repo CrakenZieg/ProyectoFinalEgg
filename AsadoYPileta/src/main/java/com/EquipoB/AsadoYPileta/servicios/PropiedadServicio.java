@@ -21,17 +21,16 @@ public class PropiedadServicio {
 
     @Autowired
     private PropiedadRepositorio propiedadRepositorio;
-
     @Autowired
     private ServicioServicio servicioServicio;
-
     @Autowired
     private ImagenServicio imagenServicio;
     @Autowired
-    private ClienteServicio clienteServicio;
+    private PropietarioServicio propietarioServicio;
+    @Autowired
     private ReservaServicio reservaServicio;
-    
-
+    @Autowired
+    private UsuarioServicio usuarioServicio;
 
     @Transactional
     public void crearPropiedad(String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo,
@@ -47,7 +46,6 @@ public class PropiedadServicio {
         List<Imagen> imagenes = new ArrayList<>();
         imagenes = imagenServicio.guardarVarias(imagenesInput);
         Propiedad propiedad = new Propiedad();
-
         propiedad.setTitulo(titulo);
         propiedad.setDescripcion(descripcion);
         propiedad.setUbicacion(ubicacion);
@@ -57,10 +55,8 @@ public class PropiedadServicio {
         propiedad.setServicios(servicios);
         propiedad.setImagenes(imagenes);
         propiedad.setValor(valor);
-        cliente.setRol(Rol.PROPIETARIO);
-
-        clienteServicio.cambiarPropietario(cliente.getId());
-        clienteServicio.agregarPropiedades(cliente.getId(), propiedad);
+        usuarioServicio.cambiarRol(cliente.getId(), Rol.CLIENTE);
+        propietarioServicio.agregarPropiedades(cliente.getId(), propiedad);
         propiedadRepositorio.save(propiedad);
     }
 
@@ -102,15 +98,15 @@ public class PropiedadServicio {
             if ("true".equals(estado)) {
                 propiedad.setEstado(true);
 
-            }else{
-                boolean busqueda= reservaServicio.validarReservasPropiedad(id);
-                if(busqueda == true){
+            } else {
+                boolean busqueda = reservaServicio.validarReservasPropiedad(id);
+                if (busqueda == true) {
                     throw new MiException("No puede darse de baja si tiene reservas activas!");
-                }else{
+                } else {
                     propiedad.setEstado(false);
                 }
-             
-           }
+
+            }
 
             propiedad.setEstado(Boolean.valueOf(estado));
             propiedad.setTipo(tipo);
