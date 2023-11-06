@@ -46,7 +46,7 @@ public class PropiedadControlador {
         model.addAttribute("tipos", tipos);
         return "index.html";
     }
-    
+
     @GetMapping("/{id}")
     public String propiedad(@PathVariable String id, ModelMap model) {
         List<Servicio> servicios = new ArrayList<>();

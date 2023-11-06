@@ -8,6 +8,7 @@ import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.ClienteRepositorio;
+import com.EquipoB.AsadoYPileta.repositorios.ContactoRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,9 +29,13 @@ public class ClienteServicio {
 
     @Autowired
     private TipoContactoServicio tipoContactoServicio;
+    
+    @Autowired
+    private ContactoRepositorio contactoRepositorio;
 
     @Autowired
     private ImagenServicio imagenServicio;
+
     
     private Rol rol;
 
@@ -53,7 +58,7 @@ public class ClienteServicio {
         imagenes = imagenServicio.guardarVarias(imagenesInput);
 
         cliente.setNombre(nombre);
-        cliente.setApellido(apellido);   
+        cliente.setApellido(apellido);
         cliente.setImagenes(imagenes);
         cliente.setDescripcion(descripcion);
         ArrayList<Contacto> contactos = new ArrayList();
@@ -62,6 +67,7 @@ public class ClienteServicio {
             Contacto contacto = new Contacto();
             contacto.setTipo(tipo);
             contacto.setContacto(contactosInput[i]);
+            contactoRepositorio.save(contacto);
             contactos.add(contacto);
         }
         cliente.setContactos(contactos);
@@ -146,6 +152,9 @@ public class ClienteServicio {
             throw new MiException("El apellido no puede ser nulo o estar vacio");
         }
         if (descripcion == null || descripcion.trim().isEmpty()) {
+            throw new MiException("La descripcion no puede ser nulo o estar vacio");
+        }
+        if (email == null || email.trim().isEmpty()) {
             throw new MiException("La descripcion no puede ser nulo o estar vacio");
         }
         if (password == null || password.trim().isEmpty()) {
