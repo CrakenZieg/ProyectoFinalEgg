@@ -47,10 +47,10 @@ public class PropiedadServicio {
         
         Optional<Propietario> respuesta = propietarioRepositorio.findById(usuario.getId());
         Propietario propietario = null;
-        if(respuesta.isEmpty()){
-            propietario = propietarioServicio.crearPropietario(usuario);
-        } else {
+        if(respuesta.isPresent()){
             propietario = respuesta.get();
+        } else {
+            propietario = propietarioServicio.crearPropietario(usuario);
         }        
 
         List<Servicio> servicios = new ArrayList<>();

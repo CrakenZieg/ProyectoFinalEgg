@@ -118,12 +118,12 @@ public class UsuarioServicio implements UserDetailsService {
                 case ADMIN: {
                     usuario.setRol(rol.ADMIN);
                     Optional<Cliente> respuestaCli = clienteRepositorio.findById(id);
-                    if (respuestaCli.isEmpty()) {
+                    if (!respuestaCli.isPresent()) {
                         Cliente cliente = new Cliente();
                         cliente.setUsuario(usuario);
                         clienteRepositorio.save(cliente);
                         Optional<Propietario> respuestaProp = propietarioRepositorio.findById(id);
-                        if (respuestaProp.isEmpty()) {
+                        if (!respuestaProp.isPresent()) {
                             Propietario propietario = new Propietario();
                             propietario.setCliente(cliente);
                             propietarioRepositorio.save(propietario);
@@ -215,17 +215,23 @@ public class UsuarioServicio implements UserDetailsService {
                     } else {
                         throw new MiException("No es posible eliminar el propietario si este tiene propiedades");
                     }
+                    Cliente cliente = clienteRepositorio.getById(usuario.getId());
+                    /* Metodo que controle que no haya reservas activas */
+                    if (true) {
+                        clienteRepositorio.delete(cliente);
+                    }
                     break;
                 }
                 case CLIENTE: {
                     Cliente cliente = clienteRepositorio.getById(usuario.getId());
                     /* Metodo que controle que no haya reservas activas */
-                    if (false) {
+                    if (true) {
                         clienteRepositorio.delete(cliente);
                     }
                     break;
                 }
                 case ADMIN: {
+                    /* Metodo que controle que este habilitada la eliminacion */
                 }
             }
             usuarioRepositorio.delete(usuario);

@@ -39,7 +39,7 @@
                         <div class="row d-flex flex-row">
                             <div class="col form-control" >
                                 <label for="tipoContactoInput">Contactos:</label>
-                                <div class="row row-cols-4">
+                                <div class="row row-cols-3">
                                     <div class="col" th:each="contacto : ${tipoContacto}">
                                         <span th:text="${contacto.tipo}"></span>
                                         <input type="checkbox" name="tipoContacto" 
