@@ -72,7 +72,13 @@ public class PropiedadServicio {
         propiedad.setImagenes(imagenes);
         propiedad.setValor(valor);
         propiedadRepositorio.save(propiedad);
-        propietario.getPropiedades().add(propiedad);
+        if(propietario.getPropiedades() != null){
+            propietario.getPropiedades().add(propiedad);
+        } else {
+            List<Propiedad> propiedades = new ArrayList<>();
+            propiedades.add(propiedad);
+            propietario.setPropiedades(propiedades);
+        }
         propietarioRepositorio.save(propietario);
     }
 

@@ -101,10 +101,10 @@ public class UsuarioServicio implements UserDetailsService {
             return null;
         }
     }
-    
+
     @Transactional(readOnly = true)
     public Usuario getPorEmail(String email) {
-        Usuario respuesta = usuarioRepositorio.buscarPorEmail(email);        
+        Usuario respuesta = usuarioRepositorio.buscarPorEmail(email);
         return respuesta;
     }
 
@@ -136,7 +136,7 @@ public class UsuarioServicio implements UserDetailsService {
                     if (usuario.getRol().equals(rol.CLIENTE)) {
                         throw new MiException("Su rol ya es de Cliente!");
                     }
-                    if (usuario.getRol().equals(rol.PROPIETARIO)) {
+                    if (usuario.getRol().equals(rol.PROPIETARIO)||usuario.getRol().equals(rol.ADMIN)) {
                         Propietario propietario = propietarioRepositorio.getById(id);
                         if (propietario.getPropiedades().size() != 0) {
                             throw new MiException("No es posible modificar el rol del cliente si este tiene propiedades");
@@ -145,21 +145,7 @@ public class UsuarioServicio implements UserDetailsService {
                         usuario.setRol(rol.CLIENTE);
                         usuarioRepositorio.save(usuario);
                         break;
-                    } else {
-                        if (usuario.getRol().equals(rol.ADMIN)) {
-                            Optional<Propietario> respuestaProp = propietarioRepositorio.findById(id);
-                            if (respuestaProp.isPresent()) {
-                                Propietario propietario = respuestaProp.get();
-                                if (propietario.getPropiedades().size() != 0) {
-                                    throw new MiException("No es posible modificar el rol del cliente si este tiene propiedades");
-                                }
-                                propietarioRepositorio.delete(propietario);
-                                usuario.setRol(rol.CLIENTE);
-                                usuarioRepositorio.save(usuario);
-                            }
-                        }
-                    }
-                    break;
+                    } 
                 }
                 case PROPIETARIO: {
                     if (usuario.getRol().equals(rol.PROPIETARIO)) {
@@ -183,7 +169,6 @@ public class UsuarioServicio implements UserDetailsService {
                     }
                     break;
                 }
-
             }
         }
         return usuario;
@@ -240,7 +225,7 @@ public class UsuarioServicio implements UserDetailsService {
                     }
                     break;
                 }
-                case ADMIN: {                    
+                case ADMIN: {
                 }
             }
             usuarioRepositorio.delete(usuario);

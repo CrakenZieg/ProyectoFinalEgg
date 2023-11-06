@@ -42,7 +42,7 @@ public class ClienteServicio {
         validar(email, nombre, apellido, descripcion, password, password2, imagenesInput,
                 tipoContactoInput, contactosInput);
 
-        usuarioServicio.crearUsuario(email, password, rol);
+        usuarioServicio.crearUsuario(email, password, rol.CLIENTE);
         Usuario usuario = usuarioServicio.getPorEmail(email);
         
         Cliente cliente = new Cliente();

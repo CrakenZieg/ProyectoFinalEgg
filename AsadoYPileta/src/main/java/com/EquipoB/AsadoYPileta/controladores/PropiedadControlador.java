@@ -1,15 +1,14 @@
 package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
-import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
-import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
+import com.EquipoB.AsadoYPileta.excepciones.MiException;
+import com.EquipoB.AsadoYPileta.excepciones.PermisosException;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropietarioServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
-import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -30,6 +29,9 @@ public class PropiedadControlador {
     
     @Autowired
     private PropiedadServicio propiedadServicio;
+    
+    @Autowired
+    private PropietarioServicio propietarioServicio;
 
     @Autowired
     private ServicioServicio servicioServicio;
@@ -44,6 +46,16 @@ public class PropiedadControlador {
         model.addAttribute("tipos", tipos);
         return "index.html";
     }
+    
+    @GetMapping("/{id}")
+    public String propiedad(@PathVariable String id, ModelMap model) {
+        List<Servicio> servicios = new ArrayList<>();
+        servicios = servicioServicio.listarServicios();
+        model.addAttribute("propiedad", propiedadServicio.getOne(id));
+        model.addAttribute("tipos", tipos);
+        model.addAttribute("servicios", servicios);
+        return "propiedad.html";
+    }
 
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @GetMapping("/registrar")
@@ -55,15 +67,6 @@ public class PropiedadControlador {
         return "registro_propiedad.html";
     }
 
-    @GetMapping("/{id}")
-    public String propiedad(@PathVariable String id, ModelMap model) {
-        List<Servicio> servicios = new ArrayList<>();
-        servicios = servicioServicio.listarServicios();
-        model.addAttribute("propiedad", propiedadServicio.getOne(id));
-        model.addAttribute("tipos", tipos);
-        model.addAttribute("servicios", servicios);
-        return "propiedad.html";
-    }
 
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @PostMapping("/registro")
@@ -81,16 +84,23 @@ public class PropiedadControlador {
         return "index.html";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @GetMapping("/modificar/{id}")
-    public String modificar(@PathVariable String id, ModelMap model) {
+    public String modificar(@PathVariable String id, ModelMap model, HttpSession session) throws PermisosException, MiException {
+        Usuario logueado = (Usuario) session.getAttribute("usuariosession");        
         List<Servicio> servicios = new ArrayList<>();
         servicios = servicioServicio.listarServicios();
-        model.addAttribute("propiedad", propiedadServicio.getOne(id));
+        Propiedad propiedad = propiedadServicio.getOne(id);
+        if(!propietarioServicio.comprobarPropietario(logueado, propiedad)){
+            throw new PermisosException("No es posible modificar la propiedad porque no te pertenece");
+        }
+        model.addAttribute("propiedad", propiedad);
         model.addAttribute("tipos", tipos);
         model.addAttribute("servicios", servicios);
         return "modificar_propiedad.html";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @PostMapping("/modificar/{id}")
     public String modificar(@PathVariable String id, @RequestParam String titulo,
             @RequestParam String descripcion, @RequestParam String ubicacion,
