@@ -20,13 +20,13 @@ import com.EquipoB.AsadoYPileta.repositorios.UsuarioRepositorio;
 import java.util.Date;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Service
-
 public class UsuarioServicio implements UserDetailsService {
 
     @Autowired
@@ -59,8 +59,10 @@ public class UsuarioServicio implements UserDetailsService {
         validar(email, password, rol);
         Usuario usuario = new Usuario();
         usuario.setEmail(email);
-        usuario.setPassword(password);
-        usuario.setRol(Rol.CLIENTE);
+
+        usuario.setPassword(new BCryptPasswordEncoder().encode(password));
+        usuario.setRol(rol);
+
         usuario.setAlta(true);
         usuarioRepositorio.save(usuario);
     }
@@ -92,51 +94,84 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Transactional(readOnly = true)
     public Usuario getOne(String id) {
-        return usuarioRepositorio.getOne(id);
+        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
+        if (respuesta.isPresent()) {
+            return usuarioRepositorio.getOne(id);
+        } else {
+            return null;
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Usuario getPorEmail(String email) {
+        Usuario respuesta = usuarioRepositorio.buscarPorEmail(email);
+        return respuesta;
     }
 
     @Transactional
-    public void cambiarRol(String id, Rol rol) throws MiException {
-        if (rol.equals(Rol.PROPIETARIO)) {
-            Propietario propietario = propietarioRepositorio.getById(id);
-            if (propietario.getPropiedades().size() == 0) {
-                propietario.setRol(rol);
-                Cliente cliente = new Cliente();
-                cliente.setId(propietario.getId());
-                cliente.setEmail(propietario.getEmail());
-                cliente.setPassword(propietario.getPassword());
-                cliente.setNombre(propietario.getNombre());
-                cliente.setApellido(propietario.getApellido());
-                cliente.setDescripcion(propietario.getDescripcion());
-                cliente.setFechaAlta(propietario.getFechaAlta());
-                cliente.setContactos(propietario.getContactos());
-                cliente.setImagenes(propietario.getImagenes());
-                cliente.setRol(propietario.getRol());
-                propietarioRepositorio.delete(propietario);
-                clienteRepositorio.save(cliente);
-
-            } else {
-                throw new MiException("No es posible modificar el rol del cliente si este tiene propiedades");
+    public Usuario cambiarRol(String id, Rol rol) throws MiException {
+        Optional<Usuario> respuestaUsuario = usuarioRepositorio.findById(id);
+        Usuario usuario = null;
+        if (respuestaUsuario.isPresent()) {
+            usuario = respuestaUsuario.get();
+            switch (rol) {
+                case ADMIN: {
+                    usuario.setRol(rol.ADMIN);
+                    Optional<Cliente> respuestaCli = clienteRepositorio.findById(id);
+                    if (respuestaCli.isEmpty()) {
+                        Cliente cliente = new Cliente();
+                        cliente.setUsuario(usuario);
+                        clienteRepositorio.save(cliente);
+                        Optional<Propietario> respuestaProp = propietarioRepositorio.findById(id);
+                        if (respuestaProp.isEmpty()) {
+                            Propietario propietario = new Propietario();
+                            propietario.setCliente(cliente);
+                            propietarioRepositorio.save(propietario);
+                        }
+                    }
+                    usuarioRepositorio.save(usuario);
+                    break;
+                }
+                case CLIENTE: {
+                    if (usuario.getRol().equals(rol.CLIENTE)) {
+                        throw new MiException("Su rol ya es de Cliente!");
+                    }
+                    if (usuario.getRol().equals(rol.PROPIETARIO)||usuario.getRol().equals(rol.ADMIN)) {
+                        Propietario propietario = propietarioRepositorio.getById(id);
+                        if (propietario.getPropiedades().size() != 0) {
+                            throw new MiException("No es posible modificar el rol del cliente si este tiene propiedades");
+                        }
+                        propietarioRepositorio.delete(propietario);
+                        usuario.setRol(rol.CLIENTE);
+                        usuarioRepositorio.save(usuario);
+                        break;
+                    } 
+                }
+                case PROPIETARIO: {
+                    if (usuario.getRol().equals(rol.PROPIETARIO)) {
+                        throw new MiException("Su rol ya es de Propietario!");
+                    } else {
+                        Optional<Propietario> respuestaProp = propietarioRepositorio.findById(id);
+                        if (respuestaProp.isPresent()) {
+                            usuario.setRol(rol.PROPIETARIO);
+                            usuarioRepositorio.save(usuario);
+                        } else {
+                            Propietario propietario = new Propietario();
+                            Optional<Cliente> respuestaCliente = clienteRepositorio.findById(id);
+                            if (respuestaCliente.isPresent()) {
+                                propietario.setCliente(respuestaCliente.get());
+                            } else {
+                                Cliente cliente = new Cliente();
+                                propietario.setCliente(cliente);
+                            }
+                            propietarioRepositorio.save(propietario);
+                        }
+                    }
+                    break;
+                }
             }
-        } else if (rol.equals(Rol.CLIENTE)) {
-            Cliente cliente = clienteRepositorio.getById(id);
-            cliente.setRol(rol);
-            Propietario propietario = new Propietario();
-            propietario.setId(cliente.getId());
-            propietario.setEmail(cliente.getEmail());
-            propietario.setPassword(cliente.getPassword());
-            propietario.setNombre(cliente.getNombre());
-            propietario.setApellido(cliente.getApellido());
-            propietario.setDescripcion(cliente.getDescripcion());
-            propietario.setFechaAlta(cliente.getFechaAlta());
-            propietario.setContactos(cliente.getContactos());
-            propietario.setImagenes(cliente.getImagenes());
-            propietario.setRol(cliente.getRol());
-            clienteRepositorio.delete(cliente);
-            propietarioRepositorio.save(propietario);
-        } else {
-            throw new MiException("No es posible modificar el rol de un administrador");
         }
+        return usuario;
     }
 
     @Transactional
@@ -178,9 +213,11 @@ public class UsuarioServicio implements UserDetailsService {
                     break;
                 }
                 case ADMIN: {
-                    usuarioRepositorio.delete(usuario);
+
                 }
             }
+            usuarioRepositorio.delete(usuario);
+
         }
     }
 

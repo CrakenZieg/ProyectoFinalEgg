@@ -32,12 +32,12 @@ public class ClienteControlador {
     }
     
     @PostMapping("/registro")
-    public String registro(@RequestParam String nombre, @RequestParam String apellido, @RequestParam String email,
-          @RequestParam String password,@RequestParam String password2
-           , @RequestParam MultipartFile[] imagenesInput, @RequestParam String descripcion, 
-          @RequestParam String[] tipoContactoInput, @RequestParam String[] contactosInput){        
+    public String registro(@RequestParam String nombre, @RequestParam String apellido, 
+        @RequestParam String email, @RequestParam String password, @RequestParam String password2,
+        @RequestParam MultipartFile[] imagenesInput, @RequestParam String descripcion, 
+        @RequestParam String[] tipoContactoInput, @RequestParam String[] contactosInput){        
         try {
-            clienteServicio.crearCliente(email,nombre, apellido, descripcion, 
+            clienteServicio.crearCliente(email, nombre, apellido, descripcion, 
                     password, password2, imagenesInput, tipoContactoInput, contactosInput);
         } catch (Exception ex) {
             Logger.getLogger(ClienteControlador.class.getName()).log(Level.SEVERE, null, ex);
