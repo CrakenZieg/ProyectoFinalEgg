@@ -2,61 +2,38 @@
 package com.EquipoB.AsadoYPileta.entidades;
 
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import lombok.Data;
 
+@Data
 @Entity
-public class Cliente extends Usuario {
+public class Cliente{
 
-    @OneToMany
-    private List<Imagen> imagenes;
+
+    @Id
+    private String id;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Usuario usuario;
     private String nombre;
-    private String apellido;
+    private String apellido; 
     private String descripcion;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Imagen> imagenes;
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Contacto> contactos;
 
     public Cliente() {
-    }
+    }    
     
-    public List<Imagen> getImagenes() {
-        return imagenes;
-    }
 
-    public void setImagenes(List<Imagen> imagenes) {
-        this.imagenes = imagenes;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public List<Contacto> getContactos() {
-        return contactos;
-    }
-
-    public void setContactos(List<Contacto> contactos) {
-        this.contactos = contactos;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
+    @PrePersist
+    protected void onCreate() {
+        this.id = usuario.getId();
+    }    
     
 }

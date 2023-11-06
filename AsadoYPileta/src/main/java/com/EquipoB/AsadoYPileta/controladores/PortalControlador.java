@@ -9,6 +9,7 @@ import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +24,6 @@ public class PortalControlador {
     
     @Autowired
     private PropiedadServicio propiedadServicio;
-   
-      @Autowired
-    private ClienteServicio clienteServicio;
     
     private TipoPropiedad tipos;
 
@@ -37,34 +35,12 @@ public class PortalControlador {
         return "index.html";
     }
     
-
-    @GetMapping("/registrar")
-    public String registrar (ModelMap modelo){
-        return "registro.html";
-    }
-    
     @GetMapping("/login")
     public String login(@RequestParam(required = false) String error, ModelMap modelo ) {
         if (error != null) {
             modelo.put("error", "Usuario o Contraseña invalidos!");
         }
         return "login.html";
-    }
-    
-    @PostMapping("/registro")
-    public String registro(@RequestParam String email,@RequestParam String nombre,@RequestParam String apellido,
-            @RequestParam String password,@RequestParam String password2,@RequestParam String descripcion,@RequestParam String numeroCelular,@RequestParam MultipartFile[] imagenesInput) throws Exception {
-
-        try {
-            clienteServicio.crearCliente(nombre, apellido,password,password2, imagenesInput, descripcion, numeroCelular);
-            
-            return "index.html";
-        } catch (MiException ex) {
-          
-            return "registro.html";
-        }
-     
-
     }
 
 }

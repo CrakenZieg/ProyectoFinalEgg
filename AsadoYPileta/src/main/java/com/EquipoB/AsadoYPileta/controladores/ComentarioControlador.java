@@ -1,7 +1,6 @@
 package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Comentario;
-import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.servicios.ComentarioServicio;
 import com.EquipoB.AsadoYPileta.servicios.ImagenServicio;
@@ -32,12 +31,15 @@ public class ComentarioControlador {
     private PropiedadServicio propiedadServicio;
 
     @GetMapping("/registrar")
-    public String registrar() {
+    public String registrar(ModelMap modelo, HttpSession session) {
+        Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+
+        modelo.put("usuario", usuario);
         return "comentario_form.html";
     }
 
     @PostMapping("/registro")
-    public String registro(@RequestParam() String cuerpo, HttpSession session, @RequestParam MultipartFile[] archivos, @RequestParam Usuario usuario, @RequestParam String stringIdpropiedad, ModelMap modelo) throws Exception {
+    public String registro(@RequestParam() String cuerpo, HttpSession session, @RequestParam MultipartFile[] archivos, @RequestParam String stringIdpropiedad, ModelMap modelo) throws Exception {
         try {
 
             comentarioServicio.crearComentario(session, archivos, cuerpo, stringIdpropiedad);
@@ -60,14 +62,21 @@ public class ComentarioControlador {
 
         return "comentario_list.html";
     }
+    
+    @GetMapping("/listaIdUsuario")
+    public String listarIdUsuario(ModelMap modelo, HttpSession session) {
+   Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+        List<Comentario> comentarios = comentarioServicio.findComentariosByUserId(usuario.getId());
+        modelo.addAttribute("comentarios", comentarios);
+
+        return "comentario_list.html";
+    }
 
     @GetMapping("/modificar/{id}")
     public String modificarComentario(@PathVariable String id, HttpSession session, ModelMap modelo) {
         modelo.put("comentario", comentarioServicio.getOne(id));
         Usuario usuario = (Usuario) session.getAttribute("usuariosession");
-        List<Propiedad> propiedades = propiedadServicio.listarPropiedades();
 
-        modelo.addAttribute("propiedades", propiedades);
         modelo.put("usuario", usuario);
         return "comentario_modificar.html";
     }
@@ -76,9 +85,7 @@ public class ComentarioControlador {
     public String actualizar(@RequestParam MultipartFile[] archivos, @PathVariable String id, HttpSession session, @RequestParam String cuerpo, Usuario usuario, @RequestParam String stringIdpropiedad, @RequestParam(required = false) String[] imagenesViejas, ModelMap modelo) throws Exception {
 
         try {
-            List<Propiedad> propiedades = propiedadServicio.listarPropiedades();
 
-            modelo.addAttribute("propiedades", propiedades);
             comentarioServicio.modificarComentario(session, archivos, id, cuerpo, stringIdpropiedad, imagenesViejas);
 
             modelo.put("exito", "comentario actualizado correctamente!");

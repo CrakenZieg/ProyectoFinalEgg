@@ -6,10 +6,10 @@ import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.EquipoB.AsadoYPileta.repositorios.ServicioRepositorio;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ServicioServicio {
@@ -61,7 +61,7 @@ public class ServicioServicio {
     
     private void validar(String tipoComodidad, Double valor) throws MiException {
 
-        if (tipoComodidad.isEmpty() || tipoComodidad == null) {
+        if ( tipoComodidad == null || tipoComodidad.trim().isEmpty() ) {
 
             throw new MiException("El tipo de comodidad no puede ser nulo o estar vacio");
         }

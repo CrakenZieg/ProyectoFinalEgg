@@ -35,12 +35,17 @@
                 <li><a href="#" class="nav-link px-2 text-white">Nosotros</a></li>
             </ul>
             <div class="text-end">
-                 <a th:if="${session.usuariosession == null}" class="btn btn-outline-white" style="border: 0px" role="button">Ingresar</a>
-                 <a th:if="${session.usuariosession == null}" class="btn btn-outline-warning" style="border: 0px" role="button" th:href="@{/propiedad/registrar}">Registrar Propiedad</a>
+                 <a th:if="${session.usuariosession == null}" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/login}">Ingresar</a>
+                 <a th:if="${session.usuariosession != null}" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/logout}">Logout</a>
+                 <a sec:authorize="hasAnyRole('CLIENTE','PROPIETARIO')" class="btn btn-outline-warning" style="border: 0px" role="button" th:href="@{/propiedad/registrar}">Registrar Propiedad</a>
+                 <a th:if="${session.usuariosession != null}" sec:authorize="hasAnyRole('CLIENTE','PROPIETARIO')" class="btn btn-outline-white" style="border: 0px" role="button" >Perfil</a>
+                 <a th:if="${session.usuariosession != null}" sec:authorize="hasRole('ADMINISTRADOR')" class="btn btn-outline-white" style="border: 0px" role="button" >Panel Admin</a>
             </div>
         </div>
     </div>
 </header>
+
+
 
 <footer th:fragments="footer" class="py-2 text-bg-secondary">
     <div class="row w-100 py-3 d-flex justify-content-around">
