@@ -4,15 +4,18 @@ import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
+import com.EquipoB.AsadoYPileta.entidades.Usuario;
+import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
+import com.EquipoB.AsadoYPileta.repositorios.PropietarioRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -22,19 +25,33 @@ public class PropiedadServicio {
     private PropiedadRepositorio propiedadRepositorio;
 
     @Autowired
+    private PropietarioServicio propietarioServicio;
+    
+    @Autowired
+    private PropietarioRepositorio propietarioRepositorio;
+    
+    @Autowired
     private ServicioServicio servicioServicio;
 
     @Autowired
     private ImagenServicio imagenServicio;
-    @Autowired
-    private ReservaServicio reservaServicio;
     
+    @Autowired
+    private ReservaServicio reservaServicio;        
 
     @Transactional
     public void crearPropiedad(String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo,
-            String[] serviciosInput, MultipartFile[] imagenesInput, Double valor, Propietario propietario) throws MiException, Exception {
+            String[] serviciosInput, MultipartFile[] imagenesInput, Double valor, Usuario usuario) throws MiException, Exception {
 
         validar(titulo, descripcion, ubicacion, direccion, tipo, imagenesInput, valor);
+        
+        Optional<Propietario> respuesta = propietarioRepositorio.findById(usuario.getId());
+        Propietario propietario = null;
+        if(respuesta.isEmpty()){
+            propietario = propietarioServicio.crearPropietario(usuario);
+        } else {
+            propietario = respuesta.get();
+        }        
 
         List<Servicio> servicios = new ArrayList<>();
         if (serviciosInput != null) {
@@ -54,8 +71,15 @@ public class PropiedadServicio {
         propiedad.setServicios(servicios);
         propiedad.setImagenes(imagenes);
         propiedad.setValor(valor);
-        propietario.getPropiedades().add(propiedad);
         propiedadRepositorio.save(propiedad);
+        if(propietario.getPropiedades() != null){
+            propietario.getPropiedades().add(propiedad);
+        } else {
+            List<Propiedad> propiedades = new ArrayList<>();
+            propiedades.add(propiedad);
+            propietario.setPropiedades(propiedades);
+        }
+        propietarioRepositorio.save(propietario);
     }
 
     @Transactional
@@ -129,11 +153,20 @@ public class PropiedadServicio {
         return propiedadRepositorio.getOne(id);
     }
 
-    public void eliminar(String id) {
+    @Transactional
+    public void eliminar(String id, Usuario logueado) {
         Optional<Propiedad> propiedadRepo = propiedadRepositorio.findById(id);
-        if (propiedadRepo.isPresent()){
+        Optional<Propietario> propietarioRepo = propietarioRepositorio.findById(logueado.getId());
+        if (propiedadRepo.isPresent() && propietarioRepo.isPresent()){
             Propiedad propiedad = propiedadRepo.get();
-            propiedadRepositorio.delete(propiedad);
+            Propietario propietario = propietarioRepo.get();
+            List<Propiedad> propiedades = propietario.getPropiedades();
+            if(propiedades.contains(propiedad)){
+                propiedades.remove(propiedad);
+                propietario.setPropiedades(propiedades);
+                propietarioRepositorio.save(propietario);
+                propiedadRepositorio.delete(propiedad);
+            }
         }        
     }
 

@@ -4,6 +4,7 @@ import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Contacto;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.TipoContacto;
+import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.ClienteRepositorio;
@@ -22,33 +23,42 @@ public class ClienteServicio {
 
     @Autowired
     private ClienteRepositorio clienteRepositorio;
+        
+    @Autowired
+    private UsuarioServicio usuarioServicio;
 
     @Autowired
     private TipoContactoServicio tipoContactoServicio;
-
-    @Autowired
-    private ImagenServicio imagenServicio;
+    
     @Autowired
     private ContactoRepositorio contactoRepositorio;
 
+    @Autowired
+    private ImagenServicio imagenServicio;
+
+    
+    private Rol rol;
+
     @Transactional
-    public void crearCliente(String email,String nombre, String apellido, String descripcion,
+    public void crearCliente(String email, String nombre, String apellido, String descripcion,
             String password, String password2, MultipartFile[] imagenesInput,
             String[] tipoContactoInput, String[] contactosInput) throws MiException, Exception {
 
-        validar(email,nombre, apellido, descripcion, password, password2, imagenesInput,
+        validar(email, nombre, apellido, descripcion, password, password2, imagenesInput,
                 tipoContactoInput, contactosInput);
 
-
+        usuarioServicio.crearUsuario(email, password, rol.CLIENTE);
+        Usuario usuario = usuarioServicio.getPorEmail(email);
+        
         Cliente cliente = new Cliente();
+        cliente.setUsuario(usuario);
+        cliente.setId(usuario.getId());
 
         List<Imagen> imagenes = new ArrayList<>();
         imagenes = imagenServicio.guardarVarias(imagenesInput);
 
         cliente.setNombre(nombre);
-        cliente.setApellido(apellido);  
-        cliente.setEmail(email);
-        cliente.setPassword(new BCryptPasswordEncoder().encode(password));
+        cliente.setApellido(apellido);
         cliente.setImagenes(imagenes);
         cliente.setDescripcion(descripcion);
         ArrayList<Contacto> contactos = new ArrayList();
@@ -61,7 +71,6 @@ public class ClienteServicio {
             contactos.add(contacto);
         }
         cliente.setContactos(contactos);
-        cliente.setRol(Rol.CLIENTE);
         clienteRepositorio.save(cliente);
     }
 
@@ -72,11 +81,11 @@ public class ClienteServicio {
     }
   
     @Transactional
-    private void modificarCliente(String email,String id, String nombre, String apellido, String descripcion,
-            String password, String password2, MultipartFile[] imagenesInput,
+    private void modificarCliente(String email, String id, String nombre, String apellido, 
+            String descripcion, String password, String password2, MultipartFile[] imagenesInput,
             String[] tipoContactoInput, String[] contactosInput, String[] imagenesViejas) throws MiException, Exception {
 
-        validar(email,nombre, apellido, descripcion, password, password2, imagenesInput,
+        validar(email, nombre, apellido, descripcion, password, password2, imagenesInput,
                 tipoContactoInput, contactosInput);
 
         Optional<Cliente> respuesta = clienteRepositorio.findById(id);
@@ -96,10 +105,10 @@ public class ClienteServicio {
                     imagenes.addAll(imagenServicio.guardarVarias(imagenesInput));
                 } 
             }
-            
+            cliente.getUsuario().setEmail(email);
+            cliente.getUsuario().setPassword(new BCryptPasswordEncoder().encode(password));
             cliente.setNombre(nombre);
             cliente.setApellido(apellido);
-            cliente.setPassword(new BCryptPasswordEncoder().encode(password));
             cliente.setImagenes(imagenes);
             cliente.setDescripcion(descripcion);
             ArrayList<Contacto> contactos = new ArrayList();
@@ -111,7 +120,6 @@ public class ClienteServicio {
                 contactos.add(contacto);
             }
             cliente.setContactos(contactos);
-            cliente.setRol(Rol.CLIENTE);
             clienteRepositorio.save(cliente);
         }
     }
@@ -131,41 +139,14 @@ public class ClienteServicio {
         }
     }
 
-    @Transactional
-    public void bajaCliente(String id, String nombre, String apellido, List<Imagen> imagenes,
-            String descripcion, List<Contacto> contactos) throws MiException {
-        Optional<Cliente> respuesta = clienteRepositorio.findById(id);
-        if (respuesta.isPresent()) {
-            Cliente cliente = new Cliente();
-            cliente = respuesta.get();
-
-            cliente.setAlta(false);
-            clienteRepositorio.save(cliente);
-        } else {
-            throw new MiException("No se encontro el usuario");
-        }
-    }
-
-    @Transactional
-    public void recuperarCliente(String id, String nombre, String apellido, List<Imagen> imagenes,
-            String descripcion, List<Contacto> contactos) throws MiException {
-        Optional<Cliente> respuesta = clienteRepositorio.findById(id);
-        if (respuesta.isPresent()) {
-            Cliente cliente = new Cliente();
-            cliente = respuesta.get();
-
-            cliente.setAlta(true);
-            clienteRepositorio.save(cliente);
-        } else {
-            throw new MiException("No se encontro el usuario");
-        }
-    }
-
-    private void validar(String email,String nombre, String apellido, String descripcion,
+    private void validar(String email, String nombre, String apellido, String descripcion,
             String password, String password2, MultipartFile[] imagenesInput,
             String[] tipoContactoInput, String[] contactosInput) throws MiException {
+        if (email == null || email.trim().isEmpty()) {
+            throw new MiException("El email no puede ser nulo o estar vacio");
+        }        
         if (nombre == null || nombre.trim().isEmpty()) {
-            throw new MiException("La nombre no puede ser nulo o estar vacio");
+            throw new MiException("El nombre no puede ser nulo o estar vacio");
         }
         if (apellido == null || apellido.trim().isEmpty()) {
             throw new MiException("El apellido no puede ser nulo o estar vacio");
