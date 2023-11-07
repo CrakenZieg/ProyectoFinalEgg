@@ -19,7 +19,6 @@ import com.EquipoB.AsadoYPileta.repositorios.PropietarioRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.UsuarioRepositorio;
 import java.util.Date;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -78,7 +77,6 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     @Transactional
-
     public void modificarUsuario(String id, String email, String password, Rol rol,
             Date fechaAlta, Boolean alta) throws MiException {
 
@@ -125,12 +123,12 @@ public class UsuarioServicio implements UserDetailsService {
                 case ADMIN: {
                     usuario.setRol(rol.ADMIN);
                     Optional<Cliente> respuestaCli = clienteRepositorio.findById(id);
-                    if (respuestaCli.isEmpty()) {
+                    if (!respuestaCli.isPresent()) {
                         Cliente cliente = new Cliente();
                         cliente.setUsuario(usuario);
                         clienteRepositorio.save(cliente);
                         Optional<Propietario> respuestaProp = propietarioRepositorio.findById(id);
-                        if (respuestaProp.isEmpty()) {
+                        if (!respuestaProp.isPresent()) {
                             Propietario propietario = new Propietario();
                             propietario.setCliente(cliente);
                             propietarioRepositorio.save(propietario);
