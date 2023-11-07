@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PropietarioRepositorio extends JpaRepository<Propietario,String> {
-    
+
+public interface PropietarioRepositorio  extends JpaRepository<Propietario, String>{
+
 }
