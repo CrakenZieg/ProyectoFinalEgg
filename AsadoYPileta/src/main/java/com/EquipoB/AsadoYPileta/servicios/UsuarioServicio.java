@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
+import com.EquipoB.AsadoYPileta.excepciones.PermisosException;
 import com.EquipoB.AsadoYPileta.repositorios.ClienteRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.PropietarioRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.UsuarioRepositorio;
@@ -36,6 +37,7 @@ public class UsuarioServicio implements UserDetailsService {
     private ClienteRepositorio clienteRepositorio;
     @Autowired
     private PropietarioRepositorio propietarioRepositorio;
+    private Rol rol;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -201,8 +203,12 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     @Transactional
-    public void eliminarUsuario(String id) throws MiException {
+    public void eliminarUsuario(String id, HttpSession session) throws MiException, PermisosException {
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
+        Usuario logueado = (Usuario) session.getAttribute("usuariosession");
+        if(!logueado.getId().equals(id) && !logueado.getRol().equals(rol.ADMIN)){
+            throw new PermisosException("No es posible eliminar la usuario porque no te pertenece");
+        }  
         if (respuesta.isPresent()) {
             Usuario usuario = new Usuario();
             usuario = respuesta.get();
