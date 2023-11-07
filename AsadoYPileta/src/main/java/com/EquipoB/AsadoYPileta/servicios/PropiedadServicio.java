@@ -47,7 +47,7 @@ public class PropiedadServicio {
         
         Optional<Propietario> respuesta = propietarioRepositorio.findById(usuario.getId());
         Propietario propietario = null;
-        if(respuesta.isEmpty()){
+        if(!respuesta.isPresent()){
             propietario = propietarioServicio.crearPropietario(usuario);
         } else {
             propietario = respuesta.get();
