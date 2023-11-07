@@ -1,0 +1,46 @@
+
+*{
+margin: 0;
+padding: 0;
+font-family: ps;
+}
+
+@font-face {
+  font-family: ps;
+  src: url('font/Poppins-Regular.ttf');
+}
+
+body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #111;
+}
+
+.container{
+  padding: 20px 30px;
+  background-color: #111;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0px 2px 10px 0px black rgb(0, 0, 0, 0, 6);
+}
+
+.container h3{
+  font-weight: 300;
+  color: #444;
+}
+
+container .star{
+  display: flex;
+  grid-gap: 20px;
+}
+
+.container.star a{
+  color: #333;
+  font-size: 40px;
+}
+
+.container.star a.active{
+  color: gold;
+}
