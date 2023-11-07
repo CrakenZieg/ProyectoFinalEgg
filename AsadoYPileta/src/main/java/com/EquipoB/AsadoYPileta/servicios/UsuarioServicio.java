@@ -118,12 +118,12 @@ public class UsuarioServicio implements UserDetailsService {
                 case ADMIN: {
                     usuario.setRol(rol.ADMIN);
                     Optional<Cliente> respuestaCli = clienteRepositorio.findById(id);
-                    if (respuestaCli.isEmpty()) {
+                    if (!respuestaCli.isPresent()) {
                         Cliente cliente = new Cliente();
                         cliente.setUsuario(usuario);
                         clienteRepositorio.save(cliente);
                         Optional<Propietario> respuestaProp = propietarioRepositorio.findById(id);
-                        if (respuestaProp.isEmpty()) {
+                        if (!respuestaProp.isPresent()) {
                             Propietario propietario = new Propietario();
                             propietario.setCliente(cliente);
                             propietarioRepositorio.save(propietario);
