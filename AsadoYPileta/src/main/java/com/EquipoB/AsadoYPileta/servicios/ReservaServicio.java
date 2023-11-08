@@ -3,11 +3,15 @@ package com.EquipoB.AsadoYPileta.servicios;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.ReservaRepositorio;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -97,6 +101,34 @@ public class ReservaServicio {
             e.getMessage();
         }
         
+    }
+    
+    @Transactional
+    public void habilitarComentarioFinReserva(Date fechaFin){
+      
+         List<Reserva> finReserva = reservaRepositorio.buscarFinReserva(fechaFin);
+    
+    for(Reserva reserva : finReserva ){
+         reserva.setComentarioHabilitado(true);
+         reservaRepositorio.save(reserva);
+        
+    }
+    }
+    //se ejecuta todos los dias a las 00:00 hs
+    @Scheduled(cron = "0 0 0 ? * * ")
+    public void bajaAutomatica(){
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        String fecha = formato.format(new Date());
+        
+        List <Reserva> finalizadas = reservaRepositorio.buscarFinalizadas(fecha);
+        
+        if(!finalizadas.isEmpty()){
+            for (Reserva finalizada : finalizadas) {
+                Reserva modificar = finalizada;
+                modificar.setDisponible(Boolean.FALSE);
+                reservaRepositorio.save(modificar);
+            }
+        }
     }
 
     private void validar(String mensaje, Date fechaInicio, Date fechaFin, Boolean disponible) throws MiException {
