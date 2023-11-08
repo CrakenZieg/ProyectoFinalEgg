@@ -17,9 +17,13 @@ public interface ReservaRepositorio extends JpaRepository <Reserva,String> {
     @Query("SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END FROM Reserva r WHERE r.disponible=true AND r.propiedad.id = :id") 
     public boolean buscarReservaPropiedad(@Param("id") String id);
     
-    @Query("SELECT r FROM Reserva r WHERE r.disponible = true AND r.fechaFin <= CURRENT_DATE") 
-    List <Reserva> buscarFinReserva(@Param("fechaFin") Date fechaFin);
     
+    @Query("SELECT r FROM Reserva r WHERE r.disponible = true AND r.fechaFin <= CURRENT_DATE") // CURRENT_DATE es una forma de obtener la fecha actual desde la base de datos y usarla en tus consultas
+    List <Reserva> buscarFinReserva(@Param("fechaFin") Date fechaFin); // diseñado para buscar y devolver una lista de reservas que han finalizado, lo que permite trabajar con esas reservas de manera individual o colectiva.
+
+   
+   
     @Query("SELECT r FROM Reserva r WHERE r.disponible=true AND r.fechaFin<'fechaActual'") 
     List <Reserva> buscarFinalizadas(@Param("fechaActual") String fechaActual);
+
 }
