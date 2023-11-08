@@ -5,74 +5,134 @@
     <body>
         <header th:replace="fragmentos/frags :: header"></header>
         <main>
-            <section class="volver-eliminar">
-                <div class="container-fluid d-flex flex-wrap justify-content-between">
-                    <div class="volver">
-                        <a class="btn btn-outline-secondary" th:href="@{/}">
-                            <i class="bi bi-arrow-left"></i>
-                        </a>
-                    </div>
-                    <div class="eliminar">
-                        <a class="btn btn-outline-danger" th:href="@{/propiedad/eliminar/__${propiedad.id}__}">
-                            <i class="bi bi-trash3"></i>
-                        </a>
-                    </div>
-                </div>
-            </section>
+            
             <section>
-                <div class="container mb-2">
-                    <div class="row mb_1">
-                        <div id="carouselPropiedad" class="carousel slide carousel-fade" data-bs-theme="dark">
-                            <div class="carousel-inner">
-                                <div class="carousel-item" th:each="imagen : ${propiedad.imagenes}" th:classappend="${imagenStat.index == 0}? active">
-                                    <img th:src="@{/imagen/__${imagen.id}__}" class="d-block w-100"/>
-                                </div>                            
-                            </div>
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselPropiedad" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselPropiedad" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <div class="col-9">
-                            <h2 class="text-center" th:text="${propiedad.titulo}"></h2>                              
-                        </div>
-                        <div class="col-3">
-                            <p class="fs-6 text-end" th:text="${propiedad.tipo}"></p>                             
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <ul class="list-group list-group-horizontal d-flex flex-wrap justify-content-around">
-                            <li th:each="servicio : ${propiedad.servicios}" class="list-group-item text-center" th:text="${servicio.tipoComodidad}">Servicio</li>
-                        </ul>
-                    </div>
-                    <div class="row mb-1">
-                        <div class="col text-center">
-                            <p>$ <span th:text="${propiedad.valor}"></span></p>
-                        </div>
-                        <div class="col text-center">                            
-                            <p th:text="${propiedad.direccion}"></p>
-                        </div>
-                        <div class="col text-center">                            
-                            <p th:text="${propiedad.ubicacion}"></p>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <div class="col">                            
-                            <p th:text="${propiedad.descripcion}"></p>
-                        </div>                       
-                    </div>                    
+             <div class="contenedor-propiedad">
+        <div class="propiedad">
+          
+          <div class="contenedor-img-propiedad">
+            
+            <button id="atras"><img th:src="@{/imagenes/arrow.png}" alt=".."></button>
+            <div id="imagen">
+              <div class="imagen-oculta" th:each="imagen : ${propiedad.imagenes}" hidden>
+                <img th:src="@{/imagen/__${imagen.id}__}"   alt="">
+              </div>
+              
+              
+            </div>
+            <button id="adelante" ><img th:src="@{/imagenes/arrow_forward.png}" alt=".."></button>
+          </div>
+          <div id="mostrar-td-serv">
+
+            <div class="dtalles-serv">
+              <div class="titulo-dtl-serv">
+                <h2>¿Que ofrecemos?</h2>
+
+              </div>
+              
+              <ul th:each="servicio : ${propiedad.servicios}" >
+                <li  th:text="${servicio.tipoComodidad}"> Limpieza</li>
+                
+                
+                
+              </ul>
+              
+            </div>
+          </div>
+          <div class="propiedad-descrip">
+            <div class="datos-propiedad">
+              <div class="descripcion">
+                <h2 th:text="${propiedad.titulo}"></h2>
+                <p th:text="${propiedad.descripcion}">descripcion</p>
+               
+              </div>
+              
+              <div id="contenedor-dts-serv">
+                <div class="servicios-propiedad">
+                  <h2>¿Que ofrecemos?</h2>
+                  
+                  <ul >
+                    <li id="servicio-dt" >Limpieza</li>
+                    
+                    
+                    
+                  </ul>
+                  <button id="mostrar-servicios">Mostrar mas</button>
                 </div>
+              </div>
+
+              <div class="map">
+                <map name="propiedad"></map>
+              </div>
+            </div>
+
+            <div class="reserva">
+                
+              <h2 th:text="${propiedad.valor}" > </h2>
+
+              <div class="check-in">
+                <div class="fechainicio">
+                  <label for="fechainicio">Check In</label>
+                  <input type="date" id="fechainicio" />
+                  
+                </div>
+                <div class="fechafinal">
+                  <label for="fechafinal">Check out</label>
+                  <input type="date" id="fechafinal" />
+                  
+                </div>
+              </div>
+              <a href="" class="reservar-btn">Reservar</a>
+            </div>
+          </div>
+          <div class="calificacion">
+            <img th:src="@{/imagenes/estrella.png}" alt="" i>
+          </div>
+          <div class="comentario-contenedor">
+            
+
+            
+            <div class="comentario">
+              <div class="perfil-coment">
+                <div class="imagen-perfil">
+                  <img src="https://images.unsplash.com/photo-1599837826158-79e79f6e032f?auto=format&fit=crop&q=80&w=2078&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
+                </div>
+                
+                <div class="perfil-data">
+                  <p>Nombre y apellido</p>
+                  <p>fecha de publicacion de comentario</p>
+                </div>
+              </div>
+              <div class="comentario-par">
+                <p >lore</p>
+              </div>
+              
+            </div>
+            <div class="comentario">
+              <div class="perfil-coment">
+                <div class="imagen-perfil">
+                  <img src="https://images.unsplash.com/photo-1599837826158-79e79f6e032f?auto=format&fit=crop&q=80&w=2078&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
+                </div>
+                
+                <div class="perfil-data">
+                  <p>Nombre y apellido</p>
+                  <p>fecha de publicacion de comentario</p>
+                </div>
+              </div>
+              <div class="comentario-par">
+                <p>lore</p>
+              </div>
+              
+            </div>
+            
+            
+          </div>
+        </div>
+      </div>
+      
             </section>
         </main>
         <footer th:replace="fragmentos/frags :: footer"></footer>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>        
+        <script th:src="@{/js/RegistroUsuario.js}" type="text/javascript"></script>     
     </body>
 </html>
