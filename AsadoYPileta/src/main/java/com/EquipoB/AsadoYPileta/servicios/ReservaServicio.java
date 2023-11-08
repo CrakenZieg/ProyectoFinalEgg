@@ -1,7 +1,9 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
+import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
+import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.ReservaRepositorio;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,15 +18,16 @@ public class ReservaServicio {
 
     @Autowired
     private ReservaRepositorio reservaRepositorio;
+    @Autowired
+    private PropiedadRepositorio propiedadRepositorio;
 
     @Transactional
-    public void crearReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible) throws MiException {
+    public void crearReserva(String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible) throws MiException {
 
         validar(mensaje, fechaInicio, fechaFin, disponible);
 
         Reserva reserva = new Reserva();
 
-        reserva.setId(id);
         reserva.setMensaje(mensaje);
         reserva.setFechaInicio(fechaInicio);
         reserva.setFechaFin(fechaFin);
@@ -36,7 +39,7 @@ public class ReservaServicio {
 
     }
     
-     @Transactional(readOnly = true) 
+    @Transactional(readOnly = true) 
     public List<Reserva> listarReserva() {
 
         List<Reserva> reservas = new ArrayList();
@@ -68,7 +71,7 @@ public class ReservaServicio {
 
     }
     
-     @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public Reserva getOne(String id){
         
         return reservaRepositorio.getOne(id);
@@ -97,6 +100,32 @@ public class ReservaServicio {
             e.getMessage();
         }
         
+    }
+    
+    public List<Reserva> listarFechasReservasDePropiedad(String id){
+        Reserva reserva = new Reserva();
+        Optional <Propiedad> respuesta = propiedadRepositorio.findById(id);
+        
+       Propiedad propiedadReservada = respuesta.get();
+        
+        reserva.setPropiedad(propiedadReservada);
+        
+        List<Date> fechasOcupadas = new ArrayList();
+        
+       
+        fechasOcupadas = reserva.getPropiedad().g
+    }
+    
+    public void verificarOcupado(String id, Date fechaInicio, Date fechaFin){
+        
+        Optional <Propiedad> respuesta = propiedadRepositorio.findById(id);
+        
+        Propiedad propiedad = respuesta.get();
+        
+        Reserva reserva = new Reserva();
+        
+        
+            
     }
 
     private void validar(String mensaje, Date fechaInicio, Date fechaFin, Boolean disponible) throws MiException {
