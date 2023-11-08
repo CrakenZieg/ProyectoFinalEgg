@@ -25,9 +25,7 @@ public class Cliente{
     private List<Imagen> imagenes;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Contacto> contactos;
-
-    public Cliente() {
-    }    
+      
     
     @PrePersist
     protected void onCreate() {

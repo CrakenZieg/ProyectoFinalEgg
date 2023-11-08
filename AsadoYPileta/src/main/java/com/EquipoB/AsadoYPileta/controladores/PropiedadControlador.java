@@ -1,5 +1,6 @@
 package com.EquipoB.AsadoYPileta.controladores;
 
+import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
@@ -73,9 +74,11 @@ public class PropiedadControlador {
     public String registro(@RequestParam String titulo, @RequestParam String descripcion,
             @RequestParam String ubicacion, @RequestParam String direccion,
             @RequestParam TipoPropiedad tipo, @RequestParam(required = false) String[] serviciosInput,
-            @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor, HttpSession session) {        
+            @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor, HttpSession session) {
         try {
+
             Usuario logueado = (Usuario) session.getAttribute("usuariosession");            
+
             propiedadServicio.crearPropiedad(titulo, descripcion, ubicacion,
                     direccion, tipo, serviciosInput, imagenesInput, valor, logueado);
         } catch (Exception ex) {
@@ -116,6 +119,7 @@ public class PropiedadControlador {
         }
         return "index.html";
     }
+
     
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROPIETARIO')")
     @GetMapping("/eliminar/{id}")
@@ -126,6 +130,7 @@ public class PropiedadControlador {
             throw new PermisosException("No es posible eliminar la propiedad porque no te pertenece");
         }
         propiedadServicio.eliminar(id,logueado);
+
         return "index.html";
     }
 }

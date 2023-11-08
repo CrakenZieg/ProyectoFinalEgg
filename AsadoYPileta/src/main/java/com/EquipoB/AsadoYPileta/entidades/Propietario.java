@@ -1,5 +1,6 @@
 package com.EquipoB.AsadoYPileta.entidades;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -18,6 +19,7 @@ public class Propietario{
     @OneToOne(cascade = CascadeType.ALL)
     private Cliente cliente;
     @OneToMany
+
     private List<Propiedad> propiedades;
     
     @PrePersist
@@ -25,4 +27,5 @@ public class Propietario{
         this.id = cliente.getId();
     }   
     
+
 }
