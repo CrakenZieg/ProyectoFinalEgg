@@ -7,7 +7,7 @@
             <div id="icon">
                 <a href="/"><img src="../AYPIcon.jpg" alt="icono"/></a>
             </div>        
-            <button id="btn">Registrarse</button>        
+            <button id="btn" th:href="@{/cliente/registrar}">Registrarse</button>        
         </nav>    
         <div class="login-contenedor">
       <div class="login">
@@ -25,7 +25,7 @@
             </div>
 
             <button class="btn">Ingresar</button>
-            <p>No tienes cuenta? <a href="#">Registrate</a></p>
+            <p>No tienes cuenta? <a th:href="@{/cliente/registrar}">Registrate</a></p>
           </form>
         </div>
       </div>

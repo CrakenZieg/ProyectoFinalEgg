@@ -26,7 +26,7 @@ public class PortalControlador {
     private PropiedadServicio propiedadServicio;
     
     private TipoPropiedad tipos;
-
+    
     @GetMapping("/")
     public String index(ModelMap model){        
         List<Propiedad> propiedades = propiedadServicio.listarPropiedades();
@@ -42,5 +42,6 @@ public class PortalControlador {
         }
         return "login.html";
     }
+
 
 }
