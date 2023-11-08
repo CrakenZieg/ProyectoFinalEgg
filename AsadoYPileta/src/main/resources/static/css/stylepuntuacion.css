@@ -7,7 +7,7 @@ font-family: ps;
 
 @font-face {
   font-family: ps;
-  src: url(`font/Poppins-Regular.ttf´);
+  src: url('font/Poppins-Regular.ttf');
 }
 
 body{

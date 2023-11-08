@@ -25,6 +25,8 @@ public class Reserva {
     private String mensaje;
     private Double montoTotal;
     private Boolean disponible;
+    private Boolean comentarioHabilitado;
+    
     
     @Temporal(TemporalType.DATE)
     private Date fechaInicio;

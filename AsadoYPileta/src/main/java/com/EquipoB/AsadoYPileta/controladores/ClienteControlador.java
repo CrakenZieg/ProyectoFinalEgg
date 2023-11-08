@@ -61,13 +61,8 @@ public class ClienteControlador {
     
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROPIETARIO','ROLE_CLIENTE')")
     @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable String id,HttpSession session) throws MiException, PermisosException {  
-        Usuario logueado = (Usuario) session.getAttribute("usuariosession");
-        if(logueado.getId()==id || logueado.getRol().equals(rol.ADMIN)){
-            usuarioServicio.eliminarUsuario(id);
-        } else {
-            throw new PermisosException("No es posible eliminar la usuario porque no te pertenece");
-        }        
+    public String eliminar(@PathVariable String id, HttpSession session) throws MiException, PermisosException { 
+        usuarioServicio.eliminarUsuario(id, session);       
         return "index.html";
     }
     
