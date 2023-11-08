@@ -1,6 +1,7 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
+import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
@@ -28,14 +29,14 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Service
 public class UsuarioServicio implements UserDetailsService {
-
+    
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
     @Autowired
     private ClienteRepositorio clienteRepositorio;
     @Autowired
     private PropietarioRepositorio propietarioRepositorio;
-
+    
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Usuario usuario = usuarioRepositorio.buscarPorEmail(email);
@@ -51,12 +52,12 @@ public class UsuarioServicio implements UserDetailsService {
             return null;
         }
     }
-
+    
     @Transactional
     public void crearUsuario(String email, String password, Rol rol) throws MiException, Exception {
-
+        
         validar(email, password, rol);
-
+        
         Usuario usuario = new Usuario();
         usuario.setEmail(email);
         usuario.setPassword(new BCryptPasswordEncoder().encode(password));
@@ -64,19 +65,19 @@ public class UsuarioServicio implements UserDetailsService {
         usuario.setAlta(true);
         usuarioRepositorio.save(usuario);
     }
-
+    
     @Transactional(readOnly = true)
     public List<Usuario> listarUsuarios() {
         List<Usuario> usuarios = new ArrayList();
         usuarios = usuarioRepositorio.findAll();
         return usuarios;
     }
-
+    
     @Transactional
     public void modificarUsuario(String id, String email, String password, Rol rol,
             Date fechaAlta, Boolean alta) throws MiException {
         validar(email, password, rol);
-
+        
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
             Usuario usuario = respuesta.get();
@@ -90,7 +91,7 @@ public class UsuarioServicio implements UserDetailsService {
             throw new MiException("No se encontro el usuario");
         }
     }
-
+    
     @Transactional(readOnly = true)
     public Usuario getOne(String id) {
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
@@ -100,13 +101,13 @@ public class UsuarioServicio implements UserDetailsService {
             return null;
         }
     }
-
+    
     @Transactional(readOnly = true)
     public Usuario getPorEmail(String email) {
         Usuario respuesta = usuarioRepositorio.buscarPorEmail(email);
         return respuesta;
     }
-
+    
     @Transactional
     public Usuario cambiarRol(String id, Rol rol) throws MiException {
         Optional<Usuario> respuestaUsuario = usuarioRepositorio.findById(id);
@@ -135,7 +136,7 @@ public class UsuarioServicio implements UserDetailsService {
                     if (usuario.getRol().equals(rol.CLIENTE)) {
                         throw new MiException("Su rol ya es de Cliente!");
                     }
-                    if (usuario.getRol().equals(rol.PROPIETARIO)||usuario.getRol().equals(rol.ADMIN)) {
+                    if (usuario.getRol().equals(rol.PROPIETARIO) || usuario.getRol().equals(rol.ADMIN)) {
                         Propietario propietario = propietarioRepositorio.getById(id);
                         if (propietario.getPropiedades().size() != 0) {
                             throw new MiException("No es posible modificar el rol del cliente si este tiene propiedades");
@@ -144,7 +145,7 @@ public class UsuarioServicio implements UserDetailsService {
                         usuario.setRol(rol.CLIENTE);
                         usuarioRepositorio.save(usuario);
                         break;
-                    } 
+                    }                    
                 }
                 case PROPIETARIO: {
                     if (usuario.getRol().equals(rol.PROPIETARIO)) {
@@ -172,7 +173,7 @@ public class UsuarioServicio implements UserDetailsService {
         }
         return usuario;
     }
-
+    
     @Transactional
     public void bajaUsuario(String id) throws MiException {
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
@@ -180,12 +181,20 @@ public class UsuarioServicio implements UserDetailsService {
             Usuario usuario = new Usuario();
             usuario = respuesta.get();
             usuario.setAlta(false);
+            String rol = usuario.getRol().toString();
+            if (rol.equals("PROPIETARIO")) {
+                Propietario propietario = propietarioRepositorio.getById(usuario.getId());
+                List<Propiedad> propiedades = propietario.getPropiedades();
+                for (Propiedad propiedad : propiedades) {
+                    propiedad.setEstado(Boolean.FALSE);
+                } 
+            }
             usuarioRepositorio.save(usuario);
         } else {
             throw new MiException("No se encontro el usuario");
         }
     }
-
+    
     @Transactional
     public void recuperarUsuario(String id) throws MiException {
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
@@ -198,7 +207,7 @@ public class UsuarioServicio implements UserDetailsService {
             throw new MiException("No se encontro el usuario");
         }
     }
-
+    
     @Transactional
     public void eliminarUsuario(String id) throws MiException {
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
@@ -236,7 +245,7 @@ public class UsuarioServicio implements UserDetailsService {
             usuarioRepositorio.delete(usuario);
         }
     }
-
+    
     private void validar(String email, String password, Rol rol) throws MiException {
         if (email == null || email.trim().isEmpty()) {
             throw new MiException("El Email no puede ser nulo o estar vacio");
