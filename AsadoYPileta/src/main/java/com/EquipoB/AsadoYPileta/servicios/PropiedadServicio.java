@@ -45,7 +45,7 @@ public class PropiedadServicio {
         validar(titulo, descripcion, ubicacion, direccion, tipo, imagenesInput, valor);
         
         Optional<Propietario> respuesta = propietarioRepositorio.findById(usuario.getId());
-        Propietario propietario = null;
+        Propietario propietario = null;       
         if(respuesta.isPresent()){
             propietario = respuesta.get();
         } else {

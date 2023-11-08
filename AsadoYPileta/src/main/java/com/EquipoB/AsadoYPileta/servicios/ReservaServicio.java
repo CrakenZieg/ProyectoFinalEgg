@@ -3,6 +3,7 @@ package com.EquipoB.AsadoYPileta.servicios;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.ReservaRepositorio;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -97,6 +98,18 @@ public class ReservaServicio {
             e.getMessage();
         }
         
+    }
+    
+    @Transactional
+    public void habilitarComentarioFinReserva(Date fechaFin){
+      
+         List<Reserva> finReserva = reservaRepositorio.buscarFinReserva(fechaFin);
+    
+    for(Reserva reserva : finReserva ){
+         reserva.setComentarioHabilitado(true);
+         reservaRepositorio.save(reserva);
+        
+    }
     }
 
     private void validar(String mensaje, Date fechaInicio, Date fechaFin, Boolean disponible) throws MiException {
