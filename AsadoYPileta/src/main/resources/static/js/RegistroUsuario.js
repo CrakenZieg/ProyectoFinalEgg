@@ -23,3 +23,69 @@ function input(nombre,valor){
     return `<input type="checkbox" id="${nombre}${valor}" name="${nombre}" value="${valor}" hidden="true" checked="true"/>`;    
 }
 
+
+
+
+// Propiedad detalles
+
+
+
+const imagenes = document.getElementsByClassName("imagen-oculta");
+const atras = document.getElementById("atras");
+const adelante = document.getElementById("adelante");
+let posicionActual = 0;
+const btnMostrarServicios = document.getElementById("mostrar-servicios");
+const divMostrarServicios = document.getElementById("mostrar-td-serv");
+
+renderizarImagen();
+
+function escalarServicios() {
+  if (divMostrarServicios.style.display === "none") {
+    divMostrarServicios.style.display = "flex";
+  } else {
+    divMostrarServicios.style.display = "none";
+  }
+}
+function atrasimagen() {
+  if (posicionActual === 0) {
+    posicionActual = imagenes.length - 1;
+  } else {
+    posicionActual--;
+  }
+  renderizarImagen();
+}
+function adelanteimagen() {
+  if (posicionActual >= imagenes.length - 1) {
+    posicionActual = 0;
+  } else {
+    posicionActual++;
+  }
+  renderizarImagen();
+}
+
+function renderizarImagen() {
+  if (imagenes[posicionActual].hidden) {
+    imagenes[posicionActual].hidden = false;
+    
+
+    if (posicionActual != imagenes.length -1  ) {
+      
+      imagenes[posicionActual + 1].hidden = true;
+      
+    }else{
+      imagenes[0].hidden = true;
+    }
+    if(posicionActual != 0){
+      imagenes[posicionActual - 1].hidden = true;
+    }
+    if(posicionActual == 0){
+      imagenes[imagenes.length-1].hidden = true;
+      imagenes[posicionActual].hidden = false;
+    }
+    
+  }
+}
+
+atras.addEventListener("click", atrasimagen);
+adelante.addEventListener("click", adelanteimagen);
+btnMostrarServicios.addEventListener("click", escalarServicios);

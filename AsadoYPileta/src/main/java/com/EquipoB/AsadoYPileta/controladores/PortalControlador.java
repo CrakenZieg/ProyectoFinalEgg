@@ -1,22 +1,16 @@
 package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
-import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
-import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
-import com.EquipoB.AsadoYPileta.excepciones.MiException;
-import com.EquipoB.AsadoYPileta.servicios.ClienteServicio;
+import com.EquipoB.AsadoYPileta.entidades.TipoPropiedad;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
-import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
+import com.EquipoB.AsadoYPileta.servicios.TipoPropiedadServicio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/")
@@ -25,13 +19,15 @@ public class PortalControlador {
     @Autowired
     private PropiedadServicio propiedadServicio;
     
-    private TipoPropiedad tipos;
+    @Autowired
+    private TipoPropiedadServicio tipopropiedadServicio;
     
     @GetMapping("/")
     public String index(ModelMap model){        
         List<Propiedad> propiedades = propiedadServicio.listarPropiedades();
+        List<TipoPropiedad> tipoPropiedades = tipopropiedadServicio.listarTipoPropiedad();
         model.addAttribute("propiedades", propiedades);        
-        model.addAttribute("tipos", tipos);
+        model.addAttribute("tipoPropiedades", tipoPropiedades);
         return "index.html";
     }
     
