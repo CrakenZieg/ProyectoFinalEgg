@@ -3,6 +3,7 @@ package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
+import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,9 @@ public class ServicioServicio {
     
     @Autowired
     private ServicioRepositorio servicioRepositorio;
+    
+    @Autowired
+    private PropiedadRepositorio propiedadRepositorio;
     
     @Transactional
     public void crearSercicio(String tipoComodidad, Double valor) throws MiException{
@@ -41,7 +45,7 @@ public class ServicioServicio {
     }
     
     @Transactional
-    public void modificarServicio(String tipoComodidad, String id, Double valor) throws MiException {
+    public void modificarServicio(String id, String tipoComodidad, Double valor) throws MiException {
 
         validar(tipoComodidad, valor);
 
@@ -91,20 +95,13 @@ public class ServicioServicio {
     }
     
     @Transactional
-    public void eliminarServicio(String id, String tipoComodidad, Double valor) throws MiException{
-    
-        try {
-            validar(tipoComodidad, valor);
-            servicioRepositorio.deleteById(id);
-            
-        } catch (MiException ex) {
-            ex.getMessage();
+    public void eliminarServicio(String id) throws MiException{
+        if(propiedadRepositorio.buscarPorServicio(id).size()!=0){
+            throw new MiException("No se puede eliminar el servicio si está siendo utilizado.");
+        } else {
+            servicioRepositorio.deleteById(id);    
         }
-    
     }
-    
-    
-    
     
 }
 
