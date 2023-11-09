@@ -24,7 +24,7 @@ public class Comentario {
     @ManyToOne
     private Propiedad propiedad;
     @ManyToOne
-    private Usuario Usuario;
+    private Usuario usuario;
 
     
     
