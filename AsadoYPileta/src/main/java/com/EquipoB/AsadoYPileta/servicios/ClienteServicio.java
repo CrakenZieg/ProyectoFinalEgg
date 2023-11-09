@@ -48,7 +48,7 @@ public class ClienteServicio {
 
         validar(email, nombre, apellido, descripcion, password, password2, imagenesInput,
                 tipoContactoInput, contactosInput);
-
+        
         usuarioServicio.crearUsuario(email, password, rol.CLIENTE);
         Usuario usuario = usuarioServicio.getPorEmail(email);
         
@@ -66,7 +66,7 @@ public class ClienteServicio {
         cliente.setDescripcion(descripcion);
         ArrayList<Contacto> contactos = new ArrayList();
         for (int i = 0; i < tipoContactoInput.length; i++) {
-            TipoContacto tipo = tipoContactoServicio.getOne(tipoContactoInput[i]);
+            TipoContacto tipo = tipoContactoServicio.getOnePorTipo(tipoContactoInput[i]);
             Contacto contacto = new Contacto();
             contacto.setTipo(tipo);
             contacto.setContacto(contactosInput[i]);
@@ -119,7 +119,7 @@ public class ClienteServicio {
             cliente.setDescripcion(descripcion);
             ArrayList<Contacto> contactos = new ArrayList();
             for (int i = 0; i < tipoContactoInput.length; i++) {
-                TipoContacto tipo = tipoContactoServicio.getOne(tipoContactoInput[i]);
+                TipoContacto tipo = tipoContactoServicio.getOnePorTipo(tipoContactoInput[i]);
                 Contacto contacto = new Contacto();
                 contacto.setTipo(tipo);
                 contacto.setContacto(contactosInput[i]);
