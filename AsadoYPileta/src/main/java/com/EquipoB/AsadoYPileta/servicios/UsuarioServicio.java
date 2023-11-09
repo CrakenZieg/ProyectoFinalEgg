@@ -254,7 +254,7 @@ public class UsuarioServicio implements UserDetailsService {
             usuarioRepositorio.delete(usuario);
         }
     }
-<<<<<<< HEAD
+
     
     @Transactional
     public void cambiarPassword(String email,String password, String newPassword,String equalPassword ) throws MiException{
@@ -279,9 +279,7 @@ public class UsuarioServicio implements UserDetailsService {
         
     }
     
-=======
 
->>>>>>> desarrollo
     private void validar(String email, String password, Rol rol) throws MiException {
         if (email == null || email.trim().isEmpty()) {
             throw new MiException("El Email no puede ser nulo o estar vacio");
