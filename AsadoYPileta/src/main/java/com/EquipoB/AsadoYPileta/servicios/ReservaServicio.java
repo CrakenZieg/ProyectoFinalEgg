@@ -1,14 +1,11 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
-import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.ReservaRepositorio;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -107,27 +104,17 @@ public class ReservaServicio {
     }
     
 
-    public List<Reserva> listarFechasReservasDePropiedad(String id){
-        Reserva reserva = new Reserva();
-        Optional <Propiedad> respuesta = propiedadRepositorio.findById(id);
-        
-       Propiedad propiedadReservada = respuesta.get();
-        
-        reserva.setPropiedad(propiedadReservada);
-        
-        List<Date> fechasOcupadas = new ArrayList();
-        
-       
-        fechasOcupadas = reserva.getPropiedad().g
-    }
     
-    public void verificarOcupado(String id, Date fechaInicio, Date fechaFin){
+    public void verificarOcupado(String idPropiedad, Date fechaInicio, Date fechaFin){
         
-        Optional <Propiedad> respuesta = propiedadRepositorio.findById(id);
+        List <Date> fechasReservas = reservaRepositorio.buscarFechasReservas(idPropiedad);
         
-        Propiedad propiedad = respuesta.get();
+        for (Date fechasReserva : fechasReservas) {
+            
+            fechasReserva.equals(fechaInicio);
+            
+        }
         
-        Reserva reserva = new Reserva();
     }
         
             
