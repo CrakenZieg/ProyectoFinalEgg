@@ -29,7 +29,7 @@ public class SeguridadWeb extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                        .antMatchers("/admin/*")
+                        .antMatchers("/admin/*","/negocio/*")
                             .hasRole("ADMIN")
                         .antMatchers("/cliente/modificar/*")
                             .hasAnyRole("ADMIN","CLIENTE","PROPIETARIO")
