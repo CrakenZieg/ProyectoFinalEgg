@@ -14,40 +14,7 @@
                         <link rel="stylesheet"  th:href="@{/css/style.css}"/>
                         </head>
                         <body>
-                            <header th:fragments="header" class="p-3 text-bg-secondary">
-                                <div class="container">
-                                    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                                        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-black text-decoration-none">
-                                            <img src="/AYPIcon.jpg" alt="icono" style="width: 6rem; height: 3rem"/>
-                                            <span class="h1">Asado y pileta</span>
-                                        </a>
-                                        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                                            <li>
-                                                <div class="dropdown">
-                                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        Buscá tu dia ideal
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li th:each="tipo : ${T(com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad).values()}">
-                                                            <a class="dropdown-item" th:text="${tipo.getTipo()}" th:href="@{/propiedad/tipo/${tipo}}">Quincho</a>
-                                                        </li>                            
-                                                    </ul>
-                                                </div>
-                                            </li>
-                                            <li><a href="#" class="nav-link px-2 text-white">Preguntas Frecuentes</a></li>
-                                            <li><a href="#" class="nav-link px-2 text-white">Nosotros</a></li>
-                                        </ul>
-                                        <div class="text-end">
-                                            <a th:if="${session.usuariosession == null}" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/login}">Ingresar</a>
-                                            <a th:if="${session.usuariosession == null}" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/cliente/registrar}">Registrarse</a>
-                                            <a th:if="${session.usuariosession != null}" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/logout}">Logout</a>
-                                            <a sec:authorize="hasAnyRole('CLIENTE','PROPIETARIO')" class="btn btn-outline-warning" style="border: 0px" role="button" th:href="@{/propiedad/registrar}">Registrar Propiedad</a>
-                                            <a th:if="${session.usuariosession != null}" sec:authorize="hasAnyRole('CLIENTE','PROPIETARIO')" class="btn btn-outline-white" style="border: 0px" role="button" >Perfil</a>
-                                            <a th:if="${session.usuariosession != null}" sec:authorize="hasRole('ADMINISTRADOR')" class="btn btn-outline-white" style="border: 0px" role="button" >Panel Admin</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </header>
+                            <header th:replace="fragmentos/frags :: header"></header>
                             <main>
                                 <div class="container-sm">
                                     <div id="carouselExampleIndicators" class="carousel slide">
@@ -56,12 +23,7 @@
 
 
 
-                                            <ul class="nav nav-pills nav-fill gap-2 p-1 small bg-black rounded-5 shadow-sm" id="pillNav2" role="tablist"
-                                                style="
-                                                --bs-nav-link-color: var(--bs-white);
-                                                --bs-nav-pills-link-active-color: var(--bs-primary);
-                                                --bs-nav-pills-link-active-bg: var(--bs-white);
-                                                ">
+                                            <ul class="nav nav-pills nav-fill gap-2 p-1 small bg-black rounded-5 shadow-sm" id="navegador" role="tablist">
                                                 <li class="nav-item" role="presentation" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0">
                                                     <button class="nav-link active rounded-5" id="home-tab2" data-bs-toggle="tab" type="button" role="tab"
                                                             aria-selected="true">
@@ -83,44 +45,56 @@
 
                                         <div class="carousel-inner">
                                             <div class="carousel-item active">
-
-
-
                                                 <br>
 
                                                     <div class="left box-primary">
-                                                        <img class="image" src="https://yt3.ggpht.com/-Y4ybONkbdYA/AAAAAAAAAAI/AAAAAAAAAAA/SCMi3HFru2w/s100-c-k-no-rj-c0xffffff/photo.jpg" alt="" />
-                                                        <h3 class="username text-center">Mariane Felix Fernandes</h3>
+                                                        <div id="carouselExampleIndicators" class="carousel slide">
+                                                            <div class="carousel-indicators">
+                                                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                                            </div>
+                                                            <div class="carousel-inner">
+                                                              <div class="carousel-item active">
+                                                                <img src="..." class="d-block w-100" alt="Foto Perfil">
+                                                              </div>
+                                                            </div>
+                                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                              <span class="visually-hidden">Previous</span>
+                                                            </button>
+                                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                              <span class="visually-hidden">Next</span>
+                                                            </button>
+                                                          </div>
+                                                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                            <button class="btn btn-primary" type="button" id="btnEdit" onclick="toggleInputs()">Editar Perfil</button>
+                                                        </div>
 
                                                     </div>
+                                                    
                                                     <div class="right tab-content">
                                                         <form class="row g-3 needs-validation" novalidate>
                                                             <div class="col-md-4">
-                                                                <label for="validationCustom01" class="form-label">Nombre</label>
+                                                                <label for="nombre" class="form-label">Nombre</label>
                                                                 <input type="text" class="form-control" id="input1" value="Mark" required disabled>
-                                                                    <div class="valid-feedback">
-                                                                        Looks good!
-                                                                    </div>
+                                                                    
                                                             </div>
                                                             <div class="col-md-4">
-                                                                <label for="validationCustom02" class="form-label">Apellido</label>
+                                                                <label for="apellido" class="form-label">Apellido</label>
                                                                 <input type="text" class="form-control" id="input2" value="Otto" required disabled>
-                                                                    <div class="valid-feedback">
-                                                                        Looks good!
-                                                                    </div>
+                                                                    
                                                             </div>
                                                             <div class="col-md-4">
-                                                                <label for="validationCustomUsername" class="form-label">Email</label>
-                                                                <div class="input-group has-validation">
-                                                                    <input type="text" class="form-control" id="input3" aria-describedby="inputGroupPrepend" required disabled>
-                                                                </div>
+                                                                <label for="email" class="form-label">Email</label>
+                                                                <input type="email" class="form-control" id="input3" aria-describedby="inputGroupPrepend" required disabled>
+                                                                
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="validationTextarea" class="form-label">Descripcion</label>
                                                                 <textarea class="form-control" id="input4" placeholder="Required example textarea" required disabled></textarea>
-                                                                <div class="invalid-feedback">
-                                                                    Please enter a message in the textarea.
-                                                                </div>
+                                                                
                                                             </div>
                                                             <div class="mb-3">
                                                                 <div class="col form-control" >
@@ -139,10 +113,27 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="mb-3">
+                                                                <div class="form-group" id="imagenEdit" hidden>
+                                                                    <label for="imagenes" class="form-label"><span class="h3">Imágenes</span></label>                           
+                                                                    <input type="file" class="form-control" id="input6"  name="imagenesInput" multiple="true" disabled/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-3 form-group">
+                                                                <div class="col card" th:each="imagen : ${propiedad.imagenes}">
+                                                                    <img th:src="@{/imagen/__${imagen.id}__}" class="card-img"/>
+                                                                    <div class="card-img-overlay">
+                                                                        <input class="form-check-input" type="checkbox" th:id="${imagen.id}" th:value="${imagen.id}" name="imagenesViejas" id="input7" disabled/>
+                                                                        <label class="form-check-label" th:for="${imagen.id}" th:text="${imagen.nombre}">Imagen</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        
 
                                                             <div class="col-12">
-                                                              <button class="btn btn-primary" type="button" onclick="toggleInputs()" >Editar Perfil</button>
-                                                              <button class="btn btn-primary" type="submit" id="btnGuardar" onclick="toggleInputs()" style="display: none;">Guardar Cambios</button>
+                                                            </br>
+                                                              
+                                                              <button class="btn btn-primary" type="submit" id="btnGuardar" onclick="toggleInputs()" >Guardar Cambios</button>
                                                             </div>
                                                         </form>
 
@@ -162,79 +153,10 @@
 
                                 </div>
                             </main>
-                            <footer th:fragments="footer" class="py-2 text-bg-secondary">
-                                <div class="row w-100 py-3 d-flex justify-content-around">
-                                    <div class="col-6 col-md-2 mb-3">
-                                        <h5>Section</h5>
-                                        <ul class="nav flex-column">
-                                            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Ayuda</a></li>
-                                            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Centro de ayuda</a></li>
-                                            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Ayuda en caso de discapacidad</a></li>
-                                            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Opciones de cancelación</a></li>
-                                            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Problemnas en el barrio</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-6 col-md-2 mb-3">
-                                        <h5>Section</h5>
-                                        <ul class="nav flex-column">
-                                            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Cómo ser anfitrión</a></li>
-                                            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Poné tu espacio</a></li>
-                                            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Cobertura para anfitriones</a></li>
-                                            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Foro de Anfitriones</a></li>
-                                            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Sé un anfitrión responsable</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-6 col-md-2 mb-3">
-                                        <h5>Section</h5>
-                                        <ul class="nav flex-column">
-                                            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Asado y Parrilla</a></li>
-                                            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Noticias</a></li>
-                                            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Funciones nuevas</a></li>
-                                            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Empleo</a></li>
-                                            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Inversionistas</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-5 mb-3">
-                                        <form>
-                                            <h5>Suscribete a nuestro Portal</h5>
-                                            <p>Nuevas funciones y ofertas todos los meses</p>
-                                            <div class="d-flex flex-column flex-sm-row w-100 gap-2">
-                                                <label for="newsletter1" class="visually-hidden">Dirección de E-Mail</label>
-                                                <input id="newsletter1" type="text" class="form-control" placeholder="Dirección de E-Mail">
-                                                    <button class="btn btn-primary" type="button">Suscribirse</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                                <div class="d-flex flex-column flex-sm-row justify-content-around my-2 border-top">
-                                    <p>&copy; 2023 Company, Inc. All rights reserved.</p>
-                                    <ul class="list-unstyled d-flex">
-                                        <li class="ms-3"><a class="link-body-emphasis" href="#"><i class="bi bi-twitter-x" style="font-size: 2rem"></i></a></li>
-                                        <li class="ms-3"><a class="link-body-emphasis" href="#"><i class="bi bi-instagram" style="font-size: 2rem"></i></a></li>
-                                        <li class="ms-3"><a class="link-body-emphasis" href="#"><i class="bi bi-facebook" style="font-size: 2rem"></i></a></li>
-                                    </ul>
-                                </div>
-                            </footer>
+                            <footer th:replace="fragmentos/frags :: footer"></footer>
                             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
                                     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
                             crossorigin="anonymous"></script>
-                            <script>
-                              function toggleInputs() {
-                                var inputs = document.getElementsByTagName("input");
-                            
-                                for (var i = 0; i < inputs.length; i++) {
-                                  inputs[i].disabled = !inputs[i].disabled;
-                                }
-                                var textarea = document.getElementById("input4");
-                                textarea.disabled = !textarea.disabled;
-                                
-                                var boton = document.getElementById("btnGuardar");
-                                if (boton.style.display === "none") {
-                                boton.style.display = "inline-block"; // o "inline" o "inline-block" según tus necesidades
-                                } else {
-                                boton.style.display = "none";
-                                }
-                              }
-                            </script>
+                            <script th:src="@{/js/perfilUsuario.js}" type="text/javascript"></script>
                         </body>
                         </html>
