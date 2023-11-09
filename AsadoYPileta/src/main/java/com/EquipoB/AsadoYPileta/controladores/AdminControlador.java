@@ -6,6 +6,7 @@ import com.EquipoB.AsadoYPileta.entidades.Servicio;
 import com.EquipoB.AsadoYPileta.entidades.TipoContacto;
 import com.EquipoB.AsadoYPileta.entidades.TipoPropiedad;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
+import com.EquipoB.AsadoYPileta.servicios.AdminServicio;
 import com.EquipoB.AsadoYPileta.servicios.ClienteServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropietarioServicio;
@@ -46,6 +47,9 @@ public class AdminControlador {
     @Autowired
     private PropiedadServicio propiedadServicio;
     
+    @Autowired
+    private AdminServicio adminServicio;
+    
     @GetMapping("dashboard")
     public String dashboard(ModelMap model){
         List<Usuario> usuarios = usuarioServicio.listarUsuarios();
@@ -53,11 +57,13 @@ public class AdminControlador {
         List<Servicio> servicios = servicioServicio.listarServicios();
         List<TipoContacto> tipoContactos = tipoContactoServicio.listarTipoContacto();
         List<TipoPropiedad> tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
+        Map<String,Integer> datos = adminServicio.datosDeUso();
         model.addAttribute("usuarios", usuarios);
         model.addAttribute("propiedades", propiedades);
         model.addAttribute("servicios", servicios);
         model.addAttribute("tipoContactos", tipoContactos);
         model.addAttribute("tipoPropiedades", tipoPropiedades);
+        model.addAllAttributes(datos);
         return "panel_admin2.html";
     }
     
