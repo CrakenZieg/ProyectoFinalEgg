@@ -60,17 +60,10 @@ public class ClienteControlador {
         return "index.html";
     }
 
-    @GetMapping("/cambiar_password")
-    public String cambiarPassword(String password) {
-
-        return "perfil_usuario.html";
-
-    }
-
     @PostMapping("/cambiar_password")
-    public String cambiandoPassword(@RequestParam String email, @RequestParam String password, ModelMap model) throws MiException {
+    public String cambiandoPassword(@RequestParam String email, @RequestParam String password, @RequestParam String newPassword,@RequestParam String equalPassword, ModelMap model) throws MiException {
         try {
-            usuarioServicio.cambiarPassword(email, password);
+            usuarioServicio.cambiarPassword(email, password,newPassword,equalPassword);
 
             return "redirect:/index";
 
