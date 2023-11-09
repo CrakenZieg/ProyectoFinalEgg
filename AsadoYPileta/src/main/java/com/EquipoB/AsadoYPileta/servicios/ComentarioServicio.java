@@ -57,6 +57,10 @@ public class ComentarioServicio {
     public List<Comentario> findComentariosByUserId(String userId) {
         return comentarioRepositorio.buscarPorCliente(userId);
     }
+    
+    public List<Comentario> findComentariosByPropiedadId(String propId) {
+        return comentarioRepositorio.buscarPorPropiedad(propId);
+    }
 
     public void modificarComentario(HttpSession session, MultipartFile[] archivos, String id, String cuerpo, String stringIdpropiedad, String[] imagenesViejas) throws MiException, Exception {
         validar(session,cuerpo, archivos, stringIdpropiedad);
