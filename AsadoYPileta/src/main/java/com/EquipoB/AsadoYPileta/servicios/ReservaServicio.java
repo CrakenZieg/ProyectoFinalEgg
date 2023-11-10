@@ -103,20 +103,29 @@ public class ReservaServicio {
         
     }
     
-
     
-    public void verificarOcupado(String idPropiedad, Date fechaInicio, Date fechaFin){
+    public boolean verificarSuperposicionReservas(String idPropiedad, Date fechaInicio, Date fechaFin) {
+    // Obtener las fechas de inicio de reservas que se superponen con el rango proporcionado
+    List<Date> fechasInicioReservas = reservaRepositorio.buscarFechaInicioReserva(idPropiedad);
+    
+    // Obtener las fechas de fin de reservas que se superponen con el rango proporcionado
+    List<Date> fechasFinReservas = reservaRepositorio.buscarFechaFinReserva(idPropiedad);
+    
+    // Verificar si hay superposición entre las fechas
+    for (int i = 0; i < fechasInicioReservas.size(); i++) {
+        Date inicioReserva = fechasInicioReservas.get(i);
+        Date finReserva = fechasFinReservas.get(i);
         
-        List <Date> fechasReservas = reservaRepositorio.buscarFechasReservas(idPropiedad);
-        
-        for (Date fechasReserva : fechasReservas) {
-            
-            fechasReserva.equals(fechaInicio);
-            
+        if ((inicioReserva.before(fechaFin) || inicioReserva.equals(fechaFin)) &&
+            (finReserva.after(fechaInicio) || finReserva.equals(fechaInicio))) {
+            // Las fechas de reserva se superponen con el período proporcionado
+            return true;
         }
-        
     }
-        
+    
+    return false;
+}
+          
             
 
     @Transactional
