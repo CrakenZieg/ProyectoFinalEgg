@@ -44,9 +44,9 @@ public class TipoContactoServicio {
     }
     
     public List<TipoContacto> listarTipoContacto() {
-        List<TipoContacto> reservas = new ArrayList();
-        reservas = tipoContactoRepositorio.findAll();
-        return reservas;
+        List<TipoContacto> contactos = new ArrayList();
+        contactos = tipoContactoRepositorio.findAll();
+        return contactos;
     }
     
     

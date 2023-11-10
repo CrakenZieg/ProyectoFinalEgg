@@ -1,4 +1,3 @@
-
 package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
@@ -25,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequestMapping("/cliente")
 public class ClienteControlador {
-    
+
     @Autowired
     private ClienteServicio clienteServicio;
     @Autowired
@@ -33,34 +32,46 @@ public class ClienteControlador {
     @Autowired
     private UsuarioServicio usuarioServicio;
     private Rol rol;
-    
+
     @GetMapping("/registrar")
-    public String registrar(ModelMap model){
+    public String registrar(ModelMap model) {
         model.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContacto());
         return "registro_usuario.html";
     }
-    
+
     @PostMapping("/registro")
-    public String registro(@RequestParam String nombre, @RequestParam String apellido, 
-        @RequestParam String email, @RequestParam String password, @RequestParam String password2,
-        @RequestParam MultipartFile[] imagenesInput, @RequestParam String descripcion, 
-        @RequestParam String[] tipoContactoInput, @RequestParam String[] contactosInput){        
+    public String registro(@RequestParam String nombre, @RequestParam String apellido,
+            @RequestParam String email, @RequestParam String password, @RequestParam String password2,
+            @RequestParam MultipartFile[] imagenesInput, @RequestParam String descripcion,
+            @RequestParam String[] tipoContactoInput, @RequestParam String[] contactosInput) {
         try {
-            clienteServicio.crearCliente(email, nombre, apellido, descripcion, 
+            clienteServicio.crearCliente(email, nombre, apellido, descripcion,
                     password, password2, imagenesInput, tipoContactoInput, contactosInput);
         } catch (Exception ex) {
             Logger.getLogger(ClienteControlador.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        }
         return "index.html";
     }
-    
+
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROPIETARIO','ROLE_CLIENTE')")
     @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable String id, HttpSession session) throws MiException, PermisosException { 
-        usuarioServicio.eliminarUsuario(id, session);       
+    public String eliminar(@PathVariable String id, HttpSession session) throws MiException, PermisosException {
+        usuarioServicio.eliminarUsuario(id, session);
         return "index.html";
     }
-    
-}
-    
 
+    @PostMapping("/cambiar_password")
+    public String cambiandoPassword(@RequestParam String email, @RequestParam String password, @RequestParam String newPassword,@RequestParam String equalPassword, ModelMap model) throws MiException {
+        try {
+            usuarioServicio.cambiarPassword(email, password,newPassword,equalPassword);
+
+            return "redirect:/index";
+
+        } catch (MiException e) {
+
+            model.addAttribute("error", e.getMessage());
+
+            return "redirect:/perfil_usuario";
+        }
+    }
+}
