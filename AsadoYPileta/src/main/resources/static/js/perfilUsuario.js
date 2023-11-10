@@ -5,6 +5,8 @@ function toggleInputs() {
     }
     let textarea = document.getElementById("input5");
     textarea.disabled = !textarea.disabled;
+    let checkTyC = document.getElementById("prepararArrayInput");
+    checkTyC.disabled = !checkTyC.disabled;
     let inputImagen = document.getElementById("imagenEdit");
     inputImagen.hidden = !inputImagen.hidden;
     let pass = document.getElementById("pass");

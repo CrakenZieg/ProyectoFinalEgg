@@ -29,7 +29,7 @@
                                 <input hidden th:value="${cliente.id}" name="id">
                                     <div class="left box-primary">
                                         <div class=" d-inline-flex p-2">
-                                            <img th:src="@{/imagen/__${cliente.imagenes[0].id}__}" class="d-block w-100" id="foto-de-perfil" alt="Foto Perfil">
+                                            <img th:src="@{/imagen/__${cliente.imagenes[0].id}__}" width="250" height="250" class="d-block w-100" id="foto-de-perfil" alt="Foto Perfil">
                                         </div>
                                     </div>
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -74,10 +74,18 @@
                                                             <span th:text="${contacto.tipo.tipo}"></span>
                                                             <input type="checkbox" name="tipoContacto" 
                                                                    onchange="actualizarInput(this)" th:id="${contacto.tipo.tipo}" 
-                                                                   th:value="${contacto.tipo.tipo}" disabled/>
+                                                                   th:value="${contacto.tipo.tipo}" disabled checked/>
                                                             <input type="text" th:id="${contacto.tipo.tipo}+Input" th:name="${contacto.tipo.tipo}" 
                                                                    th:value="${contacto.contacto}" id="input6" disabled/>
-                                                        </div>                                    
+                                                        </div>
+                                                        <div class="col" th:each="contacto : ${tipoContacto}">
+                                                            <span th:text="${contacto.tipo}"></span>
+                                                            <input type="checkbox" name="tipoContacto" 
+                                                                   onchange="actualizarInput(this)" th:id="${contacto.tipo}" 
+                                                                   th:value="${contacto.tipo}"/>
+                                                            <input type="text" th:id="${contacto.tipo}+Input" th:name="${contacto.tipo}" 
+                                                                   disabled="true"/>
+                                                        </div>
                                                     </div>
                                                     <div id="checkboxContactos">                                    
                                                     </div>
@@ -101,7 +109,7 @@
                                             <div class="form-control">
                                                 <label for="prepararArrayInput" class="form-label"><span class="h4">Acepto los terminos y condiciones: </span></label>
                                                 <a id="prepararArray" target="_blank">Terminos y condiciones.</a>
-                                                <input type="checkbox" id="prepararArrayInput" name="contactosInput" onchange="prepararArray()" required="true"/>
+                                                <input type="checkbox" id="prepararArrayInput" name="contactosInput" onchange="prepararArray()" required="true" checked/>
                                             </div>
                                             <div class="col-12">
 

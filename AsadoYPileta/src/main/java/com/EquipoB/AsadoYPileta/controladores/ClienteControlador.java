@@ -77,15 +77,19 @@ public class ClienteControlador {
     public String perfil(ModelMap model, HttpSession session) {
 
         Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+        
+        
         if (usuario.getRol().equals(Rol.CLIENTE)) {
             Cliente cliente = clienteServicio.getOne(usuario.getId());
             model.put("cliente", cliente);
+            model.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContactoUsuario(cliente));
         } else if (usuario.getRol().equals(Rol.PROPIETARIO)) {
             Propietario propietario;
             try {
                 propietario = propietarioServicio.getOne(usuario.getId());
                 model.put("cliente", propietario.getCliente());
                 model.put("propiedades", propietario.getPropiedades());
+                model.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContactoUsuario(propietario.getCliente()));
             } catch (MiException ex) {
             }
         }
