@@ -12,10 +12,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
-@Entity
 @Data
+@Entity
 public class Reserva {
     @Id
     @GeneratedValue(generator="uuid")  
@@ -29,8 +30,10 @@ public class Reserva {
     
     
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date fechaInicio;
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date fechaFin;
    
     @OneToMany
