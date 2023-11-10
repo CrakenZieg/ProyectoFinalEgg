@@ -155,6 +155,7 @@ public class PropiedadServicio {
         return propiedadRepositorio.getOne(id);
     }
 
+
     @Transactional
     public void eliminar(String id, Usuario logueado) {
         Optional<Propiedad> propiedadRepo = propiedadRepositorio.findById(id);

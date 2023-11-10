@@ -14,4 +14,10 @@ public interface PropiedadRepositorio extends JpaRepository<Propiedad, String> {
     @Query("SELECT p FROM Propiedad p WHERE p.tipo = :tipo")
     public List<Propiedad> buscarPorTipo(@Param("tipo") String tipo);
     
+    @Query("SELECT AVG(c.puntuacion) " +
+           "FROM Propiedad p " +
+           "JOIN Comentario c ON p.id = c.propiedad.id " +
+           "WHERE p.id = :propiedadId ")
+    public double obtenerPromedioPuntuacionPorPropiedad(@Param("propiedadId") String propiedadId);
+    
 }
