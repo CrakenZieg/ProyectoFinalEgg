@@ -6,6 +6,7 @@ import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.ComentarioRepositorio;
+import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,8 @@ public class ComentarioServicio {
     @Autowired
     private ComentarioRepositorio comentarioRepositorio;
     @Autowired
+    private PropiedadRepositorio PropiedadRepositorio;
+    @Autowired
     private ImagenServicio imagenServicio;
     @Autowired
     private PropiedadServicio propiedadServicio;
@@ -28,8 +31,8 @@ public class ComentarioServicio {
     private UsuarioServicio usuarioServicio;
 
     @Transactional
-    public void crearComentario(HttpSession session, MultipartFile[] archivos, String cuerpo, String stringIdpropiedad) throws MiException, Exception {
-        validar(session,cuerpo, archivos, stringIdpropiedad);
+    public void crearComentario(HttpSession session, MultipartFile[] archivos, String cuerpo, String stringIdpropiedad, double puntuacion) throws MiException, Exception {
+        validar(session, cuerpo, archivos, stringIdpropiedad,puntuacion);
 
         Comentario comentario = new Comentario();
         comentario.setCuerpo(cuerpo);
@@ -39,12 +42,12 @@ public class ComentarioServicio {
         Propiedad propiedad = propiedadServicio.getOne(stringIdpropiedad);
         comentario.setPropiedad(propiedad);
         Usuario logueado = (Usuario) session.getAttribute("usuariosession");
+        comentario.setPuntuacion(puntuacion);
         comentario.setUsuario(logueado);
 
         comentarioRepositorio.save(comentario);
 
     }
-    
 
     public List<Comentario> listarComentario() {
 
@@ -54,16 +57,17 @@ public class ComentarioServicio {
 
         return comentarios;
     }
+
     public List<Comentario> findComentariosByUserId(String userId) {
         return comentarioRepositorio.buscarPorCliente(userId);
     }
-    
+
     public List<Comentario> findComentariosByPropiedadId(String propId) {
         return comentarioRepositorio.buscarPorPropiedad(propId);
     }
 
-    public void modificarComentario(HttpSession session, MultipartFile[] archivos, String id, String cuerpo, String stringIdpropiedad, String[] imagenesViejas) throws MiException, Exception {
-        validar(session,cuerpo, archivos, stringIdpropiedad);
+    public void modificarComentario(HttpSession session, MultipartFile[] archivos, String id, String cuerpo, String stringIdpropiedad, String[] imagenesViejas, double puntuacion) throws MiException, Exception {
+        validar(session, cuerpo, archivos, stringIdpropiedad,puntuacion);
         Optional<Comentario> respuesta = comentarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
 
@@ -85,7 +89,7 @@ public class ComentarioServicio {
             Propiedad propiedad = propiedadServicio.getOne(stringIdpropiedad);
             comentario.setPropiedad(propiedad);
             comentario.setImagenes(imagenes);
-
+            comentario.setPuntuacion(puntuacion);
             Usuario logueado = (Usuario) session.getAttribute("usuariosession");
             comentario.setUsuario(logueado);
 
@@ -98,28 +102,36 @@ public class ComentarioServicio {
         return comentarioRepositorio.getById(id);
     }
 
+    public double obtenerPromedioPuntuacionPorPropiedad(String stringIdpropiedad) {
 
-    private void validar(HttpSession session, String cuerpo, MultipartFile[] imagenes, String stringIdpropiedad) throws MiException {
+        return PropiedadRepositorio.obtenerPromedioPuntuacionPorPropiedad(stringIdpropiedad);
+    }
+
+    private void validar(HttpSession session, String cuerpo, MultipartFile[] imagenes, String stringIdpropiedad, double puntuacion) throws MiException {
         Usuario logueado = (Usuario) session.getAttribute("usuariosession");
         if (logueado == null) {
             throw new MiException("el usuario debe estar logueado");
         }
         if (cuerpo.isEmpty() || cuerpo == null) {
 
-        if ( cuerpo == null || cuerpo.trim().isEmpty() ) {
+            if (cuerpo == null || cuerpo.trim().isEmpty()) {
 
-            throw new MiException("el comentario no puede ser nulo o estar vacío");
-        }
-        if (imagenes.length == 0 || imagenes == null) {
-            throw new MiException("Las imagenes no puede ser nulas o estar vacias");
-        }
+                throw new MiException("el comentario no puede ser nulo o estar vacío");
+            }
+            if (imagenes.length == 0 || imagenes == null) {
+                throw new MiException("Las imagenes no puede ser nulas o estar vacias");
+            }
 
-        if (stringIdpropiedad == null|| stringIdpropiedad.trim().isEmpty()  ) {
-            throw new MiException("la propiedad no puede  estar vacia");
+            if (stringIdpropiedad == null || stringIdpropiedad.trim().isEmpty()) {
+                throw new MiException("la propiedad no puede  estar vacia");
+
+            }
+            if (puntuacion == 0 ) {
+
+                throw new MiException("la puntucion debe cargarse");
+            }
 
         }
 
     }
-
-}
 }
