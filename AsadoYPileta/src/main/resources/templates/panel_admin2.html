@@ -36,7 +36,37 @@
                                     </h2>
                                     <div id="contactoCollapse" class="accordion-collapse collapse show" data-bs-parent="#sumarTipos">
                                         <div class="accordion-body">
-                                            <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                            <form id="formTipoContacto" method='POST' th:action="@{/negocio/registroTipoContacto}">
+                                                <input hidden="true" id="idTipoContacto" name="idTipoContacto"/>
+                                                <div class="form-group my-2">
+                                                    <label for="tipoContactoTipo" class="form-label"><span class="h3">Tipo</span></label>                           
+                                                    <input type="text" class="form-control" id="tipoContactoTipo" name="tipoContactoTipo" placeholder="ej: Celular"/>
+                                                </div>
+                                                <div class="form-group my-2">                                                                           
+                                                    <button type="submit" class="btn btn-outline-success">Guardar</button>
+                                                    <a class="btn btn-outline-info" th:onclick="limpiarTipoContacto()">Limpiar</a>
+                                                    <a class="btn btn-outline-danger" th:onclick="eliminarTipoContacto()">Eliminar</a>
+                                                    <button type="submit" id="eliminarTipoContacto" class="btn btn-danger" disabled="true"><i class="bi bi-trash"></i></button>
+                                                </div>
+                                            </form>      
+                                            <table class="table table-striped">
+                                                <caption>Contactos disponibles</caption>
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Tipo
+                                                        </th>                                                        
+                                                    </tr>                                
+                                                </thead>
+                                                <tbody>
+                                                    <tr th:each="contactoElem : ${tipoContactos}" 
+                                                        th:data-id="${contactoElem.id}"
+                                                        th:data-tipo="${contactoElem.tipo}"                                                                                                     
+                                                        th:onclick="editarTipoContacto(this.dataset.id,this.dataset.tipo)">
+                                                        <td>[[${contactoElem.tipo}]]</td>
+                                                    </tr>                                                    
+                                                </tbody> 
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -48,46 +78,62 @@
                                     </h2>
                                     <div id="propiedadCollapse" class="accordion-collapse collapse" data-bs-parent="#sumarTipos">
                                         <div class="accordion-body">
-                                            <div id="servicioCollapse" class="accordion-collapse collapse" data-bs-parent="#sumarTipos">
-                                                <div class="accordion-body">
-                                                    <form id="formServicio" method='POST' th:action="@{/negocio/registroServicio}">
-                                                        <input hidden="true" id="idServicio" name="id"/>
-                                                        <div class="form-group my-2">
-                                                            <label for="tipoComodidad" class="form-label"><span class="h3">Tipo</span></label>                           
-                                                            <input type="text" class="form-control" id="tipoServicio" name="tipoComodidad" placeholder="ej: Vajilla"/>
-                                                        </div>
-                                                        <div class="form-group my-2">
-                                                            <label for="valor" class="form-label"><span class="h3">Valor</span></label>                           
-                                                            <input type="number" class="form-control" id="valorServicio" name="valor" min="0"/>
-                                                        </div>
-                                                        <div class="form-group my-2">                                                                           
-                                                            <button type="submit" class="btn btn-outline-success">Guardar</button>
-                                                            <a class="btn btn-outline-info" th:onclick="limpiarServicio()">Limpiar</a>
-                                                            <a class="btn btn-outline-danger" th:onclick="eliminarServicio()">Eliminar</a>
-                                                            <button type="submit" id="eliminarServicio" class="btn btn-danger" disabled="true"><i class="bi bi-trash"></i></button>
-                                                        </div>
-                                                    </form>      
-                                                    <table class="table table-striped">
-                                                        <caption>Servicios disponibles</caption>
-                                                        <thead>
-                                                            <tr>
-                                                                <th>
-                                                                    Tipo de comodidad
-                                                                </th>
-                                                                <th>
-                                                                    Valor
-                                                                </th>
-                                                            </tr>                                
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr th:each="servicio : ${servicios}" th:onclick="'editarServicio(\''+__${servicio.id}__+'\',\''+__${servicio.tipoComodidad}__+'\','+__${servicio.valor}__+')'">
-                                                                <td class="tipoServicioElemento">[[${servicio.tipoComodidad}]]</td>
-                                                                <td class="tipoServiciovalor">[[${servicio.valor}]]</td>
-                                                            </tr>                                                    
-                                                        </tbody> 
-                                                    </table>                                            
+                                            <form id="formTipoPropiedad" method='POST' th:action="@{/negocio/registroTipoPropiedad}">
+                                                <input hidden="true" id="idTipoPropiedad" name="idTipoPropiedad"/>
+                                                <div class="form-group my-2">
+                                                    <label for="tipoPropiedadTipo" class="form-label"><span class="h3">Tipo</span></label>                           
+                                                    <input type="text" class="form-control" id="tipoPropiedadTipo" name="tipoPropiedadTipo" placeholder="ej: QUINCHO"/>
                                                 </div>
-                                            </div>
+                                                <div class="form-group my-2">
+                                                    <label for="tipoPropiedadTitulo" class="form-label"><span class="h3">Titulo</span></label>                           
+                                                    <input type="text" class="form-control" id="tipoPropiedadTitulo" name="tipoPropiedadTitulo" placeholder="ej: Quincho"/>
+                                                </div>
+                                                <div class="form-group my-2">
+                                                    <label for="tipoPropiedadEmoji" class="form-label"><span class="h3">Emoji</span></label> <br/> 
+                                                    <input type="text" class="form-control w-25 d-inline" id="tipoPropiedadEmoji" name="tipoPropiedadEmoji" readonly="true"/>
+                                                    <a id="emoji-button" class="btn btn-outline-secondary my-2 d-inline">😀</a>
+                                                </div>
+                                                <div class="form-group my-2">
+                                                    <label for="tipoPropiedadDescripcion" class="form-label"><span class="h3">Descripción</span></label> 
+                                                    <textarea  class="form-control" rows="6" id="tipoPropiedadDescripcion" name="tipoPropiedadDescripcion" 
+                                                               placeholder="ej: Hermoso quincho para disfrutar el verano!"></textarea>
+                                                </div>
+                                                <div class="form-group my-2">                                                                           
+                                                    <button type="submit" class="btn btn-outline-success">Guardar</button>
+                                                    <a class="btn btn-outline-info" th:onclick="limpiarTipoPropiedad()">Limpiar</a>
+                                                    <a class="btn btn-outline-danger" th:onclick="eliminarTipoPropiedad()">Eliminar</a>
+                                                    <button type="submit" id="eliminarTipoPropiedad" class="btn btn-danger" disabled="true"><i class="bi bi-trash"></i></button>
+                                                </div>
+                                            </form>      
+                                            <table class="table table-striped">
+                                                <caption>Servicios disponibles</caption>
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Tipo
+                                                        </th>
+                                                        <th>
+                                                            Emoji
+                                                        </th>
+                                                        <th>
+                                                            Descripcion
+                                                        </th>
+                                                    </tr>                                
+                                                </thead>
+                                                <tbody>                                              
+                                                    <tr th:each="tipoPropiedadElem : ${tipoPropiedades}" 
+                                                        th:data-id="${tipoPropiedadElem.id}"
+                                                        th:data-tipo="${tipoPropiedadElem.tipo}"
+                                                        th:data-titulo="${tipoPropiedadElem.titulo}"
+                                                        th:data-emoji="${tipoPropiedadElem.emoji}"
+                                                        th:data-descripcion="${tipoPropiedadElem.descripcion}"
+                                                        th:onclick="editarTipoPropiedad(this.dataset.id,this.dataset.tipo,this.dataset.titulo,this.dataset.emoji,this.dataset.descripcion)">
+                                                        <td>[[${tipoPropiedadElem.titulo}]]</td> 
+                                                        <td>[[${tipoPropiedadElem.emoji}]]</td>
+                                                        <td>[[${tipoPropiedadElem.descripcion}]]</td>
+                                                    </tr>                                                    
+                                                </tbody> 
+                                            </table> 
                                         </div>
                                     </div>
                                 </div>
@@ -100,14 +146,14 @@
                                     <div id="servicioCollapse" class="accordion-collapse collapse" data-bs-parent="#sumarTipos">
                                         <div class="accordion-body">
                                             <form id="formServicio" method='POST' th:action="@{/negocio/registroServicio}">
-                                                <input hidden="true" id="idServicio" name="id"/>
+                                                <input hidden="true" id="idServicio" name="idServicio"/>
                                                 <div class="form-group my-2">
-                                                    <label for="tipoComodidad" class="form-label"><span class="h3">Tipo</span></label>                           
-                                                    <input type="text" class="form-control" id="tipoServicio" name="tipoComodidad" placeholder="ej: Vajilla"/>
+                                                    <label for="tipoServicio" class="form-label"><span class="h3">Tipo</span></label>                           
+                                                    <input type="text" class="form-control" id="tipoServicio" name="tipoServicio" placeholder="ej: Vajilla"/>
                                                 </div>
                                                 <div class="form-group my-2">
-                                                    <label for="valor" class="form-label"><span class="h3">Valor</span></label>                           
-                                                    <input type="number" class="form-control" id="valorServicio" name="valor" min="0"/>
+                                                    <label for="valorServicio" class="form-label"><span class="h3">Valor</span></label>                           
+                                                    <input type="number" class="form-control" id="valorServicio" name="servicioValor" min="0"/>
                                                 </div>
                                                 <div class="form-group my-2">                                                                           
                                                     <button type="submit" class="btn btn-outline-success">Guardar</button>
@@ -121,7 +167,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th>
-                                                            Tipo de comodidad
+                                                            Servicio
                                                         </th>
                                                         <th>
                                                             Valor
@@ -129,9 +175,13 @@
                                                     </tr>                                
                                                 </thead>
                                                 <tbody>
-                                                    <tr th:each="servicio : ${servicios}" th:onclick="'editarServicio(\''+__${servicio.id}__+'\',\''+__${servicio.tipoComodidad}__+'\','+__${servicio.valor}__+')'">
-                                                        <td class="tipoServicioElemento">[[${servicio.tipoComodidad}]]</td>
-                                                        <td class="tipoServiciovalor">[[${servicio.valor}]]</td>
+                                                    <tr th:each="servicio : ${servicios}" 
+                                                        th:data-id="${servicio.id}"
+                                                        th:data-tipoComodidad="${servicio.tipoComodidad}"
+                                                        th:data-valor="${servicio.valor}"                                                        
+                                                        th:onclick="editarServicio(this.dataset.id,this.dataset.tipoComodidad,this.dataset.valor)">
+                                                        <td>[[${servicio.tipoComodidad}]]</td>
+                                                        <td>[[${servicio.valor}]]</td>
                                                     </tr>                                                    
                                                 </tbody> 
                                             </table>                                            
@@ -188,7 +238,15 @@
         <footer th:replace="fragmentos/frags :: footer"></footer>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>        
+        crossorigin="anonymous"></script>  
+        <script src="https://cdn.jsdelivr.net/npm/emoji-button@0.6.0/dist/index.min.js"></script>
         <script th:src="@{/js/UtilidadesPerfil.js}" type="text/javascript"></script>
+        <script>
+            window.addEventListener('DOMContentLoaded', () => {
+                EmojiButton(document.querySelector('#emoji-button'), function (emoji) {
+                    document.getElementById('tipoPropiedadEmoji').value += emoji;
+                });
+            });
+        </script>
     </body>
 </html>

@@ -2,6 +2,8 @@ package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
+import com.EquipoB.AsadoYPileta.servicios.TipoContactoServicio;
+import com.EquipoB.AsadoYPileta.servicios.TipoPropiedadServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -19,77 +21,117 @@ public class NegocioControlador {
 
     @Autowired
     private ServicioServicio servicioServicio;
+    
+    @Autowired
+    private TipoPropiedadServicio tipoPropiedadServicio;
+    
+    @Autowired
+    private TipoContactoServicio tipoContactoServicio;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/registroServicio")
-    public ModelAndView registroServicio(@RequestParam String tipoComodidad, @RequestParam Double valor, ModelMap modelo) {
+    public ModelAndView registroServicio(@RequestParam String tipoServicio, 
+            @RequestParam Double servicioValor, ModelMap modelo) {
         try {
-            servicioServicio.crearSercicio(tipoComodidad, valor);
-            modelo.put("exito", "La comodidad fue cargado correctamente");            
+            servicioServicio.crearSercicio(tipoServicio, servicioValor);   
         } catch (MiException ex) {
             modelo.put("error", ex.getMessage());
         }
-        return new ModelAndView("forward:/admin/dashboard",modelo);
+        return new ModelAndView("redirect:/admin/dashboard",modelo);
     }    
     
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/modificarServicio")
-    public ModelAndView modificarServicio(@RequestParam String id, @RequestParam String tipoComodidad, @RequestParam Double valor, ModelMap modelo) throws MiException {
+    public ModelAndView modificarServicio(@RequestParam String idServicio, @RequestParam String tipoServicio, 
+            @RequestParam Double servicioValor, ModelMap modelo) throws MiException {
         try {
-            servicioServicio.modificarServicio(id, tipoComodidad, valor);
-            modelo.put("exito", "La comodidad fue editada correctamente");            
+            servicioServicio.modificarServicio(idServicio, tipoServicio, servicioValor);       
         } catch (MiException ex) {
             modelo.put("error", ex.getMessage());
         }
-        return new ModelAndView("forward:/admin/dashboard",modelo);
+        return new ModelAndView("redirect:/admin/dashboard",modelo);
     }
     
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/eliminarServicio")
-    public ModelAndView eliminarServicio(@RequestParam String id, ModelMap modelo) throws MiException {
+    public ModelAndView eliminarServicio(@RequestParam String idServicio, ModelMap modelo) throws MiException {
         try {            
-            servicioServicio.eliminarServicio(id);
-            modelo.put("exito", "La comodidad fue eliminada correctamente");            
+            servicioServicio.eliminarServicio(idServicio);         
         } catch (MiException ex) {
             modelo.put("error", ex.getMessage());
         }
-        return new ModelAndView("forward:/admin/dashboard",modelo);
+        return new ModelAndView("redirect:/admin/dashboard",modelo);
     }
     
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/registroTipoPropiedad")
-    public ModelAndView registro(@RequestParam String tipoComodidad, @RequestParam Double valor, ModelMap modelo) {
+    public ModelAndView registroTipoPropiedad(@RequestParam String tipoPropiedadTipo, @RequestParam String tipoPropiedadTitulo,
+            @RequestParam String tipoPropiedadEmoji, @RequestParam String tipoPropiedadDescripcion, ModelMap modelo) {
         try {
-            servicioServicio.crearSercicio(tipoComodidad, valor);
-            modelo.put("exito", "La comodidad fue cargado correctamente");            
+            tipoPropiedadServicio.crearTipoPropiedad(tipoPropiedadTipo, tipoPropiedadTitulo,
+                    tipoPropiedadEmoji, tipoPropiedadDescripcion);         
         } catch (MiException ex) {
             modelo.put("error", ex.getMessage());
         }
-        return new ModelAndView("forward:/admin/dashboard",modelo);
+        return new ModelAndView("redirect:/admin/dashboard",modelo);
     }    
     
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/modificarTipoPropiedad")
-    public ModelAndView modificar(@RequestParam String id, @RequestParam String tipoComodidad, @RequestParam Double valor, ModelMap modelo) throws MiException {
+    public ModelAndView modificarTipoPropiedad(@RequestParam String idTipoPropiedad, @RequestParam String tipoPropiedadTipo,
+            @RequestParam String tipoPropiedadTitulo, @RequestParam String tipoPropiedadEmoji, 
+            @RequestParam String tipoPropiedadDescripcion, ModelMap modelo) {
         try {
-            servicioServicio.modificarServicio(id, tipoComodidad, valor);
-            modelo.put("exito", "La comodidad fue editada correctamente");            
+            tipoPropiedadServicio.modificarTipoPropiedad(idTipoPropiedad, tipoPropiedadTipo, tipoPropiedadTitulo,
+                    tipoPropiedadEmoji, tipoPropiedadDescripcion);            
         } catch (MiException ex) {
             modelo.put("error", ex.getMessage());
         }
-        return new ModelAndView("forward:/admin/dashboard",modelo);
+        return new ModelAndView("redirect:/admin/dashboard",modelo);
     }
     
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/eliminarTipoPropiedad")
-    public ModelAndView eliminar(@RequestParam String id, ModelMap modelo) throws MiException {
+    public ModelAndView eliminarTipoPropiedad(@RequestParam String idTipoPropiedad, ModelMap modelo) throws MiException {
         try {            
-            servicioServicio.eliminarServicio(id);
-            modelo.put("exito", "La comodidad fue eliminada correctamente");            
+            tipoPropiedadServicio.eliminarTipoPropiedad(idTipoPropiedad);            
         } catch (MiException ex) {
             modelo.put("error", ex.getMessage());
         }
-        return new ModelAndView("forward:/admin/dashboard",modelo);
+        return new ModelAndView("redirect:/admin/dashboard",modelo);
     }
     
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/registroTipoContacto")
+    public ModelAndView registroTipoContacto(@RequestParam String tipoContactoTipo, ModelMap modelo) {
+        try {
+            tipoContactoServicio.crearTipoContacto(tipoContactoTipo);         
+        } catch (MiException ex) {
+            modelo.put("error", ex.getMessage());
+        }
+        return new ModelAndView("redirect:/admin/dashboard",modelo);
+    }    
+    
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/modificarTipoContacto")
+    public ModelAndView modificarTipoContacto(@RequestParam String idTipoContacto, 
+            @RequestParam String tipoContactoTipo, ModelMap modelo) {
+        try {
+            tipoContactoServicio.modificarTipoContacto(idTipoContacto, tipoContactoTipo);            
+        } catch (MiException ex) {
+            modelo.put("error", ex.getMessage());
+        }
+        return new ModelAndView("redirect:/admin/dashboard",modelo);
+    }
+    
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/eliminarTipoContacto")
+    public ModelAndView eliminarTipoContacto(@RequestParam String idTipoContacto, ModelMap modelo) throws MiException {
+        try {            
+            tipoContactoServicio.eliminarTipoContacto(idTipoContacto);            
+        } catch (MiException ex) {
+            modelo.put("error", ex.getMessage());
+        }
+        return new ModelAndView("redirect:/admin/dashboard",modelo);
+    }
 }
