@@ -2,6 +2,7 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.TipoPropiedad;
+import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.TipoPropiedadRepositorio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class TipoPropiedadServicio {
     private TipoPropiedadRepositorio tipoPropiedadRepositorio;
     
     @Transactional
-    public void crearTipoPropiedad(String tipo, String titulo, String emoji, String descripcion){
+    public void crearTipoPropiedad(String tipo, String titulo, String emoji, String descripcion) throws MiException{
         TipoPropiedad tipoPropiedad = new TipoPropiedad();
         tipoPropiedad.setTipo(tipo);
         tipoPropiedad.setTitulo(titulo);
@@ -25,7 +26,7 @@ public class TipoPropiedadServicio {
     }
     
     @Transactional
-    public void modificarTipoPropiedad(String id, String tipo, String titulo, String emoji, String descripcion){
+    public void modificarTipoPropiedad(String id, String tipo, String titulo, String emoji, String descripcion) throws MiException{
         TipoPropiedad tipoPropiedad = tipoPropiedadRepositorio.getById(id);
         tipoPropiedad.setTipo(tipo);
         tipoPropiedad.setTitulo(titulo);
@@ -35,16 +36,16 @@ public class TipoPropiedadServicio {
     }
     
     @Transactional
-    public void eliminarTipoPropiedad(String id){
+    public void eliminarTipoPropiedad(String id) throws MiException{
         TipoPropiedad tipoPropiedad = tipoPropiedadRepositorio.getById(id);
         tipoPropiedadRepositorio.delete(tipoPropiedad);
     }
     
-    public TipoPropiedad getOne(String id){
+    public TipoPropiedad getOne(String id) throws MiException{
         return tipoPropiedadRepositorio.getById(id);
     }
     
-    public TipoPropiedad getOnePorTipo(String tipo){
+    public TipoPropiedad getOnePorTipo(String tipo) throws MiException{
         return tipoPropiedadRepositorio.buscarPorTipo(tipo);
     }
     

@@ -2,6 +2,7 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.TipoContacto;
+import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.TipoContactoRepositorio;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,30 +17,30 @@ public class TipoContactoServicio {
     private TipoContactoRepositorio tipoContactoRepositorio;    
     
     @Transactional
-    public void crearTipoContacto(String tipo){
+    public void crearTipoContacto(String tipo) throws MiException{
         TipoContacto tipoPropiedad = new TipoContacto();
         tipoPropiedad.setTipo(tipo);  
         tipoContactoRepositorio.save(tipoPropiedad);
     }
     
     @Transactional
-    public void modificarTipoContacto(String id, String tipo){
+    public void modificarTipoContacto(String id, String tipo) throws MiException{
         TipoContacto tipoPropiedad = tipoContactoRepositorio.getById(id);
         tipoPropiedad.setTipo(tipo);       
         tipoContactoRepositorio.save(tipoPropiedad);
     }
     
     @Transactional
-    public void eliminarTipoContacto(String id){
+    public void eliminarTipoContacto(String id) throws MiException{
         TipoContacto tipoPropiedad = tipoContactoRepositorio.getById(id);
         tipoContactoRepositorio.delete(tipoPropiedad);
     }
     
-    public TipoContacto getOne(String id){
+    public TipoContacto getOne(String id) throws MiException{
         return tipoContactoRepositorio.getById(id);
     }
     
-    public TipoContacto getOnePorTipo(String tipo){
+    public TipoContacto getOnePorTipo(String tipo) throws MiException{
         return tipoContactoRepositorio.buscarPorTipo(tipo);
     }
     

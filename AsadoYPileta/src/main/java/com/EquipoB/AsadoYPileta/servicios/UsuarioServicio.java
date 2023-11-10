@@ -254,7 +254,7 @@ public class UsuarioServicio implements UserDetailsService {
             usuarioRepositorio.delete(usuario);
         }
     }
-
+    
     private void validar(String email, String password, Rol rol) throws MiException {
         if (email == null || email.trim().isEmpty()) {
             throw new MiException("El Email no puede ser nulo o estar vacio");
