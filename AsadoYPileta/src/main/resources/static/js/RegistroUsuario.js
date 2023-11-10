@@ -12,9 +12,9 @@ function prepararArray(){
     let listaContactos = document.getElementsByName('tipoContacto');
     for(let i=0; i<listaContactos.length; i++){        
         if(listaContactos[i].checked){
-            checkboxContactos.insertAdjacentHTML("beforeend",input("tipoContactoInput",listaContactos[i].id));            
+            checkboxContactos.insertAdjacentHTML("beforeend",input("tipoContactoInput",listaContactos[i].id));
             let valor = document.getElementById(`${listaContactos[i].id}Input`).value;      
-            checkboxContactos.insertAdjacentHTML("beforeend",input("contactosInput",valor));            
+            checkboxContactos.insertAdjacentHTML("beforeend",input("contactosInput",valor));
         }
     }
 }
