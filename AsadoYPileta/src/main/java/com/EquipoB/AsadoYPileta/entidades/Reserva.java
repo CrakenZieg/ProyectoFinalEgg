@@ -22,6 +22,7 @@ public class Reserva {
     @GenericGenerator(name= "uuid", strategy = "uuid2") 
     private String id;
    
+    private String mensaje;
     private Double montoTotal;
     private Boolean disponible;
     private Boolean comentarioHabilitado;
