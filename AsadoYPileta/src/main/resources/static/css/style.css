@@ -791,9 +791,18 @@ input:valid ~ label{
     --bs-nav-pills-link-active-color: var(--bs-primary);
     --bs-nav-pills-link-active-bg: var(--bs-white);
 }
-#btnGuardar{
-    display: none;
+
+
+
+#toggleBtn {
+      cursor: pointer;
 }
-#btnEdit{
-    display: inline-block;
+#foto-de-perfil {
+  width: 150px; 
+  height: 150px; 
+  border-radius: 50%; 
+}
+#lista-imagenes{
+  width: 250px; 
+  height: 250px;
 }

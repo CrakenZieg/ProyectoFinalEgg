@@ -1,23 +1,32 @@
 function toggleInputs() {
-    var inputs = document.getElementsByTagName("input");
-
+    let inputs = document.getElementsByTagName("input");
     for (var i = 0; i < inputs.length; i++) {
-      inputs[i].disabled = !inputs[i].disabled;
+        inputs[i].disabled = !inputs[i].disabled;
     }
-    var textarea = document.getElementById("input4");
+    let textarea = document.getElementById("input5");
     textarea.disabled = !textarea.disabled;
-    var inputImagen = document.getElementById("imagenEdit");
+    let inputImagen = document.getElementById("imagenEdit");
     inputImagen.hidden = !inputImagen.hidden;
-    var boton = document.getElementById("btnGuardar");
-    if (boton.style.display === "none") {
-    boton.style.display = "inline-block"; // o "inline" o "inline-block" según tus necesidades
+    let pass = document.getElementById("pass");
+    pass.hidden = !pass.hidden;
+    let pass2 = document.getElementById("pass2");
+    pass2.hidden = !pass2.hidden;
+    let boton = document.getElementById("btnGuardar");
+    boton.hidden = !boton.hidden;
+    let botonEdit = document.getElementById("btnEdit");
+    botonEdit.hidden = !botonEdit.hidden;
+}
+function togglePasswordVisibility() {
+    var passwordField = document.getElementById('input3');
+    if (passwordField.type === 'password') {
+      passwordField.type = 'text';
     } else {
-    boton.style.display = "none";
-    }
-    var botonEdit = document.getElementById("btnEdit");
-    if (botonEdit.style.display === "inline-block") {
-        botonEdit.style.display = "none"; // o "inline" o "inline-block" según tus necesidades
-    } else {
-        botonEdit.style.display = "inline-block";
+      passwordField.type = 'password';
     }
   }
+function toggleInputsGuardar() {
+    let botonEdit = document.getElementById("btnEdit");
+    botonEdit.hidden = !botonEdit.hidden;
+    let boton = document.getElementById("btnGuardar");
+    boton.hidden = !boton.hidden;
+}
