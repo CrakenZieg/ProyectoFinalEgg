@@ -83,7 +83,7 @@ public class ClienteControlador {
             Cliente cliente = clienteServicio.getOne(usuario.getId());
             model.put("cliente", cliente);
             model.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContactoUsuario(cliente));
-        } else if (usuario.getRol().equals(Rol.PROPIETARIO)) {
+        } else if (usuario.getRol().equals(Rol.PROPIETARIO) || usuario.getRol().equals(Rol.ADMIN)) {
             Propietario propietario;
             try {
                 propietario = propietarioServicio.getOne(usuario.getId());
