@@ -74,18 +74,18 @@
             <div class="reserva">
                 
               <h2 th:text="${propiedad.valor}" > </h2>
-              <form action=""  method="POST" >
+              <form th:action="@{/reserva/registrar}"  method="POST"  >
                   
-                  <input th:value="${propiedad.id}" hidden>
+                  <input th:value="${propiedad.id}"  name="idPropiedad" type="text" hidden>
               <div class="check-in">
                 <div class="fechainicio">
                   <label for="fechainicio">Check In</label>
-                  <input type="date" id="fechainicio" name="fechainicio" />
+                  <input type="date" id="fechainicio" name="fechaInicio" />
                   
                 </div>
                 <div class="fechafinal">
                   <label for="fechafinal">Check out</label>
-                  <input type="date" id="fechafinal" name="fechafinal" />
+                  <input type="date" id="fechafinal" name="fechaFinal" />
                   
                 </div>
               </div>
