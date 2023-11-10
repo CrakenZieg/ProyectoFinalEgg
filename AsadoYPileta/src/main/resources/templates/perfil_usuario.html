@@ -81,8 +81,8 @@
                                                         <div class="col" th:each="contacto : ${tipoContacto}">
                                                             <span th:text="${contacto.tipo}"></span>
                                                             <input type="checkbox" name="tipoContacto" 
-                                                                   onchange="actualizarInput(this)" th:id="${contacto.tipo}" 
-                                                                   th:value="${contacto.tipo}"/>
+                                                                   onchange="actualizarInput(this)" th:id="${contacto.tipo}" id="input10"
+                                                                   th:value="${contacto.tipo}" disabled/>
                                                             <input type="text" th:id="${contacto.tipo}+Input" th:name="${contacto.tipo}" 
                                                                    disabled="true"/>
                                                         </div>
