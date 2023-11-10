@@ -2,6 +2,7 @@
     box-sizing: border-box;
     padding:0;
     margin:0;
+  
 }
 
 /* scroll */
@@ -387,7 +388,9 @@ input:valid ~ label{
     .carta{
         transform: scale(0.8);
     }
-
+    .propiedad-descrip{
+        display: block;
+    }
 }
 
 
@@ -602,11 +605,19 @@ input:valid ~ label{
     width: 100%;
     
     margin-top: 20px;
-    height: 700px;
+    height: 800px;
     padding:.2rem;
 }
 .descripcion{
     border-bottom: 0.5px solid #7d7d7d;
+}
+.descrip{
+    height: 300px;
+    width: 100%;
+    margin-top: 20px;
+    
+    border-bottom: 2px solid #050505;
+    padding: .3rem;
 }
 .reserva{
     width: 34%;
@@ -624,7 +635,7 @@ input:valid ~ label{
 .check-in{
     display: grid;
     grid-template-columns: 50% 50%;
-    
+
 }
 .fechainicio{
     display: grid;
@@ -651,7 +662,7 @@ input:valid ~ label{
     width: 90%;
     text-decoration: none;
     text-align: center;
-    padding-top: .4rem;
+   font-size: 1.2rem;
     margin-top: 30px;
     margin-left: auto;
     margin-right: auto;
@@ -669,38 +680,41 @@ input:valid ~ label{
 .servicios-propiedad{
     margin: .6rem;
     padding:1.2rem;
-    height: 250px;
+    height: 300px;
     width: 100%;
     border-bottom: 1px solid #7d7d7d;
-    
-    
 }
 .servicios-propiedad ul, .dtalles-serv ul{
     display: grid;
     grid-template-columns: 50% 50%;
     list-style: none;
     margin: 10px;
-    
 }
 .servicios-propiedad li, .dtalles-serv li{
-    
+    height: 40px;
+    padding-left: .3rem;
     margin: 5px;
     font-size: 1.2rem;
+  
+    box-shadow: 0 6px 6px rgba(0,0,0,0.1);
 }
 .servicios-propiedad li:nth-child(n+7){
     display: none;
 }
 #mostrar-servicios{
+    display: block;
+    height: 50px;
+    width:150px;
    padding: .4rem;
    border-radius: .4rem;
    border: 1px solid #7d7d7d;
+   border-radius: 14px;
    background-color: #fff;
    font-size: 1.2rem;
    cursor: pointer;
-   margin:20px ;
+   margin-top: auto ;
 }
 #mostrar-td-serv{
-    
     display: none;
     flex-direction: column;
     position: absolute;
@@ -711,17 +725,39 @@ input:valid ~ label{
     background-color: #fff;
     justify-content: center;
     align-items: center;
+    border-radius: 10px;
     box-shadow: 0 20px 20px rgba(0, 0, 0, 0.2 );
     overflow: auto;
 }
-
+.salir-cont{
+    
+    height: 15px;
+   margin-bottom: 40px;
+}
+.salir-cont button{
+    border: none;
+    background-color: #ffffff;
+}
+#salir{
+    width: 15px;
+    height:100%;
+    
+}
+.salir-active{
+    display: none;
+}
 .dtalles-serv{
     height: 100%;
     width: 100%;
 }
 .titulo-dtl-serv{
+    display: block;
+    height: 50px;
+    width: 600px;
     font-size: 2rem;
-    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
     border-bottom: 1px solid #222222;
 }
 
@@ -735,31 +771,32 @@ input:valid ~ label{
 }
 .comentario-contenedor{
     display: grid;
-    width: 100;
+    width: 100%;
     grid-template-columns: 50% 50%;
-    grid-template-rows: 200px 200px;
+    grid-template-rows: 200px ;
     grid-gap: 20px;
     justify-content: center;
+   
     
 }
 .comentario{
     padding: .4rem;
-    
+     border-bottom: 2px solid #1508ff;
+     box-shadow: 0 20px 20px rgba(0,0,0,0.1);
+     border-radius: 10px;
+     animation: aparicion linear both;
+     animation-timeline: view();
+     animation-range: entry 50% cover 50%
 }
 .comentario:nth-child(n+7){
     display: none;
 }
 .comentario-par{
-    
-  
   width: 100%;
   overflow: hidden;
-  
-  
 }
 .comentario-par{
     margin: 10px;
-    
 }
 .line-clamp{
     display: -webkit-box;
@@ -774,6 +811,17 @@ input:valid ~ label{
 .perfil-data{
     padding: .3rem;
     margin-left: 10px;
+    
+}
+#eliminar-btn {
+    display: block ;
+    margin-left: auto; 
+    height: 40px;
+    padding:.5rem; 
+    background-color: #555;
+    text-decoration: none;
+    font-size: clamp(.7rem, 1vw, 1.25rem);
+    border-radius:20px;
 }
 .imagen-perfil{
     height: 40px;
@@ -785,14 +833,20 @@ input:valid ~ label{
     height: 100%;
     border-radius: 100%;
 }
+@keyframes aparicion{
+    from{
+        opacity:0;
+    }
+    to{
+        opacity:1;
+    }
+
 /* perfil Usuario */
 #navegador{
     --bs-nav-link-color: var(--bs-white);
     --bs-nav-pills-link-active-color: var(--bs-primary);
     --bs-nav-pills-link-active-bg: var(--bs-white);
 }
-
-
 
 #toggleBtn {
       cursor: pointer;
@@ -805,4 +859,5 @@ input:valid ~ label{
 #lista-imagenes{
   width: 250px; 
   height: 250px;
+
 }

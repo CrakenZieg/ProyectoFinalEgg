@@ -38,8 +38,12 @@ public class ClienteControlador {
     private TipoContactoServicio tipoContactoServicio;
     @Autowired
     private UsuarioServicio usuarioServicio;
+
     @Autowired
     private PropietarioServicio propietarioServicio;
+
+    private Rol rol;
+
 
     @GetMapping("/registrar")
     public String registrar(ModelMap model) {
@@ -67,6 +71,7 @@ public class ClienteControlador {
         usuarioServicio.eliminarUsuario(id, session);
         return "index.html";
     }
+
 
     @GetMapping("/perfil")
     public String perfil(ModelMap model, HttpSession session) {
@@ -100,5 +105,20 @@ public class ClienteControlador {
             Logger.getLogger(ClienteControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "index.html";
+    }
+    @PostMapping("/cambiar_password")
+    public String cambiandoPassword(@RequestParam String email, @RequestParam String password, @RequestParam String newPassword,@RequestParam String equalPassword, ModelMap model) throws MiException {
+        try {
+            usuarioServicio.cambiarPassword(email, password,newPassword,equalPassword);
+
+            return "redirect:/index";
+
+        } catch (MiException e) {
+
+            model.addAttribute("error", e.getMessage());
+
+            return "redirect:/perfil_usuario";
+        }
+
     }
 }

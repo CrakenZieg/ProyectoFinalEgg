@@ -26,6 +26,6 @@ public class Comentario {
     @ManyToOne
     private Usuario usuario;
 
-    
+    private double puntuacion;
     
 }

@@ -6,6 +6,7 @@ import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.ComentarioRepositorio;
+import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,8 @@ public class ComentarioServicio {
     @Autowired
     private ComentarioRepositorio comentarioRepositorio;
     @Autowired
+    private PropiedadRepositorio PropiedadRepositorio;
+    @Autowired
     private ImagenServicio imagenServicio;
     @Autowired
     private PropiedadServicio propiedadServicio;
@@ -28,8 +31,9 @@ public class ComentarioServicio {
     private UsuarioServicio usuarioServicio;
 
     @Transactional
-    public void crearComentario(HttpSession session, MultipartFile[] archivos, String cuerpo, String stringIdpropiedad) throws MiException, Exception {
-        validar(session, cuerpo, archivos, stringIdpropiedad);
+    public void crearComentario(HttpSession session, MultipartFile[] archivos, String cuerpo, String stringIdpropiedad, double puntuacion) throws MiException, Exception {
+        validar(session, cuerpo, archivos, stringIdpropiedad,puntuacion);
+
 
         Comentario comentario = new Comentario();
         comentario.setCuerpo(cuerpo);
@@ -39,6 +43,7 @@ public class ComentarioServicio {
         Propiedad propiedad = propiedadServicio.getOne(stringIdpropiedad);
         comentario.setPropiedad(propiedad);
         Usuario logueado = (Usuario) session.getAttribute("usuariosession");
+        comentario.setPuntuacion(puntuacion);
         comentario.setUsuario(logueado);
 
         comentarioRepositorio.save(comentario);
@@ -57,13 +62,14 @@ public class ComentarioServicio {
     public List<Comentario> findComentariosByUserId(String userId) {
         return comentarioRepositorio.buscarPorCliente(userId);
     }
-    
+
     public List<Comentario> findComentariosByPropiedadId(String propId) {
         return comentarioRepositorio.buscarPorPropiedad(propId);
     }
 
-    public void modificarComentario(HttpSession session, MultipartFile[] archivos, String id, String cuerpo, String stringIdpropiedad, String[] imagenesViejas) throws MiException, Exception {
-        validar(session, cuerpo, archivos, stringIdpropiedad);
+
+    public void modificarComentario(HttpSession session, MultipartFile[] archivos, String id, String cuerpo, String stringIdpropiedad, String[] imagenesViejas, double puntuacion) throws MiException, Exception {
+        validar(session, cuerpo, archivos, stringIdpropiedad,puntuacion);
         Optional<Comentario> respuesta = comentarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
 
@@ -85,7 +91,7 @@ public class ComentarioServicio {
             Propiedad propiedad = propiedadServicio.getOne(stringIdpropiedad);
             comentario.setPropiedad(propiedad);
             comentario.setImagenes(imagenes);
-
+            comentario.setPuntuacion(puntuacion);
             Usuario logueado = (Usuario) session.getAttribute("usuariosession");
             comentario.setUsuario(logueado);
 
@@ -98,13 +104,20 @@ public class ComentarioServicio {
         return comentarioRepositorio.getById(id);
     }
 
+
     @Transactional
     public void eliminarComentrario(String id) throws MiException {
         Comentario comentario = comentarioRepositorio.getById(id);
         comentarioRepositorio.delete(comentario);
     }
 
-    private void validar(HttpSession session, String cuerpo, MultipartFile[] imagenes, String stringIdpropiedad) throws MiException {
+    public double obtenerPromedioPuntuacionPorPropiedad(String stringIdpropiedad) {
+
+
+        return PropiedadRepositorio.obtenerPromedioPuntuacionPorPropiedad(stringIdpropiedad);
+    }
+
+    private void validar(HttpSession session, String cuerpo, MultipartFile[] imagenes, String stringIdpropiedad, double puntuacion) throws MiException {
         Usuario logueado = (Usuario) session.getAttribute("usuariosession");
         if (logueado == null) {
             throw new MiException("el usuario debe estar logueado");
@@ -123,6 +136,11 @@ public class ComentarioServicio {
                 throw new MiException("la propiedad no puede  estar vacia");
 
             }
+            if (puntuacion == 0 ) {
+
+                throw new MiException("la puntucion debe cargarse");
+            }
+
 
         }
 
