@@ -38,6 +38,8 @@ const btnMostrarServicios = document.getElementById("mostrar-servicios");
 const divMostrarServicios = document.getElementById("mostrar-td-serv");
 const btnSalir = document.getElementById("salir");
 
+
+
 renderizarImagen();
 
 function salir(){

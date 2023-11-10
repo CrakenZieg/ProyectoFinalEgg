@@ -245,7 +245,7 @@ input:valid ~ label{
     height: auto;
     width: 100%;
     margin-left:200px;
-    margin-right: 200px;
+    margin-right: 250px;
     margin-top: .6rem; 
     padding: .6rem;
 }
@@ -335,6 +335,10 @@ input:valid ~ label{
      transform: scale(0.8);
   }
   
+  .contenedor-carta{
+      margin-left: 150px;
+      margin-right: 170px;
+  }
 }
 
 @media (max-width : 1280px ){
@@ -343,12 +347,21 @@ input:valid ~ label{
      transform: scale(0.9);
   }
   
+   .contenedor-carta{
+        margin-left: 90px;
+        margin-right: 120px;
+    }
+  
 }
 @media (max-width : 1024px ){
   
   .carta{
      transform: scale(1);
   }
+   .contenedor-carta{
+        margin-left: 60px;
+        margin-right: 100px;
+    }
   
 }
 
@@ -361,6 +374,10 @@ input:valid ~ label{
       justify-content: center;
       align-items: center;
   }
+   .contenedor-carta{
+        margin-left: 80px;
+        margin-right: 80px;
+    }
   .carta{
      transform: scale(1.1);
      margin-bottom: 60px; 
@@ -382,12 +399,10 @@ input:valid ~ label{
 
 
     .contenedor-carta{
-        margin-left: 180px;
-        margin-right: 180px;
+        margin-left: 100px;
+        margin-right: 50px;
     }
-    .carta{
-        transform: scale(0.8);
-    }
+    
     .propiedad-descrip{
         display: block;
     }
