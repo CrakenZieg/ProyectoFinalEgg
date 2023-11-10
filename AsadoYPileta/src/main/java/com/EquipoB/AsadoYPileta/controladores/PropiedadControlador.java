@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/propiedad")
@@ -145,4 +146,19 @@ public class PropiedadControlador {
         modelo.addAttribute("promedioPuntuacion", promedioPuntuacion);
         return "puntuacion.html";
     }
+    
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/baja")
+    public ModelAndView bajaPropiedad(@RequestParam String idPropiedad, ModelMap modelo) throws MiException {          
+        propiedadServicio.darDeBaja(idPropiedad);
+        return new ModelAndView("redirect:/admin/dashboard",modelo);
+    }
+    
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/alta")
+    public ModelAndView altaPropiedad(@RequestParam String idPropiedad, ModelMap modelo) throws MiException {
+        propiedadServicio.darDeAlta(idPropiedad);  
+        return new ModelAndView("redirect:/admin/dashboard",modelo);
+    }
+    
 }
