@@ -33,15 +33,15 @@ public class ReservaControlador {
     private UsuarioServicio usuarioServicio;
 
     @PostMapping("/registrar")  //localhost:8080/reserva/registrar
-    public ModelAndView crearReserva(@RequestParam String idPropiedad, @RequestParam Date fechaInicio,
-            @RequestParam Date fechaFinal, HttpSession session, ModelMap modelo) {
+    public ModelAndView crearReserva(@RequestParam String idPropiedad, @RequestParam String fechaInicio,
+            @RequestParam String fechaFinal, HttpSession session, ModelMap modelo) {
         Reserva reserva = new Reserva();
         Usuario usuario = (Usuario) session.getAttribute("usuariosession");
         Propiedad propiedad = propiedadServicio.getOne(idPropiedad);
         reserva.setUsuario(usuario);
         reserva.setPropiedad(propiedad);
-        reserva.setFechaInicio(fechaInicio);
-        reserva.setFechaFin(fechaFinal);
+        reserva.setFechaInicio(new Date(fechaInicio));
+        reserva.setFechaFin(new Date(fechaFinal));
         modelo.addAttribute("reservas", new Reserva());
         return new ModelAndView("confirmacion_reserva.html", modelo);
     }

@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/cliente")
@@ -123,6 +124,28 @@ public class ClienteControlador {
 
             return "redirect:/perfil_usuario";
         }
-
     }
+    
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/baja")
+    public ModelAndView bajaUsuario(@RequestParam String idUsuario, ModelMap modelo) throws MiException {
+        try {            
+            usuarioServicio.bajaUsuario(idUsuario);            
+        } catch (MiException ex) {
+            modelo.put("error", ex.getMessage());
+        }
+        return new ModelAndView("redirect:/admin/dashboard",modelo);
+    }
+    
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/alta")
+    public ModelAndView altaUsuario(@RequestParam String idUsuario, ModelMap modelo) throws MiException {
+        try {            
+            usuarioServicio.altaUsuario(idUsuario);            
+        } catch (MiException ex) {
+            modelo.put("error", ex.getMessage());
+        }
+        return new ModelAndView("redirect:/admin/dashboard",modelo);
+    }
+    
 }
