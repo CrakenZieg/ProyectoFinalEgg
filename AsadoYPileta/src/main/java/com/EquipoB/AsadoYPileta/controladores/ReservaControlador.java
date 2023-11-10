@@ -1,4 +1,3 @@
-
 package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
@@ -8,9 +7,11 @@ import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,83 +20,96 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/reserva") //localhost:8080/reserva
 public class ReservaControlador {
-    
+
     @Autowired
     private ReservaServicio reservaServicio;
     @Autowired
     private PropiedadServicio propiedadServicio;
     @Autowired
     private UsuarioServicio usuarioServicio;
-    
-    @GetMapping("/registrar")  //localhost:8080/reserva/registrar
-    public String crearReserva(ModelMap modelo){
 
-     modelo.addAttribute("reservas", new Reserva());
+    @PostMapping("/registrar")  //localhost:8080/reserva/registrar
+    public ModelAndView crearReserva(@RequestParam String idPropiedad, @RequestParam String fechaInicio,
+            @RequestParam String fechaFinal, HttpSession session, ModelMap modelo)  {
+         
         
-        return "reserva.html";
-   }
-   
-   
+        Reserva reserva = new Reserva();
+        Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+        Propiedad propiedad = propiedadServicio.getOne(idPropiedad);
+        reserva.setUsuario(usuario);
+        reserva.setPropiedad(propiedad);
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        try{
+            reserva.setFechaInicio(formato.parse(fechaInicio));
+        reserva.setFechaFin(formato.parse(fechaFinal));
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        
+        modelo.addAttribute("reservas", new Reserva());
+        return new ModelAndView("confirmacion_reserva.html", modelo);
+    }
+
     @GetMapping("/listar")  //localhost:8080/reserva/listar
-   public String listarReservas(ModelMap modelo){
-       List <Reserva> reservas = reservaServicio.listarReserva();
-       modelo.addAttribute("reservas", reservas);
-       
-       return "reserva_lista.html";
-   }
-    
-   @PostMapping("/registro")
-   public String registroReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible,ModelMap modelo){
-   
-       try{
-        reservaServicio.crearReserva( mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible);
+
+    public String listarReservas(ModelMap modelo) {
+        List<Reserva> reservas = reservaServicio.listarReserva();
+        modelo.addAttribute("reservas", reservas);
+
+        return "reserva_lista.html";
+    }
+
+    @PostMapping("/registro")
+    public String registroReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible, ModelMap modelo) {
+
+        try {
+            reservaServicio.crearReserva(id, mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible);
+            return "redirect:/reserva/listar";
+        } catch (MiException e) {
+
+            modelo.addAttribute("error", e.getMessage());
+
+            return "reserva.html";
+        }
+    }
+
+    @GetMapping("/modificar/{id}")
+    public String modificarReserva(@PathVariable String id, ModelMap modelo) {
+
+        modelo.put("reserva", reservaServicio.getOne(id));
+
+        return "reserva_modificar.html";
+
+    }
+
+    @PostMapping("/modificar/{id}")
+    public String modificarReserva(@PathVariable String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible, ModelMap modelo) {
+
+        try {
+            reservaServicio.modificarReserva(id, mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible);
+
+            return "redirect:/reserva/listar";
+        } catch (MiException e) {
+
+            modelo.addAttribute("error", e.getMessage());
+
+            return "reserva_modificar";
+        }
+
+    }
+
+    @GetMapping("/borrar/{id}")
+    public String borrarReserva(@PathVariable String id) {
+
+        reservaServicio.borrar(id);
+
         return "redirect:/reserva/listar";
-      }   catch(MiException e){
-          
-          modelo.addAttribute("error", e.getMessage());
-          
-          return "reserva.html";
-      }
-   }
-   
-   @GetMapping("/modificar/{id}")
-   public String modificarReserva(@PathVariable String id,ModelMap modelo){
-       
-       modelo.put("reserva", reservaServicio.getOne(id));
-       
-       return "reserva_modificar.html";
-       
-   }
-   
-   @PostMapping("/modificar/{id}")
-   public String modificarReserva(@PathVariable String id,String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible,ModelMap modelo){
-       
-       try{
-           reservaServicio.modificarReserva(id, mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible);
-           
-           return "redirect:/reserva/listar";
-       } catch (MiException e){
-           
-           modelo.addAttribute("error", e.getMessage());
-           
-           return "reserva_modificar";
-       }
-          
-   }
-   
-   @GetMapping("/borrar/{id}")
-   public String borrarReserva(@PathVariable String id){
-       
-       reservaServicio.borrar(id);
-       
-       return "redirect:/reserva/listar";
-       
-   }
-   
- 
+
+    }
+
 }

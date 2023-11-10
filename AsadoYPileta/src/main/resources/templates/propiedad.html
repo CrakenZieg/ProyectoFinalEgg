@@ -25,6 +25,9 @@
           <div id="mostrar-td-serv">
 
             <div class="dtalles-serv">
+                <div class="salir-cont">
+                    <button><img  id="salir" th:src="@{/imagenes/x.png}"></button>
+                </div>
               <div class="titulo-dtl-serv">
                 <h2>¿Que ofrecemos?</h2>
 
@@ -43,7 +46,7 @@
             <div class="datos-propiedad">
               <div class="descripcion">
                 <h2 th:text="${propiedad.titulo}"></h2>
-                <p th:text="${propiedad.descripcion}">descripcion</p>
+                
                
               </div>
               
@@ -51,8 +54,8 @@
                 <div class="servicios-propiedad">
                   <h2>¿Que ofrecemos?</h2>
                   
-                  <ul >
-                    <li id="servicio-dt" >Limpieza</li>
+                  <ul th:each="servicio : ${propiedad.servicios}">
+                    <li th:text="${servicio.tipoComodidad}">Limpieza</li>
                     
                     
                     
@@ -60,30 +63,36 @@
                   <button id="mostrar-servicios">Mostrar mas</button>
                 </div>
               </div>
-
-              <div class="map">
-                <map name="propiedad"></map>
-              </div>
+                
+                <div class="descrip line-clamp">
+                    <p th:text="${propiedad.descripcion}">descripcion</p>
+                </div>
             </div>
+
+              
 
             <div class="reserva">
                 
               <h2 th:text="${propiedad.valor}" > </h2>
-
+              <form th:action="@{/reserva/registrar}"  method="POST"  >
+                  
+                  <input th:value="${propiedad.id}"  name="idPropiedad" type="text" hidden>
               <div class="check-in">
                 <div class="fechainicio">
                   <label for="fechainicio">Check In</label>
-                  <input type="date" id="fechainicio" />
+                  <input type="date" id="fechainicio" name="fechaInicio" />
                   
                 </div>
                 <div class="fechafinal">
                   <label for="fechafinal">Check out</label>
-                  <input type="date" id="fechafinal" />
+                  <input type="date" id="fechafinal" name="fechaFinal" />
                   
                 </div>
               </div>
-              <a href="" class="reservar-btn">Reservar</a>
+                  <button class="reservar-btn"  type="submit">Reservar</button>
+              </form>
             </div>
+              
           </div>
           <div class="calificacion">
             <img th:src="@{/imagenes/estrella.png}" alt="" i>
@@ -102,29 +111,30 @@
                   <p>Nombre y apellido</p>
                   <p>fecha de publicacion de comentario</p>
                 </div>
+                  <a th:href="@{/propiedad/eliminar/__${propiedad.id}__}" sec:authorize="hasRole('ADMIN')" id="eliminar-btn">Eliminar Comentario</a> 
               </div>
               <div class="comentario-par">
                 <p >lore</p>
               </div>
               
             </div>
-            <div class="comentario">
+            <div class="comentario" th:each="comentario : ${comentarios}"  >
               <div class="perfil-coment">
                 <div class="imagen-perfil">
-                  <img src="https://images.unsplash.com/photo-1599837826158-79e79f6e032f?auto=format&fit=crop&q=80&w=2078&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
+                  <img th:src="@{/imagen/__${comentario.cliente.imagenes[0].id}__}" alt="">
                 </div>
                 
                 <div class="perfil-data">
-                  <p>Nombre y apellido</p>
-                  <p>fecha de publicacion de comentario</p>
+                  <p th:text="${comentario.cliente.nombre}"></p>
+                  <p th:text="${comentario.cliente.apellido}"></p>
                 </div>
               </div>
               <div class="comentario-par">
-                <p>lore</p>
+                <p th:text="${comentario.cuerpo}"></p>
               </div>
               
             </div>
-            
+           
             
           </div>
         </div>

@@ -86,7 +86,7 @@ public class ClienteServicio {
 
   
     @Transactional
-    private void modificarCliente(String email, String id, String nombre, String apellido, 
+    public void modificarCliente(String email, String id, String nombre, String apellido, 
             String descripcion, String password, String password2, MultipartFile[] imagenesInput,
             String[] tipoContactoInput, String[] contactosInput, String[] imagenesViejas) throws MiException, Exception {
 

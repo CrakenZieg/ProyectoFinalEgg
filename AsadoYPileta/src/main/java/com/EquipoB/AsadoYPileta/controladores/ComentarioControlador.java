@@ -39,10 +39,10 @@ public class ComentarioControlador {
     }
 
     @PostMapping("/registro")
-    public String registro(@RequestParam() String cuerpo, HttpSession session, @RequestParam MultipartFile[] archivos, @RequestParam String stringIdpropiedad, ModelMap modelo) throws Exception {
+    public String registro(@RequestParam() String cuerpo, HttpSession session, @RequestParam MultipartFile[] archivos, @RequestParam String stringIdpropiedad, double puntuacio, ModelMap modelo) throws Exception {
         try {
 
-            comentarioServicio.crearComentario(session, archivos, cuerpo, stringIdpropiedad);
+            comentarioServicio.crearComentario(session, archivos, cuerpo, stringIdpropiedad, puntuacio);
 
             modelo.put("exito", "El comentario fue registrado correctamente!");
         } catch (MiException ex) {
@@ -82,11 +82,11 @@ public class ComentarioControlador {
     }
 
     @PostMapping("/modificar/{id}")
-    public String actualizar(@RequestParam MultipartFile[] archivos, @PathVariable String id, HttpSession session, @RequestParam String cuerpo, Usuario usuario, @RequestParam String stringIdpropiedad, @RequestParam(required = false) String[] imagenesViejas, ModelMap modelo) throws Exception {
+    public String actualizar(@RequestParam MultipartFile[] archivos, @PathVariable String id, HttpSession session, @RequestParam String cuerpo, Usuario usuario, @RequestParam String stringIdpropiedad, @RequestParam(required = false) String[] imagenesViejas, double puntuacio, ModelMap modelo) throws Exception {
 
         try {
 
-            comentarioServicio.modificarComentario(session, archivos, id, cuerpo, stringIdpropiedad, imagenesViejas);
+            comentarioServicio.modificarComentario(session, archivos, id, cuerpo, stringIdpropiedad, imagenesViejas, puntuacio);
 
             modelo.put("exito", "comentario actualizado correctamente!");
 
@@ -98,4 +98,5 @@ public class ComentarioControlador {
             return "comentario_modificar.html";
         }
     }
+   
 }
