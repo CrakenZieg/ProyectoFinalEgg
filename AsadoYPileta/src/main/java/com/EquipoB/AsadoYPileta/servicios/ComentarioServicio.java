@@ -34,6 +34,7 @@ public class ComentarioServicio {
     public void crearComentario(HttpSession session, MultipartFile[] archivos, String cuerpo, String stringIdpropiedad, double puntuacion) throws MiException, Exception {
         validar(session, cuerpo, archivos, stringIdpropiedad,puntuacion);
 
+
         Comentario comentario = new Comentario();
         comentario.setCuerpo(cuerpo);
         List<Imagen> imagenes = new ArrayList<>();
@@ -65,6 +66,7 @@ public class ComentarioServicio {
     public List<Comentario> findComentariosByPropiedadId(String propId) {
         return comentarioRepositorio.buscarPorPropiedad(propId);
     }
+
 
     public void modificarComentario(HttpSession session, MultipartFile[] archivos, String id, String cuerpo, String stringIdpropiedad, String[] imagenesViejas, double puntuacion) throws MiException, Exception {
         validar(session, cuerpo, archivos, stringIdpropiedad,puntuacion);
@@ -102,7 +104,15 @@ public class ComentarioServicio {
         return comentarioRepositorio.getById(id);
     }
 
+
+    @Transactional
+    public void eliminarComentrario(String id) throws MiException {
+        Comentario comentario = comentarioRepositorio.getById(id);
+        comentarioRepositorio.delete(comentario);
+    }
+
     public double obtenerPromedioPuntuacionPorPropiedad(String stringIdpropiedad) {
+
 
         return PropiedadRepositorio.obtenerPromedioPuntuacionPorPropiedad(stringIdpropiedad);
     }
@@ -130,6 +140,7 @@ public class ComentarioServicio {
 
                 throw new MiException("la puntucion debe cargarse");
             }
+
 
         }
 
