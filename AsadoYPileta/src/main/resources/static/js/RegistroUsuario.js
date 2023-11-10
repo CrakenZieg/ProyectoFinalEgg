@@ -36,9 +36,17 @@ const adelante = document.getElementById("adelante");
 let posicionActual = 0;
 const btnMostrarServicios = document.getElementById("mostrar-servicios");
 const divMostrarServicios = document.getElementById("mostrar-td-serv");
+const btnSalir = document.getElementById("salir");
 
 renderizarImagen();
 
+function salir(){
+if (divMostrarServicios.style.display === "none") {
+    divMostrarServicios.style.display = "flex";
+  } else {
+    divMostrarServicios.style.display = "none";
+  }
+}
 function escalarServicios() {
   if (divMostrarServicios.style.display === "none") {
     divMostrarServicios.style.display = "flex";
@@ -89,3 +97,4 @@ function renderizarImagen() {
 atras.addEventListener("click", atrasimagen);
 adelante.addEventListener("click", adelanteimagen);
 btnMostrarServicios.addEventListener("click", escalarServicios);
+btnSalir.addEventListener("click", salir);
