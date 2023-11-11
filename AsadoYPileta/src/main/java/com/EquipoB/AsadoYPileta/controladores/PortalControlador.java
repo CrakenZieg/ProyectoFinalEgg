@@ -26,7 +26,7 @@ public class PortalControlador {
     
     @GetMapping("/")
     public String index(ModelMap model){         
-        List<Propiedad> propiedades = propiedadServicio.listarPropiedades();
+        List<Propiedad> propiedades = propiedadServicio.listarPropiedadesActivas();
         List<TipoPropiedad> tipoPropiedades = tipopropiedadServicio.listarTipoPropiedad();
         model.addAttribute("propiedades", propiedades);        
         model.addAttribute("tipoPropiedades", tipoPropiedades);

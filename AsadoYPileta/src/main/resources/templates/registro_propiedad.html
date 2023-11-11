@@ -22,13 +22,42 @@
                                 <input type="text" class="form-control" id="titulo" name="titulo" placeholder="titulo"/>
                             </div>
                             <div class="form-group">
-                                <label for="direccion" class="form-label"><span class="h3">Dirección</span></label>                           
-                                <input type="text" class="form-control" id="direccion" name="direccion" placeholder="direccion"/>
+                                <label for="pais" class="form-label"><span class="h3">País</span></label>                           
+                                <input type="text" class="form-control" id="pais" name="pais" placeholder="pais"/>
                             </div>
                             <div class="form-group">
-                                <label for="ubicacion" class="form-label"><span class="h3">Ubicación</span></label>                           
-                                <input type="text" class="form-control" id="ubicacion" name="ubicacion" placeholder="ubicacion"/>
+                                <label for="provincia" class="form-label"><span class="h3">Provincia</span></label>                           
+                                <input type="text" class="form-control" id="provincia" name="provincia" placeholder="provincia"/>
                             </div>
+                             <div class="form-group">
+                                <label for="departamento" class="form-label"><span class="h3">Departamento</span></label>                           
+                                <input type="text" class="form-control" id="departamento" name="departamento" placeholder="departamento"/>
+                            </div>
+                             <div class="form-group">
+                                <label for="localidad" class="form-label"><span class="h3">Localidad</span></label>                           
+                                <input type="text" class="form-control" id="localidad" name="localidad" placeholder="localidad"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="calle" class="form-label"><span class="h3">Calle</span></label>                           
+                                <input type="text" class="form-control" id="calle" name="calle" placeholder="calle"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="numeracion" class="form-label"><span class="h3">Numeración</span></label>                           
+                                <input type="text" class="form-control" id="numeracion" name="numeracion" placeholder="numeracion"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="observaciones" class="form-label"><span class="h3">Observaciones</span></label>                           
+                                <input type="text" class="form-control" id="observaciones" name="observaciones" placeholder="observaciones"/>
+                            </div>
+                            <div class="form-group">
+                                                       
+                                <input hidden type="number" class="form-control" id="latitud" name="latitud" th:value="111111"/>
+                            </div>
+                            <div class="form-group">
+                                                         
+                                <input hidden type="number" class="form-control" id="longitud" name="longitud" th:value="111111"/>
+                            </div>
+                          
                             <div class="form-group">
                                 <label for="valor" class="form-label"><span class="h3">Valor</span></label>                           
                                 <input type="number" class="form-control" id="valor" name="valor" min="0"/>
