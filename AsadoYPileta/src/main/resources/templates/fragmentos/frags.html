@@ -33,36 +33,25 @@
                 </li>
                 <li><a href="#" class="nav-link px-2 text-white">Preguntas Frecuentes</a></li>
                 <li><a href="#" class="nav-link px-2 text-white">Nosotros</a></li>
-                <li><a th:if="${session.usuariosession == null}" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/login}">Ingresar</a></li>
-                <li><a th:if="${session.usuariosession == null}" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/cliente/registrar}">Registrarse</a></li>
                 <li><a sec:authorize="hasAnyRole('CLIENTE','PROPIETARIO')" class="btn btn-outline-warning" style="border: 0px" role="button" th:href="@{/propiedad/registrar}">Registrar Propiedad</a></li>
-                <li><a th:if="${session.usuariosession != null}" sec:authorize="hasRole('ADMINISTRADOR')" class="btn btn-outline-white" style="border: 0px" role="button" >Panel Admin</a></li>
-                <li><a th:if="${session.usuariosession != null}" sec:authorize="hasRole('ADMINISTRADOR')" class="btn btn-outline-white" style="border: 0px" role="button" >Panel Admin</a></li>
-                <li>
-                    <div class="dropdown text-end">
+            </ul>
+            <div class="text-end">
+                <a th:if="${session.usuariosession == null}" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/login}">Ingresar</a>
+                <a th:if="${session.usuariosession == null}" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/cliente/registrar}">Registrarse</a>
+
+                <a th:if="${session.usuariosession != null}" sec:authorize="hasRole('ADMIN')" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/admin/dashboard}" >Panel Admin</a>
+                <div class="dropdown text-end">
                     <a th:if="${session.usuariosession != null}" sec:authorize="hasAnyRole('CLIENTE','PROPIETARIO')"
                        href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
                         <img th:src="@{/imagen/perfil/__${session.usuariosession.id}__}" alt="Foto de perfil" width="50" height="50" class="rounded-circle">
                     </a>
                     <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-                        <li><a class="dropdown-item" th:href="@{/perfil}">Perfil</a></li>
+                        <li><a class="dropdown-item" th:href="@{/cliente/perfil}">Perfil</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" th:href="@{/logout}">Cerrar Sesión</a></li>
                     </ul>
                 </div>
-                </li>
-            </ul>
-<<<<<<< HEAD
-=======
-            <div class="text-end">
-                 <a th:if="${session.usuariosession == null}" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/login}">Ingresar</a>
-                 <a th:if="${session.usuariosession == null}" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/cliente/registrar}">Registrarse</a>
-                 <a th:if="${session.usuariosession != null}" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/logout}">Logout</a>
-                 <a sec:authorize="hasAnyRole('CLIENTE','PROPIETARIO')" class="btn btn-outline-warning" style="border: 0px" role="button" th:href="@{/propiedad/registrar}">Registrar Propiedad</a>
-                 <a th:if="${session.usuariosession != null}" sec:authorize="hasAnyRole('CLIENTE','PROPIETARIO')" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/cliente/perfil}" >Perfil</a>
-                 <a th:if="${session.usuariosession != null}" sec:authorize="hasRole('ADMIN')" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/admin/dashboard}" >Panel Admin</a>
             </div>
->>>>>>> desarrollo
         </div>
     </div>
 </header>
