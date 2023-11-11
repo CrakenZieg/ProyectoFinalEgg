@@ -68,7 +68,7 @@ public class ReservaControlador {
     public String registroReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible, ModelMap modelo) {
 
         try {
-            reservaServicio.crearReserva(id, mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible);
+            reservaServicio.crearReserva(mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible);
             return "redirect:/reserva/listar";
         } catch (MiException e) {
 
