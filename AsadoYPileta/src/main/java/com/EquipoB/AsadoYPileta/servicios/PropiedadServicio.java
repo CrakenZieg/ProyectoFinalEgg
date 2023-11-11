@@ -156,6 +156,20 @@ public class PropiedadServicio {
     }
 
     @Transactional
+    public void darDeBaja(String id) {
+        Propiedad propiedad = propiedadRepositorio.getOne(id);
+        propiedad.setEstado(false);
+        propiedadRepositorio.save(propiedad);
+    }
+    
+    @Transactional
+    public void darDeAlta(String id) {
+        Propiedad propiedad = propiedadRepositorio.getOne(id);
+        propiedad.setEstado(true);
+        propiedadRepositorio.save(propiedad);
+    }
+
+    @Transactional
     public void eliminar(String id, Usuario logueado) {
         Optional<Propiedad> propiedadRepo = propiedadRepositorio.findById(id);
         Optional<Propietario> propietarioRepo = propietarioRepositorio.findById(logueado.getId());

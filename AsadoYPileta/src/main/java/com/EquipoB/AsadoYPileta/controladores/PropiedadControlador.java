@@ -24,20 +24,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/propiedad")
 public class PropiedadControlador {
-    
+
     @Autowired
     private PropiedadServicio propiedadServicio;
-    
+
     @Autowired
     private PropietarioServicio propietarioServicio;
 
     @Autowired
     private ServicioServicio servicioServicio;
-    
+
     @Autowired
     private ComentarioServicio comentarioServicio;
 
@@ -75,7 +76,6 @@ public class PropiedadControlador {
         return "registro_propiedad.html";
     }
 
-
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO','ROLE_ADMIN')")
     @PostMapping("/registro")
     public String registro(@RequestParam String titulo, @RequestParam String descripcion,
@@ -84,7 +84,7 @@ public class PropiedadControlador {
             @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor, HttpSession session) {
         try {
 
-            Usuario logueado = (Usuario) session.getAttribute("usuariosession");            
+            Usuario logueado = (Usuario) session.getAttribute("usuariosession");
 
             propiedadServicio.crearPropiedad(titulo, descripcion, ubicacion,
                     direccion, tipo, serviciosInput, imagenesInput, valor, logueado);
@@ -97,11 +97,11 @@ public class PropiedadControlador {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROPIETARIO')")
     @GetMapping("/modificar/{id}")
     public String modificar(@PathVariable String id, ModelMap model, HttpSession session) throws PermisosException, MiException {
-        Usuario logueado = (Usuario) session.getAttribute("usuariosession");        
+        Usuario logueado = (Usuario) session.getAttribute("usuariosession");
         List<Servicio> servicios = new ArrayList<>();
         servicios = servicioServicio.listarServicios();
         Propiedad propiedad = propiedadServicio.getOne(id);
-        if(!propietarioServicio.comprobarPropietario(logueado, propiedad)){
+        if (!propietarioServicio.comprobarPropietario(logueado, propiedad)) {
             throw new PermisosException("No es posible modificar la propiedad porque no te pertenece");
         }
         model.addAttribute("propiedad", propiedad);
@@ -127,17 +127,38 @@ public class PropiedadControlador {
         return "index.html";
     }
 
-    
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROPIETARIO')")
     @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable String id, HttpSession session) throws MiException, PermisosException {  
+    public String eliminar(@PathVariable String id, HttpSession session) throws MiException, PermisosException {
         Usuario logueado = (Usuario) session.getAttribute("usuariosession");
         Propiedad propiedad = propiedadServicio.getOne(id);
-        if(!propietarioServicio.comprobarPropietario(logueado, propiedad)){
+        if (!propietarioServicio.comprobarPropietario(logueado, propiedad)) {
             throw new PermisosException("No es posible eliminar la propiedad porque no te pertenece");
         }
-        propiedadServicio.eliminar(id,logueado);
+        propiedadServicio.eliminar(id, logueado);
 
         return "index.html";
     }
+
+    @GetMapping("/puntuacion/{id}")
+    public String puntuacion(@PathVariable String id, ModelMap modelo) {
+        Double promedioPuntuacion = comentarioServicio.obtenerPromedioPuntuacionPorPropiedad(id);
+        modelo.addAttribute("promedioPuntuacion", promedioPuntuacion);
+        return "puntuacion.html";
+    }
+    
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/baja")
+    public ModelAndView bajaPropiedad(@RequestParam String idPropiedad, ModelMap modelo) throws MiException {          
+        propiedadServicio.darDeBaja(idPropiedad);
+        return new ModelAndView("redirect:/admin/dashboard",modelo);
+    }
+    
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/alta")
+    public ModelAndView altaPropiedad(@RequestParam String idPropiedad, ModelMap modelo) throws MiException {
+        propiedadServicio.darDeAlta(idPropiedad);  
+        return new ModelAndView("redirect:/admin/dashboard",modelo);
+    }
+    
 }

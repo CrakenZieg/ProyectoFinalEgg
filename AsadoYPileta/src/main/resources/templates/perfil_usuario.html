@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="/fragmentos/frags :: head"></head>
+    <body>
+        <header th:replace="fragmentos/frags :: header"></header>
+        <main>
+            <div class="container-sm">
+                <div id="carouselExampleIndicators" class="carousel slide">
+                    <div class="position-relative">
+                        <ul class="nav nav-pills nav-fill gap-2 p-1 small bg-black rounded-5 shadow-sm" id="navegador" role="tablist">
+                            <li class="nav-item" role="presentation" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0">
+                                <button class="nav-link active rounded-5" id="home-tab2" data-bs-toggle="tab" type="button" role="tab"
+                                        aria-selected="true">
+                                    Usuarios
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" sec:authorize="hasAnyRole('PROPIETARIO')">
+                                <button class="nav-link rounded-5" id="profile-tab2" data-bs-toggle="tab" type="button" role="tab"
+                                        aria-selected="false">
+                                    Propiedades
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <br>
+                                <input hidden th:value="${cliente.id}" name="id">
+                                    <div class="left box-primary">
+                                        <div class=" d-inline-flex p-2">
+                                            <img th:src="@{/imagen/__${cliente.imagenes[0].id}__}" width="250" height="250" class="d-block w-100" id="foto-de-perfil" alt="Foto Perfil">
+                                        </div>
+                                    </div>
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button class="btn btn-primary" type="button" id="btnEdit" onclick="toggleInputs()">Editar Perfil</button>
+                                    </div>
+                                    <div class="right tab-content">
+
+                                        <form class="row g-3" th:action="@{/cliente/perfil/__${cliente.id}__}" method="POST" enctype="multipart/form-data">
+                                            <div class="col-md-4">
+                                                <label for="nombre" class="form-label">Nombre</label>
+                                                <input type="text" class="form-control" id="input1" name="nombre" th:value="${cliente.nombre}" required disabled>
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="apellido" class="form-label">Apellido</label>
+                                                <input type="text" class="form-control" id="input2" name="apellido" th:value="${cliente.apellido}" required disabled >
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="input9" name="email" th:value="${cliente.usuario.email}" required disabled >
+                                            </div>
+                                            <div class="col-md-6 " id="pass" hidden>
+                                                <label class="form-label" for="password">Contraseña</label>
+                                                <input  type="password" class="input-group form-control" name="password" id="input3"  required disabled/>
+                                                <button type="button" class="btn btn-secondary" id="toggleBtn" onclick="togglePasswordVisibility()">Mostrar Contraseña</button>
+
+                                            </div>
+
+                                            <div class="col-md-6" id="pass2" hidden>
+                                                <label for="password2" class="form-label">Repita contraseña</label>
+                                                <input  type="password" class="form-control" name="password2" id="input4" required disabled/>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="descripcion" class="form-label">Descripcion</label>
+                                                <textarea class="form-control" id="input5" name="descripcion" th:field="${cliente.descripcion}" required disabled></textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="col form-control" >
+                                                    <label for="tipoContactoInput">Contactos:</label>
+                                                    <div class="row row-cols-3">
+                                                        <div class="col" th:each="contacto : ${cliente.contactos}">
+                                                            <span th:text="${contacto.tipo.tipo}"></span>
+                                                            <input type="checkbox" name="tipoContacto" 
+                                                                   onchange="actualizarInput(this)" th:id="${contacto.tipo.tipo}" 
+                                                                   th:value="${contacto.tipo.tipo}" disabled checked/>
+                                                            <input type="text" th:id="${contacto.tipo.tipo}+Input" th:name="${contacto.tipo.tipo}" 
+                                                                   th:value="${contacto.contacto}" id="input6" disabled/>
+                                                        </div>
+                                                        <div class="col" th:each="contacto : ${tipoContacto}">
+                                                            <span th:text="${contacto.tipo}"></span>
+                                                            <input type="checkbox" name="tipoContacto" 
+                                                                   onchange="actualizarInput(this)" th:id="${contacto.tipo}" id="input10"
+                                                                   th:value="${contacto.tipo}" disabled/>
+                                                            <input type="text" th:id="${contacto.tipo}+Input" th:name="${contacto.tipo}" 
+                                                                   disabled="true"/>
+                                                        </div>
+                                                    </div>
+                                                    <div id="checkboxContactos">                                    
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="form-group" id="imagenEdit" hidden>
+                                                    <label for="imagenes" class="form-label">Imágenes:</label>                           
+                                                    <input type="file" class="form-control" name="imagenesInput" id="input7" multiple="multiple" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 form-group">
+                                                <div class="col card d-inline-flex p-2" th:each="imagen : ${cliente.imagenes}">
+                                                    <img th:src="@{/imagen/__${imagen.id}__}" class="card-img" width="150" height="150" id="#lista-imagenes"/>
+                                                    <div class="card-img-overlay">
+                                                        <input class="form-check-input" type="checkbox" th:id="${imagen.id}" th:value="${imagen.id}" name="imagenesViejas" id="input8" disabled/>
+                                                        <label class="form-check-label" th:for="${imagen.id}" th:text="${imagen.nombre}">Imagen</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-control">
+                                                <label for="prepararArrayInput" class="form-label"><span class="h4">Acepto los terminos y condiciones: </span></label>
+                                                <a id="prepararArray" target="_blank">Terminos y condiciones.</a>
+                                                <input type="checkbox" id="prepararArrayInput" name="contactosInput" onchange="prepararArray()" required="true" checked/>
+                                            </div>
+                                            <div class="col-12">
+
+                                                <button class="btn btn-primary" type="submit" onclick=toggleInputsGuardar() id="btnGuardar" hidden>Guardar Cambios</button>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                    </div>
+
+                                    <div class="carousel-item">
+                                        <div th:replace="fragmentos/card :: div"></div>                            
+                                    </div>
+
+                                    </div>
+                                    </div>
+                                    </div>
+                                    </div>
+                                    </main>
+                                    <footer th:replace="fragmentos/frags :: footer"></footer>
+                                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+                                            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+                                    crossorigin="anonymous"></script>
+                                    <script th:src="@{/js/perfilUsuario.js}" type="text/javascript"></script>
+                                    <script th:src="@{/js/RegistroUsuario.js}" type="text/javascript"></script>
+                                    </body>
+                                    </html>
