@@ -157,6 +157,19 @@ public class PropiedadServicio {
         return propiedadRepositorio.getOne(id);
     }
 
+    @Transactional
+    public void darDeBaja(String id) {
+        Propiedad propiedad = propiedadRepositorio.getOne(id);
+        propiedad.setEstado(false);
+        propiedadRepositorio.save(propiedad);
+    }
+    
+    @Transactional
+    public void darDeAlta(String id) {
+        Propiedad propiedad = propiedadRepositorio.getOne(id);
+        propiedad.setEstado(true);
+        propiedadRepositorio.save(propiedad);
+    }
 
     @Transactional
     public void eliminar(String id, Usuario logueado) {

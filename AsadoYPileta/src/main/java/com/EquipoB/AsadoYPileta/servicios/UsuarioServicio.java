@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.excepciones.PermisosException;
 import com.EquipoB.AsadoYPileta.repositorios.ClienteRepositorio;
+import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.PropietarioRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.UsuarioRepositorio;
 import java.util.Date;
@@ -38,6 +39,9 @@ public class UsuarioServicio implements UserDetailsService {
     private ClienteRepositorio clienteRepositorio;
     @Autowired
     private PropietarioRepositorio propietarioRepositorio;
+    
+    @Autowired
+    private PropiedadServicio propiedadServicio;
 
 
     private Rol rol;
@@ -192,15 +196,14 @@ public class UsuarioServicio implements UserDetailsService {
             usuario = respuesta.get();
 
             usuario.setAlta(false);
-            String rol = usuario.getRol().toString();
-            Propietario propietario = propietarioRepositorio.getById(usuario.getId());
-            if (rol.equals("PROPIETARIO") && propietario.getPropiedades().size() != 0) {
-
-                List<Propiedad> propiedades = propietario.getPropiedades();
-                for (Propiedad propiedad : propiedades) {
-                    propiedad.setEstado(Boolean.FALSE);
+            if (usuario.getRol().equals(rol.PROPIETARIO)) {
+                Propietario propietario = propietarioRepositorio.getOne(id);
+                if(propietario.getPropiedades().size() != 0){
+                    List<Propiedad> propiedades = propietario.getPropiedades();
+                    for (Propiedad propiedad : propiedades) {
+                        propiedadServicio.darDeBaja(propiedad.getId());
+                    }              
                 }
-                propietarioRepositorio.save(propietario);
             }
             usuarioRepositorio.save(usuario);
         } else {
@@ -210,7 +213,8 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Transactional
 
-    public void recuperarUsuario(String id) throws MiException {
+    public void altaUsuario(String id) throws MiException {
+
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
             Usuario usuario = new Usuario();

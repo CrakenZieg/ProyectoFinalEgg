@@ -40,7 +40,7 @@
                  <a th:if="${session.usuariosession != null}" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/logout}">Logout</a>
                  <a sec:authorize="hasAnyRole('CLIENTE','PROPIETARIO')" class="btn btn-outline-warning" style="border: 0px" role="button" th:href="@{/propiedad/registrar}">Registrar Propiedad</a>
                  <a th:if="${session.usuariosession != null}" sec:authorize="hasAnyRole('CLIENTE','PROPIETARIO')" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/cliente/perfil}" >Perfil</a>
-                 <a th:if="${session.usuariosession != null}" sec:authorize="hasRole('ADMINISTRADOR')" class="btn btn-outline-white" style="border: 0px" role="button" >Panel Admin</a>
+                 <a th:if="${session.usuariosession != null}" sec:authorize="hasRole('ADMIN')" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/admin/dashboard}" >Panel Admin</a>
             </div>
         </div>
     </div>

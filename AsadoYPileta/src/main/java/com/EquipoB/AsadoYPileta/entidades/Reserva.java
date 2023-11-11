@@ -15,8 +15,8 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 
-@Entity
 @Data
+@Entity
 public class Reserva {
     @Id
     @GeneratedValue(generator="uuid")  
