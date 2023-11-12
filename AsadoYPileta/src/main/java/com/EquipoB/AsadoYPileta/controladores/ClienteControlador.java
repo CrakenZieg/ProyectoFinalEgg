@@ -1,5 +1,6 @@
 package com.EquipoB.AsadoYPileta.controladores;
 
+
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Propietario;
@@ -37,6 +38,7 @@ public class ClienteControlador {
     private ClienteServicio clienteServicio;
     @Autowired
     private TipoContactoServicio tipoContactoServicio;
+
     @Autowired
     private UsuarioServicio usuarioServicio;
 
@@ -51,6 +53,7 @@ public class ClienteControlador {
         model.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContacto());
         return "registro_usuario.html";
     }
+
 
     @PostMapping("/registro")
     public String registro(@RequestParam String nombre, @RequestParam String apellido,

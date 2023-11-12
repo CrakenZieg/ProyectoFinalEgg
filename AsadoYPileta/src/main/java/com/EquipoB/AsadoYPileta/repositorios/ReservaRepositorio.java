@@ -23,7 +23,15 @@ public interface ReservaRepositorio extends JpaRepository <Reserva,String> {
     @Query("SELECT r FROM Reserva r WHERE r.disponible=true AND r.fechaFin<'fechaActual'") 
     List <Reserva> buscarFinalizadas(@Param("fechaActual") String fechaActual);
     
+
+    @Query("SELECT r.fechaInicio FROM Reserva r WHERE r.propiedad.id=id") 
+    List <Date> buscarFechaInicioReserva(@Param("id") String id);
+    
+    @Query("SELECT r.fechaFin FROM Reserva r WHERE r.propiedad.id=id") 
+    List <Date> buscarFechaFinReserva(@Param("id") String id);
+
     @Query("SELECT COUNT(r) FROM Reserva r WHERE r.fechaInicio <= CURRENT_DATE") 
     public int buscarCuantasReservasActivas();
+
 
 }

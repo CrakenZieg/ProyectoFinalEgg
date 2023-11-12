@@ -18,17 +18,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+
 @Service
 public class ClienteServicio {
 
     @Autowired
     private ClienteRepositorio clienteRepositorio;
-        
+
     @Autowired
     private UsuarioServicio usuarioServicio;
 
     @Autowired
     private TipoContactoServicio tipoContactoServicio;
+
     
     @Autowired
     private ContactoRepositorio contactoRepositorio;
@@ -59,6 +61,7 @@ public class ClienteServicio {
 
         cliente.setNombre(nombre);
         cliente.setApellido(apellido);
+
         cliente.setImagenes(imagenes);
         cliente.setDescripcion(descripcion);
         ArrayList<Contacto> contactos = new ArrayList();
@@ -71,6 +74,7 @@ public class ClienteServicio {
             contactos.add(contacto);
         }
         cliente.setContactos(contactos);
+
         clienteRepositorio.save(cliente);
     }
 
@@ -79,6 +83,7 @@ public class ClienteServicio {
         clientes = clienteRepositorio.findAll();
         return clientes;
     }
+
   
     @Transactional
     public void modificarCliente(String email, String id, String nombre, String apellido, 
@@ -87,6 +92,7 @@ public class ClienteServicio {
 
         validar(email, nombre, apellido, descripcion, password, password2, imagenesInput,
                 tipoContactoInput, contactosInput);
+
 
         Optional<Cliente> respuesta = clienteRepositorio.findById(id);
         if (respuesta.isPresent()) {
@@ -137,6 +143,7 @@ public class ClienteServicio {
         } else {
             throw new MiException("No se encontro el cliente");
         }
+
     }
 
     private void validar(String email, String nombre, String apellido, String descripcion,
@@ -148,6 +155,7 @@ public class ClienteServicio {
         if (nombre == null || nombre.trim().isEmpty()) {
             throw new MiException("El nombre no puede ser nulo o estar vacio");
         }
+
         if (apellido == null || apellido.trim().isEmpty()) {
             throw new MiException("El apellido no puede ser nulo o estar vacio");
         }
@@ -171,6 +179,7 @@ public class ClienteServicio {
         }
         if (contactosInput == null || contactosInput.length == 0 || contactosInput[0].trim().isEmpty()) {
             throw new MiException("Debes ingresar por lo menos un contacto");
+
         }
     }
 

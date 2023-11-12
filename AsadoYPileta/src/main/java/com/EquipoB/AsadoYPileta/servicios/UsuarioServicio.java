@@ -34,6 +34,7 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
+
     @Autowired
     private ClienteRepositorio clienteRepositorio;
     @Autowired
@@ -42,7 +43,9 @@ public class UsuarioServicio implements UserDetailsService {
     @Autowired
     private PropiedadServicio propiedadServicio;
 
+
     private Rol rol;
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -61,6 +64,7 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     @Transactional
+
     public void crearUsuario(String email, String password, Rol rol) throws MiException, Exception {
 
         validar(email, password, rol);
@@ -83,6 +87,7 @@ public class UsuarioServicio implements UserDetailsService {
     @Transactional
     public void modificarUsuario(String id, String email, String password, Rol rol,
             Date fechaAlta, Boolean alta) throws MiException {
+
         validar(email, password, rol);
 
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
@@ -101,6 +106,7 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Transactional(readOnly = true)
     public Usuario getOne(String id) {
+
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
             return usuarioRepositorio.getOne(id);
@@ -183,10 +189,12 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Transactional
     public void bajaUsuario(String id) throws MiException {
+
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
             Usuario usuario = new Usuario();
             usuario = respuesta.get();
+
             usuario.setAlta(false);
             if (usuario.getRol().equals(rol.PROPIETARIO)) {
                 Propietario propietario = propietarioRepositorio.getOne(id);
@@ -204,7 +212,9 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     @Transactional
+
     public void altaUsuario(String id) throws MiException {
+
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
             Usuario usuario = new Usuario();
@@ -288,8 +298,10 @@ public class UsuarioServicio implements UserDetailsService {
         if (password == null || password.trim().isEmpty()) {
             throw new MiException("La contraseña no puede ser nulo o estar vacio");
         }
+
         if (rol == null) {
             throw new MiException("El Rol no puede ser nulo o estar vacio");
         }
+
     }
 }
