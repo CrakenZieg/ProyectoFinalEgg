@@ -25,6 +25,9 @@ public interface PropiedadRepositorio extends JpaRepository<Propiedad, String> {
     
     @Query("SELECT COUNT(p) FROM Propiedad p WHERE p.estado=true")
     public int buscarCuantasPropiedades();
+    
+     @Query("SELECT p FROM Propiedad p WHERE p.estado=true")
+    public List<Propiedad> buscarPropiedadesActivas();
 
     
 }
