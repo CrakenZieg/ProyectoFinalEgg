@@ -63,6 +63,7 @@ public class PropiedadControlador {
         model.addAttribute("tipos", tipos);
         model.addAttribute("servicios", servicios);
         model.addAttribute("comentarios", comentarios);
+        
         return "propiedad.html";
     }
 
@@ -79,15 +80,17 @@ public class PropiedadControlador {
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO','ROLE_ADMIN')")
     @PostMapping("/registro")
     public String registro(@RequestParam String titulo, @RequestParam String descripcion,
-            @RequestParam String ubicacion, @RequestParam String direccion,
             @RequestParam TipoPropiedad tipo, @RequestParam(required = false) String[] serviciosInput,
-            @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor, HttpSession session) {
+            @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor, HttpSession session,
+            @RequestParam String pais,@RequestParam String provincia,@RequestParam String departamento,@RequestParam String localidad,
+            @RequestParam String calle,@RequestParam String numeracion,@RequestParam String observaciones,
+            @RequestParam Double latitud,@RequestParam Double longitud) {
         try {
 
             Usuario logueado = (Usuario) session.getAttribute("usuariosession");
 
-            propiedadServicio.crearPropiedad(titulo, descripcion, ubicacion,
-                    direccion, tipo, serviciosInput, imagenesInput, valor, logueado);
+            propiedadServicio.crearPropiedad(titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, logueado, pais, provincia, 
+                                             departamento, localidad, calle, numeracion, observaciones, latitud, longitud);
         } catch (Exception ex) {
             System.out.println("Excepcion: " + ex);
         }
@@ -113,14 +116,16 @@ public class PropiedadControlador {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROPIETARIO')")
     @PostMapping("/modificar/{id}")
     public String modificar(@PathVariable String id, @RequestParam String titulo,
-            @RequestParam String descripcion, @RequestParam String ubicacion,
-            @RequestParam String direccion, @RequestParam TipoPropiedad tipo,
+            @RequestParam String descripcion, @RequestParam TipoPropiedad tipo,
             @RequestParam(required = false) String[] serviciosInput,
             @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor,
-            @RequestParam(required = false) String[] imagenesViejas, @RequestParam String estado) {
+            @RequestParam(required = false) String[] imagenesViejas, @RequestParam String estado,
+            @RequestParam String pais,@RequestParam String provincia,@RequestParam String departamento,@RequestParam String localidad,
+            @RequestParam String calle,@RequestParam String numeracion,@RequestParam String observaciones,
+            @RequestParam Double latitud,@RequestParam Double longitud) {
         try {
-            propiedadServicio.modificarPropiedad(id, titulo, descripcion, ubicacion,
-                    direccion, tipo, serviciosInput, imagenesInput, valor, imagenesViejas, estado);
+            propiedadServicio.modificarPropiedad(id, titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, imagenesViejas, estado,
+                                                 pais, provincia, departamento, localidad, calle, numeracion, observaciones, latitud, longitud);
         } catch (Exception ex) {
             System.out.println("Excepcion: " + ex);
         }

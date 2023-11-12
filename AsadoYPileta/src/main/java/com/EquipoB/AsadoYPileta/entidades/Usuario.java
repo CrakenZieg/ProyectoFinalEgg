@@ -21,9 +21,11 @@ public class Usuario {
     @Id
     @GeneratedValue (generator= "uuid")
     @GenericGenerator (name= "uuid", strategy = "uuid2")
+
     protected String id;   
     protected String email;
     protected String password;
+
     @Enumerated(EnumType.STRING)
     protected Rol rol;
     @Temporal(TemporalType.DATE)
