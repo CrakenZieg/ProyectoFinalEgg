@@ -1,5 +1,6 @@
 package com.EquipoB.AsadoYPileta.controladores;
 
+
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Propietario;
@@ -37,6 +38,7 @@ public class ClienteControlador {
     private ClienteServicio clienteServicio;
     @Autowired
     private TipoContactoServicio tipoContactoServicio;
+
     @Autowired
     private UsuarioServicio usuarioServicio;
 
@@ -51,6 +53,7 @@ public class ClienteControlador {
         model.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContacto());
         return "registro_usuario.html";
     }
+
 
     @PostMapping("/registro")
     public String registro(@RequestParam String nombre, @RequestParam String apellido,
@@ -99,13 +102,12 @@ public class ClienteControlador {
     
     @PostMapping("/perfil/{id}")
     public String modificar(@RequestParam String nombre,@PathVariable String id, @RequestParam String apellido,
-            @RequestParam String email, @RequestParam String password, @RequestParam String password2,
-            @RequestParam MultipartFile[] imagenesInput, @RequestParam String descripcion,
-            @RequestParam String[] tipoContactoInput, @RequestParam String[] contactosInput,
-            @RequestParam(required = false) String[] imagenesViejas) {
+            @RequestParam String email,@RequestParam MultipartFile[] imagenesInput, 
+            @RequestParam String descripcion,@RequestParam String[] tipoContactoInput, 
+            @RequestParam String[] contactosInput,@RequestParam(required = false) String[] imagenesViejas) {
         try {
             clienteServicio.modificarCliente(email,id, nombre, apellido, descripcion,
-                    password, password2, imagenesInput, tipoContactoInput, contactosInput,imagenesViejas);
+                    imagenesInput, tipoContactoInput, contactosInput,imagenesViejas);
         } catch (Exception ex) {
             Logger.getLogger(ClienteControlador.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -2,6 +2,7 @@ package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
+import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.ReservaRepositorio;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,15 +19,16 @@ public class ReservaServicio {
 
     @Autowired
     private ReservaRepositorio reservaRepositorio;
+    @Autowired
+    private PropiedadRepositorio propiedadRepositorio;
 
     @Transactional
-    public void crearReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible) throws MiException {
+    public void crearReserva(String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible) throws MiException {
 
         validar(mensaje, fechaInicio, fechaFin, disponible);
 
         Reserva reserva = new Reserva();
 
-        reserva.setId(id);
         reserva.setMensaje(mensaje);
         reserva.setFechaInicio(fechaInicio);
         reserva.setFechaFin(fechaFin);
@@ -38,7 +40,7 @@ public class ReservaServicio {
 
     }
     
-     @Transactional(readOnly = true) 
+    @Transactional(readOnly = true) 
     public List<Reserva> listarReserva() {
 
         List<Reserva> reservas = new ArrayList();
@@ -70,7 +72,7 @@ public class ReservaServicio {
 
     }
     
-     @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public Reserva getOne(String id){
         
         return reservaRepositorio.getOne(id);
@@ -101,6 +103,29 @@ public class ReservaServicio {
         
     }
     
+    
+    public boolean verificarSuperposicionReservas(String idPropiedad, Date fechaInicio, Date fechaFin) {
+    
+    List<Date> fechasInicioReservas = reservaRepositorio.buscarFechaInicioReserva(idPropiedad);
+    List<Date> fechasFinReservas = reservaRepositorio.buscarFechaFinReserva(idPropiedad);
+    
+
+    for (int i = 0; i < fechasInicioReservas.size(); i++) {
+        Date inicioReserva = fechasInicioReservas.get(i);
+        Date finReserva = fechasFinReservas.get(i);
+        
+        if ((inicioReserva.before(fechaFin) || inicioReserva.equals(fechaFin)) &&
+            (finReserva.after(fechaInicio) || finReserva.equals(fechaInicio))) {
+           
+            return false;
+        }
+    }
+    
+    return true;
+}
+          
+            
+
     @Transactional
     public void habilitarComentarioFinReserva(Date fechaFin){
       
@@ -127,6 +152,7 @@ public class ReservaServicio {
                 reservaRepositorio.save(modificar);
             }
         }
+
     }
 
     private void validar(String mensaje, Date fechaInicio, Date fechaFin, Boolean disponible) throws MiException {

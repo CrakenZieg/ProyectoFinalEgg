@@ -14,6 +14,7 @@ import lombok.Data;
 @Entity
 public class Cliente{
 
+
     @Id
     private String id;
     @OneToOne(cascade = CascadeType.ALL)
@@ -27,6 +28,7 @@ public class Cliente{
     private List<Contacto> contactos;
       
     
+
     @PrePersist
     protected void onCreate() {
         this.id = usuario.getId();
