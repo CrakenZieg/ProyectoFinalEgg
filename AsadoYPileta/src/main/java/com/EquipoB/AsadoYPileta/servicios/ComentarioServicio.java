@@ -1,5 +1,6 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
+import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Comentario;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
@@ -42,7 +43,7 @@ public class ComentarioServicio {
         comentario.setImagenes(imagenes);
         Propiedad propiedad = propiedadServicio.getOne(stringIdpropiedad);
         comentario.setPropiedad(propiedad);
-        Usuario logueado = (Usuario) session.getAttribute("usuariosession");
+        Cliente logueado = (Cliente) session.getAttribute("usuariosession");
         comentario.setPuntuacion(puntuacion);
         comentario.setUsuario(logueado);
 
@@ -92,7 +93,7 @@ public class ComentarioServicio {
             comentario.setPropiedad(propiedad);
             comentario.setImagenes(imagenes);
             comentario.setPuntuacion(puntuacion);
-            Usuario logueado = (Usuario) session.getAttribute("usuariosession");
+            Cliente logueado = (Cliente) session.getAttribute("usuariosession");
             comentario.setUsuario(logueado);
 
             comentarioRepositorio.save(comentario);

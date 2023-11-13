@@ -24,7 +24,7 @@ public class Comentario {
     @ManyToOne
     private Propiedad propiedad;
     @ManyToOne
-    private Usuario usuario;
+    private Cliente usuario;
 
     private double puntuacion;
     

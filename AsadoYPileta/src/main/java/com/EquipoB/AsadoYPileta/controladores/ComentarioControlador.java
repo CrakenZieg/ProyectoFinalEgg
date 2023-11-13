@@ -1,5 +1,6 @@
 package com.EquipoB.AsadoYPileta.controladores;
 
+import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Comentario;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.servicios.ComentarioServicio;
@@ -32,7 +33,7 @@ public class ComentarioControlador {
 
     @GetMapping("/registrar")
     public String registrar(ModelMap modelo, HttpSession session) {
-        Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+        Cliente usuario = (Cliente) session.getAttribute("usuariosession");
 
         modelo.put("usuario", usuario);
         return "comentario_form.html";
@@ -65,7 +66,7 @@ public class ComentarioControlador {
     
     @GetMapping("/listaIdUsuario")
     public String listarIdUsuario(ModelMap modelo, HttpSession session) {
-   Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+   Cliente usuario = (Cliente) session.getAttribute("usuariosession");
         List<Comentario> comentarios = comentarioServicio.findComentariosByUserId(usuario.getId());
         modelo.addAttribute("comentarios", comentarios);
 
@@ -75,18 +76,18 @@ public class ComentarioControlador {
     @GetMapping("/modificar/{id}")
     public String modificarComentario(@PathVariable String id, HttpSession session, ModelMap modelo) {
         modelo.put("comentario", comentarioServicio.getOne(id));
-        Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+        Cliente usuario = (Cliente) session.getAttribute("usuariosession");
 
         modelo.put("usuario", usuario);
         return "comentario_modificar.html";
     }
 
     @PostMapping("/modificar/{id}")
-    public String actualizar(@RequestParam MultipartFile[] archivos, @PathVariable String id, HttpSession session, @RequestParam String cuerpo, Usuario usuario, @RequestParam String stringIdpropiedad, @RequestParam(required = false) String[] imagenesViejas, double puntuacio, ModelMap modelo) throws Exception {
+    public String actualizar(@RequestParam MultipartFile[] archivos, @PathVariable String id, HttpSession session, @RequestParam String cuerpo, Cliente usuario, @RequestParam String stringIdpropiedad, @RequestParam(required = false) String[] imagenesViejas, double puntuacion, ModelMap modelo) throws Exception {
 
         try {
 
-            comentarioServicio.modificarComentario(session, archivos, id, cuerpo, stringIdpropiedad, imagenesViejas, puntuacio);
+            comentarioServicio.modificarComentario(session, archivos, id, cuerpo, stringIdpropiedad, imagenesViejas, puntuacion);
 
             modelo.put("exito", "comentario actualizado correctamente!");
 
@@ -98,5 +99,13 @@ public class ComentarioControlador {
             return "comentario_modificar.html";
         }
     }
-   
+    
+    @GetMapping("/borrar/{id}")
+    public String borrarComentario(@PathVariable String id) throws MiException {
+
+        comentarioServicio.eliminarComentrario(id);
+
+        return "redirect:/comentario/lista";
+
+    }
 }
