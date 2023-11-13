@@ -17,6 +17,8 @@ function toggleInputs() {
     boton.hidden = !boton.hidden;
     let botonEdit = document.getElementById("btnEdit");
     botonEdit.hidden = !botonEdit.hidden;
+    let checkTerminos = document.getElementById("prepararArrayInput");
+    checkTerminos.checked = false;
 }
 function togglePasswordVisibility() {
     var passwordField = document.getElementById('input3');

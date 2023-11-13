@@ -10,6 +10,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TipoPropiedadRepositorio extends JpaRepository<TipoPropiedad, String>{
     
+    /**
+     *@param tipo: el tipo de propiedad
+     *@return TipoPropiedad asociado
+     */
     @Query("SELECT t FROM TipoPropiedad t WHERE t.tipo = :tipo")
     public TipoPropiedad buscarPorTipo(@Param("tipo") String tipo);
     
