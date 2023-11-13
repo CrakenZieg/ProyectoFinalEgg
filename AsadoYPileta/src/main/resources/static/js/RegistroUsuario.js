@@ -1,10 +1,6 @@
 function actualizarInput(event){
     let elem = document.getElementById(`${event.id}Input`);
-    if(elem.getAttribute("disabled")){
-        elem.disabled = false;
-    } else {
-        elem.disabled = true;
-    }
+    elem.disabled = !elem.disabled;
 }
 
 function prepararArray(){
