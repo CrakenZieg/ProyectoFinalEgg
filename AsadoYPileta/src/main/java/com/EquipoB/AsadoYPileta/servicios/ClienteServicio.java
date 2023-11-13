@@ -46,9 +46,9 @@ public class ClienteServicio {
             String password, String password2, MultipartFile[] imagenesInput,
             String[] tipoContactoInput, String[] contactosInput) throws MiException, Exception {
 
-        validar(email, nombre, apellido, descripcion, password, password2, imagenesInput,
+        validar(email, nombre, apellido, descripcion, imagenesInput,
                 tipoContactoInput, contactosInput);
-        
+        validarPasword(password, password2);
         usuarioServicio.crearUsuario(email, password, rol.CLIENTE);
         Usuario usuario = usuarioServicio.getPorEmail(email);
         
@@ -87,10 +87,10 @@ public class ClienteServicio {
   
     @Transactional
     public void modificarCliente(String email, String id, String nombre, String apellido, 
-            String descripcion, String password, String password2, MultipartFile[] imagenesInput,
+            String descripcion, MultipartFile[] imagenesInput,
             String[] tipoContactoInput, String[] contactosInput, String[] imagenesViejas) throws MiException, Exception {
 
-        validar(email, nombre, apellido, descripcion, password, password2, imagenesInput,
+        validar(email, nombre, apellido, descripcion, imagenesInput,
                 tipoContactoInput, contactosInput);
 
 
@@ -112,7 +112,6 @@ public class ClienteServicio {
                 } 
             }
             cliente.getUsuario().setEmail(email);
-            cliente.getUsuario().setPassword(new BCryptPasswordEncoder().encode(password));
             cliente.setNombre(nombre);
             cliente.setApellido(apellido);
             cliente.setImagenes(imagenes);
@@ -147,8 +146,8 @@ public class ClienteServicio {
     }
 
     private void validar(String email, String nombre, String apellido, String descripcion,
-            String password, String password2, MultipartFile[] imagenesInput,
-            String[] tipoContactoInput, String[] contactosInput) throws MiException {
+             MultipartFile[] imagenesInput, String[] tipoContactoInput, 
+             String[] contactosInput) throws MiException {
         if (email == null || email.trim().isEmpty()) {
             throw new MiException("El email no puede ser nulo o estar vacio");
         }        
@@ -165,12 +164,6 @@ public class ClienteServicio {
         if (email == null || email.trim().isEmpty()) {
             throw new MiException("La descripcion no puede ser nulo o estar vacio");
         }
-        if (password == null || password.trim().isEmpty()) {
-            throw new MiException("El password no puede ser nulo o estar vacio");
-        }
-        if (!password.equals(password2)) {
-            throw new MiException("El password tiene que ser igual en ambos campos");
-        }
         if (imagenesInput == null || imagenesInput.length == 0) {
             throw new MiException("Debes ingresar por lo menos una imagen");
         }
@@ -182,5 +175,12 @@ public class ClienteServicio {
 
         }
     }
-
+    private void validarPasword(String password, String password2) throws MiException {
+        if (password == null || password.trim().isEmpty()) {
+            throw new MiException("El password no puede ser nulo o estar vacio");
+        }
+        if (!password.equals(password2)) {
+            throw new MiException("El password tiene que ser igual en ambos campos");
+        }
+    }
 }

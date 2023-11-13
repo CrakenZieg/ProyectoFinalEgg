@@ -1,18 +1,14 @@
 function toggleInputs() {
-    let inputs = document.getElementsByTagName("input");
+    let inputs = document.getElementsByClassName("cambio");
     for (var i = 0; i < inputs.length; i++) {
         inputs[i].disabled = !inputs[i].disabled;
     }
-    let textarea = document.getElementById("input5");
-    textarea.disabled = !textarea.disabled;
-    let checkTyC = document.getElementById("prepararArrayInput");
-    checkTyC.disabled = !checkTyC.disabled;
     let inputImagen = document.getElementById("imagenEdit");
     inputImagen.hidden = !inputImagen.hidden;
-    let pass = document.getElementById("pass");
-    pass.hidden = !pass.hidden;
-    let pass2 = document.getElementById("pass2");
-    pass2.hidden = !pass2.hidden;
+    let borrar = document.getElementsByClassName("borrarImg");
+    for (var i = 0; i < borrar.length; i++) {
+        borrar[i].hidden = !borrar[i].hidden;
+    }
     let boton = document.getElementById("btnGuardar");
     boton.hidden = !boton.hidden;
     let botonEdit = document.getElementById("btnEdit");
@@ -31,4 +27,14 @@ function toggleInputsGuardar() {
     botonEdit.hidden = !botonEdit.hidden;
     let boton = document.getElementById("btnGuardar");
     boton.hidden = !boton.hidden;
+}
+function confirmarEdicion() {
+    var contraseña = prompt("Por favor, ingrese la contraseña:");
+    var claveAlmacenada = document.getElementById("claveSecreta").value;
+    if (contraseña === claveAlmacenada) {
+        return true;
+    } else {
+        alert("Contraseña incorrecta.");
+        return false;
+    }
 }
