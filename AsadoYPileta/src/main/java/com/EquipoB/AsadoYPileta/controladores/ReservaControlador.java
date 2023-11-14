@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +36,8 @@ public class ReservaControlador {
     private UsuarioServicio usuarioServicio;
     @Autowired
     private ClienteServicio clienteServicio;
-
+    
+    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @PostMapping("/registrar")  //localhost:8080/reserva/registrar
     public ModelAndView crearReserva(@RequestParam String idPropiedad, @RequestParam String fechaInicio,
             @RequestParam String fechaFinal, HttpSession session, ModelMap modelo)  {
