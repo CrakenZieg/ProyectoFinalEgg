@@ -10,6 +10,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TipoContactoRepositorio extends JpaRepository<TipoContacto, String>{
     
+    /**
+     *@param tipo: el tipo de contacto
+     *@return TipoContacto asociado
+     */
     @Query("SELECT t FROM TipoContacto t WHERE t.tipo = :tipo")
     public TipoContacto buscarPorTipo(@Param("tipo") String tipo);
     

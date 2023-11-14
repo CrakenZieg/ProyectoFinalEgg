@@ -25,8 +25,8 @@
                             Buscá tu dia ideal
                         </button>
                         <ul class="dropdown-menu">
-                            <li th:each="tipo : ${T(com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad).values()}">
-                                <a class="dropdown-item" th:text="${tipo.getTipo()}" th:href="@{/propiedad/tipo/${tipo}}">Quincho</a>
+                            <li th:each="tipo : ${tipoPropiedades}">
+                                <a class="dropdown-item" th:text="${tipo.getTitulo()}" th:href="@{/propiedad/tipo/${tipo.getTipo()}}">Quincho</a>
                             </li>                            
                         </ul>
                     </div>
