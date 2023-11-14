@@ -1,9 +1,11 @@
 package com.EquipoB.AsadoYPileta.controladores;
 
+import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
+import com.EquipoB.AsadoYPileta.servicios.ClienteServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
@@ -32,6 +34,8 @@ public class ReservaControlador {
     private PropiedadServicio propiedadServicio;
     @Autowired
     private UsuarioServicio usuarioServicio;
+    @Autowired
+    private ClienteServicio clienteServicio;
 
     @PostMapping("/registrar")  //localhost:8080/reserva/registrar
     public ModelAndView crearReserva(@RequestParam String idPropiedad, @RequestParam String fechaInicio,
@@ -40,18 +44,21 @@ public class ReservaControlador {
 
         Reserva reserva = new Reserva();
         Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+        Cliente cliente = clienteServicio.getOne(usuario.getId());
         Propiedad propiedad = propiedadServicio.getOne(idPropiedad);
         reserva.setUsuario(usuario);
         reserva.setPropiedad(propiedad);
-
+        
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         try{
-            reserva.setFechaInicio(formato.parse(fechaInicio));
+        reserva.setFechaInicio(formato.parse(fechaInicio));
         reserva.setFechaFin(formato.parse(fechaFinal));
         }catch(Exception e){
             System.out.println(e);
-        }        
-        modelo.addAttribute("reservas", new Reserva());
+        }  
+        modelo.addAttribute("propiedad", propiedad);
+        modelo.addAttribute("cliente", cliente);
+        modelo.addAttribute("reserva", reserva);
         return new ModelAndView("confirmacion_reserva.html", modelo);
     }
 
