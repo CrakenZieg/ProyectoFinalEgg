@@ -1,14 +1,15 @@
 package com.EquipoB.AsadoYPileta.controladores;
 
+import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
+import com.EquipoB.AsadoYPileta.servicios.ClienteServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -32,25 +33,30 @@ public class ReservaControlador {
     private PropiedadServicio propiedadServicio;
     @Autowired
     private UsuarioServicio usuarioServicio;
+    @Autowired
+    private ClienteServicio clienteServicio;
 
     @PostMapping("/registrar")  //localhost:8080/reserva/registrar
     public ModelAndView crearReserva(@RequestParam String idPropiedad, @RequestParam String fechaInicio,
             @RequestParam String fechaFinal, HttpSession session, ModelMap modelo)  {
 
-            Reserva reserva = new Reserva();
+        Reserva reserva = new Reserva();
+        Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+        Cliente cliente = clienteServicio.getOne(usuario.getId());
+        Propiedad propiedad = propiedadServicio.getOne(idPropiedad);
+        reserva.setUsuario(usuario);
+        reserva.setPropiedad(propiedad);
+        
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         try{
-            Usuario usuario = (Usuario) session.getAttribute("usuariosession");
-            Propiedad propiedad = propiedadServicio.getOne(idPropiedad);
-            reserva.setUsuario(usuario);
-            reserva.setPropiedad(propiedad);
-
-            SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-            reserva.setFechaInicio(formato.parse(fechaInicio));
-            reserva.setFechaFin(formato.parse(fechaFinal));
-            modelo.addAttribute("reservas", new Reserva());
+        reserva.setFechaInicio(formato.parse(fechaInicio));
+        reserva.setFechaFin(formato.parse(fechaFinal));
         }catch(Exception e){
             System.out.println(e);
-        }        
+        }  
+        modelo.addAttribute("propiedad", propiedad);
+        modelo.addAttribute("cliente", cliente);
+        modelo.addAttribute("reserva", reserva);
         return new ModelAndView("confirmacion_reserva.html", modelo);
     }
 

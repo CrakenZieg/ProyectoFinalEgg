@@ -472,7 +472,7 @@ input:valid ~ label{
   color: #222222;
 }
 
-.registro .registro-inptcont {
+.registro .registro-inptcont, .modale .registro-inptcont {
   position: relative;
   width: 100%;
   border-bottom: 1px solid #222222;
@@ -496,7 +496,7 @@ input:valid ~ label{
   top: -1px;
 }
 
-.registro-inptcont input {
+.registro-inptcont input , .modale form input{
   height: 40px;
   width: 100%;
   padding-left: 0;
@@ -848,6 +848,7 @@ input:valid ~ label{
     height: 100%;
     border-radius: 100%;
 }
+
 @keyframes aparicion{
     from{
         opacity:0;
@@ -855,7 +856,52 @@ input:valid ~ label{
     to{
         opacity:1;
     }
+}
 
+    /* perfil cambiar password */
+#botn-camb{
+    padding-block:.5rem;
+    padding: .3rem;
+    border: none;
+    border-radius: .2rem;
+    background-color: #e6c56c;
+    font-weight: bolder;
+    color:#888;
+}
+
+.modale{
+   padding: 3em;
+   max-width: 60ch;
+   border: 0;
+   height: 400px;
+   left: 45%;
+   top: 40%;
+   border-radius: 2rem;
+   background-color: 
+   box-shadow : 0 0 3rem rgba(0 0 0 / .4);
+}
+.modale form button{
+    border: 0;
+    margin: .3rem;
+    padding: .4em;
+    background-color: #e6c56c;
+    border-radius: 2rem;
+    
+}
+#cerrar-modal{
+    border: 0;
+    margin:.3rem;
+    border-radius: 2rem;
+    padding: .5rem;
+    background-color: #0508ad;
+    color: #fffcfc;
+    float: left;
+}
+.modale::backdrop{
+    background: rgba(0 0 0 / .4);
+    
+    
+}
 /* perfil Usuario */
 #navegador{
     --bs-nav-link-color: var(--bs-white);

@@ -13,8 +13,12 @@ function toggleInputs() {
     boton.hidden = !boton.hidden;
     let botonEdit = document.getElementById("btnEdit");
     botonEdit.hidden = !botonEdit.hidden;
-    let checkTerminos = document.getElementById("prepararArrayInput");
-    checkTerminos.checked = false;
+    
+    let botonPass = document.getElementById("botn-camb");
+    if(botonEdit.hidden){
+        botonPass.hidden = false;
+    }
+
 }
 function togglePasswordVisibility() {
     var passwordField = document.getElementById('input3');
@@ -40,3 +44,19 @@ function confirmarEdicion() {
         return false;
     }
 }
+
+
+// Modal cambiar contrasena
+
+const btonCambiarPass = document.getElementById("botn-camb");
+const modal = document.getElementById("modale");
+const cerrarModal = document.getElementById("cerrar-modal");
+
+btonCambiarPass.addEventListener('click', ()  => {
+    modal.showModal();
+})
+
+cerrarModal.addEventListener('click', ()  => {
+    modal.close();
+})
+

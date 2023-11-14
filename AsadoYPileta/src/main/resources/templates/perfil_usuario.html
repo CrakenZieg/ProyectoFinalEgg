@@ -34,6 +34,27 @@
                                     </div>
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                         <button class="btn btn-primary" type="button" id="btnEdit" onclick="toggleInputs()">Editar Perfil</button>
+                                        <button id="botn-camb" hidden >Cambiar contraseña</button>
+                                        <dialog class="modale" id="modale">
+                                            <form>
+
+                                                        <div class="registro-inptcont">
+                                                                <input type="password" name="passwordAnt" required/>
+                                                                <label for="passwordAnt">Ingrese su contraseña</label>
+                                                        </div>
+                                                        <div class="registro-inptcont">
+                                                                <input type="password" name="password" required/>
+                                                                <label for="password">Ingrese su nueva contraseña</label>
+                                                        </div>
+                                                        <div class="registro-inptcont">
+                                                                <input type="password" name="password2" required/>
+                                                                <label for="password2">Repita contraseña</label>
+                                                        </div>
+                                                 
+                                                <button type="submit">Guardar</button>  <button id="cerrar-modal">Cerrar</button>
+                                            </form>
+                                            
+                                        </dialog>
                                     </div>
                                     <div class="right tab-content">
 
