@@ -15,7 +15,7 @@
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-black text-decoration-none">
-                <img src="/AYPIcon.jpg" alt="icono" style="width: 6rem; height: 3rem"/>
+                <img src="/AYPIcon.jpg" alt="icono" style="width: 6rem; height: 3rem"/> &emsp;
                 <span class="h1">Asado y pileta</span>
             </a>
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
@@ -42,12 +42,12 @@
                 <a th:if="${session.usuariosession != null}" sec:authorize="hasRole('ADMIN')" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/admin/dashboard}" >Panel Admin</a>
                 <div class="dropdown text-end">
                     <a th:if="${session.usuariosession != null}" sec:authorize="hasAnyRole('CLIENTE','PROPIETARIO')"
-                       href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img th:src="@{/imagen/perfil/__${session.usuariosession.id}__}" alt="Foto de perfil" width="50" height="50" class="rounded-circle">
+                      th:href="@{#}" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img th:src="@{/imagen/perfil/__${session.usuariosession.id}__}" alt="Foto de perfil" width="50" height="50" class="rounded-circle"/>
                     </a>
                     <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
                         <li><a class="dropdown-item" th:href="@{/cliente/perfil}">Perfil</a></li>
-                        <li><hr class="dropdown-divider"></li>
+                        <li><hr class="dropdown-divider"/></li>
                         <li><a class="dropdown-item" th:href="@{/logout}">Cerrar Sesión</a></li>
                     </ul>
                 </div>
