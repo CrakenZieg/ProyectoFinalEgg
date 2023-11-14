@@ -28,6 +28,7 @@
                 <div class="salir-cont">
                     <button><img  id="salir" th:src="@{/imagenes/x.png}"></button>
                 </div>
+                
               <div class="titulo-dtl-serv">
                 <h2>¿Que ofrecemos?</h2>
 
@@ -66,6 +67,16 @@
                 
                 <div class="descrip line-clamp">
                     <p th:text="${propiedad.descripcion}">descripcion</p>
+                </div>
+                
+                <div >
+                    <p th:text="${propiedad.ubicacion.pais}">pais</p>
+                    <p th:text="${propiedad.ubicacion.provincia}">pais</p>
+                    <p th:text="${propiedad.ubicacion.departamento}">pais</p>
+                    <p th:text="${propiedad.ubicacion.localidad}">pais</p>
+                    <p th:text="${propiedad.ubicacion.calle}">pais</p>
+                    <p th:text="${propiedad.ubicacion.numeracion}">pais</p>
+                    <p th:text="${propiedad.ubicacion.observaciones}">pais</p>
                 </div>
             </div>
 

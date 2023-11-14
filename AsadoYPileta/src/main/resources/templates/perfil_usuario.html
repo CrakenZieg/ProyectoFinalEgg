@@ -40,51 +40,43 @@
                                         <form class="row g-3" th:action="@{/cliente/perfil/__${cliente.id}__}" method="POST" enctype="multipart/form-data">
                                             <div class="col-md-4">
                                                 <label for="nombre" class="form-label">Nombre</label>
-                                                <input type="text" class="form-control" id="input1" name="nombre" th:value="${cliente.nombre}" required disabled>
+                                                <input type="text" class="form-control cambio" name="nombre" th:value="${cliente.nombre}" required disabled>
 
                                             </div>
                                             <div class="col-md-4">
                                                 <label for="apellido" class="form-label">Apellido</label>
-                                                <input type="text" class="form-control" id="input2" name="apellido" th:value="${cliente.apellido}" required disabled >
+                                                <input type="text" class="form-control cambio" name="apellido" th:value="${cliente.apellido}" required disabled >
                                             </div>
                                             <div class="col-md-4">
                                                 <label for="email" class="form-label">Email</label>
-                                                <input type="email" class="form-control" id="input9" name="email" th:value="${cliente.usuario.email}" required disabled >
-                                            </div>
-                                            <div class="col-md-6 " id="pass" hidden>
-                                                <label class="form-label" for="password">Contraseña</label>
-                                                <input  type="password" class="input-group form-control" name="password" id="input3"  required disabled/>
-                                                <button type="button" class="btn btn-secondary" id="toggleBtn" onclick="togglePasswordVisibility()">Mostrar Contraseña</button>
-
-                                            </div>
-
-                                            <div class="col-md-6" id="pass2" hidden>
-                                                <label for="password2" class="form-label">Repita contraseña</label>
-                                                <input  type="password" class="form-control" name="password2" id="input4" required disabled/>
+                                                <input  type="email" class="form-control cambio" name="email" th:value="${cliente.usuario.email}" required disabled>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="descripcion" class="form-label">Descripcion</label>
-                                                <textarea class="form-control" id="input5" name="descripcion" th:field="${cliente.descripcion}" required disabled></textarea>
+                                                <textarea class="form-control cambio" name="descripcion" th:field="${cliente.descripcion}" required disabled></textarea>
                                             </div>
                                             <div class="mb-3">
                                                 <div class="col form-control" >
                                                     <label for="tipoContactoInput">Contactos:</label>
                                                     <div class="row row-cols-3">
-                                                        <div class="col" th:each="contacto : ${cliente.contactos}">
-                                                            <span th:text="${contacto.tipo.tipo}"></span>
+                                                        <div class="col" th:each="contacto : ${cliente.contactos}" th:if="${!#strings.contains(contacto.tipo.tipo, 'email')}" >
+                                                            <span th:text="${contacto.tipo.tipo}" 
+                                                                  ></span>
                                                             <input type="checkbox" name="tipoContacto" 
                                                                    onchange="actualizarInput(this)" th:id="${contacto.tipo.tipo}" 
-                                                                   th:value="${contacto.tipo.tipo}" disabled checked/>
-                                                            <input type="text" th:id="${contacto.tipo.tipo}+Input" th:name="${contacto.tipo.tipo}" 
-                                                                   th:value="${contacto.contacto}" id="input6" disabled/>
+                                                                   th:value="${contacto.tipo.tipo}" 
+                                                                   class="cambio" disabled checked/>
+                                                            <input type="text"  th:id="${contacto.tipo.tipo}+Input" th:name="${contacto.tipo.tipo}" 
+                                                                   th:value="${contacto.contacto}" 
+                                                                   class="form-control cambio" disabled/>
                                                         </div>
-                                                        <div class="col" th:each="contacto : ${tipoContacto}">
+                                                        <div class="col" th:each="contacto : ${tipoContacto}" th:if="${!#strings.contains(contacto.tipo, 'email')}">
                                                             <span th:text="${contacto.tipo}"></span>
                                                             <input type="checkbox" name="tipoContacto" 
-                                                                   onchange="actualizarInput(this)" th:id="${contacto.tipo}" id="input10"
-                                                                   th:value="${contacto.tipo}" disabled/>
+                                                                   onchange="actualizarInput(this)" th:id="${contacto.tipo}" 
+                                                                   th:value="${contacto.tipo}" class="cambio" disabled/>
                                                             <input type="text" th:id="${contacto.tipo}+Input" th:name="${contacto.tipo}" 
-                                                                   disabled="true"/>
+                                                                   class="form-control" disabled/>
                                                         </div>
                                                     </div>
                                                     <div id="checkboxContactos">                                    
@@ -94,29 +86,27 @@
                                             <div class="mb-3">
                                                 <div class="form-group" id="imagenEdit" hidden>
                                                     <label for="imagenes" class="form-label">Imágenes:</label>                           
-                                                    <input type="file" class="form-control" name="imagenesInput" id="input7" multiple="multiple" disabled/>
+                                                    <input type="file" class="form-control cambio" name="imagenesInput" multiple="multiple" disabled/>
                                                 </div>
                                             </div>
                                             <div class="mb-3 form-group">
                                                 <div class="col card d-inline-flex p-2" th:each="imagen : ${cliente.imagenes}">
                                                     <img th:src="@{/imagen/__${imagen.id}__}" class="card-img" width="150" height="150" id="#lista-imagenes"/>
-                                                    <div class="card-img-overlay">
-                                                        <input class="form-check-input" type="checkbox" th:id="${imagen.id}" th:value="${imagen.id}" name="imagenesViejas" id="input8" disabled/>
-                                                        <label class="form-check-label" th:for="${imagen.id}" th:text="${imagen.nombre}">Imagen</label>
+                                                    <div class="card-img-overlay borrarImg" hidden>
+                                                        <input class="form-check-input" type="checkbox" th:id="${imagen.id}" th:value="${imagen.id}" name="imagenesViejas"/>
+                                                        <label class="form-check-label" th:for="${imagen.id}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" style=" color: crimson;"viewBox="0 0 16 16">
+                                                                <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+                                                            </svg></label>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-control">
-                                                <label for="prepararArrayInput" class="form-label"><span class="h4">Acepto los terminos y condiciones: </span></label>
-                                                <a id="prepararArray" target="_blank">Terminos y condiciones.</a>
-                                                <input type="checkbox" id="prepararArrayInput" name="contactosInput" onchange="prepararArray()" required="true" checked/>
-                                            </div>
+
                                             <div class="col-12">
 
-                                                <button class="btn btn-primary" type="submit" onclick=toggleInputsGuardar() id="btnGuardar" hidden>Guardar Cambios</button>
+                                                <button class="btn btn-primary" type="submit" onclick="toggleInputsGuardar(),prepararArray()" id="btnGuardar" hidden>Guardar Cambios</button>                                              
+
                                             </div>
                                         </form>
-
                                     </div>
                                     </div>
 
