@@ -43,7 +43,7 @@ public class ComentarioServicio {
         comentario.setImagenes(imagenes);
         Propiedad propiedad = propiedadServicio.getOne(stringIdpropiedad);
         comentario.setPropiedad(propiedad);
-        Cliente logueado = (Cliente) session.getAttribute("usuariosession");
+        Usuario logueado = (Usuario) session.getAttribute("usuariosession");
         comentario.setPuntuacion(puntuacion);
         comentario.setUsuario(logueado);
 
@@ -93,7 +93,7 @@ public class ComentarioServicio {
             comentario.setPropiedad(propiedad);
             comentario.setImagenes(imagenes);
             comentario.setPuntuacion(puntuacion);
-            Cliente logueado = (Cliente) session.getAttribute("usuariosession");
+            Usuario logueado = (Usuario) session.getAttribute("usuariosession");
             comentario.setUsuario(logueado);
 
             comentarioRepositorio.save(comentario);
