@@ -124,7 +124,16 @@ public class ReservaServicio {
     
     return true;
 }
-          
+        
+    public List<Reserva> reservasFuturas(String id){
+        
+        List<Reserva> reservas = new ArrayList();
+
+        reservas = reservaRepositorio.buscarReservaPorPropiedad(id);
+
+        return reservas;
+        
+    }
             
 
     @Transactional
