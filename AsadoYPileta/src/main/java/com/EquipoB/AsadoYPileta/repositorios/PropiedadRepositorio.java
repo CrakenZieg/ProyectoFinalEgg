@@ -16,8 +16,8 @@ public interface PropiedadRepositorio extends JpaRepository<Propiedad, String> {
      *@param tipo: string del tipo de propiedad
      *@return lista con las propiedades de ese tipo
     */
-    @Query("SELECT p FROM Propiedad p WHERE p.tipo = :tipo")
-    public List<Propiedad> buscarPorTipo(@Param("tipo") String tipo);
+    @Query("SELECT p FROM Propiedad p WHERE p.tipo.id = :idTipo")
+    public List<Propiedad> buscarPorTipo(@Param("idTipo") String idTipo);
 
     /**
      *Query para recuperar las propiedades con un servicio particular

@@ -4,8 +4,8 @@ import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
-import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.entidades.TipoPropiedad;
+import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.PropietarioRepositorio;
@@ -159,9 +159,14 @@ public class PropiedadServicio {
         return propiedades;
     }
 
-    public List<Propiedad> listarPropiedadesPorTipo(String tipo) {
+    public List<Propiedad> listarPropiedadesPorTipo(String tipo) throws MiException {
         List<Propiedad> propiedades = new ArrayList<>();
-        propiedades = propiedadRepositorio.buscarPorTipo(tipo);
+        try{
+            TipoPropiedad tipoPropiedad = tipoPropiedadServicio.getOnePorTipo(tipo);
+            propiedades = propiedadRepositorio.buscarPorTipo(tipoPropiedad.getId());
+        } catch(MiException ex){
+            throw ex;
+        }
         return propiedades;
     }
 

@@ -26,7 +26,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li th:each="tipo : ${tipoPropiedades}">
-                                <a class="dropdown-item" th:text="${tipo.getTitulo()}" th:href="@{/propiedad/tipo/${tipo.getTipo()}}">Quincho</a>
+                                <a class="dropdown-item" th:text="${tipo.getTitulo()}" th:href="@{/propiedad/tipo/__${tipo.getTipo()}__}">Quincho</a>
                             </li>                            
                         </ul>
                     </div>
