@@ -52,7 +52,7 @@ public class PropiedadControlador {
     private ReservaServicio reservaServicio;
 
     @GetMapping("/tipo/{tipo}")
-    public String listar(@PathVariable String tipo, ModelMap model) {
+    public String listar(@PathVariable String tipo, ModelMap model) throws MiException {
         List<Propiedad> propiedades = new ArrayList<>();
         propiedades = propiedadServicio.listarPropiedadesPorTipo(tipo);
         List<TipoPropiedad> tipoPropiedades = new ArrayList<>();
