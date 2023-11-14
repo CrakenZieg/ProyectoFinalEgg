@@ -269,9 +269,9 @@
                             <tbody>
                                 <tr th:each="propiedad : ${propiedades}">
                                     <td>[[${propiedad.titulo}]]</td>
-                                    <td>[[${propiedad.ubicacion}]]</td>
-                                    <td>[[${propiedad.direccion}]]</td>
-                                    <td>[[${propiedad.tipo}]]</td>
+                                    <td>[[${propiedad.ubicacion.localidad}]]</td>
+                                    <td>[[${propiedad.ubicacion.calle}]]</td>
+                                    <td>[[${propiedad.tipo.titulo}]]</td>
                                     <td>[[${propiedad.estado}]]</td>
                                     <td>
                                         <div class="container">
