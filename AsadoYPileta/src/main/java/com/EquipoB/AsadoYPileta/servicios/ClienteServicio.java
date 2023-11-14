@@ -28,12 +28,11 @@ public class ClienteServicio {
     @Autowired
     private UsuarioServicio usuarioServicio;
 
-    @Autowired
-    private TipoContactoServicio tipoContactoServicio;
+    
 
     
     @Autowired
-    private ContactoRepositorio contactoRepositorio;
+    private ContactoServicio contactoServicio;
 
     @Autowired
     private ImagenServicio imagenServicio;
@@ -64,17 +63,8 @@ public class ClienteServicio {
 
         cliente.setImagenes(imagenes);
         cliente.setDescripcion(descripcion);
-        ArrayList<Contacto> contactos = new ArrayList();
-        for (int i = 0; i < tipoContactoInput.length; i++) {
-            TipoContacto tipo = tipoContactoServicio.getOnePorTipo(tipoContactoInput[i]);
-            Contacto contacto = new Contacto();
-            contacto.setTipo(tipo);
-            contacto.setContacto(contactosInput[i]);
-            contactoRepositorio.save(contacto);
-            contactos.add(contacto);
-        }
+        List<Contacto> contactos = contactoServicio.guardarVarios(tipoContactoInput, contactosInput);
         cliente.setContactos(contactos);
-
         clienteRepositorio.save(cliente);
     }
 
@@ -116,19 +106,14 @@ public class ClienteServicio {
             cliente.setApellido(apellido);
             cliente.setImagenes(imagenes);
             cliente.setDescripcion(descripcion);
-            ArrayList<Contacto> contactos = new ArrayList();
-            for (int i = 0; i < tipoContactoInput.length; i++) {
-                TipoContacto tipo = tipoContactoServicio.getOnePorTipo(tipoContactoInput[i]);
-                Contacto contacto = new Contacto();
-                contacto.setTipo(tipo);
-                contacto.setContacto(contactosInput[i]);
-                contactos.add(contacto);
-            }
+            List<Contacto> contactos = cliente.getContactos();
+            contactos = contactoServicio.filtrar(contactos, contactosInput,tipoContactoInput);
             cliente.setContactos(contactos);
             clienteRepositorio.save(cliente);
         }
     }
-
+    
+    
     @Transactional(readOnly = true)
     public Cliente getOne(String id) {
         return clienteRepositorio.getOne(id);
