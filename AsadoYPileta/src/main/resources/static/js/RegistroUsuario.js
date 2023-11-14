@@ -20,6 +20,19 @@ function input(nombre,valor){
 }
 
 
+// Modal cambiar contrasena
+
+const btonCambiarPass = document.getElementById("botn-camb");
+const modal = document.getElementById("modale");
+const cerrarModal = document.getElementById("cerrar-modal");
+
+btonCambiarPass.addEventListener('click', ()  => {
+    modal.showModal();
+})
+
+cerrarModal.addEventListener('click', ()  => {
+    modal.close();
+})
 
 
 // Propiedad detalles
@@ -96,3 +109,4 @@ atras.addEventListener("click", atrasimagen);
 adelante.addEventListener("click", adelanteimagen);
 btnMostrarServicios.addEventListener("click", escalarServicios);
 btnSalir.addEventListener("click", salir);
+
