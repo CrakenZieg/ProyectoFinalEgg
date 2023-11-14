@@ -2,6 +2,7 @@ package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Comentario;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
+import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
 import com.EquipoB.AsadoYPileta.entidades.TipoPropiedad;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
@@ -10,6 +11,7 @@ import com.EquipoB.AsadoYPileta.excepciones.PermisosException;
 import com.EquipoB.AsadoYPileta.servicios.ComentarioServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropietarioServicio;
+import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
 import com.EquipoB.AsadoYPileta.servicios.TipoPropiedadServicio;
 import java.util.ArrayList;
@@ -45,6 +47,9 @@ public class PropiedadControlador {
 
     @Autowired
     private TipoPropiedadServicio tipoPropiedadServicio;
+    
+    @Autowired
+    private ReservaServicio reservaServicio;
 
     @GetMapping("/tipo/{tipo}")
     public String listar(@PathVariable String tipo, ModelMap model) {
@@ -65,6 +70,7 @@ public class PropiedadControlador {
         comentarios = comentarioServicio.findComentariosByPropiedadId(id);
         List<TipoPropiedad> tipoPropiedades = new ArrayList<>();
         tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
+        List<Reserva> reservas = reservaServicio.reservasFuturas(id);
         model.addAttribute("propiedad", propiedadServicio.getOne(id));
         model.addAttribute("tipoPropiedades", tipoPropiedades);
         model.addAttribute("servicios", servicios);
