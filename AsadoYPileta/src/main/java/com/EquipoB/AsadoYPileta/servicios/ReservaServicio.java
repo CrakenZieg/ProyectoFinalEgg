@@ -49,6 +49,7 @@ public class ReservaServicio {
 
         return reservas;
     }
+    
     @Transactional
     public void modificarReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible) throws MiException {
 

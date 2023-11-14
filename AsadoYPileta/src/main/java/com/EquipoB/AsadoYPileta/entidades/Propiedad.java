@@ -1,15 +1,13 @@
 
 package com.EquipoB.AsadoYPileta.entidades;
 
-import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import lombok.Data;
@@ -25,10 +23,10 @@ public class Propiedad {
     private String id;
     private String titulo;
     private String descripcion;
-    private Boolean estado;    
-    @Enumerated(EnumType.STRING)
-    private TipoPropiedad tipo;   
+    private Boolean estado;
     private Double valor;
+    @ManyToOne
+    private TipoPropiedad tipo;   
     @ManyToMany
     private List<Servicio> servicios;
     @OneToMany
