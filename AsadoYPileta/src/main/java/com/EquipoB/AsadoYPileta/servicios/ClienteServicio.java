@@ -3,17 +3,14 @@ package com.EquipoB.AsadoYPileta.servicios;
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Contacto;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
-import com.EquipoB.AsadoYPileta.entidades.TipoContacto;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.ClienteRepositorio;
-import com.EquipoB.AsadoYPileta.repositorios.ContactoRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,17 +25,12 @@ public class ClienteServicio {
     @Autowired
     private UsuarioServicio usuarioServicio;
 
-    
-
-    
     @Autowired
     private ContactoServicio contactoServicio;
 
     @Autowired
     private ImagenServicio imagenServicio;
 
-    
-    private Rol rol;
 
     @Transactional
     public void crearCliente(String email, String nombre, String apellido, String descripcion,
@@ -48,7 +40,7 @@ public class ClienteServicio {
         validar(email, nombre, apellido, descripcion, imagenesInput,
                 tipoContactoInput, contactosInput);
         validarPasword(password, password2);
-        usuarioServicio.crearUsuario(email, password, rol.CLIENTE);
+        usuarioServicio.crearUsuario(email, password, Rol.CLIENTE);
         Usuario usuario = usuarioServicio.getPorEmail(email);
         
         Cliente cliente = new Cliente();
@@ -60,7 +52,6 @@ public class ClienteServicio {
 
         cliente.setNombre(nombre);
         cliente.setApellido(apellido);
-
         cliente.setImagenes(imagenes);
         cliente.setDescripcion(descripcion);
         List<Contacto> contactos = contactoServicio.guardarVarios(tipoContactoInput, contactosInput);
@@ -83,10 +74,8 @@ public class ClienteServicio {
         validar(email, nombre, apellido, descripcion, imagenesInput,
                 tipoContactoInput, contactosInput);
 
-
         Optional<Cliente> respuesta = clienteRepositorio.findById(id);
-        if (respuesta.isPresent()) {
-            
+        if (respuesta.isPresent()) {           
             Cliente cliente = respuesta.get();            
             List<Imagen> imagenes = cliente.getImagenes();
             
