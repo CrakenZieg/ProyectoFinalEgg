@@ -48,7 +48,7 @@ public interface ReservaRepositorio extends JpaRepository <Reserva,String> {
     public int buscarCuantasReservasActivas();
 
     /**
-     * Devuelve
+     * Devuelve reservas futuras por id de propiedad
      * @param idpropiedad
      * @return 
      */
