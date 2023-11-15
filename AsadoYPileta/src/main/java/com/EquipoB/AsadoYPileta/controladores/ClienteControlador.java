@@ -114,17 +114,20 @@ public class ClienteControlador {
         return "index.html";
     }
     @PostMapping("/cambiar_password")
-    public String cambiandoPassword(@RequestParam String email, @RequestParam String password, @RequestParam String newPassword,@RequestParam String equalPassword, ModelMap model) throws MiException {
+    public String cambiandoPassword(HttpSession session, @RequestParam String password, @RequestParam String passwordNuevo,@RequestParam String passwordNuevo2, ModelMap model) throws MiException {
+        
+        Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+        
         try {
-            usuarioServicio.cambiarPassword(email, password,newPassword,equalPassword);
+            usuarioServicio.cambiarPassword(usuario, password,passwordNuevo,passwordNuevo2);
 
-            return "redirect:/index";
+            return "redirect:/cliente/perfil";
 
         } catch (MiException e) {
 
             model.addAttribute("error", e.getMessage());
 
-            return "redirect:/perfil_usuario";
+            return "redirect:/cliente/perfil";
         }
     }
     
