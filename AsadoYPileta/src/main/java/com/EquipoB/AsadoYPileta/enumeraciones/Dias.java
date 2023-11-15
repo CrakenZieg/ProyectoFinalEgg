@@ -6,13 +6,13 @@ import java.util.Map;
 
 public enum Dias {
     
-    DOMINGO("Domingo",0),
     LUNES("Lunes",1),
     MARTES("Martes",2),
     MIERCOLES("Miércoles",3),
     JUEVES("Jueves",4),
     VIERNES("Viernes",5),
-    SABADO("Sábado",6);
+    SABADO("Sábado",6),
+    DOMINGO("Domingo",7);
     
     private final String dia;
     private final int numDia;
@@ -29,14 +29,14 @@ public enum Dias {
         this.numDia = numDia;
     }
     
-    public static Dias getMes(int num){
+    public static Dias getDia(int num){
        return mapa.get(num);
     }
 
-    public String getMes() {
+    public String getDia() {
         return dia;
     }
-    public int getNumMes() {
+    public int getNumDia() {
         return numDia;
     }  
     
