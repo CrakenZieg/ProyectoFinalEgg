@@ -25,19 +25,41 @@
                     </div>
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <br>
-                                <input hidden th:value="${cliente.id}" name="id">
+                            <br/>
+                                
                                     <div class="left box-primary">
                                         <div class=" d-inline-flex p-2">
-                                            <img th:src="@{/imagen/__${cliente.imagenes[0].id}__}" width="250" height="250" class="d-block w-100" id="foto-de-perfil" alt="Foto Perfil">
+                                            <img th:src="@{/imagen/__${cliente.imagenes[0].id}__}" width="250" height="250" class="d-block w-100" id="foto-de-perfil" alt="Foto Perfil"/>
                                         </div>
                                     </div>
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                         <button class="btn btn-primary" type="button" id="btnEdit" onclick="toggleInputs()">Editar Perfil</button>
+                                        <button id="botn-camb" hidden >Cambiar contraseña</button>
+                                        <dialog class="modale" id="modale">
+                                            <form>
+
+                                                        <div class="registro-inptcont">
+                                                                <input type="password" name="passwordAnt" required/>
+                                                                <label for="passwordAnt">Ingrese su contraseña</label>
+                                                        </div>
+                                                        <div class="registro-inptcont">
+                                                                <input type="password" name="password" required/>
+                                                                <label for="password">Ingrese su nueva contraseña</label>
+                                                        </div>
+                                                        <div class="registro-inptcont">
+                                                                <input type="password" name="password2" required/>
+                                                                <label for="password2">Repita contraseña</label>
+                                                        </div>
+                                                 
+                                                <button type="submit">Guardar</button>  <button id="cerrar-modal">Cerrar</button>
+                                            </form>
+                                            
+                                        </dialog>
                                     </div>
                                     <div class="right tab-content">
 
                                         <form class="row g-3" th:action="@{/cliente/perfil/__${cliente.id}__}" method="POST" enctype="multipart/form-data">
+                                            <input hidden th:value="${cliente.id}" name="id">
                                             <div class="col-md-4">
                                                 <label for="nombre" class="form-label">Nombre</label>
                                                 <input type="text" class="form-control cambio" name="nombre" th:value="${cliente.nombre}" required disabled>

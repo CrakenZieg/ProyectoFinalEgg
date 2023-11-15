@@ -21,7 +21,6 @@ function input(nombre,valor){
 
 
 
-
 // Propiedad detalles
 
 
@@ -96,3 +95,4 @@ atras.addEventListener("click", atrasimagen);
 adelante.addEventListener("click", adelanteimagen);
 btnMostrarServicios.addEventListener("click", escalarServicios);
 btnSalir.addEventListener("click", salir);
+

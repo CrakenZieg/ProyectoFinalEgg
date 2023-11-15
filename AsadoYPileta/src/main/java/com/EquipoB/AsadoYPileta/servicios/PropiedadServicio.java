@@ -4,8 +4,8 @@ import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
+import com.EquipoB.AsadoYPileta.entidades.TipoPropiedad;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
-import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.PropietarioRepositorio;
@@ -40,9 +40,12 @@ public class PropiedadServicio {
     
     @Autowired
     private UbicacionServicio ubicacionServicio;  
+    
+    @Autowired    
+    private TipoPropiedadServicio tipoPropiedadServicio;  
 
     @Transactional
-    public void crearPropiedad(String titulo, String descripcion, TipoPropiedad tipo,
+    public void crearPropiedad(String titulo, String descripcion, String tipo,
             String[] serviciosInput, MultipartFile[] imagenesInput, Double valor, Usuario usuario,
             String pais, String provincia,String departamento, String localidad,String calle,String numeracion,String observaciones,
                                Double latitud, Double longitud) throws MiException, Exception {
@@ -74,7 +77,7 @@ public class PropiedadServicio {
         propiedad.setTitulo(titulo);
         propiedad.setDescripcion(descripcion);
         propiedad.setUbicacion(ubicacionServicio.crearUbicacion(pais, provincia, departamento, localidad, calle, numeracion, observaciones, latitud, longitud));
-        propiedad.setTipo(tipo);
+        propiedad.setTipo(tipoPropiedadServicio.getOnePorTipo(tipo));
         propiedad.setEstado(true);
         propiedad.setServicios(servicios);
         propiedad.setImagenes(imagenes);
@@ -91,7 +94,7 @@ public class PropiedadServicio {
     }
 
     @Transactional
-    public void modificarPropiedad(String id, String titulo, String descripcion, TipoPropiedad tipo, String[] serviciosInput, MultipartFile[] imagenesInput,
+    public void modificarPropiedad(String id, String titulo, String descripcion, String tipo, String[] serviciosInput, MultipartFile[] imagenesInput,
             Double valor, String[] imagenesViejas, String estado,String pais, String provincia,String departamento, String localidad,String calle,String numeracion,
             String observaciones,Double latitud, Double longitud) throws MiException, Exception {
 
@@ -137,7 +140,7 @@ public class PropiedadServicio {
            }
             propiedad.setEstado(Boolean.valueOf(estado));
             propiedad.setUbicacion(ubicacionServicio.modificarUbicacion(propiedad.getUbicacion().getId(), pais, provincia, departamento, localidad, calle, numeracion, observaciones, latitud, longitud,estado));
-            propiedad.setTipo(tipo);
+            propiedad.setTipo(tipoPropiedadServicio.getOnePorTipo(tipo));
             propiedad.setServicios(servicios);
             propiedad.setImagenes(imagenes);
             propiedad.setValor(valor);
@@ -156,9 +159,14 @@ public class PropiedadServicio {
         return propiedades;
     }
 
-    public List<Propiedad> listarPropiedadesPorTipo(String tipo) {
+    public List<Propiedad> listarPropiedadesPorTipo(String tipo) throws MiException {
         List<Propiedad> propiedades = new ArrayList<>();
-        propiedades = propiedadRepositorio.buscarPorTipo(tipo);
+        try{
+            TipoPropiedad tipoPropiedad = tipoPropiedadServicio.getOnePorTipo(tipo);
+            propiedades = propiedadRepositorio.buscarPorTipo(tipoPropiedad.getId());
+        } catch(MiException ex){
+            throw ex;
+        }
         return propiedades;
     }
 
@@ -199,8 +207,8 @@ public class PropiedadServicio {
         }        
     }
 
-    public void validar(String titulo,String descripcion,
-            TipoPropiedad tipo, MultipartFile[] imagenes, Double valor) throws MiException {
+    public void validar(String titulo, String descripcion,
+            String tipo, MultipartFile[] imagenes, Double valor) throws MiException {
         
         if (titulo == null || titulo.trim().isEmpty()) {
             throw new MiException("El titulo no puede ser nulo o estar vacio");
@@ -209,8 +217,8 @@ public class PropiedadServicio {
             throw new MiException("La descripcion no puede ser nula o estar vacio");
         }
 
-        if (tipo == null) {
-            throw new MiException("El tipo no puede ser nulo");
+        if (tipo == null || descripcion.trim().isEmpty()) {
+            throw new MiException("El tipo no puede ser nulo o estar vacio");
         }
 
         if (imagenes.length == 0 || imagenes == null) {

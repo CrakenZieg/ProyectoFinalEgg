@@ -4,6 +4,7 @@ import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Contacto;
 import com.EquipoB.AsadoYPileta.entidades.TipoContacto;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
+import com.EquipoB.AsadoYPileta.repositorios.ContactoRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.TipoContactoRepositorio;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,9 @@ public class TipoContactoServicio {
 
     @Autowired
     private TipoContactoRepositorio tipoContactoRepositorio;
+    
+    @Autowired
+    private ContactoRepositorio contactoRepositorio;
 
     @Transactional
     public void crearTipoContacto(String tipo) throws MiException {
@@ -34,9 +38,14 @@ public class TipoContactoServicio {
     }
 
     @Transactional
-    public void eliminarTipoContacto(String id) throws MiException {
-        TipoContacto tipoPropiedad = tipoContactoRepositorio.getById(id);
-        tipoContactoRepositorio.delete(tipoPropiedad);
+    public void eliminarTipoContacto(String id) throws MiException {        
+        TipoContacto tipoContacto = tipoContactoRepositorio.getById(id);      
+        if(contactoRepositorio.buscarPorTipo(tipoContacto.getTipo()).size()==0){
+            tipoContactoRepositorio.delete(tipoContacto);            
+        } else {
+            throw new MiException("No se puede eliminar el tipo de contacto, está siendo utilizado.\n"
+                    + "Podés modificar el tipo o trabajar sobre los contactos que lo utilizan.");
+        }        
     }
 
     public TipoContacto getOne(String id) throws MiException {

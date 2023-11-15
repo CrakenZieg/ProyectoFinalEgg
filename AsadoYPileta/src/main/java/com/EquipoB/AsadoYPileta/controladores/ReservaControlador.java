@@ -10,7 +10,6 @@ import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -39,7 +38,6 @@ public class ReservaControlador {
 
     @PostMapping("/registrar")  //localhost:8080/reserva/registrar
     public ModelAndView crearReserva(@RequestParam String idPropiedad, @RequestParam String fechaInicio,
-
             @RequestParam String fechaFinal, HttpSession session, ModelMap modelo)  {
 
         Reserva reserva = new Reserva();

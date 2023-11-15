@@ -3,17 +3,15 @@ package com.EquipoB.AsadoYPileta.servicios;
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Contacto;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
-import com.EquipoB.AsadoYPileta.entidades.TipoContacto;
+import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.ClienteRepositorio;
-import com.EquipoB.AsadoYPileta.repositorios.ContactoRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,27 +27,21 @@ public class ClienteServicio {
     private UsuarioServicio usuarioServicio;
 
     @Autowired
-    private TipoContactoServicio tipoContactoServicio;
-
-    
-    @Autowired
-    private ContactoRepositorio contactoRepositorio;
+    private ContactoServicio contactoServicio;
 
     @Autowired
     private ImagenServicio imagenServicio;
 
-    
-    private Rol rol;
 
     @Transactional
     public void crearCliente(String email, String nombre, String apellido, String descripcion,
             String password, String password2, MultipartFile[] imagenesInput,
-            String[] tipoContactoInput, String[] contactosInput) throws MiException, Exception {
+            String[] tipoContactoInput, String[] contactosInput, String rol) throws MiException, Exception {
 
         validar(email, nombre, apellido, descripcion, imagenesInput,
                 tipoContactoInput, contactosInput);
         validarPasword(password, password2);
-        usuarioServicio.crearUsuario(email, password, rol.CLIENTE);
+        usuarioServicio.crearUsuario(email, password, Rol.valueOf(rol));
         Usuario usuario = usuarioServicio.getPorEmail(email);
         
         Cliente cliente = new Cliente();
@@ -61,21 +53,16 @@ public class ClienteServicio {
 
         cliente.setNombre(nombre);
         cliente.setApellido(apellido);
-
         cliente.setImagenes(imagenes);
         cliente.setDescripcion(descripcion);
-        ArrayList<Contacto> contactos = new ArrayList();
-        for (int i = 0; i < tipoContactoInput.length; i++) {
-            TipoContacto tipo = tipoContactoServicio.getOnePorTipo(tipoContactoInput[i]);
-            Contacto contacto = new Contacto();
-            contacto.setTipo(tipo);
-            contacto.setContacto(contactosInput[i]);
-            contactoRepositorio.save(contacto);
-            contactos.add(contacto);
-        }
+        List<Contacto> contactos = contactoServicio.guardarVarios(tipoContactoInput, contactosInput);
         cliente.setContactos(contactos);
-
         clienteRepositorio.save(cliente);
+        if (rol =="PROPIETARIO"){
+            Propietario propietario= new Propietario();
+            propietario.setCliente(cliente);
+            
+        }
     }
 
     public List<Cliente> listarCientes() {
@@ -93,10 +80,8 @@ public class ClienteServicio {
         validar(email, nombre, apellido, descripcion, imagenesInput,
                 tipoContactoInput, contactosInput);
 
-
         Optional<Cliente> respuesta = clienteRepositorio.findById(id);
-        if (respuesta.isPresent()) {
-            
+        if (respuesta.isPresent()) {           
             Cliente cliente = respuesta.get();            
             List<Imagen> imagenes = cliente.getImagenes();
             
@@ -116,19 +101,14 @@ public class ClienteServicio {
             cliente.setApellido(apellido);
             cliente.setImagenes(imagenes);
             cliente.setDescripcion(descripcion);
-            ArrayList<Contacto> contactos = new ArrayList();
-            for (int i = 0; i < tipoContactoInput.length; i++) {
-                TipoContacto tipo = tipoContactoServicio.getOnePorTipo(tipoContactoInput[i]);
-                Contacto contacto = new Contacto();
-                contacto.setTipo(tipo);
-                contacto.setContacto(contactosInput[i]);
-                contactos.add(contacto);
-            }
+            List<Contacto> contactos = cliente.getContactos();
+            contactos = contactoServicio.filtrar(contactos, contactosInput,tipoContactoInput);
             cliente.setContactos(contactos);
             clienteRepositorio.save(cliente);
         }
     }
-
+    
+    
     @Transactional(readOnly = true)
     public Cliente getOne(String id) {
         return clienteRepositorio.getOne(id);

@@ -2,15 +2,18 @@ package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Comentario;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
+import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
+import com.EquipoB.AsadoYPileta.entidades.TipoPropiedad;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
-import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.excepciones.PermisosException;
 import com.EquipoB.AsadoYPileta.servicios.ComentarioServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropietarioServicio;
+import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
+import com.EquipoB.AsadoYPileta.servicios.TipoPropiedadServicio;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -42,14 +45,20 @@ public class PropiedadControlador {
     @Autowired
     private ComentarioServicio comentarioServicio;
 
-    private TipoPropiedad tipos;
+    @Autowired
+    private TipoPropiedadServicio tipoPropiedadServicio;
+    
+    @Autowired
+    private ReservaServicio reservaServicio;
 
     @GetMapping("/tipo/{tipo}")
-    public String listar(@PathVariable String tipo, ModelMap model) {
+    public String listar(@PathVariable String tipo, ModelMap model) throws MiException {
         List<Propiedad> propiedades = new ArrayList<>();
         propiedades = propiedadServicio.listarPropiedadesPorTipo(tipo);
+        List<TipoPropiedad> tipoPropiedades = new ArrayList<>();
+        tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
         model.addAttribute("propiedades", propiedades);
-        model.addAttribute("tipos", tipos);
+        model.addAttribute("tipoPropiedades", tipoPropiedades);
         return "index.html";
     }
 
@@ -59,8 +68,11 @@ public class PropiedadControlador {
         servicios = servicioServicio.listarServicios();
         List<Comentario> comentarios = new ArrayList<>();
         comentarios = comentarioServicio.findComentariosByPropiedadId(id);
+        List<TipoPropiedad> tipoPropiedades = new ArrayList<>();
+        tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
+        List<Reserva> reservas = reservaServicio.reservasFuturas(id);
         model.addAttribute("propiedad", propiedadServicio.getOne(id));
-        model.addAttribute("tipos", tipos);
+        model.addAttribute("tipoPropiedades", tipoPropiedades);
         model.addAttribute("servicios", servicios);
         model.addAttribute("comentarios", comentarios);
         
@@ -72,7 +84,9 @@ public class PropiedadControlador {
     public String registrar(ModelMap model) {
         List<Servicio> servicios = new ArrayList<>();
         servicios = servicioServicio.listarServicios();
-        model.addAttribute("tipos", tipos);
+        List<TipoPropiedad> tipoPropiedades = new ArrayList<>();
+        tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
+        model.addAttribute("tipoPropiedades", tipoPropiedades);
         model.addAttribute("servicios", servicios);
         return "registro_propiedad.html";
     }
@@ -80,7 +94,7 @@ public class PropiedadControlador {
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO','ROLE_ADMIN')")
     @PostMapping("/registro")
     public String registro(@RequestParam String titulo, @RequestParam String descripcion,
-            @RequestParam TipoPropiedad tipo, @RequestParam(required = false) String[] serviciosInput,
+            @RequestParam String tipo, @RequestParam(required = false) String[] serviciosInput,
             @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor, HttpSession session,
             @RequestParam String pais,@RequestParam String provincia,@RequestParam String departamento,@RequestParam String localidad,
             @RequestParam String calle,@RequestParam String numeracion,@RequestParam String observaciones,
@@ -103,12 +117,14 @@ public class PropiedadControlador {
         Usuario logueado = (Usuario) session.getAttribute("usuariosession");
         List<Servicio> servicios = new ArrayList<>();
         servicios = servicioServicio.listarServicios();
+        List<TipoPropiedad> tipoPropiedades = new ArrayList<>();
+        tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
         Propiedad propiedad = propiedadServicio.getOne(id);
         if (!propietarioServicio.comprobarPropietario(logueado, propiedad)) {
             throw new PermisosException("No es posible modificar la propiedad porque no te pertenece");
         }
         model.addAttribute("propiedad", propiedad);
-        model.addAttribute("tipos", tipos);
+        model.addAttribute("tipoPropiedades", tipoPropiedades);
         model.addAttribute("servicios", servicios);
         return "modificar_propiedad.html";
     }
@@ -116,7 +132,7 @@ public class PropiedadControlador {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROPIETARIO')")
     @PostMapping("/modificar/{id}")
     public String modificar(@PathVariable String id, @RequestParam String titulo,
-            @RequestParam String descripcion, @RequestParam TipoPropiedad tipo,
+            @RequestParam String descripcion, @RequestParam String tipo,
             @RequestParam(required = false) String[] serviciosInput,
             @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor,
             @RequestParam(required = false) String[] imagenesViejas, @RequestParam String estado,

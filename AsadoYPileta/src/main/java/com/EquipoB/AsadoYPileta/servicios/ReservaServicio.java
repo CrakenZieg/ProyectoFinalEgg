@@ -49,6 +49,7 @@ public class ReservaServicio {
 
         return reservas;
     }
+    
     @Transactional
     public void modificarReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible) throws MiException {
 
@@ -123,7 +124,12 @@ public class ReservaServicio {
     
     return true;
 }
-          
+        
+    public List<Reserva> reservasFuturas(String id){        
+        List<Reserva> reservas = new ArrayList();
+        reservas = reservaRepositorio.buscarReservaPorPropiedad(id);
+        return reservas;        
+    }
             
 
     @Transactional

@@ -9,7 +9,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ServicioRepositorio extends JpaRepository<Servicio, String> {
-        
+       
+    /**
+     *@param tipoComodidad: el tipo de servicio
+     *@return Servicio asociado
+     */
     @Query("SELECT s FROM Servicio s WHERE s.tipoComodidad = :tipoComodidad")
     public Servicio buscarTipoServicio(@Param("tipoComodidad") String tipoComodidad);
     
