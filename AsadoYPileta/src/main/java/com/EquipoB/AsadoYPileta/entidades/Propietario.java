@@ -18,8 +18,8 @@ public class Propietario{
     private String id;
     @OneToOne(cascade = CascadeType.ALL)
     private Cliente cliente;
+    
     @OneToMany
-
     private List<Propiedad> propiedades;
     
     @PrePersist
