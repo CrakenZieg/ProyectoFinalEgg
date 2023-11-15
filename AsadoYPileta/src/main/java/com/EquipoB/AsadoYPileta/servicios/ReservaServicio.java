@@ -1,5 +1,6 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
+import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
@@ -23,18 +24,21 @@ public class ReservaServicio {
     private PropiedadRepositorio propiedadRepositorio;
 
     @Transactional
-    public void crearReserva(String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible) throws MiException {
-
+    public void crearReserva(String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible,String idPropiedad) throws MiException {
+        
+        validarReservasPropiedad(idPropiedad);
         validar(mensaje, fechaInicio, fechaFin, disponible);
 
         Reserva reserva = new Reserva();
-
+        Propiedad propiedad = new Propiedad();
+        
         reserva.setMensaje(mensaje);
         reserva.setFechaInicio(fechaInicio);
         reserva.setFechaFin(fechaFin);
         reserva.setServiciosElegidas(serviciosElegidas);
         reserva.setMontoTotal(montoTotal);
         reserva.setDisponible(disponible);
+        propiedad.setId(idPropiedad);
 
         reservaRepositorio.save(reserva);
 
@@ -51,8 +55,8 @@ public class ReservaServicio {
     }
     
     @Transactional
-    public void modificarReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible) throws MiException {
-
+    public void modificarReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible,String idPropiedad) throws MiException {
+        validarReservasPropiedad(idPropiedad);
         validar(mensaje, fechaInicio, fechaFin, disponible);
         
         Optional<Reserva> respuesta = reservaRepositorio.findById(id);
@@ -85,8 +89,14 @@ public class ReservaServicio {
     }
     
     @Transactional
-    public boolean validarReservasPropiedad(String id){
-        return reservaRepositorio.buscarReservaPropiedad(id);
+    public boolean validarReservasPropiedad(String idPropiedad)throws MiException{
+        Optional<Propiedad> propiedad = propiedadRepositorio.findById(idPropiedad);
+        
+       if(!propiedad.isPresent()){
+           throw new MiException("La propiedad no existe");
+       }
+        return reservaRepositorio.buscarReservaPropiedad(idPropiedad);
+       
     }
     
     @Transactional
@@ -106,7 +116,7 @@ public class ReservaServicio {
     
     
     public boolean verificarSuperposicionReservas(String idPropiedad, Date fechaInicio, Date fechaFin) {
-    
+        
     List<Date> fechasInicioReservas = reservaRepositorio.buscarFechaInicioReserva(idPropiedad);
     List<Date> fechasFinReservas = reservaRepositorio.buscarFechaFinReserva(idPropiedad);
     
@@ -160,7 +170,7 @@ public class ReservaServicio {
         }
 
     }
-
+    
     private void validar(String mensaje, Date fechaInicio, Date fechaFin, Boolean disponible) throws MiException {
 
         if (mensaje == null || mensaje.trim().isEmpty() ) {

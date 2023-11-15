@@ -70,10 +70,10 @@ public class ReservaControlador {
     }
 
     @PostMapping("/registro")
-    public String registroReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible, ModelMap modelo) {
+    public String registroReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible,String idPropiedad, ModelMap modelo) {
 
         try {
-            reservaServicio.crearReserva(mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible);
+            reservaServicio.crearReserva(mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible,idPropiedad);
             return "redirect:/reserva/listar";
         } catch (MiException e) {
 
