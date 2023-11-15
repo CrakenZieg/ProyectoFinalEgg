@@ -111,7 +111,7 @@ public class PropiedadControlador {
         return "index.html";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROPIETARIO')")
+    @PreAuthorize("hasRole('ROLE_PROPIETARIO')")
     @GetMapping("/modificar/{id}")
     public String modificar(@PathVariable String id, ModelMap model, HttpSession session) throws PermisosException, MiException {
         Usuario logueado = (Usuario) session.getAttribute("usuariosession");
@@ -129,7 +129,7 @@ public class PropiedadControlador {
         return "modificar_propiedad.html";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROPIETARIO')")
+    @PreAuthorize("hasRole('ROLE_PROPIETARIO')")
     @PostMapping("/modificar/{id}")
     public String modificar(@PathVariable String id, @RequestParam String titulo,
             @RequestParam String descripcion, @RequestParam String tipo,
@@ -148,7 +148,7 @@ public class PropiedadControlador {
         return "index.html";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROPIETARIO')")
+    @PreAuthorize("hasRole('ROLE_PROPIETARIO')")
     @GetMapping("/eliminar/{id}")
     public String eliminar(@PathVariable String id, HttpSession session) throws MiException, PermisosException {
         Usuario logueado = (Usuario) session.getAttribute("usuariosession");

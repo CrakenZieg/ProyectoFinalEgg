@@ -3,6 +3,7 @@ package com.EquipoB.AsadoYPileta.servicios;
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Contacto;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
+import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
@@ -35,12 +36,12 @@ public class ClienteServicio {
     @Transactional
     public void crearCliente(String email, String nombre, String apellido, String descripcion,
             String password, String password2, MultipartFile[] imagenesInput,
-            String[] tipoContactoInput, String[] contactosInput) throws MiException, Exception {
+            String[] tipoContactoInput, String[] contactosInput, String rol) throws MiException, Exception {
 
         validar(email, nombre, apellido, descripcion, imagenesInput,
                 tipoContactoInput, contactosInput);
         validarPasword(password, password2);
-        usuarioServicio.crearUsuario(email, password, Rol.CLIENTE);
+        usuarioServicio.crearUsuario(email, password, Rol.valueOf(rol));
         Usuario usuario = usuarioServicio.getPorEmail(email);
         
         Cliente cliente = new Cliente();
@@ -57,6 +58,11 @@ public class ClienteServicio {
         List<Contacto> contactos = contactoServicio.guardarVarios(tipoContactoInput, contactosInput);
         cliente.setContactos(contactos);
         clienteRepositorio.save(cliente);
+        if (rol =="PROPIETARIO"){
+            Propietario propietario= new Propietario();
+            propietario.setCliente(cliente);
+            
+        }
     }
 
     public List<Cliente> listarCientes() {
