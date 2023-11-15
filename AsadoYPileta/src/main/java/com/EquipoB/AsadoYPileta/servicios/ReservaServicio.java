@@ -33,6 +33,7 @@ public class ReservaServicio {
         reserva.setFechaInicio(fechaInicio);
         reserva.setFechaFin(fechaFin);
         reserva.setServiciosElegidas(serviciosElegidas);
+        
         reserva.setMontoTotal(montoTotal);
         reserva.setDisponible(disponible);
 
