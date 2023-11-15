@@ -29,42 +29,15 @@ public class PropietarioServicio {
     
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
-
+    
     public Propietario crearPropietario(Usuario usuario) {
         Propietario propietario = null;
-        Cliente cliente = null;
-        if (usuario.getRol().equals(Rol.ADMIN)) {
-            Optional<Propietario> respuestaProp = propietarioRepositorio.findById(usuario.getId());
-            if (respuestaProp.isPresent()) {
-                propietario = respuestaProp.get();
-                return propietario;
-            } else {
-                Optional<Cliente> respuestaCli = clienteRepositorio.findById(usuario.getId());
-                if (respuestaCli.isPresent()) {
-                    cliente = respuestaCli.get();
-                } else {
-                    cliente = new Cliente();
-                    cliente.setId(usuario.getId());
-                    cliente.setUsuario(usuario);
-                }
-            }
-            propietario = new Propietario();
-            propietario.setId(usuario.getId());
-            propietario.setCliente(cliente);
-            return propietario;
-        } else {
-            Optional<Cliente> respuestaCli = clienteRepositorio.findById(usuario.getId());
-            if (respuestaCli.isPresent()) {
-                cliente = respuestaCli.get();
-            } else {
-                cliente = new Cliente();
-                cliente.setId(usuario.getId());
-                cliente.setUsuario(usuario);
-            }
-        }
+        Optional<Cliente> respuesta = clienteRepositorio.findById(usuario.getId());
+        Cliente cliente = respuesta.get();
         propietario = new Propietario();
         propietario.setId(usuario.getId());
         propietario.setCliente(cliente);
+        propietarioRepositorio.save(propietario);
         usuario.setRol(Rol.PROPIETARIO);
         usuarioRepositorio.save(usuario);
         return propietario;
