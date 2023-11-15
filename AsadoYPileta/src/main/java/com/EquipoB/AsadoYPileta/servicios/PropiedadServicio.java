@@ -50,7 +50,7 @@ public class PropiedadServicio {
             String pais, String provincia,String departamento, String localidad,String calle,String numeracion,String observaciones,
                                Double latitud, Double longitud) throws MiException, Exception {
 
-        validar(titulo, descripcion, tipo, imagenesInput, valor);
+        validar(titulo, descripcion, tipo, imagenesInput, valor, provincia, localidad);
         
         Optional<Propietario> respuesta = propietarioRepositorio.findById(usuario.getId());
 
@@ -98,7 +98,7 @@ public class PropiedadServicio {
             Double valor, String[] imagenesViejas, String estado,String pais, String provincia,String departamento, String localidad,String calle,String numeracion,
             String observaciones,Double latitud, Double longitud) throws MiException, Exception {
 
-        validar(titulo, descripcion, tipo, imagenesInput, valor);
+        validar(titulo, descripcion, tipo, imagenesInput, valor, provincia, localidad);
 
         Optional<Propiedad> propiedadRepo = propiedadRepositorio.findById(id);
 
@@ -208,7 +208,7 @@ public class PropiedadServicio {
     }
 
     public void validar(String titulo, String descripcion,
-            String tipo, MultipartFile[] imagenes, Double valor) throws MiException {
+            String tipo, MultipartFile[] imagenes, Double valor, String provincia, String localidad) throws MiException {
         
         if (titulo == null || titulo.trim().isEmpty()) {
             throw new MiException("El titulo no puede ser nulo o estar vacio");
@@ -227,6 +227,14 @@ public class PropiedadServicio {
 
         if (valor == null) {
             throw new MiException("El valor no puede ser 0");
+        }
+        
+        if (provincia == null || provincia.trim().isEmpty()) {
+            throw new MiException("La Provincia no puede ser nula o estar vacia");
+        }
+        
+        if (localidad == null || localidad.trim().isEmpty()) {
+            throw new MiException("La Localidad no puede ser nula o estar vacia");
         }
     }
 
