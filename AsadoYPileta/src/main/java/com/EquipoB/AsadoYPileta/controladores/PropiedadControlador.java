@@ -79,7 +79,7 @@ public class PropiedadControlador {
         return "propiedad.html";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @GetMapping("/registrar")
     public String registrar(ModelMap model) {
         List<Servicio> servicios = new ArrayList<>();
@@ -91,7 +91,7 @@ public class PropiedadControlador {
         return "registro_propiedad.html";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @PostMapping("/registro")
     public String registro(@RequestParam String titulo, @RequestParam String descripcion,
             @RequestParam String tipo, @RequestParam(required = false) String[] serviciosInput,
