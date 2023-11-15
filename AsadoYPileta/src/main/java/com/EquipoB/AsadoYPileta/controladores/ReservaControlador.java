@@ -38,11 +38,11 @@ public class ReservaControlador {
     @Autowired
     private UsuarioServicio usuarioServicio;
     @Autowired
-    private ClienteServicio clienteServici
-    
-    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')"
+    private ClienteServicio clienteServicio;
     @Autowired
-    private ServicioServicio servicioSe
+    private ServicioServicio servicioServicio;
+    
+    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @PostMapping("/registrar")  //localhost:8080/reserva/registrar
     public ModelAndView crearReserva(@RequestParam String idPropiedad, @RequestParam String fechaInicio,
             @RequestParam String fechaFinal, HttpSession session, @RequestParam String[] idServicio, ModelMap modelo) {
