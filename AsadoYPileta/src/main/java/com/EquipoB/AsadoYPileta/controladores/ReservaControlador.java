@@ -3,17 +3,21 @@ package com.EquipoB.AsadoYPileta.controladores;
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
+import com.EquipoB.AsadoYPileta.entidades.Servicio;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.servicios.ClienteServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
+import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,10 +39,13 @@ public class ReservaControlador {
     private UsuarioServicio usuarioServicio;
     @Autowired
     private ClienteServicio clienteServicio;
-
+    @Autowired
+    private ServicioServicio servicioServicio;
+    
+    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @PostMapping("/registrar")  //localhost:8080/reserva/registrar
     public ModelAndView crearReserva(@RequestParam String idPropiedad, @RequestParam String fechaInicio,
-            @RequestParam String fechaFinal, HttpSession session, ModelMap modelo)  {
+            @RequestParam String fechaFinal, HttpSession session, @RequestParam String[] idServicio, ModelMap modelo) {
 
         Reserva reserva = new Reserva();
         Usuario usuario = (Usuario) session.getAttribute("usuariosession");
@@ -46,14 +53,28 @@ public class ReservaControlador {
         Propiedad propiedad = propiedadServicio.getOne(idPropiedad);
         reserva.setUsuario(usuario);
         reserva.setPropiedad(propiedad);
-        
+        List<Servicio> servicios = servicioServicio.listarServicios();
+        modelo.addAttribute("servicios", servicios);
+        List<Servicio> serviciosElegidos = new ArrayList<>();
+        Double montoTotal = propiedad.getValor();
+
+        for (String Servicio : idServicio) {
+            serviciosElegidos.add(servicioServicio.getOne(Servicio));
+            montoTotal = montoTotal + montoTotal * 0.005;
+        }
+        for (Servicio servicio : serviciosElegidos) {
+            servicio.setValor(montoTotal * 0.005);
+        }
+
+        reserva.setMontoTotal(montoTotal);
+        reserva.setServiciosElegidas(serviciosElegidos);
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-        try{
-        reserva.setFechaInicio(formato.parse(fechaInicio));
-        reserva.setFechaFin(formato.parse(fechaFinal));
-        }catch(Exception e){
+        try {
+            reserva.setFechaInicio(formato.parse(fechaInicio));
+            reserva.setFechaFin(formato.parse(fechaFinal));
+        } catch (Exception e) {
             System.out.println(e);
-        }  
+        }
         modelo.addAttribute("propiedad", propiedad);
         modelo.addAttribute("cliente", cliente);
         modelo.addAttribute("reserva", reserva);
