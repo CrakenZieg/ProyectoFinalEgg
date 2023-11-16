@@ -140,7 +140,27 @@
                         </div>
 
                         <div class="carousel-item">
-                            <div th:replace="fragmentos/card :: div"></div>                            
+                            
+                                <div th:replace="fragmentos/card :: div"></div>  
+                            
+                                    <div >
+                                            <table>
+                                            <thead>
+                                              <tr>
+                                                   <th>Nombre propiedad</th>
+                                                   
+                                               </tr>
+                                             </thead>
+                                             <tbody>
+                                                        <tr th:each="propiedad : ${propiedades}">
+                                                         <td th:text="${propiedad.titulo}"></td>
+                                                         <td th:each="reserva: ${reservas}" th:if="reserva.propiedad.id=propiedad.id" th:text="${reserva.cliente.nombre}"></td>
+                                                        </tr>
+                                            </tbody>
+                                            </table>
+                                          </div>
+                                    </div>
+                              
                         </div>
                          <div class="carousel-item">
                                           <div class="resultado-contenedor">

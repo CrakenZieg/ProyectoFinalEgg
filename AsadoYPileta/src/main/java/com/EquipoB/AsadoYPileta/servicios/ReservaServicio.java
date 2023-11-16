@@ -1,5 +1,6 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
+import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
@@ -49,6 +50,22 @@ public class ReservaServicio {
         List<Reserva> reservas = new ArrayList();
 
         reservas = reservaRepositorio.buscarReservaPorCliente(id);
+
+        return reservas;
+    }
+    
+    @Transactional(readOnly = true) 
+    public List<Reserva> listarReservaPropiedadEnPerfil(List<Propiedad> propiedades) {
+        List <String> idPropiedades = new ArrayList();
+        for (Propiedad propiedad : propiedades) {
+            String idPropiedad = propiedad.getId();
+            idPropiedades.add(idPropiedad);
+        }
+
+
+        List<Reserva> reservas = new ArrayList();
+
+        reservas = reservaRepositorio.buscarReservaPorPropiedadPerfil(idPropiedades);
 
         return reservas;
     }

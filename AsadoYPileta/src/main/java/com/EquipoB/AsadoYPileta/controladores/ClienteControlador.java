@@ -100,6 +100,7 @@ public class ClienteControlador {
             }
             modelo.put("cliente", propietario.getCliente());
             modelo.put("propiedades", propietario.getPropiedades());
+            modelo.addAttribute("reservas",reservaServicio.listarReservaPropiedadEnPerfil(propietario.getPropiedades()));
             modelo.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContactoUsuario(propietario.getCliente()));
         }
         return new ModelAndView("perfil_usuario.html", modelo);
