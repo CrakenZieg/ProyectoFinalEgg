@@ -177,9 +177,9 @@
                                                 <tbody>
                                                     <tr th:each="servicio : ${servicios}" 
                                                         th:data-id="${servicio.id}"
-                                                        th:data-tipoComodidad="${servicio.tipoComodidad}"
+                                                        th:data-tipocomodidad="${servicio.tipoComodidad}"
                                                         th:data-valor="${servicio.valor}"                                                        
-                                                        th:onclick="editarServicio(this.dataset.id,this.dataset.tipoComodidad,this.dataset.valor)">
+                                                        th:onclick="editarServicio(this.dataset.id,this.dataset.tipocomodidad,this.dataset.valor)">
                                                         <td>[[${servicio.tipoComodidad}]]</td>
                                                         <td>[[${servicio.valor}]]</td>
                                                     </tr>                                                    

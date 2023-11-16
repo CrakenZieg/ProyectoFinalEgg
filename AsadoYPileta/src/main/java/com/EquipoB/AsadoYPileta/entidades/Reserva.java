@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.Data;
@@ -44,5 +45,10 @@ public class Reserva {
     
     @ManyToOne
     private Usuario usuario;
+    
+    @PrePersist
+    private void onCreate(){
+        this.disponible = false;
+    }
     
 }
