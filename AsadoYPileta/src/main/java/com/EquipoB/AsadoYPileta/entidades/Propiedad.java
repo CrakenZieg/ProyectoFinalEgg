@@ -3,6 +3,7 @@ package com.EquipoB.AsadoYPileta.entidades;
 
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -24,6 +25,7 @@ public class Propiedad {
     private String id;
     private String titulo;
     @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String descripcion;
     private Boolean estado;
     private Double valor;
