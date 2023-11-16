@@ -11,15 +11,16 @@ import org.springframework.web.servlet.ModelAndView;
 public class ErrorControlador implements ErrorController {
     
     @RequestMapping(value = "/error", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
+	public ModelAndView renderErrorPage(HttpServletRequest httpRequest, Exception ex) {
 
 		ModelAndView errorPage = new ModelAndView("error");
                 
 		int httpErrorCode = getCodigoError(httpRequest);
-		String errorMsg = getMensajeError(httpErrorCode);
+		String errorMsg = (String) httpRequest.getAttribute(getMensajeError(httpErrorCode));
 		
 		errorPage.addObject("codigo", httpErrorCode);
 		errorPage.addObject("mensaje", errorMsg);
+		errorPage.addObject("excepcion", ex.getMessage());
 		return errorPage;
 	}
     private int getCodigoError(HttpServletRequest httpRequest) {

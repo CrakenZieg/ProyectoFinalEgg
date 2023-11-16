@@ -1,6 +1,5 @@
 package com.EquipoB.AsadoYPileta.controladores;
 
-
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Propietario;
@@ -29,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequestMapping("/cliente")
@@ -47,110 +48,91 @@ public class ClienteControlador {
 
     private Rol rol;
 
-
     @GetMapping("/registrar")
-    public String registrar(ModelMap model) {
-        model.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContacto());
-        return "registro_usuario.html";
+    public ModelAndView registrar(ModelMap modelo) {
+        modelo.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContacto());
+        return new ModelAndView("registro_usuario.html", modelo);
     }
 
-
     @PostMapping("/registro")
-    public String registro(@RequestParam String nombre, @RequestParam String apellido,
+    public RedirectView registro(@RequestParam String nombre, @RequestParam String apellido,
             @RequestParam String email, @RequestParam String password, @RequestParam String password2,
             @RequestParam MultipartFile[] imagenesInput, @RequestParam String descripcion,
-            @RequestParam String[] tipoContactoInput, @RequestParam String[] contactosInput,@RequestParam String rol) {
-        try {
-            clienteServicio.crearCliente(email, nombre, apellido, descripcion,
-                    password, password2, imagenesInput, tipoContactoInput, contactosInput,rol);
-        } catch (Exception ex) {
-            Logger.getLogger(ClienteControlador.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return "redirect:/";
+            @RequestParam String[] tipoContactoInput, @RequestParam String[] contactosInput, @RequestParam String rol) throws Exception {
+
+        clienteServicio.crearCliente(email, nombre, apellido, descripcion,
+                password, password2, imagenesInput, tipoContactoInput, contactosInput, rol);
+
+        return new RedirectView("/login");
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROPIETARIO','ROLE_CLIENTE')")
     @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable String id, HttpSession session) throws MiException, PermisosException {
+    public RedirectView eliminar(@PathVariable String id, HttpSession session) throws MiException, PermisosException {
         usuarioServicio.eliminarUsuario(id, session);
-        return "redirect:/";
+        return new RedirectView("/");
     }
-
 
     @GetMapping("/perfil")
-    public String perfil(ModelMap model, HttpSession session) {
-
+    public ModelAndView perfil(ModelMap modelo, HttpSession session) throws MiException {
         Usuario usuario = (Usuario) session.getAttribute("usuariosession");
-        
-        
         if (usuario.getRol().equals(Rol.CLIENTE)) {
             Cliente cliente = clienteServicio.getOne(usuario.getId());
-            model.put("cliente", cliente);
-            model.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContactoUsuario(cliente));
+            modelo.put("cliente", cliente);
+            modelo.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContactoUsuario(cliente));
         } else if (usuario.getRol().equals(Rol.PROPIETARIO) || usuario.getRol().equals(Rol.ADMIN)) {
             Propietario propietario;
-            try {
-                propietario = propietarioServicio.getOne(usuario.getId());
-                model.put("cliente", propietario.getCliente());
-                model.put("propiedades", propietario.getPropiedades());
-                model.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContactoUsuario(propietario.getCliente()));
-            } catch (MiException ex) {
-            }
+            propietario = propietarioServicio.getOne(usuario.getId());
+            modelo.put("cliente", propietario.getCliente());
+            modelo.put("propiedades", propietario.getPropiedades());
+            modelo.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContactoUsuario(propietario.getCliente()));
         }
-        return "perfil_usuario.html";
+        return new ModelAndView("perfil_usuario.html", modelo);
     }
-    
+
     @PostMapping("/perfil/{id}")
-    public String modificar(@RequestParam String nombre,@PathVariable String id, @RequestParam String apellido,
-            @RequestParam String email,@RequestParam MultipartFile[] imagenesInput, 
-            @RequestParam String descripcion,@RequestParam String[] tipoContactoInput, 
-            @RequestParam String[] contactosInput,@RequestParam(required = false) String[] imagenesViejas) {
-        try {
-            clienteServicio.modificarCliente(email,id, nombre, apellido, descripcion,
-                    imagenesInput, tipoContactoInput, contactosInput,imagenesViejas);
-        } catch (Exception ex) {
-            Logger.getLogger(ClienteControlador.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return "index.html";
+    public RedirectView modificar(@RequestParam String nombre, @PathVariable String id, @RequestParam String apellido,
+            @RequestParam String email, @RequestParam MultipartFile[] imagenesInput,
+            @RequestParam String descripcion, @RequestParam String[] tipoContactoInput,
+            @RequestParam String[] contactosInput, @RequestParam(required = false) String[] imagenesViejas) throws Exception { 
+            clienteServicio.modificarCliente(email, id, nombre, apellido, descripcion,
+                    imagenesInput, tipoContactoInput, contactosInput, imagenesViejas);   
+        return new RedirectView("/");
     }
+
     @PostMapping("/cambiar_password")
-    public String cambiandoPassword(HttpSession session, @RequestParam String password, @RequestParam String passwordNuevo,@RequestParam String passwordNuevo2, ModelMap model) throws MiException {
-        
+    public ModelAndView cambiandoPassword(HttpSession session, @RequestParam String password, 
+            @RequestParam String passwordNuevo, @RequestParam String passwordNuevo2, ModelMap modelo) throws MiException {
         Usuario usuario = (Usuario) session.getAttribute("usuariosession");
-        
         try {
-            usuarioServicio.cambiarPassword(usuario, password,passwordNuevo,passwordNuevo2);
-
-            return "redirect:/cliente/perfil";
-
+            usuarioServicio.cambiarPassword(usuario, password, passwordNuevo, passwordNuevo2);           
+            return new ModelAndView("redirect:/cliente/perfil", modelo);
         } catch (MiException e) {
-
-            model.addAttribute("error", e.getMessage());
-
-            return "redirect:/cliente/perfil";
+            modelo.addAttribute("error", e.getMessage());
+            return new ModelAndView("redirect:/cliente/perfil", modelo);            
         }
     }
-    
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/baja")
     public ModelAndView bajaUsuario(@RequestParam String idUsuario, ModelMap modelo) throws MiException {
-        try {            
-            usuarioServicio.bajaUsuario(idUsuario);            
+        try {
+            usuarioServicio.bajaUsuario(idUsuario);
         } catch (MiException ex) {
             modelo.put("error", ex.getMessage());
         }
-        return new ModelAndView("redirect:/admin/dashboard",modelo);
+        return new ModelAndView("redirect:/admin/dashboard", modelo);
     }
-    
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/alta")
     public ModelAndView altaUsuario(@RequestParam String idUsuario, ModelMap modelo) throws MiException {
-        try {            
-            usuarioServicio.altaUsuario(idUsuario);            
+        try {
+            usuarioServicio.altaUsuario(idUsuario);
         } catch (MiException ex) {
             modelo.put("error", ex.getMessage());
         }
-        return new ModelAndView("redirect:/admin/dashboard",modelo);
+        return new ModelAndView("redirect:/admin/dashboard", modelo);
     }
-    
+
 }

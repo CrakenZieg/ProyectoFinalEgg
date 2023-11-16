@@ -65,72 +65,46 @@ public class ReservaControlador {
         return new ModelAndView("confirmacion_reserva.html", modelo);
     }
 
-    @GetMapping("/listar")  //localhost:8080/reserva/listar
-
-    public String listarReservas(ModelMap modelo) {
-        List<Reserva> reservas = reservaServicio.listarReserva();
-        modelo.addAttribute("reservas", reservas);
-
-        return "reserva_lista.html";
-    }
-
     @PostMapping("/registro")
-    public String registroReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible, ModelMap modelo) {
-
-        try {
-            reservaServicio.crearReserva(mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible);
-            return "redirect:/reserva/listar";
-        } catch (MiException e) {
-
-            modelo.addAttribute("error", e.getMessage());
-
-            return "reserva.html";
-        }
+    public ModelAndView registroReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible, ModelMap modelo) throws MiException {
+        reservaServicio.crearReserva(mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible);
+        return new ModelAndView("redirect:/reserva/listar", modelo);        
     }
 
     @GetMapping("/modificar/{id}")
-    public String modificarReserva(@PathVariable String id, ModelMap modelo) {
-
+    public ModelAndView modificarReserva(@PathVariable String id, ModelMap modelo) {
         modelo.put("reserva", reservaServicio.getOne(id));
-
-        return "reserva_modificar.html";
+        return new ModelAndView("reserva_modificar.html", modelo);
 
     }
 
     @PostMapping("/modificar/{id}")
     public String modificarReserva(@PathVariable String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible, ModelMap modelo) {
-
         try {
             reservaServicio.modificarReserva(id, mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible);
-
             return "redirect:/reserva/listar";
         } catch (MiException e) {
-
             modelo.addAttribute("error", e.getMessage());
-
             return "reserva_modificar";
         }
-
     }
 
     @GetMapping("/borrar/{id}")
-    public String borrarReserva(@PathVariable String id) {
-
+    public ModelAndView borrarReserva(@PathVariable String id) {
         reservaServicio.borrar(id);
-
-        return "redirect:/reserva/listar";
-
+        return new ModelAndView("redirect:/reserva/listar");
     }
     
     @PostMapping("/aceptarReserva/{id}")
-    public String aceptar(@PathVariable String id) throws MiException{
+    public ModelAndView aceptar(
+            @PathVariable String id) throws MiException{
         Reserva reserva = reservaServicio.getOne(id);
         reserva.setDisponible(true);
         reservaServicio.modificarReserva(id, reserva.getMensaje(), 
                 reserva.getFechaInicio(), reserva.getFechaFin(), 
                 reserva.getServiciosElegidas(), reserva.getMontoTotal(), 
                 reserva.getDisponible());
-        return "redirect:/cliente/perfil";        
+        return new ModelAndView("redirect:/cliente/perfil");        
     }    
 
 }
