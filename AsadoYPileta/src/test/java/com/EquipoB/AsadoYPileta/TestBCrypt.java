@@ -8,7 +8,7 @@ public class TestBCrypt {
     public static void main(String[] args) {
         
         /* Ingresa tu contrasena aquí */
-        String contrasena = "";
+        String contrasena = "coco";
         
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         

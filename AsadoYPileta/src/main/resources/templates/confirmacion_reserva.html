@@ -152,8 +152,8 @@
                                                 <input type="number" id="montoTotal" name="montoTotal" class="form-control"
                                                        th:value="${propiedad.valor}" hidden="true" />  <!--  input MontoTotal -->
                                                 <input type="date" name="fechaInicio" th:value="reserva.fechaInicio" /> <!--  input fechaInicio  -->
-                                                <input type="date" name="fechaFin" th:value="reserva.fechaFin"/>   <!--  input fechaFin  -->
-                                                <input type="text" name="idPropiedad" th:value="propiedad.id"/>    <!--  input idPropiedad   --->
+                                                <input type="date" name="fechaFin" th:value="${reserva.fechaFin}"/>   <!--  input fechaFin  -->
+                                                <input type="text" name="idPropiedad" th:value="${propiedad.id}"/>    <!--  input idPropiedad   --->
                                                 <button class="btn btn-primary mt-2" type="button" onclick="reserva()">
                                                     Realizar Reserva</span>
                                                 </button>
