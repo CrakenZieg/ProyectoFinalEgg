@@ -96,7 +96,7 @@ public class ServicioServicio {
     
     @Transactional
     public void eliminarServicio(String id) throws MiException{
-        if(propiedadRepositorio.buscarPorServicio(id).size()!=0){
+        if(!propiedadRepositorio.buscarPorServicio(id).isEmpty()){
             throw new MiException("No se puede eliminar el servicio si está siendo utilizado.");
         } else {
             servicioRepositorio.deleteById(id);    

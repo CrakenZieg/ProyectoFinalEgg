@@ -34,7 +34,7 @@
                             <div class="box-inner-1 pb-3 mb-3">
                                 <div class="d-flex justify-content-between mb-3 userdetails">
                                     <p class="fw-bold" th:text="${propiedad.titulo}"></p>
-                                    <p class="fw-lighter" th:text="'Precio: U$s '+${propiedad.valor}">
+                                    <p class="fw-lighter" th:text="'Precio: $ '+${propiedad.valor}">
                                         <span class="fas fa-dollar-sign"></span>
                                     </p>
                                 </div>
@@ -69,6 +69,7 @@
                                    th:text="'Fecha reserva: '+${reserva.fechaInicio.toString.substring(4,10)}+' al '
                                    +${reserva.fechaFin.toString.substring(4,10)}"
                                    ></p>
+                                <p class="fw-bold">Servicios disponibles:</p>
                                 <div class="dis" th:each="servicio : ${propiedad.servicios}">
                                     <p class="black" >
                                         <i class="bi bi-arrow-right"></i> &ensp; <span th:text="${servicio.tipoComodidad}"></span>
@@ -152,8 +153,8 @@
                                                 <input type="number" id="montoTotal" name="montoTotal" class="form-control"
                                                        th:value="${propiedad.valor}" hidden="true" />  <!--  input MontoTotal -->
                                                 <input type="date" name="fechaInicio" th:value="reserva.fechaInicio" /> <!--  input fechaInicio  -->
-                                                <input type="date" name="fechaFin" th:value="reserva.fechaFin"/>   <!--  input fechaFin  -->
-                                                <input type="text" name="idPropiedad" th:value="propiedad.id"/>    <!--  input idPropiedad   --->
+                                                <input type="date" name="fechaFin" th:value="${reserva.fechaFin}"/>   <!--  input fechaFin  -->
+                                                <input type="text" name="idPropiedad" th:value="${propiedad.id}"/>    <!--  input idPropiedad   --->
                                                 <button class="btn btn-primary mt-2" type="button" onclick="reserva()">
                                                     Realizar Reserva</span>
                                                 </button>

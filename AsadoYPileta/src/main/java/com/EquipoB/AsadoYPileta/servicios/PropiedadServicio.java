@@ -25,45 +25,49 @@ public class PropiedadServicio {
 
     @Autowired
     private PropietarioServicio propietarioServicio;
-    
+
     @Autowired
     private PropietarioRepositorio propietarioRepositorio;
-    
+
     @Autowired
     private ServicioServicio servicioServicio;
 
     @Autowired
     private ImagenServicio imagenServicio;
-    
+
     @Autowired
     private ReservaServicio reservaServicio;
-    
+
     @Autowired
-    private UbicacionServicio ubicacionServicio;  
-    
-    @Autowired    
-    private TipoPropiedadServicio tipoPropiedadServicio;  
+    private UbicacionServicio ubicacionServicio;
+
+    @Autowired
+    private TipoPropiedadServicio tipoPropiedadServicio;
+
+    @Autowired
+    private FiltroDisponibilidadServicio filtroDisponibilidadServicio;
 
     @Transactional
     public void crearPropiedad(String titulo, String descripcion, String tipo,
             String[] serviciosInput, MultipartFile[] imagenesInput, Double valor, Usuario usuario,
-            String pais, String provincia,String departamento, String localidad,String calle,String numeracion,String observaciones,
-                               Double latitud, Double longitud) throws MiException, Exception {
+            String pais, String provincia, String departamento, String localidad, String calle,
+            String numeracion, String observaciones, Double latitud, Double longitud,
+            String fechaInicioReserva, String fechaFinReserva, String[] mensualReserva,
+            String[] diarioReserva, String[] porFechaReserva) throws MiException, Exception {
 
-        validar(titulo, descripcion, tipo, imagenesInput, valor, provincia, localidad);
-        
+
+        validar(titulo, descripcion, tipo, imagenesInput, valor);
+
+
         Optional<Propietario> respuesta = propietarioRepositorio.findById(usuario.getId());
 
+        Propietario propietario = null;
 
-        Propietario propietario = null;       
-      
-
-        if(respuesta.isPresent()){
-
+        if (respuesta.isPresent()) {
             propietario = respuesta.get();
         } else {
             propietario = propietarioServicio.crearPropietario(usuario);
-        }        
+        }
 
         List<Servicio> servicios = new ArrayList<>();
         if (serviciosInput != null) {
@@ -73,7 +77,7 @@ public class PropiedadServicio {
         imagenes = imagenServicio.guardarVarias(imagenesInput);
 
         Propiedad propiedad = new Propiedad();
-        
+
         propiedad.setTitulo(titulo);
         propiedad.setDescripcion(descripcion);
         propiedad.setUbicacion(ubicacionServicio.crearUbicacion(pais, provincia, departamento, localidad, calle, numeracion, observaciones, latitud, longitud));
@@ -82,8 +86,14 @@ public class PropiedadServicio {
         propiedad.setServicios(servicios);
         propiedad.setImagenes(imagenes);
         propiedad.setValor(valor);
+        int[] mesParseado = parsearArregloString(mensualReserva);
+        int[] diaParseado = parsearArregloString(diarioReserva);
+        int[] porFechaParsado = parsearArregloString(porFechaReserva);
+        propiedad.setFiltroDisponibilidad(filtroDisponibilidadServicio.crearFiltro(fechaInicioReserva,
+                fechaFinReserva, mesParseado, diaParseado, porFechaParsado));
+        propiedad.setPuntuacion(0.00);
         propiedadRepositorio.save(propiedad);
-        if(propietario.getPropiedades() != null){
+        if (propietario.getPropiedades() != null) {
             propietario.getPropiedades().add(propiedad);
         } else {
             List<Propiedad> propiedades = new ArrayList<>();
@@ -95,22 +105,18 @@ public class PropiedadServicio {
 
     @Transactional
     public void modificarPropiedad(String id, String titulo, String descripcion, String tipo, String[] serviciosInput, MultipartFile[] imagenesInput,
-            Double valor, String[] imagenesViejas, String estado,String pais, String provincia,String departamento, String localidad,String calle,String numeracion,
-            String observaciones,Double latitud, Double longitud, Usuario logueado) throws MiException, Exception {
 
-        validar(titulo, descripcion, tipo, imagenesInput, valor, provincia, localidad);
+            Double valor, String[] imagenesViejas, String estado, String pais, String provincia, String departamento, String localidad, String calle, String numeracion,
+            String observaciones, Double latitud, Double longitud, String fechaInicioReserva, String fechaFinReserva, String[] mensualReserva,
+            String[] diarioReserva, String[] porFechaReserva) throws MiException, Exception {
+
+
+        validar(titulo, descripcion, tipo, imagenesInput, valor);
 
         Optional<Propiedad> propiedadRepo = propiedadRepositorio.findById(id);
-        Optional<Propietario> propietarioRepo = propietarioRepositorio.findById(logueado.getId());
+
         
-        if (propiedadRepo.isPresent() && propietarioRepo.isPresent()){
-            Propiedad propiedad = propiedadRepo.get();
-            Propietario propietario = propietarioRepo.get();
-            List<Propiedad> propiedades = propietario.getPropiedades();
-            if(!propiedades.contains(propiedad)){
-               throw new MiException("Esta propiedad no le pertenece, no la puede modificar");
-            }
-        } 
+        
 
         List<Servicio> servicios = new ArrayList<>();
         if (serviciosInput != null) {
@@ -121,41 +127,53 @@ public class PropiedadServicio {
 
             Propiedad propiedad = propiedadRepo.get();
             List<Imagen> imagenes = propiedad.getImagenes();
-            
-            if(imagenesViejas != null){ 
-                if(imagenesViejas.length != 0){
-                    imagenes = imagenServicio.filtrar(imagenes, 
+
+            if (imagenesViejas != null) {
+                if (imagenesViejas.length != 0) {
+                    imagenes = imagenServicio.filtrar(imagenes,
                             imagenesViejas);
                 }
-            }     
-            if(imagenesInput != null){
-                if(imagenesInput.length != 0){
+            }
+            if (imagenesInput != null) {
+                if (imagenesInput.length != 0) {
                     imagenes.addAll(imagenServicio.guardarVarias(imagenesInput));
-                } 
+                }
             }
 
             propiedad.setTitulo(titulo);
             propiedad.setDescripcion(descripcion);
-                      
-            if("true".equals(estado)){
+
+            if ("true".equals(estado)) {
                 propiedad.setEstado(true);
-            }else{
-                boolean busqueda= reservaServicio.validarReservasPropiedad(id);
-                if(busqueda == true){
+            } else {
+                boolean busqueda = reservaServicio.validarReservasPropiedad(id);
+                if (busqueda == true) {
                     throw new MiException("No puede darse de baja si tiene reservas activas!");
-                }else{
+                } else {
                     propiedad.setEstado(false);
                 }
-             
-           }
+
+            }
             propiedad.setEstado(Boolean.valueOf(estado));
-            propiedad.setUbicacion(ubicacionServicio.modificarUbicacion(propiedad.getUbicacion().getId(), pais, provincia, departamento, localidad, calle, numeracion, observaciones, latitud, longitud,estado));
+            propiedad.setUbicacion(ubicacionServicio.modificarUbicacion(propiedad.getUbicacion().getId(), pais, provincia, departamento, localidad, calle, numeracion, observaciones, latitud, longitud, estado));
             propiedad.setTipo(tipoPropiedadServicio.getOnePorTipo(tipo));
             propiedad.setServicios(servicios);
             propiedad.setImagenes(imagenes);
             propiedad.setValor(valor);
+            int[] mesParseado = parsearArregloString(mensualReserva);
+            int[] diaParseado = parsearArregloString(diarioReserva);
+            int[] porFechaParsado = parsearArregloString(porFechaReserva);
+            propiedad.setFiltroDisponibilidad(filtroDisponibilidadServicio.modificarFiltro(propiedad.getFiltroDisponibilidad().getId(),
+                    fechaInicioReserva, fechaFinReserva, mesParseado, diaParseado, porFechaParsado));
             propiedadRepositorio.save(propiedad);
         }
+    }
+
+    @Transactional
+    public void setPuntuacion(Double puntuacion, String id) {
+        Propiedad propiedad = propiedadRepositorio.getOne(id);
+        propiedad.setPuntuacion(puntuacion);
+        propiedadRepositorio.save(propiedad);
     }
 
     public List<Propiedad> listarPropiedades() {
@@ -163,6 +181,7 @@ public class PropiedadServicio {
         propiedades = propiedadRepositorio.findAll();
         return propiedades;
     }
+
     public List<Propiedad> listarPropiedadesActivas() {
         List<Propiedad> propiedades = new ArrayList<>();
         propiedades = propiedadRepositorio.buscarPropiedadesActivas();
@@ -171,10 +190,10 @@ public class PropiedadServicio {
 
     public List<Propiedad> listarPropiedadesPorTipo(String tipo) throws MiException {
         List<Propiedad> propiedades = new ArrayList<>();
-        try{
+        try {
             TipoPropiedad tipoPropiedad = tipoPropiedadServicio.getOnePorTipo(tipo);
             propiedades = propiedadRepositorio.buscarPorTipo(tipoPropiedad.getId());
-        } catch(MiException ex){
+        } catch (MiException ex) {
             throw ex;
         }
         return propiedades;
@@ -191,7 +210,7 @@ public class PropiedadServicio {
         ubicacionServicio.cambiarEstadoUbicacion(propiedad.getUbicacion().getId(), "false");
         propiedadRepositorio.save(propiedad);
     }
-    
+
     @Transactional
     public void darDeAlta(String id) throws MiException {
         Propiedad propiedad = propiedadRepositorio.getOne(id);
@@ -204,22 +223,35 @@ public class PropiedadServicio {
     public void eliminar(String id, Usuario logueado) {
         Optional<Propiedad> propiedadRepo = propiedadRepositorio.findById(id);
         Optional<Propietario> propietarioRepo = propietarioRepositorio.findById(logueado.getId());
-        if (propiedadRepo.isPresent() && propietarioRepo.isPresent()){
+        if (propiedadRepo.isPresent() && propietarioRepo.isPresent()) {
             Propiedad propiedad = propiedadRepo.get();
             Propietario propietario = propietarioRepo.get();
             List<Propiedad> propiedades = propietario.getPropiedades();
-            if(propiedades.contains(propiedad)){
+            if (propiedades.contains(propiedad)) {
                 propiedades.remove(propiedad);
                 propietario.setPropiedades(propiedades);
                 propietarioRepositorio.save(propietario);
                 propiedadRepositorio.delete(propiedad);
             }
-        }        
+        }
+    }
+
+    public int[] parsearArregloString(String[] arreglo) {
+        if (arreglo != null) {
+            int[] enteros = new int[arreglo.length];
+            for (int i = 0; i < arreglo.length; i++) {
+                enteros[i] = Integer.parseInt(arreglo[i]);
+            }
+            return enteros;
+        }
+        return null;
     }
 
     public void validar(String titulo, String descripcion,
-            String tipo, MultipartFile[] imagenes, Double valor, String provincia, String localidad) throws MiException {
-        
+
+            String tipo, MultipartFile[] imagenes, Double valor) throws MiException {
+
+
         if (titulo == null || titulo.trim().isEmpty()) {
             throw new MiException("El titulo no puede ser nulo o estar vacio");
         }
@@ -239,14 +271,7 @@ public class PropiedadServicio {
             throw new MiException("El valor no puede ser 0");
         }
         
-        if (provincia == null || provincia.trim().isEmpty()) {
-            throw new MiException("La Provincia no puede ser nula o estar vacia");
-        }
-        
-        if (localidad == null || localidad.trim().isEmpty()) {
-            throw new MiException("La Localidad no puede ser nula o estar vacia");
-        }
+     
     }
-
 
 }

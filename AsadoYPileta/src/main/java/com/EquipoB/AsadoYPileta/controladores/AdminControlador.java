@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("admin")
@@ -53,20 +54,20 @@ public class AdminControlador {
     
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("dashboard")
-    public String dashboard(ModelMap model){
+    public ModelAndView dashboard(ModelMap modelo){
         List<Cliente> clientes = clienteServicio.listarCientes();
         List<Propiedad> propiedades = propiedadServicio.listarPropiedades();
         List<Servicio> servicios = servicioServicio.listarServicios();
         List<TipoContacto> tipoContactos = tipoContactoServicio.listarTipoContacto();
         List<TipoPropiedad> tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
         Map<String,Integer> datos = adminServicio.datosDeUso();
-        model.addAttribute("clientes", clientes);
-        model.addAttribute("propiedades", propiedades);
-        model.addAttribute("servicios", servicios);
-        model.addAttribute("tipoContactos", tipoContactos);
-        model.addAttribute("tipoPropiedades", tipoPropiedades);
-        model.addAllAttributes(datos);
-        return "panel_admin2.html";
+        modelo.addAttribute("clientes", clientes);
+        modelo.addAttribute("propiedades", propiedades);
+        modelo.addAttribute("servicios", servicios);
+        modelo.addAttribute("tipoContactos", tipoContactos);
+        modelo.addAttribute("tipoPropiedades", tipoPropiedades);
+        modelo.addAllAttributes(datos);
+        return new ModelAndView("panel_admin2.html", modelo);
     }
     
     

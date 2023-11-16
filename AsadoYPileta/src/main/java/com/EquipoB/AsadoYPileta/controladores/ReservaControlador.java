@@ -11,8 +11,8 @@ import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -41,101 +41,81 @@ public class ReservaControlador {
     private ClienteServicio clienteServicio;
     @Autowired
     private ServicioServicio servicioServicio;
-    
-    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
-    @PostMapping("/registrar")  //localhost:8080/reserva/registrar
-    public ModelAndView crearReserva(@RequestParam String idPropiedad, @RequestParam String fechaInicio,
-            @RequestParam String fechaFinal, HttpSession session, @RequestParam String[] idServicio, ModelMap modelo) {
 
+    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
+    @PostMapping("/registrar") 
+    public ModelAndView crearReserva(@RequestParam String idPropiedad, @RequestParam String fechaInicio,
+            @RequestParam String fechaFinal, HttpSession session, ModelMap modelo) throws ParseException, MiException {
         Reserva reserva = new Reserva();
         Usuario usuario = (Usuario) session.getAttribute("usuariosession");
         Cliente cliente = clienteServicio.getOne(usuario.getId());
-        Propiedad propiedad = propiedadServicio.getOne(idPropiedad);
-        reserva.setUsuario(usuario);
-        reserva.setPropiedad(propiedad);
+        Propiedad propiedad = propiedadServicio.getOne(idPropiedad);   
         List<Servicio> servicios = servicioServicio.listarServicios();
+        
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");     
+        reserva.setFechaInicio(formato.parse(fechaInicio));
+        reserva.setFechaFin(formato.parse(fechaFinal));
+        propiedad.getFiltroDisponibilidad().habilitado(reserva.getFechaInicio(), reserva.getFechaFin());
+        
         modelo.addAttribute("servicios", servicios);
-        List<Servicio> serviciosElegidos = new ArrayList<>();
-        Double montoTotal = propiedad.getValor();
-
-        for (String Servicio : idServicio) {
-            serviciosElegidos.add(servicioServicio.getOne(Servicio));
-            montoTotal = montoTotal + montoTotal * 0.005;
-        }
-        for (Servicio servicio : serviciosElegidos) {
-            servicio.setValor(montoTotal * 0.005);
-        }
-
-        reserva.setMontoTotal(montoTotal);
-        reserva.setServiciosElegidas(serviciosElegidos);
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            reserva.setFechaInicio(formato.parse(fechaInicio));
-            reserva.setFechaFin(formato.parse(fechaFinal));
-        } catch (Exception e) {
-            System.out.println(e);
-        }
         modelo.addAttribute("propiedad", propiedad);
         modelo.addAttribute("cliente", cliente);
         modelo.addAttribute("reserva", reserva);
+        
         return new ModelAndView("confirmacion_reserva.html", modelo);
     }
 
-    @GetMapping("/listar")  //localhost:8080/reserva/listar
-
-    public String listarReservas(ModelMap modelo) {
-        List<Reserva> reservas = reservaServicio.listarReserva();
-        modelo.addAttribute("reservas", reservas);
-
-        return "reserva_lista.html";
-    }
-
     @PostMapping("/registro")
-    public String registroReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible, ModelMap modelo) {
-
-        try {
-            reservaServicio.crearReserva(mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible);
-            return "redirect:/reserva/listar";
-        } catch (MiException e) {
-
-            modelo.addAttribute("error", e.getMessage());
-
-            return "reserva.html";
-        }
+    public ModelAndView registroReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible, ModelMap modelo) throws MiException {
+        reservaServicio.crearReserva(mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible);
+        return new ModelAndView("redirect:/reserva/listar", modelo);        
     }
 
     @GetMapping("/modificar/{id}")
-    public String modificarReserva(@PathVariable String id, ModelMap modelo) {
-
+    public ModelAndView modificarReserva(@PathVariable String id, ModelMap modelo) {
         modelo.put("reserva", reservaServicio.getOne(id));
-
-        return "reserva_modificar.html";
+        return new ModelAndView("reserva_modificar.html", modelo);
 
     }
 
     @PostMapping("/modificar/{id}")
     public String modificarReserva(@PathVariable String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible, ModelMap modelo) {
-
         try {
             reservaServicio.modificarReserva(id, mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible);
-
             return "redirect:/reserva/listar";
         } catch (MiException e) {
-
             modelo.addAttribute("error", e.getMessage());
-
             return "reserva_modificar";
         }
-
     }
 
     @GetMapping("/borrar/{id}")
-    public String borrarReserva(@PathVariable String id) {
-
+    public ModelAndView borrarReserva(@PathVariable String id) {
         reservaServicio.borrar(id);
-
-        return "redirect:/reserva/listar";
-
+        return new ModelAndView("redirect:/reserva/listar");
     }
+    
+    @PostMapping("/aceptarReserva/{id}")
+    public ModelAndView aceptar(
+            @PathVariable String id) throws MiException{
+        Reserva reserva = reservaServicio.getOne(id);
+        reserva.setDisponible(true);
+        reservaServicio.modificarReserva(id, reserva.getMensaje(), 
+                reserva.getFechaInicio(), reserva.getFechaFin(), 
+                reserva.getServiciosElegidas(), reserva.getMontoTotal(), 
+                reserva.getDisponible());
+        return new ModelAndView("redirect:/cliente/perfil");        
+    }    
 
 }
+
+/*
+@RequestParam String[] idServicio,
+List<Servicio> serviciosElegidos = new ArrayList<>();
+        for (String Servicio : idServicio) {
+            serviciosElegidos.add(servicioServicio.getOne(Servicio));
+            montoTotal = montoTotal + servicioServicio.getOne(Servicio).getValor()*montoPropiedad;
+        }
+
+        reserva.setServiciosElegidas(serviciosElegidos);
+*/

@@ -8,6 +8,7 @@ import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.ClienteRepositorio;
+import com.EquipoB.AsadoYPileta.repositorios.PropietarioRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,9 +17,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-
 @Service
 public class ClienteServicio {
+
+    @Autowired
+    private PropietarioRepositorio propietarioRepositorio;
 
     @Autowired
     private ClienteRepositorio clienteRepositorio;
@@ -32,7 +35,6 @@ public class ClienteServicio {
     @Autowired
     private ImagenServicio imagenServicio;
 
-
     @Transactional
     public void crearCliente(String email, String nombre, String apellido, String descripcion,
             String password, String password2, MultipartFile[] imagenesInput,
@@ -43,7 +45,7 @@ public class ClienteServicio {
         validarPasword(password, password2);
         usuarioServicio.crearUsuario(email, password, Rol.valueOf(rol));
         Usuario usuario = usuarioServicio.getPorEmail(email);
-        
+
         Cliente cliente = new Cliente();
         cliente.setUsuario(usuario);
         cliente.setId(usuario.getId());
@@ -58,10 +60,11 @@ public class ClienteServicio {
         List<Contacto> contactos = contactoServicio.guardarVarios(tipoContactoInput, contactosInput);
         cliente.setContactos(contactos);
         clienteRepositorio.save(cliente);
-        if (rol =="PROPIETARIO"){
-            Propietario propietario= new Propietario();
+        if (rol == "PROPIETARIO") {
+            Propietario propietario = new Propietario();
             propietario.setCliente(cliente);
-            
+            propietario.setId(cliente.getId());
+            propietarioRepositorio.save(propietario);
         }
     }
 
@@ -71,9 +74,8 @@ public class ClienteServicio {
         return clientes;
     }
 
-  
     @Transactional
-    public void modificarCliente(String email, String id, String nombre, String apellido, 
+    public void modificarCliente(String email, String id, String nombre, String apellido,
             String descripcion, MultipartFile[] imagenesInput,
             String[] tipoContactoInput, String[] contactosInput, String[] imagenesViejas) throws MiException, Exception {
 
@@ -81,20 +83,20 @@ public class ClienteServicio {
                 tipoContactoInput, contactosInput);
 
         Optional<Cliente> respuesta = clienteRepositorio.findById(id);
-        if (respuesta.isPresent()) {           
-            Cliente cliente = respuesta.get();            
+        if (respuesta.isPresent()) {
+            Cliente cliente = respuesta.get();
             List<Imagen> imagenes = cliente.getImagenes();
-            
-            if(imagenesViejas != null){ 
-                if(imagenesViejas.length != 0){
-                    imagenes = imagenServicio.filtrar(imagenes, 
+
+            if (imagenesViejas != null) {
+                if (imagenesViejas.length != 0) {
+                    imagenes = imagenServicio.filtrar(imagenes,
                             imagenesViejas);
                 }
-            }     
-            if(imagenesInput != null){
-                if(imagenesInput.length != 0){
+            }
+            if (imagenesInput != null) {
+                if (imagenesInput.length != 0) {
                     imagenes.addAll(imagenServicio.guardarVarias(imagenesInput));
-                } 
+                }
             }
             cliente.getUsuario().setEmail(email);
             cliente.setNombre(nombre);
@@ -102,13 +104,12 @@ public class ClienteServicio {
             cliente.setImagenes(imagenes);
             cliente.setDescripcion(descripcion);
             List<Contacto> contactos = cliente.getContactos();
-            contactos = contactoServicio.filtrar(contactos, contactosInput,tipoContactoInput);
+            contactos = contactoServicio.filtrar(contactos, contactosInput, tipoContactoInput);
             cliente.setContactos(contactos);
             clienteRepositorio.save(cliente);
         }
     }
-    
-    
+
     @Transactional(readOnly = true)
     public Cliente getOne(String id) {
         return clienteRepositorio.getOne(id);
@@ -126,11 +127,11 @@ public class ClienteServicio {
     }
 
     private void validar(String email, String nombre, String apellido, String descripcion,
-             MultipartFile[] imagenesInput, String[] tipoContactoInput, 
-             String[] contactosInput) throws MiException {
+            MultipartFile[] imagenesInput, String[] tipoContactoInput,
+            String[] contactosInput) throws MiException {
         if (email == null || email.trim().isEmpty()) {
             throw new MiException("El email no puede ser nulo o estar vacio");
-        }        
+        }
         if (nombre == null || nombre.trim().isEmpty()) {
             throw new MiException("El nombre no puede ser nulo o estar vacio");
         }
@@ -155,6 +156,7 @@ public class ClienteServicio {
 
         }
     }
+
     private void validarPasword(String password, String password2) throws MiException {
         if (password == null || password.trim().isEmpty()) {
             throw new MiException("El password no puede ser nulo o estar vacio");
