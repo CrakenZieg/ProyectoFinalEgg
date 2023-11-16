@@ -66,14 +66,14 @@ public class ClienteControlador {
         } catch (Exception ex) {
             Logger.getLogger(ClienteControlador.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return "index.html";
+        return "redirect:/";
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROPIETARIO','ROLE_CLIENTE')")
     @GetMapping("/eliminar/{id}")
     public String eliminar(@PathVariable String id, HttpSession session) throws MiException, PermisosException {
         usuarioServicio.eliminarUsuario(id, session);
-        return "index.html";
+        return "redirect:/";
     }
 
 

@@ -17,7 +17,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.excepciones.PermisosException;
 import com.EquipoB.AsadoYPileta.repositorios.ClienteRepositorio;
-import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.PropietarioRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.UsuarioRepositorio;
 import java.util.Date;
@@ -37,6 +36,7 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Autowired
     private ClienteRepositorio clienteRepositorio;
+    
     @Autowired
     private PropietarioRepositorio propietarioRepositorio;
     

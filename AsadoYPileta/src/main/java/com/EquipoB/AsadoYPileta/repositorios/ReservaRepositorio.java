@@ -16,7 +16,7 @@ public interface ReservaRepositorio extends JpaRepository <Reserva,String> {
      *@param id: id del cliente
      *@return boolean
      */
-    @Query("SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END FROM Reserva r WHERE r.disponible=true AND r.usuario.id = :id")
+    @Query("SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END FROM Reserva r WHERE r.disponible=true AND r.cliente.id = :id")
     public boolean buscarReservaCliente(@Param("id") String id);
     
     /**

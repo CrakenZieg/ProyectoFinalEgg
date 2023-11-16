@@ -11,6 +11,7 @@ import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -44,28 +45,23 @@ public class ReservaControlador {
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @PostMapping("/registrar") 
     public ModelAndView crearReserva(@RequestParam String idPropiedad, @RequestParam String fechaInicio,
-            @RequestParam String fechaFinal, HttpSession session, ModelMap modelo) {
-
+            @RequestParam String fechaFinal, HttpSession session, ModelMap modelo) throws ParseException, MiException {
         Reserva reserva = new Reserva();
         Usuario usuario = (Usuario) session.getAttribute("usuariosession");
         Cliente cliente = clienteServicio.getOne(usuario.getId());
-        Propiedad propiedad = propiedadServicio.getOne(idPropiedad);
-        reserva.setCliente(cliente);
-        reserva.setPropiedad(propiedad);  
-        reserva.setMontoTotal(propiedad.getValor());
-        
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            reserva.setFechaInicio(formato.parse(fechaInicio));
-            reserva.setFechaFin(formato.parse(fechaFinal));
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+        Propiedad propiedad = propiedadServicio.getOne(idPropiedad);   
         List<Servicio> servicios = servicioServicio.listarServicios();
+        
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");     
+        reserva.setFechaInicio(formato.parse(fechaInicio));
+        reserva.setFechaFin(formato.parse(fechaFinal));
+        propiedad.getFiltroDisponibilidad().habilitado(reserva.getFechaInicio(), reserva.getFechaFin());
+        
         modelo.addAttribute("servicios", servicios);
         modelo.addAttribute("propiedad", propiedad);
         modelo.addAttribute("cliente", cliente);
         modelo.addAttribute("reserva", reserva);
+        
         return new ModelAndView("confirmacion_reserva.html", modelo);
     }
 
