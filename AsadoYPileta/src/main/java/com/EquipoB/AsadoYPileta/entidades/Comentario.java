@@ -1,6 +1,7 @@
 package com.EquipoB.AsadoYPileta.entidades;
 
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -19,6 +20,7 @@ public class Comentario {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
     @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String cuerpo;
     @OneToMany
     private List<Imagen> imagenes;
