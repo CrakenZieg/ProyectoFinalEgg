@@ -66,8 +66,10 @@ public class ReservaControlador {
     }
 
     @PostMapping("/registro")
-    public ModelAndView registroReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible, ModelMap modelo) throws MiException {
-        reservaServicio.crearReserva(mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible);
+    public ModelAndView registroReserva(String idPropiedad, String mensaje, String fechaInicio, String fechaFin, String[] serviciosElegidas, ModelMap modelo) throws MiException, ParseException {
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");     
+        reservaServicio.crearReserva(idPropiedad,mensaje, formato.parse(fechaInicio),formato.parse(fechaFin), 
+                servicioServicio.listarServiciosArray(serviciosElegidas));
         return new ModelAndView("redirect:/reserva/listar", modelo);        
     }
 
@@ -79,9 +81,9 @@ public class ReservaControlador {
     }
 
     @PostMapping("/modificar/{id}")
-    public String modificarReserva(@PathVariable String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible, ModelMap modelo) {
+    public String modificarReserva(@PathVariable String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, ModelMap modelo) {
         try {
-            reservaServicio.modificarReserva(id, mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible);
+            reservaServicio.modificarReserva(id, mensaje, fechaInicio, fechaFin, serviciosElegidas);
             return "redirect:/reserva/listar";
         } catch (MiException e) {
             modelo.addAttribute("error", e.getMessage());
@@ -96,26 +98,9 @@ public class ReservaControlador {
     }
     
     @PostMapping("/aceptarReserva/{id}")
-    public ModelAndView aceptar(
-            @PathVariable String id) throws MiException{
-        Reserva reserva = reservaServicio.getOne(id);
-        reserva.setDisponible(true);
-        reservaServicio.modificarReserva(id, reserva.getMensaje(), 
-                reserva.getFechaInicio(), reserva.getFechaFin(), 
-                reserva.getServiciosElegidas(), reserva.getMontoTotal(), 
-                reserva.getDisponible());
+    public ModelAndView aceptar(@PathVariable String id) throws MiException{
+        reservaServicio.aceptarReserva(id);        
         return new ModelAndView("redirect:/cliente/perfil");        
     }    
 
 }
-
-/*
-@RequestParam String[] idServicio,
-List<Servicio> serviciosElegidos = new ArrayList<>();
-        for (String Servicio : idServicio) {
-            serviciosElegidos.add(servicioServicio.getOne(Servicio));
-            montoTotal = montoTotal + servicioServicio.getOne(Servicio).getValor()*montoPropiedad;
-        }
-
-        reserva.setServiciosElegidas(serviciosElegidos);
-*/

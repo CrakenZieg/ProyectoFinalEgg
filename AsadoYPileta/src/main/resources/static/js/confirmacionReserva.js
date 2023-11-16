@@ -40,3 +40,17 @@ function reserva(){
   }, 3000);
 
 }
+
+function cambiarMonto(valor,elem){
+    let monto = document.getElementById("monto_total");
+    if(elem.checked){        
+        let base = Number.parseFloat(monto.innerHTML);
+        base += base*Number.parseFloat(valor);
+        monto.innerHTML = Math.floor(base);
+    } else {
+        let base = Number.parseFloat(monto.innerHTML);
+        base -= base*Number.parseFloat(valor);
+        monto.innerHTML = Math.floor(base);        
+    }
+    
+}
