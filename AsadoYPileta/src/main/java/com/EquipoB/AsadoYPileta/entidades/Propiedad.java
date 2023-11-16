@@ -6,6 +6,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -22,6 +23,7 @@ public class Propiedad {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
     private String titulo;
+    @Lob
     private String descripcion;
     private Boolean estado;
     private Double valor;

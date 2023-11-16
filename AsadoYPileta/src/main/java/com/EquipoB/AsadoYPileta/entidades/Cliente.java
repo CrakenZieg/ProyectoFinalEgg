@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
@@ -21,6 +22,7 @@ public class Cliente{
     private Usuario usuario;
     private String nombre;
     private String apellido; 
+    @Lob
     private String descripcion;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Imagen> imagenes;
