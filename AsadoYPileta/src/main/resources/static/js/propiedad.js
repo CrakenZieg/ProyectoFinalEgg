@@ -4,8 +4,9 @@ function enviarDatos() {
     var finValue = document.getElementById('fin').value;
     if(inicioValue!=null && finValue!=null){
         var arregloEnteros = [parseInt(inicioValue), parseInt(finValue)]; 
-        for(let i=0; i<arregloEnteros.length; i++)
-        checkboxInicioFin.insertAdjacentHTML("beforeend",input("porFechaReserva",arregloEnteros[i]);
+        for(let i=0; i<arregloEnteros.length; i++){
+        checkboxInicioFin.insertAdjacentHTML("beforeend",input("porFechaReserva",arregloEnteros[i]));
+        }
     }
 }            
 

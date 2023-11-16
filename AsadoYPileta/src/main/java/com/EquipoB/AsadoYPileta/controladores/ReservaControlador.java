@@ -12,7 +12,6 @@ import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -43,28 +42,18 @@ public class ReservaControlador {
     private ServicioServicio servicioServicio;
 
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
-    @PostMapping("/registrar")  //localhost:8080/reserva/registrar
+    @PostMapping("/registrar") 
     public ModelAndView crearReserva(@RequestParam String idPropiedad, @RequestParam String fechaInicio,
-            @RequestParam String fechaFinal, HttpSession session, @RequestParam String[] idServicio, ModelMap modelo) {
-        
+            @RequestParam String fechaFinal, HttpSession session, ModelMap modelo) {
+
         Reserva reserva = new Reserva();
         Usuario usuario = (Usuario) session.getAttribute("usuariosession");
         Cliente cliente = clienteServicio.getOne(usuario.getId());
         Propiedad propiedad = propiedadServicio.getOne(idPropiedad);
-        reserva.setUsuario(usuario);
-        reserva.setPropiedad(propiedad);
-        List<Servicio> servicios = servicioServicio.listarServicios();
-        modelo.addAttribute("servicios", servicios);
-        List<Servicio> serviciosElegidos = new ArrayList<>();
-        Double montoPropiedad = propiedad.getValor();
-        Double montoTotal = montoPropiedad;
-        for (String Servicio : idServicio) {
-            serviciosElegidos.add(servicioServicio.getOne(Servicio));
-            montoTotal = montoTotal + servicioServicio.getOne(Servicio).getValor()*montoPropiedad;
-        }
-
-        reserva.setMontoTotal(montoTotal);
-        reserva.setServiciosElegidas(serviciosElegidos);
+        reserva.setCliente(cliente);
+        reserva.setPropiedad(propiedad);  
+        reserva.setMontoTotal(propiedad.getValor());
+        
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         try {
             reserva.setFechaInicio(formato.parse(fechaInicio));
@@ -72,6 +61,8 @@ public class ReservaControlador {
         } catch (Exception e) {
             System.out.println(e);
         }
+        List<Servicio> servicios = servicioServicio.listarServicios();
+        modelo.addAttribute("servicios", servicios);
         modelo.addAttribute("propiedad", propiedad);
         modelo.addAttribute("cliente", cliente);
         modelo.addAttribute("reserva", reserva);
@@ -147,3 +138,14 @@ public class ReservaControlador {
     }    
 
 }
+
+/*
+@RequestParam String[] idServicio,
+List<Servicio> serviciosElegidos = new ArrayList<>();
+        for (String Servicio : idServicio) {
+            serviciosElegidos.add(servicioServicio.getOne(Servicio));
+            montoTotal = montoTotal + servicioServicio.getOne(Servicio).getValor()*montoPropiedad;
+        }
+
+        reserva.setServiciosElegidas(serviciosElegidos);
+*/

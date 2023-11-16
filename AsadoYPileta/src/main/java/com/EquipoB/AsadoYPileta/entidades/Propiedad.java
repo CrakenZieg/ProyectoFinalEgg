@@ -39,24 +39,4 @@ public class Propiedad {
     @OneToOne(cascade = CascadeType.ALL)
     private FiltroDisponibilidad filtroDisponibilidad;
 
-    public Propiedad() {
-    }
-
-    public Propiedad(String id, String titulo, String descripcion, TipoPropiedad tipo, Double valor, 
-            List<Servicio> servicios, List<Imagen> imagenes, Boolean estado,Ubicacion ubicacion, Double puntuacion) {
-        this.id = id;
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.tipo = tipo;
-        this.valor = valor;
-        this.servicios = servicios;
-        this.imagenes = imagenes;
-        this.estado = estado;
-        this.ubicacion =ubicacion;
-        this.puntuacion= puntuacion;
-    }
-
- 
-    
-    
 }
