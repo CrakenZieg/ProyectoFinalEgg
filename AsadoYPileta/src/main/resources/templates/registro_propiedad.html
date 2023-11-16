@@ -7,6 +7,8 @@
         <main>
             <div class="main_container">
                 <h2 class="h1 text-center">Registrar Propiedad</h2>
+                <div th:if="${error}" th:text="${error}" class="alert alert-danger" role="alert">
+                </div>
                 <div  class="container border border-black rounded-4">
                     <form class="row d-flex justify-content-between align-items-center" th:action="@{/propiedad/registro}" method="POST" enctype="multipart/form-data">
 
@@ -94,7 +96,7 @@
                             <button type="submit" class="btn btn-primary"><span class="h3">Registrar Propiedad</span></button>
                         </div>                        
                     </form>
-                   
+
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <a th:href="@{/}" class="btn btn-primary"><span class="h3">Atras</span></a>
                     </div>

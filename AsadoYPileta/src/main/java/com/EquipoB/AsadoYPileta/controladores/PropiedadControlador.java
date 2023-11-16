@@ -40,6 +40,9 @@ public class PropiedadControlador {
     private PropietarioServicio propietarioServicio;
 
     @Autowired
+    private TipoPropiedadServicio tipopropiedadServicio;
+
+    @Autowired
     private ServicioServicio servicioServicio;
 
     @Autowired
@@ -47,7 +50,7 @@ public class PropiedadControlador {
 
     @Autowired
     private TipoPropiedadServicio tipoPropiedadServicio;
-    
+
     @Autowired
     private ReservaServicio reservaServicio;
 
@@ -75,7 +78,7 @@ public class PropiedadControlador {
         model.addAttribute("tipoPropiedades", tipoPropiedades);
         model.addAttribute("servicios", servicios);
         model.addAttribute("comentarios", comentarios);
-        
+
         return "propiedad.html";
     }
 
@@ -96,19 +99,36 @@ public class PropiedadControlador {
     public String registro(@RequestParam String titulo, @RequestParam String descripcion,
             @RequestParam String tipo, @RequestParam(required = false) String[] serviciosInput,
             @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor, HttpSession session,
-            @RequestParam String pais,@RequestParam String provincia,@RequestParam String departamento,@RequestParam String localidad,
-            @RequestParam String calle,@RequestParam String numeracion,@RequestParam String observaciones,
-            @RequestParam Double latitud,@RequestParam Double longitud) {
+            @RequestParam String pais, @RequestParam String provincia, @RequestParam String departamento, @RequestParam String localidad,
+            @RequestParam String calle, @RequestParam String numeracion, @RequestParam String observaciones,
+            @RequestParam Double latitud, @RequestParam Double longitud, ModelMap modelo) {
         try {
 
             Usuario logueado = (Usuario) session.getAttribute("usuariosession");
 
-            propiedadServicio.crearPropiedad(titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, logueado, pais, provincia, 
-                                             departamento, localidad, calle, numeracion, observaciones, latitud, longitud);
+            propiedadServicio.crearPropiedad(titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, logueado, pais, provincia,
+                    departamento, localidad, calle, numeracion, observaciones, latitud, longitud);
+            modelo.put("exito", "Propiedad Cargada exitosamente!!!");
+
+            List<Propiedad> propiedades = propiedadServicio.listarPropiedadesActivas();
+            List<TipoPropiedad> tipoPropiedades = tipopropiedadServicio.listarTipoPropiedad();
+            modelo.addAttribute("propiedades", propiedades);
+            modelo.addAttribute("tipoPropiedades", tipoPropiedades);
+            return "index.html";
         } catch (Exception ex) {
-            System.out.println("Excepcion: " + ex);
+            modelo.put("error", ex.getMessage());
+
+            List<Servicio> servicios = new ArrayList<>();
+            servicios = servicioServicio.listarServicios();
+            List<TipoPropiedad> tipoPropiedades = new ArrayList<>();
+            tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
+            modelo.addAttribute("tipoPropiedades", tipoPropiedades);
+            modelo.addAttribute("servicios", servicios);
+            return "registro_propiedad.html";
+
+//            return "redirect:/registrar";
         }
-        return "index.html";
+
     }
 
     @PreAuthorize("hasRole('ROLE_PROPIETARIO')")
@@ -136,12 +156,12 @@ public class PropiedadControlador {
             @RequestParam(required = false) String[] serviciosInput,
             @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor,
             @RequestParam(required = false) String[] imagenesViejas, @RequestParam String estado,
-            @RequestParam String pais,@RequestParam String provincia,@RequestParam String departamento,@RequestParam String localidad,
-            @RequestParam String calle,@RequestParam String numeracion,@RequestParam String observaciones,
-            @RequestParam Double latitud,@RequestParam Double longitud) {
+            @RequestParam String pais, @RequestParam String provincia, @RequestParam String departamento, @RequestParam String localidad,
+            @RequestParam String calle, @RequestParam String numeracion, @RequestParam String observaciones,
+            @RequestParam Double latitud, @RequestParam Double longitud) {
         try {
             propiedadServicio.modificarPropiedad(id, titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, imagenesViejas, estado,
-                                                 pais, provincia, departamento, localidad, calle, numeracion, observaciones, latitud, longitud);
+                    pais, provincia, departamento, localidad, calle, numeracion, observaciones, latitud, longitud);
         } catch (Exception ex) {
             System.out.println("Excepcion: " + ex);
         }
@@ -167,19 +187,19 @@ public class PropiedadControlador {
         modelo.addAttribute("promedioPuntuacion", promedioPuntuacion);
         return "puntuacion.html";
     }
-    
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/baja")
-    public ModelAndView bajaPropiedad(@RequestParam String idPropiedad, ModelMap modelo) throws MiException {          
+    public ModelAndView bajaPropiedad(@RequestParam String idPropiedad, ModelMap modelo) throws MiException {
         propiedadServicio.darDeBaja(idPropiedad);
-        return new ModelAndView("redirect:/admin/dashboard",modelo);
+        return new ModelAndView("redirect:/admin/dashboard", modelo);
     }
-    
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/alta")
     public ModelAndView altaPropiedad(@RequestParam String idPropiedad, ModelMap modelo) throws MiException {
-        propiedadServicio.darDeAlta(idPropiedad);  
-        return new ModelAndView("redirect:/admin/dashboard",modelo);
+        propiedadServicio.darDeAlta(idPropiedad);
+        return new ModelAndView("redirect:/admin/dashboard", modelo);
     }
-    
+
 }

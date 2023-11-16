@@ -59,14 +59,16 @@ public class ClienteControlador {
     public String registro(@RequestParam String nombre, @RequestParam String apellido,
             @RequestParam String email, @RequestParam String password, @RequestParam String password2,
             @RequestParam MultipartFile[] imagenesInput, @RequestParam String descripcion,
-            @RequestParam String[] tipoContactoInput, @RequestParam String[] contactosInput,@RequestParam String rol) {
+            @RequestParam String[] tipoContactoInput, @RequestParam String[] contactosInput,@RequestParam String rol, ModelMap modelo) {
         try {
             clienteServicio.crearCliente(email, nombre, apellido, descripcion,
                     password, password2, imagenesInput, tipoContactoInput, contactosInput,rol);
+            modelo.put("exito", "Cliente Cargado exitosamente!!!");
+             return "login.html";
         } catch (Exception ex) {
-            Logger.getLogger(ClienteControlador.class.getName()).log(Level.SEVERE, null, ex);
+            modelo.put("error", ex.getMessage());
+            return "redirect:/cliente/registrar";
         }
-        return "index.html";
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROPIETARIO','ROLE_CLIENTE')")
