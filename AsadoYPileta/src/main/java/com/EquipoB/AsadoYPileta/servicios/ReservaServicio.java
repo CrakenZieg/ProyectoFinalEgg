@@ -24,20 +24,18 @@ public class ReservaServicio {
     private PropiedadRepositorio propiedadRepositorio;
 
     @Transactional
-    public void crearReserva(String mensaje, Date fechaInicio, Date fechaFin, 
-            List serviciosElegidas, Double montoTotal, Boolean disponible) throws MiException {
+    public void crearReserva(String idPropiedad, String mensaje, Date fechaInicio, Date fechaFin, 
+            List serviciosElegidas) throws MiException {
 
-        validar(mensaje, fechaInicio, fechaFin, disponible);
-
+        validar(mensaje, fechaInicio, fechaFin);
         Reserva reserva = new Reserva();
-
+        reserva.setPropiedad(propiedadRepositorio.getById(idPropiedad));
         reserva.setMensaje(mensaje);
         reserva.setFechaInicio(fechaInicio);
         reserva.setFechaFin(fechaFin);
         reserva.setServiciosElegidas(serviciosElegidas);
 
-        reserva.setMontoTotal(montoTotal);
-        reserva.setDisponible(disponible);
+        reserva.setMontoTotal(reserva.getMontoTotal());
 
         reservaRepositorio.save(reserva);
 
@@ -71,21 +69,21 @@ public class ReservaServicio {
     }
 
     @Transactional
-    public void modificarReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible) throws MiException {
+    public void modificarReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas) throws MiException {
 
-        validar(mensaje, fechaInicio, fechaFin, disponible);
+        validar(mensaje, fechaInicio, fechaFin);
 
         Optional<Reserva> respuesta = reservaRepositorio.findById(id);
 
         if (respuesta.isPresent()) {
 
             Reserva reserva = respuesta.get();
-
+            reserva.getPropiedad().getFiltroDisponibilidad().habilitado(fechaInicio, fechaFin);
             reserva.setMensaje(mensaje);
             reserva.setFechaInicio(fechaInicio);
             reserva.setFechaFin(fechaFin);
             reserva.setServiciosElegidas(serviciosElegidas);
-
+            reserva.setMontoTotal(reserva.montoTotal());
             reservaRepositorio.save(reserva);
         }
 
@@ -177,8 +175,15 @@ public class ReservaServicio {
         }
 
     }
+    
+    @Transactional
+    public void aceptarReserva(String id){
+        Reserva reserva = reservaRepositorio.getById(id);
+        reserva.setDisponible(true);
+        reservaRepositorio.save(reserva);
+    }
 
-    private void validar(String mensaje, Date fechaInicio, Date fechaFin, Boolean disponible) throws MiException {
+    private void validar(String mensaje, Date fechaInicio, Date fechaFin) throws MiException {
 
         if (mensaje == null || mensaje.trim().isEmpty()) {
 
@@ -192,11 +197,6 @@ public class ReservaServicio {
         if (fechaInicio.before(fechaFin)) {
 
             throw new MiException("La fecha de Inicio no puede ser posterior a la fecha de Fin");
-        }
-
-        if (disponible == false) {
-
-            throw new MiException("La propiedad que quiere reservar no esta disponible");
         }
     }
 }

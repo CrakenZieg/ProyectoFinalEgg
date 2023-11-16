@@ -84,11 +84,8 @@ public class PropiedadServicio {
         propiedad.setServicios(servicios);
         propiedad.setImagenes(imagenes);
         propiedad.setValor(valor);
-        int[] mesParseado = parsearArregloString(mensualReserva);
-        int[] diaParseado = parsearArregloString(diarioReserva);
-        int[] porFechaParsado = parsearArregloString(porFechaReserva);
         propiedad.setFiltroDisponibilidad(filtroDisponibilidadServicio.crearFiltro(fechaInicioReserva,
-                fechaFinReserva, mesParseado, diaParseado, porFechaParsado));
+                fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva));
         propiedad.setPuntuacion(0.00);
         propiedad.setIdPropietario(propietario.getId());
         propiedadRepositorio.save(propiedad);
@@ -154,11 +151,8 @@ public class PropiedadServicio {
             propiedad.setServicios(servicios);
             propiedad.setImagenes(imagenes);
             propiedad.setValor(valor);
-            int[] mesParseado = parsearArregloString(mensualReserva);
-            int[] diaParseado = parsearArregloString(diarioReserva);
-            int[] porFechaParsado = parsearArregloString(porFechaReserva);
             propiedad.setFiltroDisponibilidad(filtroDisponibilidadServicio.modificarFiltro(propiedad.getFiltroDisponibilidad().getId(),
-                    fechaInicioReserva, fechaFinReserva, mesParseado, diaParseado, porFechaParsado));
+                    fechaInicioReserva, fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva));
             propiedadRepositorio.save(propiedad);
         }
     }
@@ -228,17 +222,6 @@ public class PropiedadServicio {
                 propiedadRepositorio.delete(propiedad);
             }
         }
-    }
-
-    public int[] parsearArregloString(String[] arreglo) {
-        if (arreglo != null) {
-            int[] enteros = new int[arreglo.length];
-            for (int i = 0; i < arreglo.length; i++) {
-                enteros[i] = Integer.parseInt(arreglo[i]);
-            }
-            return enteros;
-        }
-        return null;
     }
 
     public void validar(String titulo, String descripcion,
