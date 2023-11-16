@@ -154,7 +154,7 @@
                                              <tbody>
                                                         <tr th:each="propiedad : ${propiedades}">
                                                          <td th:text="${propiedad.titulo}"></td>
-                                                         <td th:each="reserva: ${reservas}" th:if="reserva.propiedad.id=propiedad.id" th:text="${reserva.cliente.nombre}"></td>
+                                                         <td th:each="reserva: ${reservas}" th:if="reserva.propiedad.id=propiedad.id" th:text="${reserva.cliente.contacto.tipo}"></td>
                                                         </tr>
                                             </tbody>
                                             </table>
