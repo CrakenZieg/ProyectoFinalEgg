@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
@@ -23,7 +24,7 @@ public class Reserva {
     @GeneratedValue(generator="uuid")  
     @GenericGenerator(name= "uuid", strategy = "uuid2") 
     private String id;
-   
+   @Lob
     private String mensaje;
     private Double montoTotal;
     private Boolean disponible;
