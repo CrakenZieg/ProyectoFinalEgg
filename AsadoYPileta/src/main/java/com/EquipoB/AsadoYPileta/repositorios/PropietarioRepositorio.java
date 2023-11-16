@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 public interface PropietarioRepositorio  extends JpaRepository<Propietario, String>{
 
-    @Query("SELECT COUNT(p) FROM Propietario p WHERE p.cliente.usuario.alta=true")
+    @Query("SELECT COUNT(p) FROM Propietario p WHERE p.cliente.usuario.alta=true") // devuelve un entero que representa la cantidad de propietarios cuyos clientes tienen la propiedad
     public int buscarCuantosPropietarios();
     
 }

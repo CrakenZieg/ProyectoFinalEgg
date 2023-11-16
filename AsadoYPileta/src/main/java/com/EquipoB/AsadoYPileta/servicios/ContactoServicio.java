@@ -1,6 +1,5 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
-import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Contacto;
 import com.EquipoB.AsadoYPileta.entidades.TipoContacto;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;

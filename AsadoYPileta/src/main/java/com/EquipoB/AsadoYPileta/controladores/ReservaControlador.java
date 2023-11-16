@@ -10,7 +10,6 @@ import com.EquipoB.AsadoYPileta.servicios.ClienteServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
-import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,8 +34,6 @@ public class ReservaControlador {
     private ReservaServicio reservaServicio;
     @Autowired
     private PropiedadServicio propiedadServicio;
-    @Autowired
-    private UsuarioServicio usuarioServicio;
     @Autowired
     private ClienteServicio clienteServicio;
     @Autowired
@@ -101,7 +98,7 @@ public class ReservaControlador {
     public String modificarReserva(@PathVariable String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible,String idPropiedad, ModelMap modelo) {
 
         try {
-            reservaServicio.modificarReserva(id, mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible,idPropiedad);
+            reservaServicio.modificarReserva(id, mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible);
 
             return "redirect:/reserva/listar";
         } catch (MiException e) {
@@ -134,14 +131,3 @@ public class ReservaControlador {
     }    
 
 }
-
-/*
-@RequestParam String[] idServicio,
-List<Servicio> serviciosElegidos = new ArrayList<>();
-        for (String Servicio : idServicio) {
-            serviciosElegidos.add(servicioServicio.getOne(Servicio));
-            montoTotal = montoTotal + servicioServicio.getOne(Servicio).getValor()*montoPropiedad;
-        }
-
-        reserva.setServiciosElegidas(serviciosElegidos);
-*/

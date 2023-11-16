@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.servicios.ClienteServicio;
@@ -28,10 +27,6 @@ public class ComentarioControlador {
 
     @Autowired
     private ComentarioServicio comentarioServicio;
-    @Autowired
-    private ImagenServicio imagenServicio;
-    @Autowired
-    private PropiedadServicio propiedadServicio;
     @Autowired
     private ClienteServicio clienteServicio;
 

@@ -1,6 +1,5 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
-
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Propietario;

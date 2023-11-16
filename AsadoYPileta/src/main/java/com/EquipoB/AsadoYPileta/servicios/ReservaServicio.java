@@ -3,7 +3,6 @@ package com.EquipoB.AsadoYPileta.servicios;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
-import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.ReservaRepositorio;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,8 +19,6 @@ public class ReservaServicio {
 
     @Autowired
     private ReservaRepositorio reservaRepositorio;
-    @Autowired
-    private PropiedadRepositorio propiedadRepositorio;
 
     @Transactional
     public void crearReserva(String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible,String idPropiedad) throws MiException {
@@ -56,8 +53,8 @@ public class ReservaServicio {
     }
     
     @Transactional
-    public void modificarReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible,String idPropiedad) throws MiException {
-        validarReservasPropiedad(idPropiedad);
+    public void modificarReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible) throws MiException {
+        
         validar(mensaje, fechaInicio, fechaFin, disponible);
         
         Optional<Reserva> respuesta = reservaRepositorio.findById(id);
@@ -91,12 +88,8 @@ public class ReservaServicio {
     
     @Transactional
     public boolean validarReservasPropiedad(String idPropiedad)throws MiException{
-        Optional<Propiedad> propiedad = propiedadRepositorio.findById(idPropiedad);
-        
-       if(!propiedad.isPresent()){
-           throw new MiException("La propiedad no existe");
-       }
-        return reservaRepositorio.buscarReservaPropiedad(idPropiedad);
+       
+        return reservaRepositorio.propiedadTieneReservasActivas(idPropiedad);
        
     }
     

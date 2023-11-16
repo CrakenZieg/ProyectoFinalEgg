@@ -1,4 +1,3 @@
-
 package com.EquipoB.AsadoYPileta.entidades;
 
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;

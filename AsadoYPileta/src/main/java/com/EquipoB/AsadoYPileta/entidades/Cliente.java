@@ -28,7 +28,6 @@ public class Cliente{
     private List<Contacto> contactos;
       
     
-
     @PrePersist
     private void onCreate() {
         this.id = usuario.getId();
