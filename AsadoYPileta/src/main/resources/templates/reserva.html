@@ -25,6 +25,11 @@ and open the template in the editor.
                 <ul th:each="servicio ${reserva.serviciosElegidas}">
                     <li th:text="${servicio.tipoComidad + servicio.valor}"></li>
                 </ul>
+                
+                <ul th:if="reserva.disponible==true" th:each="contacto ${contactosPropietario}">
+                    <li th:text="${contacto.tipo}"></li>
+                     <li th:text="${contacto.contacto}"></li>
+                </ul>
                 <p th:text="reserva.valor">Valor total:</p>
             </div>
         </div>
