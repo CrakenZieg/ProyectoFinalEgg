@@ -2,6 +2,7 @@ package com.EquipoB.AsadoYPileta.servicios;
 
 
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
+import com.EquipoB.AsadoYPileta.entidades.Contacto;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
@@ -52,6 +53,13 @@ public class PropietarioServicio {
     @Transactional(readOnly = true)
     public Optional<Propietario> getOne(String id) throws MiException {
         return propietarioRepositorio.findById(id);
+    }
+    
+     public List<Contacto> mostrarContactos (String idUsuario){
+        Propietario propietario = propietarioRepositorio.getOne(idUsuario);
+         
+        List<Contacto> contactosUsuario = propietario.getCliente().getContactos();
+        return contactosUsuario;
     }
     
     public boolean comprobarPropietario(Usuario logueado, Propiedad propiedad) throws MiException{

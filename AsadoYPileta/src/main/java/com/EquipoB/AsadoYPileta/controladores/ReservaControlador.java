@@ -1,6 +1,7 @@
 package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
+import com.EquipoB.AsadoYPileta.entidades.Contacto;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
@@ -8,6 +9,7 @@ import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.servicios.ClienteServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
+import com.EquipoB.AsadoYPileta.servicios.PropietarioServicio;
 import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
@@ -41,6 +43,8 @@ public class ReservaControlador {
     private ClienteServicio clienteServicio;
     @Autowired
     private ServicioServicio servicioServicio;
+    @Autowired
+    private PropietarioServicio propietarioServicio;
 
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @PostMapping("/registrar") 
@@ -77,6 +81,17 @@ public class ReservaControlador {
     public ModelAndView modificarReserva(@PathVariable String id, ModelMap modelo) {
         modelo.put("reserva", reservaServicio.getOne(id));
         return new ModelAndView("reserva_modificar.html", modelo);
+
+    }
+    
+    @GetMapping("/ver/{id}")
+    public String verReserva(@PathVariable String id, ModelMap modelo) {
+        Reserva reserva =reservaServicio.getOne(id);
+        List<Contacto> contactosPropietario= propietarioServicio.mostrarContactos(reserva.getPropiedad().getId());
+        modelo.addAttribute("contactoPropietatio",contactosPropietario);
+        modelo.put("reserva", reserva);
+        
+        return "reserva.html";
 
     }
 
