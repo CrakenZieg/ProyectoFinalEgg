@@ -23,7 +23,7 @@ public class Propietario{
     private List<Propiedad> propiedades;
     
     @PrePersist
-    protected void onCreate() {
+    private void onCreate() {
         this.id = cliente.getId();
     }   
     
