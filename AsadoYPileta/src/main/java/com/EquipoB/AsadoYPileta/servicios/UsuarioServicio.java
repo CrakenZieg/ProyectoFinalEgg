@@ -17,7 +17,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.excepciones.PermisosException;
 import com.EquipoB.AsadoYPileta.repositorios.ClienteRepositorio;
-import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.PropietarioRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.UsuarioRepositorio;
 import java.util.Date;
@@ -37,6 +36,7 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Autowired
     private ClienteRepositorio clienteRepositorio;
+    
     @Autowired
     private PropietarioRepositorio propietarioRepositorio;
     
@@ -269,17 +269,16 @@ public class UsuarioServicio implements UserDetailsService {
     }
     
     @Transactional
-    public void cambiarPassword(String email,String password, String newPassword,String equalPassword ) throws MiException{
+    public void cambiarPassword(Usuario usuario,String password, String passwordNuevo,String passwordNuevo2 ) throws MiException{
         
-        Usuario usuario = usuarioRepositorio.buscarPorEmail(email);
-       
+        
         // BCryptPasswordEncoder es una clase que se utiliza comúnmente para realizar hashing y verificación de contraseñas seguras.
         if(usuario != null && new BCryptPasswordEncoder()
                 .matches(password, usuario.getPassword())){  //se procede a verificar si la contraseña proporcionada coincide con la contraseña almacenada en la base de datos. Esto se hace utilizando el método matches 
             
-            if(newPassword.equals(equalPassword)){ //Si newPasword esta igual a equalPassword nos da acceso para poder encriptar la nueva contraseña
+            if(passwordNuevo.equals(passwordNuevo2)){ //Si newPasword esta igual a equalPassword nos da acceso para poder encriptar la nueva contraseña
                usuario.setPassword(new BCryptPasswordEncoder()// Si la contraseña antigua coincide, esta línea establece la nueva contraseña proporcionada por el usuario después de codificarla con BCryptPasswordEncoder. Esto garantiza que la contraseña se almacene de forma segura en la base de datos.
-                    .encode(newPassword)); //encode: proporciona en la forma que se va a ingresar la contraseña, en este caso String
+                    .encode(passwordNuevo)); //encode: proporciona en la forma que se va a ingresar la contraseña, en este caso String
                 usuarioRepositorio.save(usuario);
             } else {
                 throw new MiException("Las contraseñas nuevas no coinciden.");
@@ -292,10 +291,11 @@ public class UsuarioServicio implements UserDetailsService {
     }
     
     private void validar(String email, String password, Rol rol) throws MiException {
+        String regex = "^(?=.*[0-9])(?=.*[A-Z]).*$";
         if (email == null || email.trim().isEmpty()) {
             throw new MiException("El Email no puede ser nulo o estar vacio");
         }
-        if (password == null || password.trim().isEmpty()) {
+        if (password == null || password.trim().isEmpty()|| password.length() <= 7 || !password.matches(regex)) {
             throw new MiException("La contraseña no puede ser nulo o estar vacio");
         }
 

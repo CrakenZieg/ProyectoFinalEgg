@@ -3,8 +3,10 @@ package com.EquipoB.AsadoYPileta.entidades;
 
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
@@ -20,7 +22,9 @@ public class Cliente{
     @OneToOne(cascade = CascadeType.ALL)
     private Usuario usuario;
     private String nombre;
-    private String apellido; 
+    private String apellido;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String descripcion;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Imagen> imagenes;
@@ -30,7 +34,7 @@ public class Cliente{
     
 
     @PrePersist
-    protected void onCreate() {
+    private void onCreate() {
         this.id = usuario.getId();
     }    
     

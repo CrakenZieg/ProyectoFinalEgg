@@ -1,9 +1,11 @@
 package com.EquipoB.AsadoYPileta.entidades;
 
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import lombok.Data;
@@ -17,6 +19,8 @@ public class Comentario {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String cuerpo;
     @OneToMany
     private List<Imagen> imagenes;

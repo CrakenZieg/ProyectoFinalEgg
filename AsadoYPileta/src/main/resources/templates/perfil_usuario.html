@@ -21,6 +21,13 @@
                                     Propiedades
                                 </button>
                             </li>
+                            <li class="nav-item" role="presentation" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" >
+                                <button class="nav-link rounded-5" id="profile-tab3" data-bs-toggle="tab" type="button" role="tab"
+                                        aria-selected="false">
+                                    Reservas
+                                </button>
+                            </li>
+
                         </ul>
                     </div>
                     <div class="carousel-inner">
@@ -36,19 +43,19 @@
                                 <button class="btn btn-primary" type="button" id="btnEdit" onclick="toggleInputs()">Editar Perfil</button>
                                 <button id="botn-camb" hidden >Cambiar contraseña</button>
                                 <dialog class="modale" id="modale">
-                                    <form>
+                                    <form  th:action="@{/cliente/cambiar_password}" method="POST" enctype="multipart/form-data">
 
                                         <div class="registro-inptcont">
-                                            <input type="password" name="passwordAnt" required/>
-                                            <label for="passwordAnt">Ingrese su contraseña</label>
-                                        </div>
-                                        <div class="registro-inptcont">
                                             <input type="password" name="password" required/>
-                                            <label for="password">Ingrese su nueva contraseña</label>
+                                            <label for="password">Ingrese contraseña actual</label>
                                         </div>
                                         <div class="registro-inptcont">
-                                            <input type="password" name="password2" required/>
-                                            <label for="password2">Repita contraseña</label>
+                                            <input type="password" name="passwordNuevo" required/>
+                                            <label for="passwordNuevo">Ingrese su nueva contraseña</label>
+                                        </div>
+                                        <div class="registro-inptcont">
+                                            <input type="password" name="passwordNuevo2" required/>
+                                            <label for="passwordNuevo2">Repita contraseña</label>
                                         </div>
 
                                         <button type="submit">Guardar</button>  <button id="cerrar-modal">Cerrar</button>
@@ -135,6 +142,36 @@
                         <div class="carousel-item">
                             <div th:replace="fragmentos/card :: div"></div>                            
                         </div>
+                         <div class="carousel-item">
+                                          <div class="resultado-contenedor">
+                                            <table>
+                                            <thead>
+                                              <tr>
+                                                   <th>Nombre propiedad</th>
+                                                   <th>Check In</th>
+                                                   <th>Check out</th>
+                                                   <th>Ubicacion</th>
+                                                   <th>Valor total</th>
+                                                   <th>Servicios</th>
+                                                   <th>Estado</th>
+                                                 </tr>
+                                             </thead>
+                                             <tbody>
+                                                        <tr th:each="reserva : ${reservas}">
+                                                          <th  th:text="${reserva.propiedad.titulo}"   >titulo</th>
+                                                          <td th:text="${reserva.fechaInicio.toString()}">titulo</td>
+                                                          <td th:text="${reserva.fechaFinal.toString()}">titulo</td>
+                                                          <td th:text="${reserva.propiedad.ubicacion.pais +  ', ' + reserva.propiedad.ubicacion.provincia }">Mendoza</td>
+                                                         <td th:text="${reserva.valor}"></td>
+                                                         <td th:text="${reserva.serviciosElegidas[0] + ', '  +  reserva.serviciosElegidas[1] , + '...' }"></td>
+                                                         <td sec:authorize="hasAnyRole('PROPIETARIO')"  th:if="${!reserva.disponible }"><a th:href='@{/reserva/aceptarReserva/__${reserva.id }__}'>Aceptar></a></td>
+                                                         <td th:if="${reserva.disponible}"> <a th:href='@{/reserva/borar/__${reserva.id }__}'>Cancelar></a></td>
+                                                         <td><a id="abrir-detalles">Ver detalles</a></td>
+                                                        </tr>
+                                            </tbody>
+                                            </table>
+                                          </div>
+                                    </div>
 
                     </div>
                 </div>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="/fragmentos/frags :: head"></head>
+    <body>
+        <header th:replace="fragmentos/frags :: header"></header>
+        <section>
+
+        <div class="reserva-contenedor">
+
+            <div class="reserva" >
+                <h2 th:text="${reserva.propiedad.titulo}" ></h2>
+                <p th:text="${reserva.fechaInicio.toString()}"></p>
+                <p th:text="${reserva.fechaFinal.toString()}"></p>
+                <p th:text="${reserva.propiedad.ubicacion.pais }">Pais:</p>
+                <p th:text="${reserva.propiedad.ubicacion.provincia }">Provincia:</p>
+                <p th:text="reserva.propiedad.ubicacion.departamento">Departamento:</p>
+                <p  th:text="reserva.propiedad.ubicacion.calle">Calle:</p>
+                <p  th:text="reserva.propiedad.ubicacion.numeracion">Numeracion:</p>
+                <ul th:each="servicio ${reserva.serviciosElegidas}">
+                    <li th:text="${servicio.tipoComidad + servicio.valor}"></li>
+                </ul>
+                <p th:text="reserva.valor">Valor total:</p>
+            </div>
+        </div>
+        </section>
+    </body>
+</html>

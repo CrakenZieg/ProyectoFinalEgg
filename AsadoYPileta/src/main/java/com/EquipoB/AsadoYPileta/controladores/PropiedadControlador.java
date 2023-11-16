@@ -9,6 +9,7 @@ import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.excepciones.PermisosException;
 import com.EquipoB.AsadoYPileta.servicios.ComentarioServicio;
+import com.EquipoB.AsadoYPileta.servicios.FiltroDisponibilidadServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropietarioServicio;
 import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
@@ -51,22 +52,28 @@ public class PropiedadControlador {
     @Autowired
     private TipoPropiedadServicio tipoPropiedadServicio;
 
+<<<<<<< HEAD
+=======
+    @Autowired
+    private FiltroDisponibilidadServicio filtroDisponibilidadServicio;
+
+>>>>>>> desarrollo
     @Autowired
     private ReservaServicio reservaServicio;
 
     @GetMapping("/tipo/{tipo}")
-    public String listar(@PathVariable String tipo, ModelMap model) throws MiException {
+    public ModelAndView listar(@PathVariable String tipo, ModelMap modelo) throws MiException {
         List<Propiedad> propiedades = new ArrayList<>();
         propiedades = propiedadServicio.listarPropiedadesPorTipo(tipo);
         List<TipoPropiedad> tipoPropiedades = new ArrayList<>();
         tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
-        model.addAttribute("propiedades", propiedades);
-        model.addAttribute("tipoPropiedades", tipoPropiedades);
-        return "index.html";
+        modelo.addAttribute("propiedades", propiedades);
+        modelo.addAttribute("tipoPropiedades", tipoPropiedades);
+        return new ModelAndView("index.html", modelo);
     }
 
     @GetMapping("/{id}")
-    public String propiedad(@PathVariable String id, ModelMap model) {
+    public ModelAndView propiedad(@PathVariable String id, ModelMap modelo) {
         List<Servicio> servicios = new ArrayList<>();
         servicios = servicioServicio.listarServicios();
         List<Comentario> comentarios = new ArrayList<>();
@@ -74,24 +81,32 @@ public class PropiedadControlador {
         List<TipoPropiedad> tipoPropiedades = new ArrayList<>();
         tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
         List<Reserva> reservas = reservaServicio.reservasFuturas(id);
+<<<<<<< HEAD
         model.addAttribute("propiedad", propiedadServicio.getOne(id));
         model.addAttribute("tipoPropiedades", tipoPropiedades);
         model.addAttribute("servicios", servicios);
         model.addAttribute("comentarios", comentarios);
 
         return "propiedad.html";
+=======
+        modelo.addAttribute("propiedad", propiedadServicio.getOne(id));
+        modelo.addAttribute("tipoPropiedades", tipoPropiedades);
+        modelo.addAttribute("servicios", servicios);
+        modelo.addAttribute("comentarios", comentarios);
+        return new ModelAndView("propiedad.html", modelo);
+>>>>>>> desarrollo
     }
 
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @GetMapping("/registrar")
-    public String registrar(ModelMap model) {
+    public ModelAndView registrar(ModelMap modelo) {
         List<Servicio> servicios = new ArrayList<>();
         servicios = servicioServicio.listarServicios();
         List<TipoPropiedad> tipoPropiedades = new ArrayList<>();
         tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
-        model.addAttribute("tipoPropiedades", tipoPropiedades);
-        model.addAttribute("servicios", servicios);
-        return "registro_propiedad.html";
+        modelo.addAttribute("tipoPropiedades", tipoPropiedades);
+        modelo.addAttribute("servicios", servicios);
+        return new ModelAndView("registro_propiedad.html", modelo);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
@@ -101,11 +116,18 @@ public class PropiedadControlador {
             @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor, HttpSession session,
             @RequestParam String pais, @RequestParam String provincia, @RequestParam String departamento, @RequestParam String localidad,
             @RequestParam String calle, @RequestParam String numeracion, @RequestParam String observaciones,
+<<<<<<< HEAD
             @RequestParam Double latitud, @RequestParam Double longitud, ModelMap modelo) {
         try {
+=======
+            @RequestParam Double latitud, @RequestParam Double longitud, @RequestParam(required = false) String fechaInicioReserva,
+            @RequestParam(required = false) String fechaFinReserva, @RequestParam(required = false) String[] mensualReserva,
+            @RequestParam(required = false) String[] diarioReserva, @RequestParam(required = false) String[] porFechaReserva) throws Exception {
+>>>>>>> desarrollo
 
-            Usuario logueado = (Usuario) session.getAttribute("usuariosession");
+        Usuario logueado = (Usuario) session.getAttribute("usuariosession");
 
+<<<<<<< HEAD
             propiedadServicio.crearPropiedad(titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, logueado, pais, provincia,
                     departamento, localidad, calle, numeracion, observaciones, latitud, longitud);
             modelo.put("exito", "Propiedad Cargada exitosamente!!!");
@@ -129,11 +151,17 @@ public class PropiedadControlador {
 //            return "redirect:/registrar";
         }
 
+=======
+        propiedadServicio.crearPropiedad(titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, logueado, pais, provincia,
+                departamento, localidad, calle, numeracion, observaciones, latitud, longitud, fechaInicioReserva,
+                fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva);
+        return "index.html";
+>>>>>>> desarrollo
     }
 
     @PreAuthorize("hasRole('ROLE_PROPIETARIO')")
     @GetMapping("/modificar/{id}")
-    public String modificar(@PathVariable String id, ModelMap model, HttpSession session) throws PermisosException, MiException {
+    public ModelAndView modificar(@PathVariable String id, ModelMap modelo, HttpSession session) throws PermisosException, MiException {
         Usuario logueado = (Usuario) session.getAttribute("usuariosession");
         List<Servicio> servicios = new ArrayList<>();
         servicios = servicioServicio.listarServicios();
@@ -143,10 +171,10 @@ public class PropiedadControlador {
         if (!propietarioServicio.comprobarPropietario(logueado, propiedad)) {
             throw new PermisosException("No es posible modificar la propiedad porque no te pertenece");
         }
-        model.addAttribute("propiedad", propiedad);
-        model.addAttribute("tipoPropiedades", tipoPropiedades);
-        model.addAttribute("servicios", servicios);
-        return "modificar_propiedad.html";
+        modelo.addAttribute("propiedad", propiedad);
+        modelo.addAttribute("tipoPropiedades", tipoPropiedades);
+        modelo.addAttribute("servicios", servicios);
+        return new ModelAndView("modificar_propiedad.html", modelo);
     }
 
     @PreAuthorize("hasRole('ROLE_PROPIETARIO')")
@@ -158,6 +186,7 @@ public class PropiedadControlador {
             @RequestParam(required = false) String[] imagenesViejas, @RequestParam String estado,
             @RequestParam String pais, @RequestParam String provincia, @RequestParam String departamento, @RequestParam String localidad,
             @RequestParam String calle, @RequestParam String numeracion, @RequestParam String observaciones,
+<<<<<<< HEAD
             @RequestParam Double latitud, @RequestParam Double longitud) {
         try {
             propiedadServicio.modificarPropiedad(id, titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, imagenesViejas, estado,
@@ -165,6 +194,16 @@ public class PropiedadControlador {
         } catch (Exception ex) {
             System.out.println("Excepcion: " + ex);
         }
+=======
+            @RequestParam Double latitud, @RequestParam Double longitud, @RequestParam(required = false) String fechaInicioReserva,
+            @RequestParam(required = false) String fechaFinReserva, @RequestParam(required = false) String[] mensualReserva,
+            @RequestParam(required = false) String[] diarioReserva, @RequestParam(required = false) String[] porFechaReserva) throws Exception {
+
+        propiedadServicio.modificarPropiedad(id, titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, imagenesViejas, estado,
+                pais, provincia, departamento, localidad, calle, numeracion, observaciones, latitud, longitud,
+                fechaInicioReserva, fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva);
+
+>>>>>>> desarrollo
         return "index.html";
     }
 
@@ -177,15 +216,14 @@ public class PropiedadControlador {
             throw new PermisosException("No es posible eliminar la propiedad porque no te pertenece");
         }
         propiedadServicio.eliminar(id, logueado);
-
         return "index.html";
     }
 
     @GetMapping("/puntuacion/{id}")
-    public String puntuacion(@PathVariable String id, ModelMap modelo) {
+    public ModelAndView puntuacion(@PathVariable String id, ModelMap modelo) {
         Double promedioPuntuacion = comentarioServicio.obtenerPromedioPuntuacionPorPropiedad(id);
         modelo.addAttribute("promedioPuntuacion", promedioPuntuacion);
-        return "puntuacion.html";
+        return new ModelAndView("puntuacion.html", modelo);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
