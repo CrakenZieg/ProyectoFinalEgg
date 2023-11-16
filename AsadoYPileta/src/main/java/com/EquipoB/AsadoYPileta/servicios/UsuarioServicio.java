@@ -265,6 +265,7 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     @Transactional
+
     public void cambiarPassword(Usuario usuario,String password, String passwordNuevo,String passwordNuevo2 ) throws MiException{
         
         
