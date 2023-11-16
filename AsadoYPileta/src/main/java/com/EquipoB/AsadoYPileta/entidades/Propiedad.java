@@ -10,6 +10,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -34,24 +35,6 @@ public class Propiedad {
     @OneToOne(cascade = CascadeType.ALL)
     private Ubicacion ubicacion;
     @OneToOne(cascade = CascadeType.ALL)
-    private FiltroDisponibilidad filtroDisponibilidad;
-
-    public Propiedad() {
-    }
-
-    public Propiedad(String id, String titulo, String descripcion, TipoPropiedad tipo, Double valor, List<Servicio> servicios, List<Imagen> imagenes, Boolean estado,Ubicacion ubicacion) {
-        this.id = id;
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.tipo = tipo;
-        this.valor = valor;
-        this.servicios = servicios;
-        this.imagenes = imagenes;
-        this.estado = estado;
-        this.ubicacion =ubicacion;
-    }
-
- 
-    
+    private FiltroDisponibilidad filtroDisponibilidad;   
     
 }

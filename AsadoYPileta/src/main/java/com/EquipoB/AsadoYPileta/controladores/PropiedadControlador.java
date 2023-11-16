@@ -1,6 +1,7 @@
 package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Comentario;
+import com.EquipoB.AsadoYPileta.entidades.FiltroDisponibilidad;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
@@ -9,11 +10,13 @@ import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.excepciones.PermisosException;
 import com.EquipoB.AsadoYPileta.servicios.ComentarioServicio;
+import com.EquipoB.AsadoYPileta.servicios.FiltroDisponibilidadServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropietarioServicio;
 import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
 import com.EquipoB.AsadoYPileta.servicios.TipoPropiedadServicio;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +51,9 @@ public class PropiedadControlador {
 
     @Autowired
     private TipoPropiedadServicio tipoPropiedadServicio;
+    
+    @Autowired
+    private FiltroDisponibilidadServicio filtroDisponibilidadServicio;
     
     @Autowired
     private ReservaServicio reservaServicio;
@@ -99,15 +105,16 @@ public class PropiedadControlador {
             @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor, HttpSession session,
             @RequestParam String pais,@RequestParam String provincia,@RequestParam String departamento,@RequestParam String localidad,
             @RequestParam String calle,@RequestParam String numeracion,@RequestParam String observaciones,
-            @RequestParam Double latitud,@RequestParam Double longitud,@RequestParam(required = false) Date fechaInicioReserva,
-            @RequestParam(required = false) Date fechaFinReserva,@RequestParam(required = false) int[] mensualReserva,
+            @RequestParam Double latitud,@RequestParam Double longitud,@RequestParam(required = false) String fechaInicioReserva,
+            @RequestParam(required = false) String fechaFinReserva,@RequestParam(required = false) int[] mensualReserva,
             @RequestParam(required = false) int[] diarioReserva,@RequestParam(required = false) int[] porFechaReserva) {
         try {
 
-            Usuario logueado = (Usuario) session.getAttribute("usuariosession");
-
+            Usuario logueado = (Usuario) session.getAttribute("usuariosession");          
+            
             propiedadServicio.crearPropiedad(titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, logueado, pais, provincia, 
-                                             departamento, localidad, calle, numeracion, observaciones, latitud, longitud);
+                                             departamento, localidad, calle, numeracion, observaciones, latitud, longitud, fechaInicioReserva,
+                                             fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva);
         } catch (Exception ex) {
             System.out.println("Excepcion: " + ex);
         }
@@ -141,12 +148,13 @@ public class PropiedadControlador {
             @RequestParam(required = false) String[] imagenesViejas, @RequestParam String estado,
             @RequestParam String pais,@RequestParam String provincia,@RequestParam String departamento,@RequestParam String localidad,
             @RequestParam String calle,@RequestParam String numeracion,@RequestParam String observaciones,
-            @RequestParam Double latitud,@RequestParam Double longitud,@RequestParam(required = false) Date fechaInicioReserva,
-            @RequestParam(required = false) Date fechaFinReserva,@RequestParam(required = false) int[] mensualReserva,
+            @RequestParam Double latitud,@RequestParam Double longitud,@RequestParam(required = false) String fechaInicioReserva,
+            @RequestParam(required = false) String fechaFinReserva,@RequestParam(required = false) int[] mensualReserva,
             @RequestParam(required = false) int[] diarioReserva,@RequestParam(required = false) int[] porFechaReserva) {
         try {
             propiedadServicio.modificarPropiedad(id, titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, imagenesViejas, estado,
-                                                 pais, provincia, departamento, localidad, calle, numeracion, observaciones, latitud, longitud);
+                                                 pais, provincia, departamento, localidad, calle, numeracion, observaciones, latitud, longitud,
+                                                 fechaInicioReserva, fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva);
         } catch (Exception ex) {
             System.out.println("Excepcion: " + ex);
         }

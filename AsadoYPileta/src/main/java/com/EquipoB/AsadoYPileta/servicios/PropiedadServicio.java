@@ -1,5 +1,6 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
+import com.EquipoB.AsadoYPileta.entidades.FiltroDisponibilidad;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Propietario;
@@ -43,23 +44,25 @@ public class PropiedadServicio {
     
     @Autowired    
     private TipoPropiedadServicio tipoPropiedadServicio;  
+    
+    @Autowired    
+    private FiltroDisponibilidadServicio filtroDisponibilidadServicio; 
 
     @Transactional
     public void crearPropiedad(String titulo, String descripcion, String tipo,
             String[] serviciosInput, MultipartFile[] imagenesInput, Double valor, Usuario usuario,
-            String pais, String provincia,String departamento, String localidad,String calle,String numeracion,String observaciones,
-                               Double latitud, Double longitud) throws MiException, Exception {
+            String pais, String provincia,String departamento, String localidad,String calle,
+            String numeracion,String observaciones, Double latitud, Double longitud, 
+            String fechaInicioReserva, String fechaFinReserva, int[] mensualReserva, 
+            int[] diarioReserva, int[] porFechaReserva) throws MiException, Exception {
 
         validar(titulo, descripcion, tipo, imagenesInput, valor);
         
         Optional<Propietario> respuesta = propietarioRepositorio.findById(usuario.getId());
 
-
-        Propietario propietario = null;       
-      
+        Propietario propietario = null;             
 
         if(respuesta.isPresent()){
-
             propietario = respuesta.get();
         } else {
             propietario = propietarioServicio.crearPropietario(usuario);
@@ -82,6 +85,7 @@ public class PropiedadServicio {
         propiedad.setServicios(servicios);
         propiedad.setImagenes(imagenes);
         propiedad.setValor(valor);
+        propiedad.setFiltroDisponibilidad(filtroDisponibilidadServicio.crearFiltro(fechaInicioReserva, fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva));
         propiedadRepositorio.save(propiedad);
         if(propietario.getPropiedades() != null){
             propietario.getPropiedades().add(propiedad);
@@ -96,7 +100,8 @@ public class PropiedadServicio {
     @Transactional
     public void modificarPropiedad(String id, String titulo, String descripcion, String tipo, String[] serviciosInput, MultipartFile[] imagenesInput,
             Double valor, String[] imagenesViejas, String estado,String pais, String provincia,String departamento, String localidad,String calle,String numeracion,
-            String observaciones,Double latitud, Double longitud) throws MiException, Exception {
+            String observaciones,Double latitud, Double longitud, String fechaInicioReserva, String fechaFinReserva, int[] mensualReserva, 
+            int[] diarioReserva, int[] porFechaReserva) throws MiException, Exception {
 
         validar(titulo, descripcion, tipo, imagenesInput, valor);
 
@@ -144,6 +149,7 @@ public class PropiedadServicio {
             propiedad.setServicios(servicios);
             propiedad.setImagenes(imagenes);
             propiedad.setValor(valor);
+            propiedad.setFiltroDisponibilidad(filtroDisponibilidadServicio.modificarFiltro(propiedad.getFiltroDisponibilidad().getId(),fechaInicioReserva, fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva));
             propiedadRepositorio.save(propiedad);
         }
     }

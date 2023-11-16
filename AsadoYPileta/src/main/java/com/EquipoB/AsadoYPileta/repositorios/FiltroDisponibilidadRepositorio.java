@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FiltroDisponibiliadadRepositorio extends JpaRepository<FiltroDisponibilidad, String> {
+public interface FiltroDisponibilidadRepositorio extends JpaRepository<FiltroDisponibilidad, String> {
     
 }

@@ -30,7 +30,7 @@ public class Cliente{
     
 
     @PrePersist
-    protected void onCreate() {
+    private void onCreate() {
         this.id = usuario.getId();
     }    
     
