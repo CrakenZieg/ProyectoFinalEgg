@@ -291,10 +291,11 @@ public class UsuarioServicio implements UserDetailsService {
     }
     
     private void validar(String email, String password, Rol rol) throws MiException {
+        String regex = "^(?=.*[0-9])(?=.*[A-Z]).*$";
         if (email == null || email.trim().isEmpty()) {
             throw new MiException("El Email no puede ser nulo o estar vacio");
         }
-        if (password == null || password.trim().isEmpty()) {
+        if (password == null || password.trim().isEmpty()|| password.length() <= 7 || !password.matches(regex)) {
             throw new MiException("La contraseña no puede ser nulo o estar vacio");
         }
 

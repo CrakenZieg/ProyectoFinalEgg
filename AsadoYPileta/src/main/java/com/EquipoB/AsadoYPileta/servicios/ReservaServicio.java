@@ -23,7 +23,8 @@ public class ReservaServicio {
     private PropiedadRepositorio propiedadRepositorio;
 
     @Transactional
-    public void crearReserva(String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible) throws MiException {
+    public void crearReserva(String mensaje, Date fechaInicio, Date fechaFin, 
+            List serviciosElegidas, Double montoTotal, Boolean disponible) throws MiException {
 
         validar(mensaje, fechaInicio, fechaFin, disponible);
 
@@ -33,16 +34,17 @@ public class ReservaServicio {
         reserva.setFechaInicio(fechaInicio);
         reserva.setFechaFin(fechaFin);
         reserva.setServiciosElegidas(serviciosElegidas);
-        
+
         reserva.setMontoTotal(montoTotal);
         reserva.setDisponible(disponible);
 
         reservaRepositorio.save(reserva);
 
     }
-    
+
     @Transactional(readOnly = true) 
     public List<Reserva> listarReservaCliente(String id) {
+
 
         List<Reserva> reservas = new ArrayList();
 
@@ -50,15 +52,13 @@ public class ReservaServicio {
 
         return reservas;
     }
-    
+
     @Transactional
     public void modificarReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible) throws MiException {
 
         validar(mensaje, fechaInicio, fechaFin, disponible);
-        
+
         Optional<Reserva> respuesta = reservaRepositorio.findById(id);
-        
-     
 
         if (respuesta.isPresent()) {
 
@@ -73,89 +73,88 @@ public class ReservaServicio {
         }
 
     }
-    
+
     @Transactional(readOnly = true)
-    public Reserva getOne(String id){
-        
+    public Reserva getOne(String id) {
+
         return reservaRepositorio.getOne(id);
     }
-    
+
     @Transactional
-    public boolean validarReservasCliente(String id){
+    public boolean validarReservasCliente(String id) {
         return reservaRepositorio.buscarReservaCliente(id);
     }
-    
+
     @Transactional
-    public boolean validarReservasPropiedad(String id){
+    public boolean validarReservasPropiedad(String id) {
         return reservaRepositorio.buscarReservaPropiedad(id);
     }
-    
+
     @Transactional
-    public void borrar(String id){
-        
+    public void borrar(String id) {
+
         try {
-            Optional <Reserva> respuesta = reservaRepositorio.findById(id);
-            
-            if(respuesta.isPresent()){
+            Optional<Reserva> respuesta = reservaRepositorio.findById(id);
+
+            if (respuesta.isPresent()) {
                 reservaRepositorio.deleteById(id);
             }
-        } catch(Exception e){
+        } catch (Exception e) {
             e.getMessage();
         }
-        
-    }
-    
-    
-    public boolean verificarSuperposicionReservas(String idPropiedad, Date fechaInicio, Date fechaFin) {
-    
-    List<Date> fechasInicioReservas = reservaRepositorio.buscarFechaInicioReserva(idPropiedad);
-    List<Date> fechasFinReservas = reservaRepositorio.buscarFechaFinReserva(idPropiedad);
-    
 
-    for (int i = 0; i < fechasInicioReservas.size(); i++) {
-        Date inicioReserva = fechasInicioReservas.get(i);
-        Date finReserva = fechasFinReservas.get(i);
-        
-        if ((inicioReserva.before(fechaFin) || inicioReserva.equals(fechaFin)) &&
-            (finReserva.after(fechaInicio) || finReserva.equals(fechaInicio))) {
-           
-            return false;
-        }
     }
-    
-    return true;
-}
-        
-    public List<Reserva> reservasFuturas(String id){        
+
+    public boolean verificarSuperposicionReservas(String idPropiedad, Date fechaInicio, Date fechaFin) {
+
+        List<Date> fechasInicioReservas = reservaRepositorio.buscarFechaInicioReserva(idPropiedad);
+        List<Date> fechasFinReservas = reservaRepositorio.buscarFechaFinReserva(idPropiedad);
+
+        for (int i = 0; i < fechasInicioReservas.size(); i++) {
+            Date inicioReserva = fechasInicioReservas.get(i);
+            Date finReserva = fechasFinReservas.get(i);
+
+            if ((inicioReserva.before(fechaFin) || inicioReserva.equals(fechaFin))
+                    && (finReserva.after(fechaInicio) || finReserva.equals(fechaInicio))) {
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public List<Reserva> reservasFuturas(String id) {
         List<Reserva> reservas = new ArrayList();
         reservas = reservaRepositorio.buscarReservaPorPropiedad(id);
-        return reservas;        
+        return reservas;
     }
-            
 
     @Transactional
-    public void habilitarComentarioFinReserva(Date fechaFin){
-      
-         List<Reserva> finReserva = reservaRepositorio.buscarFinReserva(fechaFin);
-    
-    for(Reserva reserva : finReserva ){
-         reserva.setComentarioHabilitado(true);
-         reservaRepositorio.save(reserva);
-        
+    public void habilitarComentarioFinReserva(Date fechaFin) {
+
+        List<Reserva> finReserva = reservaRepositorio.buscarFinReserva(fechaFin);
+
+        for (Reserva reserva : finReserva) {
+            reserva.setComentarioHabilitado(true);
+            reservaRepositorio.save(reserva);
+
+        }
     }
-    }
+
     //se ejecuta todos los dias a las 00:00 hs
     @Scheduled(cron = "0 0 0 ? * * ")
-    public void bajaAutomatica(){
+    public void bajaAutomatica() {
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         String fecha = formato.format(new Date());
-        
-        List <Reserva> finalizadas = reservaRepositorio.buscarFinalizadas(fecha);
-        
-        if(!finalizadas.isEmpty()){
+
+        List<Reserva> finalizadas = reservaRepositorio.buscarFinalizadas(fecha);
+
+        if (!finalizadas.isEmpty()) {
             for (Reserva finalizada : finalizadas) {
                 Reserva modificar = finalizada;
                 modificar.setDisponible(Boolean.FALSE);
+                modificar.setComentarioHabilitado(Boolean.TRUE);
                 reservaRepositorio.save(modificar);
             }
         }
@@ -164,7 +163,7 @@ public class ReservaServicio {
 
     private void validar(String mensaje, Date fechaInicio, Date fechaFin, Boolean disponible) throws MiException {
 
-        if (mensaje == null || mensaje.trim().isEmpty() ) {
+        if (mensaje == null || mensaje.trim().isEmpty()) {
 
             throw new MiException("El mensaje no puede estar vacio, tiene que ingresar un mensaje");
         }

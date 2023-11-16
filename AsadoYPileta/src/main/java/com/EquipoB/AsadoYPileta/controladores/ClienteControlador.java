@@ -17,6 +17,7 @@ import com.EquipoB.AsadoYPileta.servicios.TipoContactoServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
@@ -89,9 +90,14 @@ public class ClienteControlador {
             modelo.put("cliente", cliente);
             modelo.addAttribute("reservas",reservasCliente);
             modelo.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContactoUsuario(cliente));
-        } else if (usuario.getRol().equals(Rol.PROPIETARIO) || usuario.getRol().equals(Rol.ADMIN)) {
-            Propietario propietario;
-            propietario = propietarioServicio.getOne(usuario.getId());
+        } else if (usuario.getRol().equals(Rol.PROPIETARIO)) {
+            Propietario propietario = new Propietario();
+            Optional<Propietario> respuesta = propietarioServicio.getOne(usuario.getId());
+            if(respuesta.isPresent()){
+                propietario = respuesta.get();                
+            } else {
+                propietario = propietarioServicio.crearPropietario(usuario);
+            }
             modelo.put("cliente", propietario.getCliente());
             modelo.put("propiedades", propietario.getPropiedades());
             modelo.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContactoUsuario(propietario.getCliente()));

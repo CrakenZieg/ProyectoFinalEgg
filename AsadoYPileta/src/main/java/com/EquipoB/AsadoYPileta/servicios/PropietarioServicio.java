@@ -51,13 +51,8 @@ public class PropietarioServicio {
     }
 
     @Transactional(readOnly = true)
-    public Propietario getOne(String id) throws MiException {
-        Optional<Propietario> respuesta = propietarioRepositorio.findById(id);
-        if (respuesta.isPresent()) {
-            return respuesta.get();
-        } else {
-            throw new MiException("No se encontro el propietario");
-        }
+    public Optional<Propietario> getOne(String id) throws MiException {
+        return propietarioRepositorio.findById(id);
     }
     
      public List<Contacto> mostrarContactos (String idUsuario){
@@ -68,7 +63,12 @@ public class PropietarioServicio {
     }
     
     public boolean comprobarPropietario(Usuario logueado, Propiedad propiedad) throws MiException{
-        return getOne(logueado.getId()).getPropiedades().contains(propiedad);
+        Optional<Propietario> respuesta = propietarioRepositorio.findById(logueado.getId());
+        if (respuesta.isPresent()) {
+            return respuesta.get().getPropiedades().contains(propiedad);
+        } else {
+            throw new MiException("No se encontro el propietario");
+        }
     }
 
     @Transactional
