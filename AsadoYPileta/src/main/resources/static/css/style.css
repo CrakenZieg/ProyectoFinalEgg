@@ -633,7 +633,7 @@ input:valid ~ label{
     padding: .3rem;
 }
 .reserva{
-    width: 34%;
+    width: auto;
     height: 400px;
     margin:.9rem;
     background-color: #fff;
@@ -963,7 +963,7 @@ th{
     gap: 1rem;
     height: 100%;
     max-height: 1020px;
-    width: 400px;
+    width: auto;
     background-color: #ffffff;
     padding: 1rem;
     border-radius: .7rem;
