@@ -114,10 +114,10 @@ public class ReservaControlador {
     }
 
     @PostMapping("/modificar/{id}")
-    public String modificarReserva(@PathVariable String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible, ModelMap modelo) {
+    public String modificarReserva(@PathVariable String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, Double montoTotal, Boolean disponible,String idPropiedad, ModelMap modelo) {
 
         try {
-            reservaServicio.modificarReserva(id, mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible);
+            reservaServicio.modificarReserva(id, mensaje, fechaInicio, fechaFin, serviciosElegidas, montoTotal, disponible,idPropiedad);
 
             return "redirect:/reserva/listar";
         } catch (MiException e) {
