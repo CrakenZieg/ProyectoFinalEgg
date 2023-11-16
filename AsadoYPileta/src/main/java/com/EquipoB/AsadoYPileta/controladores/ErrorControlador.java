@@ -9,20 +9,26 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class ErrorControlador implements ErrorController {
-    
-    @RequestMapping(value = "/error", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView renderErrorPage(HttpServletRequest httpRequest, Exception ex) {
 
-		ModelAndView errorPage = new ModelAndView("error");
-                
-		int httpErrorCode = getCodigoError(httpRequest);
-		String errorMsg = (String) httpRequest.getAttribute(getMensajeError(httpErrorCode));
-		
-		errorPage.addObject("codigo", httpErrorCode);
-		errorPage.addObject("mensaje", errorMsg);
-		errorPage.addObject("excepcion", ex.getMessage());
-		return errorPage;
-	}
+    @RequestMapping(value = "/error", method = {RequestMethod.GET, RequestMethod.POST})
+    public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
+
+        ModelAndView errorPage = new ModelAndView("error");
+        
+        int httpErrorCode = getCodigoError(httpRequest);
+        String errorMsg = getMensajeError(httpErrorCode);
+        String excepMsg = "Error";
+        Throwable throwable = (Throwable) httpRequest.getAttribute("javax.servlet.error.exception");
+        if (throwable != null && throwable.getMessage() != null) {
+            excepMsg = throwable.getMessage();
+        }
+        
+        errorPage.addObject("codigo", httpErrorCode);
+        errorPage.addObject("mensaje", errorMsg);
+        errorPage.addObject("excepcion", excepMsg);
+        return errorPage;
+    }
+
     private int getCodigoError(HttpServletRequest httpRequest) {
         return (Integer) httpRequest.getAttribute("javax.servlet.error.status_code");
     }
@@ -53,7 +59,7 @@ public class ErrorControlador implements ErrorController {
         }
         return mensaje;
     }
-    
+
     public String getErrorPath() {
         return "/error.html";
     }
