@@ -42,11 +42,11 @@ public class ReservaServicio {
     }
     
     @Transactional(readOnly = true) 
-    public List<Reserva> listarReserva() {
+    public List<Reserva> listarReservaCliente(String id) {
 
         List<Reserva> reservas = new ArrayList();
 
-        reservas = reservaRepositorio.findAll();
+        reservas = reservaRepositorio.buscarReservaPorCliente(id);
 
         return reservas;
     }

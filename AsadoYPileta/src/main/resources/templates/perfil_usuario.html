@@ -166,7 +166,7 @@
                                                          <td th:text="${reserva.serviciosElegidas[0] + ', '  +  reserva.serviciosElegidas[1] , + '...' }"></td>
                                                          <td sec:authorize="hasAnyRole('PROPIETARIO')"  th:if="${!reserva.disponible }"><a th:href='@{/reserva/aceptarReserva/__${reserva.id }__}'>Aceptar></a></td>
                                                          <td th:if="${reserva.disponible}"> <a th:href='@{/reserva/borar/__${reserva.id }__}'>Cancelar></a></td>
-                                                         <td><a id="abrir-detalles">Ver detalles</a></td>
+                                                         <td><a id="abrir-detalles" <a th:href='@{/reserva/ver/__${reserva.id }__}'>Ver detalles</a></td>
                                                         </tr>
                                             </tbody>
                                             </table>

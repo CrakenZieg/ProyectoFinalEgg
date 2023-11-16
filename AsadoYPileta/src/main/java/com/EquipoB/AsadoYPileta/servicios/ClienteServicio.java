@@ -70,8 +70,8 @@ public class ClienteServicio {
         clientes = clienteRepositorio.findAll();
         return clientes;
     }
-
-  
+    
+   
     @Transactional
     public void modificarCliente(String email, String id, String nombre, String apellido, 
             String descripcion, MultipartFile[] imagenesInput,

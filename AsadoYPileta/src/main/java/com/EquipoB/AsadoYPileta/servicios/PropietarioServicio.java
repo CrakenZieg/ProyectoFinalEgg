@@ -2,6 +2,7 @@ package com.EquipoB.AsadoYPileta.servicios;
 
 
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
+import com.EquipoB.AsadoYPileta.entidades.Contacto;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
@@ -57,6 +58,13 @@ public class PropietarioServicio {
         } else {
             throw new MiException("No se encontro el propietario");
         }
+    }
+    
+     public List<Contacto> mostrarContactos (String idUsuario){
+        Propietario propietario = propietarioRepositorio.getOne(idUsuario);
+         
+        List<Contacto> contactosUsuario = propietario.getCliente().getContactos();
+        return contactosUsuario;
     }
     
     public boolean comprobarPropietario(Usuario logueado, Propiedad propiedad) throws MiException{
