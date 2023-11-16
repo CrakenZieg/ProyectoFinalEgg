@@ -82,6 +82,7 @@ public class PropiedadServicio {
         propiedad.setServicios(servicios);
         propiedad.setImagenes(imagenes);
         propiedad.setValor(valor);
+        propiedad.setPuntuacion(0.00);
         propiedadRepositorio.save(propiedad);
         if(propietario.getPropiedades() != null){
             propietario.getPropiedades().add(propiedad);
@@ -147,7 +148,14 @@ public class PropiedadServicio {
             propiedadRepositorio.save(propiedad);
         }
     }
-
+    @Transactional
+    public void setPuntuacion (Double puntuacion, String id){
+        Propiedad propiedad = propiedadRepositorio.getOne(id);
+        propiedad.setPuntuacion(puntuacion);
+        propiedadRepositorio.save(propiedad);
+    }
+    
+  
     public List<Propiedad> listarPropiedades() {
         List<Propiedad> propiedades = new ArrayList<>();
         propiedades = propiedadRepositorio.findAll();
