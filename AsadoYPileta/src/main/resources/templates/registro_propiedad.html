@@ -9,7 +9,6 @@
                 <h2 class="h1 text-center">Registrar Propiedad</h2>
                 <div  class="container border border-black rounded-4">
                     <form class="row d-flex justify-content-between align-items-center" th:action="@{/propiedad/registro}" method="POST" enctype="multipart/form-data">
-
                         <div class="col-md-4">
                             <label for="titulo" class="form-label"><span class="h3">Título</span></label>                           
                             <input type="text" class="form-control" id="titulo" name="titulo" placeholder="titulo"/>
@@ -24,8 +23,6 @@
                                 <option th:each="tipo : ${tipoPropiedades}" th:value="${tipo.getTipo()}" th:text="${tipo.getTitulo()}"></option>
                             </select>
                         </div>
-
-
                         <div class="col-md-4">
                             <label for="pais" class="form-label"><span class="h3">País</span></label>                           
                             <input type="text" class="form-control" id="pais" name="pais" placeholder="pais"/>
@@ -66,21 +63,47 @@
                             <label for="imagenes" class="form-label"><span class="h3">Imágenes</span></label>                           
                             <input type="file" class="form-control" id="imagenes" name="imagenesInput" multiple="multiple"/>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group p-3">
                             <label for="descripcion" class="form-label"><span class="h3">Descripción</span></label>                            
                             <textarea class="form-control" rows="6" id="descripcion" name="descripcion"></textarea>
                         </div>
-
-                        <div class="col-md-6">
-                            <label for="fechainicio" class="form-label">Fecha Inicio disponible</label>
-                            <input class="form-control" type="date" id="fechainicio" name="fechaInicio" />
+                        <span class="h3 text-center border-3 border-top border-success">Opcionales</span>
+                        <div class="col-md-5 p-3">
+                            <label for="fechaInicioReserva" class="form-label "><span class="h3">Fecha Inicio disponibilidad</span></label>
+                            <input class="form-control" type="date" id="fechaInicioReserva" name="fechaInicioReserva" />
                         </div>
-                        <div class="col-md-6">
-                            <label for="fechafinal" class="form-label">Fecha fin disponibilidad</label>
-                            <input class="form-control" type="date" id="fechafinal" name="fechaFinal" />
+                        <div class="col-md-5 p-3">
+                            <label for="fechaFinReserva" class="form-label "><span class="h3">Fecha fin disponibilidad</span></label>
+                            <input class="form-control" type="date" id="fechaFinReserva" name="fechaFinReserva" />
                         </div>
+                        <div class="form-group p-3">
+                            <span class="h3">En que Meses lo alquilarias</span></br>
+                            <div th:each="mesesOpt : ${T(com.EquipoB.AsadoYPileta.enumeraciones.Meses).values()}" class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" th:id="${mesesOpt.getMes()}" th:value="${mesesOpt.getNumMes()}" 
+                                       name="mensualReserva" />
+                                <label class="form-check-label" th:for="${mesesOpt.getMes()}" th:text="${mesesOpt.getMes()}"></label>
+                            </div>
+                        </div>
+                        <div class="form-group p-3">
+                            <span class="h3">Dias Disponible</span></br>
+                            <div th:each="diasOpt : ${T(com.EquipoB.AsadoYPileta.enumeraciones.Dias).values()}" class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" th:id="${diasOpt.getDia()}" th:value="${diasOpt.getNumDia()}" 
+                                       name="diarioReserva" />
+                                <label class="form-check-label" th:for="${diasOpt.getDia()}" th:text="${diasOpt.getDia()}"></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-auto" >
+                                <label for="inicio" class="form-label"><span class="h3">Dia del Mes Inicio</span></label>                           
+                                <input type="number" class="form-control" id="inicio" name="inicio" min="0"/>
+                            </div>
+                            <div class="col-auto">
+                                <label for="fin" class="form-label"><span class="h3">Dia del Mes Fin</span></label>                           
+                                <input type="number" class="form-control" id="fin" name="fin" min="0"/>
+                            </div>
+                        </div>
+                        <span class="p-1 border-3 border-bottom border-success"></span>
                         <div class="form-group">
-
                             <input hidden type="number" class="form-control" id="latitud" name="latitud" th:value="111111"/>
                         </div>
                         <div class="form-group">
@@ -93,7 +116,7 @@
                             <button type="submit" class="btn btn-primary"><span class="h3">Registrar Propiedad</span></button>
                         </div>                        
                     </form>
-                   
+
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <a th:href="@{/}" class="btn btn-primary"><span class="h3">Atras</span></a>
                     </div>
