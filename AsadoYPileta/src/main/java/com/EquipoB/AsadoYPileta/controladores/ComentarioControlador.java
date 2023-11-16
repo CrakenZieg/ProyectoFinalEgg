@@ -47,7 +47,8 @@ public class ComentarioControlador {
     }
 
     @PostMapping("/registro")
-    public String registro(@RequestParam() String cuerpo, HttpSession session, @RequestParam MultipartFile[] archivos, @RequestParam String stringIdpropiedad, double puntuacion, ModelMap modelo) throws Exception {
+    public String registro(@RequestParam() String cuerpo, HttpSession session, @RequestParam MultipartFile[] archivos, 
+                            @RequestParam String stringIdpropiedad,@RequestParam Integer puntuacion, ModelMap modelo) throws Exception {
         try {
 
             comentarioServicio.crearComentario(session, archivos, cuerpo, stringIdpropiedad, puntuacion);
@@ -98,7 +99,7 @@ public class ComentarioControlador {
     }
 
     @PostMapping("/modificar/{id}")
-    public String actualizar(@RequestParam MultipartFile[] archivos, @PathVariable String id, HttpSession session, @RequestParam String cuerpo, Cliente usuario, @RequestParam String stringIdpropiedad, @RequestParam(required = false) String[] imagenesViejas, double puntuacion, ModelMap modelo) throws Exception {
+    public String actualizar(@RequestParam MultipartFile[] archivos, @PathVariable String id, HttpSession session, @RequestParam String cuerpo, Cliente usuario, @RequestParam String stringIdpropiedad, @RequestParam(required = false) String[] imagenesViejas, Integer puntuacion, ModelMap modelo) throws Exception {
 
         try {
 

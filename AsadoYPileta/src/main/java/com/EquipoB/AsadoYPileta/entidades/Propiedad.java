@@ -35,11 +35,14 @@ public class Propiedad {
     private Ubicacion ubicacion;
 //    @OneToOne(cascade = CascadeType.ALL)
 //    private FiltroDisponibilidad filtroDisponibilidad;
+    
+    private Double puntuacion;
 
     public Propiedad() {
     }
 
-    public Propiedad(String id, String titulo, String descripcion, TipoPropiedad tipo, Double valor, List<Servicio> servicios, List<Imagen> imagenes, Boolean estado,Ubicacion ubicacion) {
+    public Propiedad(String id, String titulo, String descripcion, TipoPropiedad tipo, Double valor, 
+            List<Servicio> servicios, List<Imagen> imagenes, Boolean estado,Ubicacion ubicacion, Double puntuacion) {
         this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -49,6 +52,7 @@ public class Propiedad {
         this.imagenes = imagenes;
         this.estado = estado;
         this.ubicacion =ubicacion;
+        this.puntuacion= puntuacion;
     }
 
  
