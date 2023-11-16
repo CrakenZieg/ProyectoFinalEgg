@@ -96,11 +96,21 @@ public class PropiedadServicio {
     @Transactional
     public void modificarPropiedad(String id, String titulo, String descripcion, String tipo, String[] serviciosInput, MultipartFile[] imagenesInput,
             Double valor, String[] imagenesViejas, String estado,String pais, String provincia,String departamento, String localidad,String calle,String numeracion,
-            String observaciones,Double latitud, Double longitud) throws MiException, Exception {
+            String observaciones,Double latitud, Double longitud, Usuario logueado) throws MiException, Exception {
 
         validar(titulo, descripcion, tipo, imagenesInput, valor, provincia, localidad);
 
         Optional<Propiedad> propiedadRepo = propiedadRepositorio.findById(id);
+        Optional<Propietario> propietarioRepo = propietarioRepositorio.findById(logueado.getId());
+        
+        if (propiedadRepo.isPresent() && propietarioRepo.isPresent()){
+            Propiedad propiedad = propiedadRepo.get();
+            Propietario propietario = propietarioRepo.get();
+            List<Propiedad> propiedades = propietario.getPropiedades();
+            if(!propiedades.contains(propiedad)){
+               throw new MiException("Esta propiedad no le pertenece, no la puede modificar");
+            }
+        } 
 
         List<Servicio> servicios = new ArrayList<>();
         if (serviciosInput != null) {
