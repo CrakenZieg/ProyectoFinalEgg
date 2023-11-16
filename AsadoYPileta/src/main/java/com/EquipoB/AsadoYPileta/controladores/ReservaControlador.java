@@ -134,5 +134,16 @@ public class ReservaControlador {
         return "redirect:/reserva/listar";
 
     }
+    
+    @PostMapping("/aceptarReserva/{id}")
+    public String aceptar(@PathVariable String id) throws MiException{
+        Reserva reserva = reservaServicio.getOne(id);
+        reserva.setDisponible(true);
+        reservaServicio.modificarReserva(id, reserva.getMensaje(), 
+                reserva.getFechaInicio(), reserva.getFechaFin(), 
+                reserva.getServiciosElegidas(), reserva.getMontoTotal(), 
+                reserva.getDisponible());
+        return "redirect:/cliente/perfil";        
+    }    
 
 }
