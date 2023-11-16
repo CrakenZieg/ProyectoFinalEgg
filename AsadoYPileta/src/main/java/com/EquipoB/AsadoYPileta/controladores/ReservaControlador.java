@@ -12,7 +12,6 @@ import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -51,7 +50,7 @@ public class ReservaControlador {
         Usuario usuario = (Usuario) session.getAttribute("usuariosession");
         Cliente cliente = clienteServicio.getOne(usuario.getId());
         Propiedad propiedad = propiedadServicio.getOne(idPropiedad);
-        reserva.setUsuario(usuario);
+        reserva.setCliente(cliente);
         reserva.setPropiedad(propiedad);  
         reserva.setMontoTotal(propiedad.getValor());
         

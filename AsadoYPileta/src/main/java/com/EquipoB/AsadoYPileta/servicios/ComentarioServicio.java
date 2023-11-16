@@ -32,7 +32,7 @@ public class ComentarioServicio {
     private UsuarioServicio usuarioServicio;
 
     @Transactional
-    public void crearComentario(HttpSession session, MultipartFile[] archivos, String cuerpo, String stringIdpropiedad, double puntuacion) throws MiException, Exception {
+    public void crearComentario(HttpSession session, MultipartFile[] archivos, String cuerpo, String stringIdpropiedad, Integer puntuacion) throws MiException, Exception {
         validar(session, cuerpo, archivos, stringIdpropiedad,puntuacion);
 
 
@@ -46,8 +46,8 @@ public class ComentarioServicio {
         Usuario logueado = (Usuario) session.getAttribute("usuariosession");
         comentario.setPuntuacion(puntuacion);
         comentario.setUsuario(logueado);
-
         comentarioRepositorio.save(comentario);
+        propiedadServicio.setPuntuacion(obtenerPromedioPuntuacionPorPropiedad(stringIdpropiedad),stringIdpropiedad);
 
     }
 
@@ -69,7 +69,7 @@ public class ComentarioServicio {
     }
 
 
-    public void modificarComentario(HttpSession session, MultipartFile[] archivos, String id, String cuerpo, String stringIdpropiedad, String[] imagenesViejas, double puntuacion) throws MiException, Exception {
+    public void modificarComentario(HttpSession session, MultipartFile[] archivos, String id, String cuerpo, String stringIdpropiedad, String[] imagenesViejas, Integer puntuacion) throws MiException, Exception {
         validar(session, cuerpo, archivos, stringIdpropiedad,puntuacion);
         Optional<Comentario> respuesta = comentarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
@@ -97,6 +97,7 @@ public class ComentarioServicio {
             comentario.setUsuario(logueado);
 
             comentarioRepositorio.save(comentario);
+            propiedadServicio.setPuntuacion(obtenerPromedioPuntuacionPorPropiedad(stringIdpropiedad),stringIdpropiedad);
         }
     }
 

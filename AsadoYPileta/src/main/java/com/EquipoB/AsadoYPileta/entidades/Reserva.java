@@ -44,7 +44,7 @@ public class Reserva {
     private Propiedad propiedad;
     
     @ManyToOne
-    private Usuario usuario;
+    private Cliente cliente;
     
     @PrePersist
     private void onCreate(){

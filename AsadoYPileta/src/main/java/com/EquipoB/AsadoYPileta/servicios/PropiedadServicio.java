@@ -1,6 +1,5 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
-import com.EquipoB.AsadoYPileta.entidades.FiltroDisponibilidad;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Propietario;
@@ -86,6 +85,7 @@ public class PropiedadServicio {
         propiedad.setImagenes(imagenes);
         propiedad.setValor(valor);
         propiedad.setFiltroDisponibilidad(filtroDisponibilidadServicio.crearFiltro(fechaInicioReserva, fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva));
+        propiedad.setPuntuacion(0.00);
         propiedadRepositorio.save(propiedad);
         if(propietario.getPropiedades() != null){
             propietario.getPropiedades().add(propiedad);
@@ -153,7 +153,14 @@ public class PropiedadServicio {
             propiedadRepositorio.save(propiedad);
         }
     }
-
+    @Transactional
+    public void setPuntuacion (Double puntuacion, String id){
+        Propiedad propiedad = propiedadRepositorio.getOne(id);
+        propiedad.setPuntuacion(puntuacion);
+        propiedadRepositorio.save(propiedad);
+    }
+    
+  
     public List<Propiedad> listarPropiedades() {
         List<Propiedad> propiedades = new ArrayList<>();
         propiedades = propiedadRepositorio.findAll();
