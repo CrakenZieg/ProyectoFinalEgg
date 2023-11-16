@@ -41,7 +41,7 @@ public class ReservaControlador {
     private ClienteServicio clienteServicio;
     @Autowired
     private ServicioServicio servicioServicio;
-    
+
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @PostMapping("/registrar")  //localhost:8080/reserva/registrar
     public ModelAndView crearReserva(@RequestParam String idPropiedad, @RequestParam String fechaInicio,
@@ -56,14 +56,11 @@ public class ReservaControlador {
         List<Servicio> servicios = servicioServicio.listarServicios();
         modelo.addAttribute("servicios", servicios);
         List<Servicio> serviciosElegidos = new ArrayList<>();
-        Double montoTotal = propiedad.getValor();
-
+        Double montoPropiedad = propiedad.getValor();
+        Double montoTotal = montoPropiedad;
         for (String Servicio : idServicio) {
             serviciosElegidos.add(servicioServicio.getOne(Servicio));
-            montoTotal = montoTotal + montoTotal * 0.005;
-        }
-        for (Servicio servicio : serviciosElegidos) {
-            servicio.setValor(montoTotal * 0.005);
+            montoTotal = montoTotal + servicioServicio.getOne(Servicio).getValor()*montoPropiedad;
         }
 
         reserva.setMontoTotal(montoTotal);

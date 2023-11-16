@@ -36,19 +36,19 @@
                                 <button class="btn btn-primary" type="button" id="btnEdit" onclick="toggleInputs()">Editar Perfil</button>
                                 <button id="botn-camb" hidden >Cambiar contraseña</button>
                                 <dialog class="modale" id="modale">
-                                    <form>
+                                    <form  th:action="@{/cliente/cambiar_password}" method="POST" enctype="multipart/form-data">
 
                                         <div class="registro-inptcont">
-                                            <input type="password" name="passwordAnt" required/>
-                                            <label for="passwordAnt">Ingrese su contraseña</label>
-                                        </div>
-                                        <div class="registro-inptcont">
                                             <input type="password" name="password" required/>
-                                            <label for="password">Ingrese su nueva contraseña</label>
+                                            <label for="password">Ingrese contraseña actual</label>
                                         </div>
                                         <div class="registro-inptcont">
-                                            <input type="password" name="password2" required/>
-                                            <label for="password2">Repita contraseña</label>
+                                            <input type="password" name="passwordNuevo" required/>
+                                            <label for="passwordNuevo">Ingrese su nueva contraseña</label>
+                                        </div>
+                                        <div class="registro-inptcont">
+                                            <input type="password" name="passwordNuevo2" required/>
+                                            <label for="passwordNuevo2">Repita contraseña</label>
                                         </div>
 
                                         <button type="submit">Guardar</button>  <button id="cerrar-modal">Cerrar</button>
