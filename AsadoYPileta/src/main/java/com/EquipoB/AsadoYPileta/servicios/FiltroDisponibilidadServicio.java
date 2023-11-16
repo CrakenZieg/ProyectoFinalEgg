@@ -51,11 +51,11 @@ public class FiltroDisponibilidadServicio {
         if (respuesta.isPresent()) {
             filtro = respuesta.get();
             SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-            if (fechaInicioReserva != null) {
+            if (fechaInicioReserva != null && !fechaInicioReserva.trim().isEmpty()) {
                 Date fechaInicio = formato.parse(fechaInicioReserva);
                 filtro.setFechaInicio(fechaInicio);
             }
-            if (fechaFinReserva != null) {
+            if (fechaFinReserva != null && !fechaFinReserva.trim().isEmpty()) {
                 Date fechaFinal = formato.parse(fechaFinReserva);
                 filtro.setFechaFin(fechaFinal);
             }
