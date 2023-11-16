@@ -15,6 +15,7 @@ import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
 import com.EquipoB.AsadoYPileta.servicios.TipoPropiedadServicio;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +99,9 @@ public class PropiedadControlador {
             @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor, HttpSession session,
             @RequestParam String pais,@RequestParam String provincia,@RequestParam String departamento,@RequestParam String localidad,
             @RequestParam String calle,@RequestParam String numeracion,@RequestParam String observaciones,
-            @RequestParam Double latitud,@RequestParam Double longitud) {
+            @RequestParam Double latitud,@RequestParam Double longitud,@RequestParam(required = false) Date fechaInicioReserva,
+            @RequestParam(required = false) Date fechaFinReserva,@RequestParam(required = false) int[] mensualReserva,
+            @RequestParam(required = false) int[] diarioReserva,@RequestParam(required = false) int[] porFechaReserva) {
         try {
 
             Usuario logueado = (Usuario) session.getAttribute("usuariosession");
@@ -138,7 +141,9 @@ public class PropiedadControlador {
             @RequestParam(required = false) String[] imagenesViejas, @RequestParam String estado,
             @RequestParam String pais,@RequestParam String provincia,@RequestParam String departamento,@RequestParam String localidad,
             @RequestParam String calle,@RequestParam String numeracion,@RequestParam String observaciones,
-            @RequestParam Double latitud,@RequestParam Double longitud) {
+            @RequestParam Double latitud,@RequestParam Double longitud,@RequestParam(required = false) Date fechaInicioReserva,
+            @RequestParam(required = false) Date fechaFinReserva,@RequestParam(required = false) int[] mensualReserva,
+            @RequestParam(required = false) int[] diarioReserva,@RequestParam(required = false) int[] porFechaReserva) {
         try {
             propiedadServicio.modificarPropiedad(id, titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, imagenesViejas, estado,
                                                  pais, provincia, departamento, localidad, calle, numeracion, observaciones, latitud, longitud);

@@ -10,6 +10,7 @@ function seleccionar(event) {
 }
 
 function editarServicio(id, tipo, valor) {
+    console.log(id+" "+tipo+" "+valor);
     document.getElementById('formServicio').setAttribute('action', '/negocio/modificarServicio');
     document.getElementById('idServicio').value = id;
     document.getElementById('tipoServicio').value = tipo;
