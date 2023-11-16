@@ -2,8 +2,8 @@ function enviarDatos() {
     let checkboxInicioFin = document.getElementById('checkboxInicioFin');
     var inicioValue = document.getElementById('inicio').value;
     var finValue = document.getElementById('fin').value;
-    if(inicioValue!=null && finValue!=null){
-        var arregloEnteros = [parseInt(inicioValue), parseInt(finValue)]; 
+    if(inicioValue!=0 && finValue!=0){
+        var arregloEnteros = [inicioValue, finValue]; 
         for(let i=0; i<arregloEnteros.length; i++){
         checkboxInicioFin.insertAdjacentHTML("beforeend",input("porFechaReserva",arregloEnteros[i]));
         }

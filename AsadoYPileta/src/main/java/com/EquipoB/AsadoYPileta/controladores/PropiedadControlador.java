@@ -48,10 +48,10 @@ public class PropiedadControlador {
 
     @Autowired
     private TipoPropiedadServicio tipoPropiedadServicio;
-    
+
     @Autowired
     private FiltroDisponibilidadServicio filtroDisponibilidadServicio;
-    
+
     @Autowired
     private ReservaServicio reservaServicio;
 
@@ -63,7 +63,7 @@ public class PropiedadControlador {
         tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
         modelo.addAttribute("propiedades", propiedades);
         modelo.addAttribute("tipoPropiedades", tipoPropiedades);
-        return new ModelAndView("index.html",modelo);
+        return new ModelAndView("index.html", modelo);
     }
 
     @GetMapping("/{id}")
@@ -79,7 +79,7 @@ public class PropiedadControlador {
         modelo.addAttribute("tipoPropiedades", tipoPropiedades);
         modelo.addAttribute("servicios", servicios);
         modelo.addAttribute("comentarios", comentarios);
-        return new ModelAndView("propiedad.html",modelo);
+        return new ModelAndView("propiedad.html", modelo);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
@@ -91,7 +91,7 @@ public class PropiedadControlador {
         tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
         modelo.addAttribute("tipoPropiedades", tipoPropiedades);
         modelo.addAttribute("servicios", servicios);
-        return new ModelAndView("registro_propiedad.html",modelo);
+        return new ModelAndView("registro_propiedad.html", modelo);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
@@ -99,17 +99,17 @@ public class PropiedadControlador {
     public String registro(@RequestParam String titulo, @RequestParam String descripcion,
             @RequestParam String tipo, @RequestParam(required = false) String[] serviciosInput,
             @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor, HttpSession session,
-            @RequestParam String pais,@RequestParam String provincia,@RequestParam String departamento,@RequestParam String localidad,
-            @RequestParam String calle,@RequestParam String numeracion,@RequestParam String observaciones,
-            @RequestParam Double latitud,@RequestParam Double longitud,@RequestParam(required = false) String fechaInicioReserva,
-            @RequestParam(required = false) String fechaFinReserva,@RequestParam(required = false) int[] mensualReserva,
-            @RequestParam(required = false) int[] diarioReserva,@RequestParam(required = false) int[] porFechaReserva) throws Exception {
+            @RequestParam String pais, @RequestParam String provincia, @RequestParam String departamento, @RequestParam String localidad,
+            @RequestParam String calle, @RequestParam String numeracion, @RequestParam String observaciones,
+            @RequestParam Double latitud, @RequestParam Double longitud, @RequestParam(required = false) String fechaInicioReserva,
+            @RequestParam(required = false) String fechaFinReserva, @RequestParam(required = false) String[] mensualReserva,
+            @RequestParam(required = false) String[] diarioReserva, @RequestParam(required = false) String[] porFechaReserva) throws Exception {
 
-            Usuario logueado = (Usuario) session.getAttribute("usuariosession");          
-            
-            propiedadServicio.crearPropiedad(titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, logueado, pais, provincia, 
-                                             departamento, localidad, calle, numeracion, observaciones, latitud, longitud, fechaInicioReserva,
-                                             fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva);
+        Usuario logueado = (Usuario) session.getAttribute("usuariosession");
+
+        propiedadServicio.crearPropiedad(titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, logueado, pais, provincia,
+                departamento, localidad, calle, numeracion, observaciones, latitud, longitud, fechaInicioReserva,
+                fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva);
         return "index.html";
     }
 
@@ -128,7 +128,7 @@ public class PropiedadControlador {
         modelo.addAttribute("propiedad", propiedad);
         modelo.addAttribute("tipoPropiedades", tipoPropiedades);
         modelo.addAttribute("servicios", servicios);
-        return new ModelAndView("modificar_propiedad.html",modelo);
+        return new ModelAndView("modificar_propiedad.html", modelo);
     }
 
     @PreAuthorize("hasRole('ROLE_PROPIETARIO')")
@@ -138,15 +138,15 @@ public class PropiedadControlador {
             @RequestParam(required = false) String[] serviciosInput,
             @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor,
             @RequestParam(required = false) String[] imagenesViejas, @RequestParam String estado,
-            @RequestParam String pais,@RequestParam String provincia,@RequestParam String departamento,@RequestParam String localidad,
-            @RequestParam String calle,@RequestParam String numeracion,@RequestParam String observaciones,
-            @RequestParam Double latitud,@RequestParam Double longitud,@RequestParam(required = false) String fechaInicioReserva,
-            @RequestParam(required = false) String fechaFinReserva,@RequestParam(required = false) int[] mensualReserva,
-            @RequestParam(required = false) int[] diarioReserva,@RequestParam(required = false) int[] porFechaReserva) throws Exception {
-        
-            propiedadServicio.modificarPropiedad(id, titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, imagenesViejas, estado,
-                                                 pais, provincia, departamento, localidad, calle, numeracion, observaciones, latitud, longitud,
-                                                 fechaInicioReserva, fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva);
+            @RequestParam String pais, @RequestParam String provincia, @RequestParam String departamento, @RequestParam String localidad,
+            @RequestParam String calle, @RequestParam String numeracion, @RequestParam String observaciones,
+            @RequestParam Double latitud, @RequestParam Double longitud, @RequestParam(required = false) String fechaInicioReserva,
+            @RequestParam(required = false) String fechaFinReserva, @RequestParam(required = false) String[] mensualReserva,
+            @RequestParam(required = false) String[] diarioReserva, @RequestParam(required = false) String[] porFechaReserva) throws Exception {
+
+        propiedadServicio.modificarPropiedad(id, titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, imagenesViejas, estado,
+                pais, provincia, departamento, localidad, calle, numeracion, observaciones, latitud, longitud,
+                fechaInicioReserva, fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva);
 
         return "index.html";
     }
@@ -167,21 +167,21 @@ public class PropiedadControlador {
     public ModelAndView puntuacion(@PathVariable String id, ModelMap modelo) {
         Double promedioPuntuacion = comentarioServicio.obtenerPromedioPuntuacionPorPropiedad(id);
         modelo.addAttribute("promedioPuntuacion", promedioPuntuacion);
-        return new ModelAndView("puntuacion.html",modelo);
+        return new ModelAndView("puntuacion.html", modelo);
     }
-    
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/baja")
-    public ModelAndView bajaPropiedad(@RequestParam String idPropiedad, ModelMap modelo) throws MiException {          
+    public ModelAndView bajaPropiedad(@RequestParam String idPropiedad, ModelMap modelo) throws MiException {
         propiedadServicio.darDeBaja(idPropiedad);
-        return new ModelAndView("redirect:/admin/dashboard",modelo);
+        return new ModelAndView("redirect:/admin/dashboard", modelo);
     }
-    
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/alta")
     public ModelAndView altaPropiedad(@RequestParam String idPropiedad, ModelMap modelo) throws MiException {
-        propiedadServicio.darDeAlta(idPropiedad);  
-        return new ModelAndView("redirect:/admin/dashboard",modelo);
+        propiedadServicio.darDeAlta(idPropiedad);
+        return new ModelAndView("redirect:/admin/dashboard", modelo);
     }
-    
+
 }
