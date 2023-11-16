@@ -33,10 +33,11 @@ public class Propiedad {
     private List<Imagen> imagenes;
     @OneToOne(cascade = CascadeType.ALL)
     private Ubicacion ubicacion;
-//    @OneToOne(cascade = CascadeType.ALL)
-//    private FiltroDisponibilidad filtroDisponibilidad;
-    
+
     private Double puntuacion;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private FiltroDisponibilidad filtroDisponibilidad;
 
     public Propiedad() {
     }
