@@ -28,12 +28,13 @@ public class ReservaServicio {
     @Autowired
     private PropiedadRepositorio propiedadRepositorio;
     @Autowired
+
     private PropietarioRepositorio propietarioRepositorio;
     @Autowired
     ClienteRepositorio clienteRepositorio;
 
     @Transactional
-    public void crearReserva(String idPropiedad, String mensaje, Date fechaInicio, Date fechaFin,
+    public void crearReserva(String idPropiedad , String idCliente, String mensaje, Date fechaInicio, Date fechaFin,
             List serviciosElegidas, Usuario logueado) throws MiException {
 
         Optional<Propiedad> propiedadRepo = propiedadRepositorio.findById(idPropiedad);
@@ -48,9 +49,11 @@ public class ReservaServicio {
             }
         }
 
+
         validar(mensaje, fechaInicio, fechaFin);
         Reserva reserva = new Reserva();
         reserva.setPropiedad(propiedadRepositorio.getById(idPropiedad));
+        reserva.setCliente(clienteRepositorio.getById(idCliente));
         reserva.setMensaje(mensaje);
         reserva.setFechaInicio(fechaInicio);
         reserva.setFechaFin(fechaFin);
@@ -80,8 +83,6 @@ public class ReservaServicio {
             String idPropiedad = propiedad.getId();
             idPropiedades.add(idPropiedad);
         }
-
-
         List<Reserva> reservas = new ArrayList();
 
         reservas = reservaRepositorio.buscarReservaPorPropiedadPerfil(idPropiedades);
@@ -222,7 +223,7 @@ public class ReservaServicio {
 
             throw new MiException("La fechas de reserva no pueden ser nulas ");
         }
-        if (fechaInicio.before(fechaFin)) {
+        if (fechaFin.before(fechaInicio)) {
 
             throw new MiException("La fecha de Inicio no puede ser posterior a la fecha de Fin");
         }
