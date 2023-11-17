@@ -249,9 +249,7 @@ public class ReservaServicio {
     public List<String> diasReservados(List<Reserva> reservas) {
         List<String> respuesta = new ArrayList<>();
         for (Reserva reserva : reservas) {
-            for (String diasReservado : diasPorReserva(reserva)) {
-                respuesta.add(diasReservado);
-            }
+            respuesta.addAll(diasPorReserva(reserva));
         }
         return respuesta;
     }
