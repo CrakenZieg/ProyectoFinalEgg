@@ -86,10 +86,13 @@ public class ServicioServicio {
     }
     
     public List<Servicio> listarServiciosArray(String[] serviciosInput){
-        List<Servicio> servicios = new ArrayList<>();            
-        for (String servicioElem : serviciosInput) {
-            Servicio servicio = servicioPorTipo(servicioElem);
-            servicios.add(servicio);
+        List<Servicio> servicios = null;  
+        if(serviciosInput!=null){
+            servicios = new ArrayList<>();
+            for (String servicioElem : serviciosInput) {
+                Servicio servicio = servicioPorTipo(servicioElem);
+                servicios.add(servicio);
+            }
         }
         return servicios;
     }
