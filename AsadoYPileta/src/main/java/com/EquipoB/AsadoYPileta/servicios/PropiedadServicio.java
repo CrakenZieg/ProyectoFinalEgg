@@ -58,7 +58,7 @@ public class PropiedadServicio {
 
         validar(titulo, descripcion, tipo, imagenesInput, valor, provincia, localidad);
         
-
+        
         Optional<Propietario> respuesta = propietarioRepositorio.findById(usuario.getId());
 
         Propietario propietario = null;
