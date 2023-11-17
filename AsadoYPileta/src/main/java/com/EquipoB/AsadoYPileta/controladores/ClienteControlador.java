@@ -1,8 +1,10 @@
 package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
+import com.EquipoB.AsadoYPileta.entidades.Contacto;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Propietario;
+import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
@@ -10,6 +12,7 @@ import com.EquipoB.AsadoYPileta.excepciones.PermisosException;
 import com.EquipoB.AsadoYPileta.servicios.ClienteServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropietarioServicio;
+import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.TipoContactoServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
 import java.util.ArrayList;
@@ -46,6 +49,10 @@ public class ClienteControlador {
 
     @Autowired
     private PropietarioServicio propietarioServicio;
+    
+    @Autowired
+    private ReservaServicio reservaServicio;
+
 
     private Rol rol;
 
@@ -59,25 +66,12 @@ public class ClienteControlador {
     public RedirectView registro(@RequestParam String nombre, @RequestParam String apellido,
             @RequestParam String email, @RequestParam String password, @RequestParam String password2,
             @RequestParam MultipartFile[] imagenesInput, @RequestParam String descripcion,
-<<<<<<< HEAD
-            @RequestParam String[] tipoContactoInput, @RequestParam String[] contactosInput,@RequestParam String rol, ModelMap modelo) {
-        try {
-            clienteServicio.crearCliente(email, nombre, apellido, descripcion,
-                    password, password2, imagenesInput, tipoContactoInput, contactosInput,rol);
-            modelo.put("exito", "Cliente Cargado exitosamente!!!");
-             return "login.html";
-        } catch (Exception ex) {
-            modelo.put("error", ex.getMessage());
-            return "redirect:/cliente/registrar";
-        }
-=======
             @RequestParam String[] tipoContactoInput, @RequestParam String[] contactosInput, @RequestParam String rol) throws Exception {
 
         clienteServicio.crearCliente(email, nombre, apellido, descripcion,
                 password, password2, imagenesInput, tipoContactoInput, contactosInput, rol);
 
         return new RedirectView("/login");
->>>>>>> desarrollo
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PROPIETARIO','ROLE_CLIENTE')")
@@ -92,7 +86,9 @@ public class ClienteControlador {
         Usuario usuario = (Usuario) session.getAttribute("usuariosession");
         if (usuario.getRol().equals(Rol.CLIENTE)) {
             Cliente cliente = clienteServicio.getOne(usuario.getId());
+            List<Reserva> reservasCliente = reservaServicio.listarReservaCliente(usuario.getId());
             modelo.put("cliente", cliente);
+            modelo.addAttribute("reservas",reservasCliente);
             modelo.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContactoUsuario(cliente));
         } else if (usuario.getRol().equals(Rol.PROPIETARIO)) {
             Propietario propietario = new Propietario();
@@ -104,6 +100,7 @@ public class ClienteControlador {
             }
             modelo.put("cliente", propietario.getCliente());
             modelo.put("propiedades", propietario.getPropiedades());
+            modelo.addAttribute("reservas",reservaServicio.listarReservaPropiedadEnPerfil(propietario.getPropiedades()));
             modelo.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContactoUsuario(propietario.getCliente()));
         }
         return new ModelAndView("perfil_usuario.html", modelo);
