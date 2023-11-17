@@ -10,10 +10,8 @@ import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.excepciones.PermisosException;
 import com.EquipoB.AsadoYPileta.servicios.ClienteServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
-import com.EquipoB.AsadoYPileta.servicios.PropietarioServicio;
 import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
-import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,8 +40,7 @@ public class ReservaControlador {
     private ClienteServicio clienteServicio;
     @Autowired
     private ServicioServicio servicioServicio;
-    @Autowired
-    private PropietarioServicio propietarioServicio;
+    
 
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @PostMapping("/registrar") 
@@ -73,7 +70,6 @@ public class ReservaControlador {
         reservaServicio.crearReserva(idPropiedad,idCliente ,mensaje, formato.parse(fechaInicio),formato.parse(fechaFin), 
                 servicioServicio.listarServiciosArray(serviciosElegidas), logueado);
         return new ModelAndView("redirect:/cliente/perfil", modelo);        
-
     }
 
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")

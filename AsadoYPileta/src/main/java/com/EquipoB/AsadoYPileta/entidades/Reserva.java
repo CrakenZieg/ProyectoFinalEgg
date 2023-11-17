@@ -1,4 +1,3 @@
-
 package com.EquipoB.AsadoYPileta.entidades;
 
 import java.util.Date;

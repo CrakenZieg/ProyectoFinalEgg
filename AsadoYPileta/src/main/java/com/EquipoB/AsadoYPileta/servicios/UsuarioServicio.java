@@ -292,7 +292,7 @@ public class UsuarioServicio implements UserDetailsService {
         String regex = "^(?=.*[0-9])(?=.*[A-Z]).*$";
         if (email == null || email.trim().isEmpty()) {
             throw new MiException("El Email no puede ser nulo o estar vacio");
-        }
+        } // Verifica que la contraseña no sea nula, esté vacía, tenga al menos 8 caracteres y cumpla con un patrón específico (números y mayúsculas)
         if (password == null || password.trim().isEmpty()|| password.length() <= 7 || !password.matches(regex)) {
             throw new MiException("La contraseña no puede ser nulo o estar vacio");
         }

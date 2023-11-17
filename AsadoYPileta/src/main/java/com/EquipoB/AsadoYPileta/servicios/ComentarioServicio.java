@@ -1,6 +1,5 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
-import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Comentario;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
@@ -28,9 +27,7 @@ public class ComentarioServicio {
     private ImagenServicio imagenServicio;
     @Autowired
     private PropiedadServicio propiedadServicio;
-    @Autowired
-    private UsuarioServicio usuarioServicio;
-
+  
     @Transactional
     public void crearComentario(HttpSession session, MultipartFile[] archivos, String cuerpo, String stringIdpropiedad, Integer puntuacion) throws MiException, Exception {
         validar(session, cuerpo, archivos, stringIdpropiedad,puntuacion);

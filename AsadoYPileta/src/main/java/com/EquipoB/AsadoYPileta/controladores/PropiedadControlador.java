@@ -57,6 +57,7 @@ public class PropiedadControlador {
     @Autowired
     private ReservaServicio reservaServicio;
 
+
     @GetMapping("/tipo/{tipo}")
     public ModelAndView listar(@PathVariable String tipo, ModelMap modelo) throws MiException {
         List<Propiedad> propiedades = new ArrayList<>();
@@ -77,6 +78,7 @@ public class PropiedadControlador {
         comentarios = comentarioServicio.findComentariosByPropiedadId(id);
         List<TipoPropiedad> tipoPropiedades = new ArrayList<>();
         tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
+       
         List<Reserva> reservas = reservaServicio.reservasFuturas(id);
         List<String> fechasReservadas = reservaServicio.diasReservados(reservas);
         List<String> fechasDisponibles = filtroDisponibilidadServicio.obtenerDiasHabilitados(propiedad.getFiltroDisponibilidad());
@@ -87,6 +89,7 @@ public class PropiedadControlador {
         modelo.addAttribute("servicios", servicios);
         modelo.addAttribute("comentarios", comentarios);
         return new ModelAndView("propiedad.html", modelo);
+
     }
 
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
