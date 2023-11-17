@@ -5,7 +5,7 @@
     <body onload="cargar()">
         <header th:replace="fragmentos/frags :: header"></header>
         <main>
-            
+
             <section>
                 <div class="contenedor-propiedad">
                     <div class="propiedad">
@@ -55,7 +55,7 @@
                                 <div id="contenedor-dtserv">
                                     <h2>¿Que ofrecemos?</h2>
                                     <div class="servicios-propiedad">
-                                        
+
 
                                         <ul th:each="servicio : ${propiedad.servicios}">
                                             <li th:text="${servicio.tipoComodidad}">Limpieza</li>
@@ -63,7 +63,7 @@
 
 
                                         </ul>
-                                        
+
                                     </div>
                                     <button id="mostrar-servicios">Mostrar mas</button>
                                 </div>
@@ -93,26 +93,27 @@
                                         <span id="mes-actual" class="h3"></span>
                                         <button type="button" class="btn btn-secondary justify-content-end" onclick="cambiarMes(1)">Mes Siguiente</button>
                                     </div>
-                                    
-                                        <table class="table table-bordered" id="tablaFechas">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col" class="custom-cell">Domingo</th>
-                                                    <th scope="col" class="custom-cell">Lunes</th>
-                                                    <th scope="col" class="custom-cell">Martes</th>
-                                                    <th scope="col" class="custom-cell">Miércoles</th>
-                                                    <th scope="col" class="custom-cell">Jueves</th>
-                                                    <th scope="col" class="custom-cell">Viernes</th>
-                                                    <th scope="col" class="custom-cell">Sábado</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="calendar-body">
-                                                <!-- Aquí se generará el contenido del calendario con JavaScript -->
-                                            </tbody>
-                                        </table>
-                                   
+
+                                    <table class="table table-bordered" id="tablaFechas">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="custom-cell">Domingo</th>
+                                                <th scope="col" class="custom-cell">Lunes</th>
+                                                <th scope="col" class="custom-cell">Martes</th>
+                                                <th scope="col" class="custom-cell">Miércoles</th>
+                                                <th scope="col" class="custom-cell">Jueves</th>
+                                                <th scope="col" class="custom-cell">Viernes</th>
+                                                <th scope="col" class="custom-cell">Sábado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="calendar-body">
+                                            <!-- Aquí se generará el contenido del calendario con JavaScript -->
+                                        </tbody>
+                                    </table>
+                                    <span class="badge text-bg-success h2">Disponible</span>
+                                    <span class="badge text-bg-danger h2">No Disponible</span>
                                 </div>
-                                <h2 th:text="${propiedad.valor}" > </h2>
+                                <h2 th:text="'$ ' +${propiedad.valor}" > </h2>
                                 <form th:action="@{/reserva/registrar}"  method="POST"  >
 
                                     <input th:value="${propiedad.id}"  name="idPropiedad" type="text" hidden>
@@ -134,6 +135,7 @@
 
                         </div>
                         <div class="calificacion">
+
                             <input id="calificacion"  th:value="${propiedad.puntuacion}"hidden>
                             <ul>
                                  
@@ -146,6 +148,7 @@
                         
                         <h2 th:text="${'Calificacion de ' +  propiedad.puntuacion}"></h2>
                     </ul>
+
                         </div>
                         <div class="comentario-contenedor">
 
@@ -185,14 +188,14 @@
 
                             </div>
 
-                            
+
                         </div>
                         <button id="ver-comentarios">Ver todos</button>
-                        
+
                         <dialog class="td-coment" id="modalc">
-                             <div class="salir-cont">
-                                    <button><img  id="cerrar-comentarios" th:src="@{/imagenes/x.png}"></button>
-                                </div>
+                            <div class="salir-cont">
+                                <button><img  id="cerrar-comentarios" th:src="@{/imagenes/x.png}"></button>
+                            </div>
                             <div class="comentario">
                                 <div class="perfil-coment">
                                     <div class="imagen-perfil">
@@ -225,7 +228,7 @@
                                     <p th:text="${comentario.cuerpo}"></p>
                                 </div>
                             </div>
-                                
+
                         </dialog>
                     </div>
                 </div>
