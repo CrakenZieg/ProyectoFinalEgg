@@ -26,7 +26,6 @@ public class PortalControlador {
     
     @GetMapping("/")
     public String index(ModelMap model, HttpSession session){
-        Usuario logueado = (Usuario) session.getAttribute("usuariosession");
         List<Propiedad> propiedades = propiedadServicio.listarPropiedadesActivas();
         List<TipoPropiedad> tipoPropiedades = tipopropiedadServicio.listarTipoPropiedad();
         model.addAttribute("propiedades", propiedades);        

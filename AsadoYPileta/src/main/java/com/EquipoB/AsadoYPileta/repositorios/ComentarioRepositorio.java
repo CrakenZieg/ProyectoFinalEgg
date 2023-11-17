@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ComentarioRepositorio extends JpaRepository<Comentario, String>{
      
-    @Query("SELECT c FROM Comentario c WHERE c.usuario.id IN :id")
+    @Query("SELECT c FROM Comentario c WHERE c.cliente.id IN :id")
     public List<Comentario> buscarPorCliente(@Param("id") String id);
     
     @Query("SELECT c FROM Comentario c WHERE c.propiedad.id IN :id")
