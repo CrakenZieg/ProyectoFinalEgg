@@ -49,12 +49,12 @@ function cargar(){
             const fechaISO = fecha.toISOString().split('T')[0];
             if (fechasDisponibles.includes(fechaISO)) {
                 celda.classList.add('available', 'custom-cell');
-            } else if(fechasReservadas.includes(fechaISO)){
-                celda.classList.add('not-available', 'custom-cell');
             }else {
                 celda.classList.add('not-available', 'custom-cell');
             }
-
+            if(fechasReservadas.includes(fechaISO)){
+                celda.classList.add('not-available', 'custom-cell');
+                }
             fila.appendChild(celda);
 
             fecha.setDate(fecha.getDate() + 1);

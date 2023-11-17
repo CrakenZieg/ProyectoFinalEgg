@@ -1,6 +1,5 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
-
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Propietario;
@@ -40,14 +39,14 @@ public class ReservaServicio {
     ClienteRepositorio clienteRepositorio;
 
     @Transactional
-    public void crearReserva(String idPropiedad , String idCliente, String mensaje, Date fechaInicio, Date fechaFin,
+    public void crearReserva(String idPropiedad, String idCliente, String mensaje, Date fechaInicio, Date fechaFin,
             List serviciosElegidas, Usuario logueado) throws MiException {
 
         Propiedad propiedad = propiedadRepositorio.getOne(idPropiedad);
         if(propiedad.getIdPropietario()==logueado.getId()){
             throw new MiException("No es posible generar reservas sobre tus propiedades");
         }
-        
+
         validar(mensaje, fechaInicio, fechaFin);
         verificarSuperposicionReservas(idPropiedad,fechaInicio,fechaFin);
 
@@ -234,15 +233,14 @@ public class ReservaServicio {
 
     public List<String> diasPorReserva(Reserva reserva) {
         List<String> fechas = new ArrayList<>();
-        LocalDate fechaInicio = reserva.getFechaInicio().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate fechaFin = reserva.getFechaFin().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        long diferencia = ChronoUnit.DAYS.between(fechaInicio, fechaFin);
+        LocalDate ini = LocalDate.of(reserva.getFechaInicio().getYear() + 1900, reserva.getFechaInicio().getMonth() + 1, reserva.getFechaInicio().getDate());
+        LocalDate fini = LocalDate.of(reserva.getFechaFin().getYear() + 1900, reserva.getFechaFin().getMonth() + 1, reserva.getFechaFin().getDate());
+        long diferencia = ChronoUnit.DAYS.between(ini, fini);
         for (int i = 0; i <= diferencia; i++) {
-            LocalDate intermedio = fechaInicio.plusDays(i);
+            LocalDate intermedio = ini.plusDays(i);
             String fechaFormateada = intermedio.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             fechas.add(fechaFormateada);
         }
-
         return fechas;
     }
 
