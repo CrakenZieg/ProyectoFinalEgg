@@ -1,6 +1,7 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.FiltroDisponibilidad;
+import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.FiltroDisponibilidadRepositorio;
 import java.text.ParseException;
@@ -112,7 +113,7 @@ public class FiltroDisponibilidadServicio {
 
     public List<String> obtenerDiasHabilitados(FiltroDisponibilidad filtro) {
         int[] arregloNuevo = null;
-        if(filtro.getDiario()!=null){
+        if (filtro.getDiario() != null) {
             arregloNuevo = filtro.getDiario().clone();
             for (int i = 0; i < filtro.getDiario().length; i++) {
                 arregloNuevo[i] = arregloNuevo[i] + 1;
@@ -123,18 +124,17 @@ public class FiltroDisponibilidadServicio {
         }
 
         List<String> diasHabilitados = new ArrayList<>();
-        
+
         Calendar calendar = Calendar.getInstance();
-        if(filtro.getFechaInicio()!=null){
+        if (filtro.getFechaInicio() != null) {
             calendar.setTime(filtro.getFechaInicio());
-        }
-        else{
+        } else {
             calendar.setTime(new Date());
         }
         Calendar fechaFinCalendar = Calendar.getInstance();
         fechaFinCalendar.setTime(añoSiguiente(filtro.getFechaFin()));
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        
+
         while (calendar.before(fechaFinCalendar) || calendar.equals(fechaFinCalendar)) {
             int mesActual = calendar.get(Calendar.MONTH);
             int diaSemanaActual = calendar.get(Calendar.DAY_OF_WEEK);
@@ -176,7 +176,7 @@ public class FiltroDisponibilidadServicio {
 
     public int[] mesesDisponible(int[] meses) {
         if (meses == null) {
-            return new int[]{0,1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+            return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
         } else {
             return meses;
         }
@@ -193,6 +193,15 @@ public class FiltroDisponibilidadServicio {
             calendar.add(Calendar.YEAR, 1);
             return calendar.getTime();
         }
+    }
+
+    public List<Integer> listaDeEnterosDiasReservados(Propiedad propiedad) {
+        List<Integer> respuesta = new ArrayList<>();
+        int[] arregloInt = propiedad.getFiltroDisponibilidad().getDiario();
+        for (int i = 0; i < arregloInt.length; i++) {
+            respuesta.add(arregloInt[i]);
+        }
+        return respuesta;
     }
 
 }

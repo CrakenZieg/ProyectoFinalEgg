@@ -112,7 +112,7 @@
                                                             <span class="h3">En que Meses lo alquilarias</span></br>
                                                             <div th:each="mesesOpt : ${T(com.EquipoB.AsadoYPileta.enumeraciones.Meses).values()}" class="form-check form-check-inline">
                                                                 <input class="form-check-input" type="checkbox" th:id="${mesesOpt.getMes()}" th:value="${mesesOpt.getNumMes()}" 
-                                                                       name="mensualReserva" />
+                                                                       name="mensualReserva" th:checked="${mesesDisponibles != null and mesesDisponibles.contains(mesesOpt.getNumMes())}" />
                                                                 <label class="form-check-label" th:for="${mesesOpt.getMes()}" th:text="${mesesOpt.getMes()}"></label>
                                                             </div>
                                                         </div>
@@ -120,7 +120,7 @@
                                                             <span class="h3">Dias Disponible</span></br>
                                                             <div th:each="diasOpt : ${T(com.EquipoB.AsadoYPileta.enumeraciones.Dias).values()}" class="form-check form-check-inline">
                                                                 <input class="form-check-input" type="checkbox" th:id="${diasOpt.getDia()}" th:value="${diasOpt.getNumDia()}" 
-                                                                       name="diarioReserva" />
+                                                                       name="diarioReserva" th:checked="${fechasDisponibles != null and fechasDisponibles.contains(diasOpt.getNumDia())}"/>
                                                                 <label class="form-check-label" th:for="${diasOpt.getDia()}" th:text="${diasOpt.getDia()}"></label>
                                                             </div>
                                                         </div>
