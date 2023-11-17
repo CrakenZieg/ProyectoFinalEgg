@@ -16,7 +16,7 @@ public interface ComentarioRepositorio extends JpaRepository<Comentario, String>
      * @param id: id
      * @return Lista de comentarios de usuarios
      */ 
-    @Query("SELECT c FROM Comentario c WHERE c.usuario.id IN :id") 
+    @Query("SELECT c FROM Comentario c WHERE c.cliente.id IN :id") 
     public List<Comentario> buscarPorCliente(@Param("id") String id); 
    
     /**
