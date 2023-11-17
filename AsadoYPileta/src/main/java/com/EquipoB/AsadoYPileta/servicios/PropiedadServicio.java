@@ -56,7 +56,7 @@ public class PropiedadServicio {
             String[] diarioReserva, String[] porFechaReserva) throws MiException, Exception {
 
 
-        validar(titulo, descripcion, tipo, imagenesInput, valor, provincia, localidad);
+        validar(titulo, descripcion, tipo, imagenesInput, valor, pais, localidad);
         
         
         Optional<Propietario> respuesta = propietarioRepositorio.findById(usuario.getId());
@@ -103,7 +103,6 @@ public class PropiedadServicio {
 
     @Transactional
     public void modificarPropiedad(String id, String titulo, String descripcion, String tipo, String[] serviciosInput, MultipartFile[] imagenesInput,
-
             Double valor, String[] imagenesViejas, String estado, String pais, String provincia, String departamento, String localidad, String calle, String numeracion,
             String observaciones, Double latitud, Double longitud, String fechaInicioReserva, String fechaFinReserva, String[] mensualReserva,
             String[] diarioReserva, String[] porFechaReserva , Usuario logueado) throws MiException, Exception {
@@ -238,9 +237,8 @@ public class PropiedadServicio {
         }
     }
 
-    public void validar(String titulo, String descripcion,
-
-            String tipo, MultipartFile[] imagenes, Double valor, String provincia, String localidad) throws MiException {
+    public void validar(String titulo, String descripcion, String tipo, MultipartFile[] imagenes, 
+            Double valor, String pais, String localidad) throws MiException {
 
         if (titulo == null || titulo.trim().isEmpty()) {
             throw new MiException("El titulo no puede ser nulo o estar vacio");
@@ -261,7 +259,7 @@ public class PropiedadServicio {
             throw new MiException("El valor no puede ser 0");
         }
         
-        if (provincia == null || provincia.trim().isEmpty()) {
+        if (pais == null || pais.trim().isEmpty()) {
             throw new MiException("La Provincia no puede ser nula o estar vacia");
         }
         
