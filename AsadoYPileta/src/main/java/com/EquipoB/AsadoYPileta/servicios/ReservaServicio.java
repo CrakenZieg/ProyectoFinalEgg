@@ -1,5 +1,6 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
+import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.ClienteRepositorio;
@@ -62,8 +63,6 @@ public class ReservaServicio {
             String idPropiedad = propiedad.getId();
             idPropiedades.add(idPropiedad);
         }
-
-
         List<Reserva> reservas = new ArrayList();
 
         reservas = reservaRepositorio.buscarReservaPorPropiedadPerfil(idPropiedades);
