@@ -972,7 +972,7 @@ input:valid ~ label{
     background-color: #242323;
     border-collapse: collapse;
 }
-}
+
 .resultado-contenedor table thead, .resultado-contenedor table tbody {
     border-collapse: collapse;  
     
