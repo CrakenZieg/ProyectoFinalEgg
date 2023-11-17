@@ -66,12 +66,11 @@ public class ReservaControlador {
     }
 
     @PostMapping("/registro")
-
     public ModelAndView registroReserva(String idPropiedad  , String idCliente, String mensaje, String fechaInicio, String fechaFin, String[] serviciosElegidas, ModelMap modelo,Usuario logueado) throws MiException, ParseException {
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");     
         reservaServicio.crearReserva(idPropiedad,idCliente ,mensaje, formato.parse(fechaInicio),formato.parse(fechaFin), 
                 servicioServicio.listarServiciosArray(serviciosElegidas), logueado);
-        return new ModelAndView("redirect:/reserva/listar", modelo);        
+        return new ModelAndView("redirect:/cliente/perfil", modelo);        
 
     }
 
@@ -83,13 +82,13 @@ public class ReservaControlador {
     }
     
     @GetMapping("/ver/{id}")
-    public String verReserva(@PathVariable String id, ModelMap modelo) {
+    public ModelAndView verReserva(@PathVariable String id, ModelMap modelo) {
         Reserva reserva =reservaServicio.getOne(id);
         List<Contacto> contactosPropietario= propietarioServicio.mostrarContactos(reserva.getPropiedad().getId());
         modelo.addAttribute("contactoPropietatio",contactosPropietario);
         modelo.put("reserva", reserva);
         
-        return "reserva.html";
+        return new ModelAndView("reserva.html", modelo);
 
     }
 
@@ -106,13 +105,21 @@ public class ReservaControlador {
     }
 
     @GetMapping("/borrar/{id}")
-    public ModelAndView borrarReserva(@PathVariable String id) {
+    public ModelAndView borrarReserva(@PathVariable String id, HttpSession session) throws MiException {
+        Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+        if(reservaServicio.getOne(id).getPropiedad().getIdPropietario()!=usuario.getId()){
+            throw new MiException("No es posible borrar una reserva de una propiedad ajena");
+        }
         reservaServicio.borrar(id);
-        return new ModelAndView("redirect:/reserva/listar");
+        return new ModelAndView("redirect:/cliente/perfil");
     }
     
-    @PostMapping("/aceptarReserva/{id}")
-    public ModelAndView aceptar(@PathVariable String id) throws MiException{
+    @GetMapping("/aceptarReserva/{id}")
+    public ModelAndView aceptar(@PathVariable String id, HttpSession session) throws MiException{
+        Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+        if(reservaServicio.getOne(id).getPropiedad().getIdPropietario()!=usuario.getId()){
+            throw new MiException("No es posible aceptar una reserva de una propiedad ajena");
+        }
         reservaServicio.aceptarReserva(id);        
         return new ModelAndView("redirect:/cliente/perfil");        
     }    

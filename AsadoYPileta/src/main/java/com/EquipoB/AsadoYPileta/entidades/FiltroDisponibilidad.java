@@ -67,7 +67,7 @@ public class FiltroDisponibilidad {
      * @param fin: fecha final, en LocalDate para aprovechar ventajas
      */
     public void porFecha(LocalDate inicio, LocalDate fin) throws MiException {
-        if (porFecha[0] >= inicio.getDayOfMonth() || porFecha[1] <= fin.getDayOfMonth()) {
+        if (!(porFecha[0] <= inicio.getDayOfMonth()) || !(porFecha[1] >= fin.getDayOfMonth())) {
             throw new MiException("Error: la reserva debe ser entre el " + porFecha[0] + " y el " + porFecha[1] + " de cada mes");
         }
     }
