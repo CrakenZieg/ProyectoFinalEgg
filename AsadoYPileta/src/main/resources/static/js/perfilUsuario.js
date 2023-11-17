@@ -60,3 +60,17 @@ cerrarModal.addEventListener('click', ()  => {
     modal.close();
 })
 
+//bton modificar
+
+const btonModificar =  document.querySelectorAll('.bton-modificar');;
+const urlActual = window.location.pathname;
+mostrarBotonModificar();
+
+function mostrarBotonModificar(){
+
+    if(urlActual == "/cliente/perfil"){
+    btonModificar.forEach((b) =>{
+    b.hidden = false;
+})
+}
+}
