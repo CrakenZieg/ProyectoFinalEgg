@@ -1,10 +1,14 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
+import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
+import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
+import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.ClienteRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
+import com.EquipoB.AsadoYPileta.repositorios.PropietarioRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.ReservaRepositorio;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,12 +28,28 @@ public class ReservaServicio {
     @Autowired
     private PropiedadRepositorio propiedadRepositorio;
     @Autowired
-    private ClienteRepositorio clienteRepositorio;
+
+    private PropietarioRepositorio propietarioRepositorio;
+    @Autowired
+    ClienteRepositorio clienteRepositorio;
 
     @Transactional
-    public void crearReserva(String idPropiedad, String idCliente, String mensaje, Date fechaInicio, 
-            Date fechaFin, List serviciosElegidas) throws MiException {
-        
+    public void crearReserva(String idPropiedad , String idCliente, String mensaje, Date fechaInicio, Date fechaFin,
+            List serviciosElegidas, Usuario logueado) throws MiException {
+
+        Optional<Propiedad> propiedadRepo = propiedadRepositorio.findById(idPropiedad);
+        Optional<Propietario> propietarioRepo = propietarioRepositorio.findById(logueado.getId());
+
+        if (propiedadRepo.isPresent() && propietarioRepo.isPresent()) {
+            Propiedad propiedad = propiedadRepo.get();
+            Propietario propietario = propietarioRepo.get();
+            List<Propiedad> propiedades = propietario.getPropiedades();
+            if (propiedades.contains(propiedad)) {
+                throw new MiException("No puede reservar una propiedad que le pertenece");
+            }
+        }
+
+
         validar(mensaje, fechaInicio, fechaFin);
         Reserva reserva = new Reserva();
         reserva.setPropiedad(propiedadRepositorio.getById(idPropiedad));
@@ -71,11 +91,18 @@ public class ReservaServicio {
     }
 
     @Transactional
-    public void modificarReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas) throws MiException {
+    public void modificarReserva(String idReserva, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas,
+            Usuario logueado) throws MiException {
 
         validar(mensaje, fechaInicio, fechaFin);
 
-        Optional<Reserva> respuesta = reservaRepositorio.findById(id);
+        Optional<Reserva> respuesta = reservaRepositorio.findById(idReserva);
+        if (respuesta.isPresent()) {
+            Reserva reserva = respuesta.get();
+            if (!reserva.getCliente().getId().equals(logueado.getId())) {
+                throw new MiException("Solo puede modificar una reserva que usted realizo");
+            }
+        }
 
         if (respuesta.isPresent()) {
 
@@ -177,9 +204,9 @@ public class ReservaServicio {
         }
 
     }
-    
+
     @Transactional
-    public void aceptarReserva(String id){
+    public void aceptarReserva(String id) {
         Reserva reserva = reservaRepositorio.getById(id);
         reserva.setDisponible(true);
         reservaRepositorio.save(reserva);

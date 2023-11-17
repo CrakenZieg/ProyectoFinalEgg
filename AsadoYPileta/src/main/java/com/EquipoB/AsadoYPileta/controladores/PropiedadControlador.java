@@ -68,6 +68,7 @@ public class PropiedadControlador {
 
     @GetMapping("/{id}")
     public ModelAndView propiedad(@PathVariable String id, ModelMap modelo) {
+        Propiedad propiedad = propiedadServicio.getOne(id);
         List<Servicio> servicios = new ArrayList<>();
         servicios = servicioServicio.listarServicios();
         List<Comentario> comentarios = new ArrayList<>();
@@ -75,7 +76,9 @@ public class PropiedadControlador {
         List<TipoPropiedad> tipoPropiedades = new ArrayList<>();
         tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
         List<Reserva> reservas = reservaServicio.reservasFuturas(id);
-        modelo.addAttribute("propiedad", propiedadServicio.getOne(id));
+        List<String> fechasDisponibles = filtroDisponibilidadServicio.obtenerDiasHabilitados(propiedad.getFiltroDisponibilidad());
+        modelo.addAttribute("fechasDisponibles",fechasDisponibles);
+        modelo.addAttribute("propiedad",propiedad );
         modelo.addAttribute("tipoPropiedades", tipoPropiedades);
         modelo.addAttribute("servicios", servicios);
         modelo.addAttribute("comentarios", comentarios);
