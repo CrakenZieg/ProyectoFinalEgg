@@ -102,11 +102,11 @@
                                                         <span class="h3 text-center border-3 border-top border-success">Opcionales</span>
                                                         <div class="col-md-5 p-3">
                                                             <label for="fechaInicioReserva" class="form-label "><span class="h3">Fecha Inicio disponibilidad</span></label>
-                                                            <input class="form-control" type="date" id="fechaInicioReserva" name="fechaInicioReserva" />
+                                                            <input class="form-control" type="date" id="fechaInicioReserva" name="fechaInicioReserva" th:value="${propiedad.filtroDisponibilidad.fechaInicio}"/>
                                                         </div>
                                                         <div class="col-md-5 p-3">
                                                             <label for="fechaFinReserva" class="form-label "><span class="h3">Fecha fin disponibilidad</span></label>
-                                                            <input class="form-control" type="date" id="fechaFinReserva" name="fechaFinReserva" />
+                                                            <input class="form-control" type="date" id="fechaFinReserva" name="fechaFinReserva" th:value="${propiedad.filtroDisponibilidad.fechaFin}"/>
                                                         </div>
                                                         <div class="form-group p-3">
                                                             <span class="h3">En que Meses lo alquilarias</span></br>

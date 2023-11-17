@@ -111,25 +111,24 @@ public class FiltroDisponibilidadServicio {
     }
 
     public List<String> obtenerDiasHabilitados(FiltroDisponibilidad filtro) {
-        int[] arregloNuevo = filtro.getDiario().clone();
-        for (int i = 0; i < filtro.getDiario().length; i++) {
-            arregloNuevo[i] = arregloNuevo[i] + 1;
-            if (arregloNuevo[i] == 8) {
-                arregloNuevo[i] = 1;
-            }
-        }
-
         List<String> diasHabilitados = new ArrayList<>();
+        
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(filtro.getFechaInicio());
+        if(filtro.getFechaInicio()!=null){
+            calendar.setTime(filtro.getFechaInicio());
+        }
+        else{
+            calendar.setTime(new Date());
+        }
         Calendar fechaFinCalendar = Calendar.getInstance();
-        fechaFinCalendar.setTime(filtro.getFechaFin());
+        fechaFinCalendar.setTime(añoSiguiente(filtro.getFechaFin()));
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        
         while (calendar.before(fechaFinCalendar) || calendar.equals(fechaFinCalendar)) {
             int mesActual = calendar.get(Calendar.MONTH);
             int diaSemanaActual = calendar.get(Calendar.DAY_OF_WEEK);
-            if (contiene(filtro.getMensual(), mesActual)) {
-                if (contiene(arregloNuevo, diaSemanaActual)) {
+            if (contiene(mesesDisponible(filtro.getMensual()), mesActual)) {
+                if (contiene(diasDisponibles(filtro.getDiario()), diaSemanaActual)) {
                     diasHabilitados.add(dateFormat.format(calendar.getTime()));
                 }
             }
@@ -147,6 +146,42 @@ public class FiltroDisponibilidadServicio {
             }
         }
         return false;
+    }
+
+    public int[] diasDisponibles(int[] dias) {
+        if (dias != null) {
+            int[] arregloNuevoDias = dias.clone();
+            for (int i = 0; i < dias.length; i++) {
+                arregloNuevoDias[i] = arregloNuevoDias[i] + 1;
+                if (arregloNuevoDias[i] == 8) {
+                    arregloNuevoDias[i] = 1;
+                }
+            }
+            return arregloNuevoDias;
+        } else {
+            return new int[]{1, 2, 3, 4, 5, 6, 7};
+        }
+    }
+
+    public int[] mesesDisponible(int[] meses) {
+        if (meses == null) {
+            return new int[]{0,1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+        } else {
+            return meses;
+        }
+
+    }
+
+    public Date añoSiguiente(Date diaFin) {
+        if (diaFin != null) {
+            return diaFin;
+        } else {
+            Date fechaHoy = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(fechaHoy);
+            calendar.add(Calendar.YEAR, 1);
+            return calendar.getTime();
+        }
     }
 
 }
