@@ -235,7 +235,7 @@ input:valid ~ label{
 
 
 .contenedor{
-    padding: 0.6rem; 
+    padding: 1.2rem; 
     height: auto;
     width: 100%;
     overflow: hidden;
@@ -256,9 +256,10 @@ input:valid ~ label{
 .carta{
   display: grid;
     grid-template-columns: 100%;
-    padding: 1.2rem;
+    padding: 1rem;
     height: 450px;
-    
+    box-shadow: 0 2px 2px #222222;
+    border-radius: 1.2rem;
 }
 
 .carta-cuerpo{
@@ -287,7 +288,6 @@ input:valid ~ label{
 .carta-texto{
     font-size: .8rem;
   color:#050505;
-  margin-bottom: .5rem;
   height : 60px;
   
 }
@@ -295,12 +295,18 @@ input:valid ~ label{
     overflow: hidden;
 }
 .carta-prec{
-    height: 60px;
+    height: 30px;
 }
 .carta-btn{
   width: 100%;
   height:60px;
 
+}
+.calificacion ul{
+    display: flex;
+    flex-direction: row;
+    gap:10px;
+    list-style: none;
 }
 .bton{
   height: 35px;
@@ -714,19 +720,7 @@ input:valid ~ label{
    margin-top: auto ;
 }
 #mostrar-td-serv{
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    height: 800px;
-    width: 700px;
-    left: 40%;
-    padding: .5rem;
-    background-color: #fff;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    box-shadow: 0 20px 20px rgba(0, 0, 0, 0.2 );
-    overflow: auto;
+    
 }
 .salir-cont{
     
@@ -832,7 +826,37 @@ input:valid ~ label{
     height: 100%;
     border-radius: 100%;
 }
+#ver-comentarios{
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border: 0;
+    padding: .4rem;
+    background-color: #0508ad;
+    color: #fff;
+    border-radius: 2rem;
+}
 
+.td-coment,#mostrar-td-serv{
+    
+    height: 100%;
+    max-height: 700px;
+    width: 600px;
+    border: 0;
+    left: 40%;
+    top: 15%;
+    overflow-x: auto;
+    border-radius: 1rem;
+}
+.td-coment::backdrop, #mostrar-td-serv::backdrop{
+    background: rgba(0 0 0 / 0.6);
+}
+#cerrar-comentarios{
+    display: block ; 
+    height: 38px;
+    padding:.7rem; 
+    color: #fff;
+    text-decoration: none; 
+}
 @keyframes aparicion{
     from{
         opacity:0;
