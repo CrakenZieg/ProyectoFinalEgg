@@ -35,7 +35,7 @@ const btnSalir = document.getElementById("salir");
 const btnComentario = document.getElementById("ver-comentarios");
 const btnCerrarComentario = document.getElementById("cerrar-comentarios");
 const comentarios = document.getElementById("modalc");
-const estrellas = document.getElementById('starsp');
+const estrellas = document.getElementsByClassName('starp');
 const puntuacion = Number(document.getElementById("calificacion").value);
 
 
@@ -90,8 +90,8 @@ function renderizarImagen() {
 }
 agregarPuntuacion();
 function agregarPuntuacion() {
-conse
-    for(let i=0; i<=puntuacion; i++){
+
+    for(let i=0; i<=puntuacion-1; i++){
       estrellas[i].style.color = "gold";
     }
 }

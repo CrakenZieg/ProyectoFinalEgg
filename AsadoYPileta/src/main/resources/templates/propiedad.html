@@ -135,18 +135,20 @@
 
                         </div>
                         <div class="calificacion">
-                            <input id="calificacion"  value="4"hidden>
-                                <ul>
 
-                                    <li><i class="bi bi-star-fill star" id="starsp"></i></li>
-                                    <li><i class="bi bi-star-fill star" id="starsp"></i></li>
-                                    <li><i class="bi bi-star-fill star" id="starsp"></i></li>
-                                    <li><i class="bi bi-star-fill star" id="starsp"></i></li>
-                                    <li><i class="bi bi-star-fill star" id="starsp"></i></li>
+                            <input id="calificacion"  th:value="${propiedad.puntuacion}"hidden>
+                            <ul>
+                                 
+                        <li><i class="bi bi-star-fill starp" ></i></li>
+                        <li><i class="bi bi-star-fill starp"></i></li>
+                        <li><i class="bi bi-star-fill starp"></i></li>
+                        <li><i class="bi bi-star-fill starp" ></i></li>
+                        <li><i class="bi bi-star-fill starp" ></i></li>
+                        
+                        
+                        <h2 th:text="${'Calificacion de ' +  propiedad.puntuacion}"></h2>
+                    </ul>
 
-
-                                    <h2 > Calificacion de 4.9</h2>
-                                </ul>
                         </div>
                         <div class="comentario-contenedor">
 
