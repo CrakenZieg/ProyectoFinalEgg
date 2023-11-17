@@ -53,7 +53,7 @@ public class FiltroDisponibilidad {
             dias(ini, fini);
         }
         if (porFecha != null) {
-            dias(ini, fini);
+            porFecha(ini, fini);
         }
         return habilitado;
     }
@@ -80,14 +80,15 @@ public class FiltroDisponibilidad {
      */
     public void dias(LocalDate inicio, LocalDate fin) throws MiException {
         List<LocalDate> fechas = dePrincipioAFin(inicio, fin);
-        for (int i = 0; i <= fechas.size(); i++) {
-            switch (fechas.get(i).getDayOfWeek().ordinal()) {
+        for (int i = 0; i < fechas.size(); i++) {
+            switch (fechas.get(i).getDayOfWeek().getValue()) {                
                 case 1: {
                     for (int dia : diario) {
                         if (dia == 1) {
                             break;
                         }
                     }
+                    break;
                 }
                 case 2: {
                     for (int dia : diario) {
@@ -95,6 +96,7 @@ public class FiltroDisponibilidad {
                             break;
                         }
                     }
+                    break;
                 }
                 case 3: {
                     for (int dia : diario) {
@@ -102,6 +104,7 @@ public class FiltroDisponibilidad {
                             break;
                         }
                     }
+                    break;
                 }
                 case 4: {
                     for (int dia : diario) {
@@ -109,6 +112,7 @@ public class FiltroDisponibilidad {
                             break;
                         }
                     }
+                    break;
                 }
                 case 5: {
                     for (int dia : diario) {
@@ -116,6 +120,7 @@ public class FiltroDisponibilidad {
                             break;
                         }
                     }
+                    break;
                 }
                 case 6: {
                     for (int dia : diario) {
@@ -123,6 +128,7 @@ public class FiltroDisponibilidad {
                             break;
                         }
                     }
+                    break;
                 }
                 case 7: {
                     for (int dia : diario) {
@@ -130,9 +136,10 @@ public class FiltroDisponibilidad {
                             break;
                         }
                     }
+                    break;
                 }
                 default: {
-                    throw new MiException("Error: de la reserva no puede ser " + Dias.getDia(fechas.get(i).getDayOfWeek().ordinal()));
+                    throw new MiException("Error: de la reserva no puede ser " + Dias.getDia(fechas.get(i).getDayOfWeek().getValue()));
                 }
             }
         }
@@ -147,13 +154,11 @@ public class FiltroDisponibilidad {
      */
     public List<LocalDate> dePrincipioAFin(LocalDate inicio, LocalDate fin) {
         List<LocalDate> fechas = new ArrayList<>();
-        fechas.add(inicio);
         long diferencia = ChronoUnit.DAYS.between(inicio, fin);
-        for (int i = 0; i < diferencia; i++) {
+        for (int i = 0; i <= diferencia; i++) {
             LocalDate intermedio = inicio.plusDays(i);
             fechas.add(intermedio);
         }
-        fechas.add(fin);
         return fechas;
     }
 

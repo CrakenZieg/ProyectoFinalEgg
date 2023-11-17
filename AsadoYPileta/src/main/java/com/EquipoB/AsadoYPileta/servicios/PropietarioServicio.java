@@ -1,6 +1,7 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
+import com.EquipoB.AsadoYPileta.entidades.Contacto;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
@@ -49,17 +50,24 @@ public class PropietarioServicio {
     }
 
     @Transactional(readOnly = true)
-    public Propietario getOne(String id) throws MiException {
-        Optional<Propietario> respuesta = propietarioRepositorio.findById(id);
+    public Optional<Propietario> getOne(String id) throws MiException {
+        return propietarioRepositorio.findById(id);
+    }
+    
+     public List<Contacto> mostrarContactos (String idUsuario){
+        Propietario propietario = propietarioRepositorio.getOne(idUsuario);
+         
+        List<Contacto> contactosUsuario = propietario.getCliente().getContactos();
+        return contactosUsuario;
+    }
+    
+    public boolean comprobarPropietario(Usuario logueado, Propiedad propiedad) throws MiException{ // el método comprueba si un usuario logueado es propietario de una propiedad específica y devuelve un valor booleano
+        Optional<Propietario> respuesta = propietarioRepositorio.findById(logueado.getId());
         if (respuesta.isPresent()) {
-            return respuesta.get();
+            return respuesta.get().getPropiedades().contains(propiedad);
         } else {
             throw new MiException("No se encontro el propietario");
         }
-    }
-    
-    public boolean comprobarPropietario(Usuario logueado, Propiedad propiedad) throws MiException{
-        return getOne(logueado.getId()).getPropiedades().contains(propiedad);
     }
 
     @Transactional

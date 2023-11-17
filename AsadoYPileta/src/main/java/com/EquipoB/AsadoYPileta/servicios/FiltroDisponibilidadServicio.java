@@ -19,25 +19,26 @@ public class FiltroDisponibilidadServicio {
 
     @Transactional
     public FiltroDisponibilidad crearFiltro(String fechaInicioReserva, String fechaFinReserva,
-            int[] mensualReserva, int[] diarioReserva, int[] porFechaReserva) throws ParseException {
+            String[] mensualReserva, String[] diarioReserva, String[] porFechaReserva) throws ParseException {
         FiltroDisponibilidad filtro = new FiltroDisponibilidad();
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-        if (fechaInicioReserva != null) {
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");  
+        
+        if (fechaInicioReserva != null && !fechaInicioReserva.trim().isEmpty()) {
             Date fechaInicio = formato.parse(fechaInicioReserva);
             filtro.setFechaInicio(fechaInicio);
         }
-        if (fechaFinReserva != null) {
+        if (fechaFinReserva != null && !fechaFinReserva.trim().isEmpty()) {
             Date fechaFinal = formato.parse(fechaFinReserva);
             filtro.setFechaFin(fechaFinal);
         }
         if (mensualReserva != null && mensualReserva.length > 0) {
-            filtro.setMensual(mensualReserva);
+            filtro.setMensual(parsearArregloString(mensualReserva));
         }
         if (diarioReserva != null && diarioReserva.length > 0) {
-            filtro.setDiario(diarioReserva);
+            filtro.setDiario(parsearArregloString(diarioReserva));
         }
         if (porFechaReserva != null && porFechaReserva.length == 2) {
-            filtro.setPorFecha(porFechaReserva);
+            filtro.setPorFecha(parsearArregloString(porFechaReserva));
         }
         filtroDisponibilidadRepositorio.save(filtro);
         return filtro;
@@ -45,28 +46,28 @@ public class FiltroDisponibilidadServicio {
 
     @Transactional
     public FiltroDisponibilidad modificarFiltro(String id, String fechaInicioReserva, String fechaFinReserva,
-            int[] mensualReserva, int[] diarioReserva, int[] porFechaReserva) throws ParseException {
+            String[] mensualReserva, String[] diarioReserva, String[] porFechaReserva) throws ParseException {
         Optional<FiltroDisponibilidad> respuesta = filtroDisponibilidadRepositorio.findById(id);
         FiltroDisponibilidad filtro = new FiltroDisponibilidad();
         if (respuesta.isPresent()) {
             filtro = respuesta.get();
             SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-            if (fechaInicioReserva != null) {
+            if (fechaInicioReserva != null && !fechaInicioReserva.trim().isEmpty()) {
                 Date fechaInicio = formato.parse(fechaInicioReserva);
                 filtro.setFechaInicio(fechaInicio);
             }
-            if (fechaFinReserva != null) {
+            if (fechaFinReserva != null && !fechaFinReserva.trim().isEmpty()) {
                 Date fechaFinal = formato.parse(fechaFinReserva);
                 filtro.setFechaFin(fechaFinal);
             }
             if (mensualReserva != null && mensualReserva.length > 0) {
-                filtro.setMensual(mensualReserva);
+            filtro.setMensual(parsearArregloString(mensualReserva));
             }
             if (diarioReserva != null && diarioReserva.length > 0) {
-                filtro.setDiario(diarioReserva);
+                filtro.setDiario(parsearArregloString(diarioReserva));
             }
             if (porFechaReserva != null && porFechaReserva.length == 2) {
-                filtro.setPorFecha(porFechaReserva);
+                filtro.setPorFecha(parsearArregloString(porFechaReserva));
             }
             filtroDisponibilidadRepositorio.save(filtro);
         }
@@ -92,6 +93,17 @@ public class FiltroDisponibilidadServicio {
         } else {
             return new FiltroDisponibilidad();
         }
+    }    
+    
+    public int[] parsearArregloString(String[] arreglo) {
+        if (arreglo != null) {
+            int[] enteros = new int[arreglo.length];
+            for (int i = 0; i < arreglo.length; i++) {
+                enteros[i] = Integer.parseInt(arreglo[i]);
+            }
+            return enteros;
+        }
+        return null;
     }
 
 }

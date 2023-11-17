@@ -4,7 +4,6 @@ import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Comentario;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.servicios.ComentarioServicio;
-import com.EquipoB.AsadoYPileta.servicios.ImagenServicio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.servicios.ClienteServicio;
-import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import javax.servlet.http.HttpSession;
 
 @Controller
