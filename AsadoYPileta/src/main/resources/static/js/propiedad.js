@@ -22,45 +22,53 @@ var fechasDisponibles = JSON.parse(document.body.getAttribute('data-fechas-dispo
   var fechasDisponibles = document.getElementById('fechasDisponiblesInput').value;
   function generarCalendario(fechasDisponibles) {
     const calendarBody = document.getElementById('calendar-body');
-    calendarBody.innerHTML = ''; // Limpiar el contenido actual
+    calendarBody.innerHTML = ''; 
 
     const primerDiaMes = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), 1);
+    const primerDiaSemana = primerDiaMes.getDay(); 
     const ultimoDiaMes = new Date(fechaActual.getFullYear(), fechaActual.getMonth() + 1, 0);
 
     let fecha = new Date(primerDiaMes);
+    fecha.setDate(1); 
+
+    
+    while (fecha.getDay() !== 0) {
+        fecha.setDate(fecha.getDate() - 1);
+    }
+
     let diasEnFila = 0;
 
     while (fecha <= ultimoDiaMes) {
-      const fila = document.createElement('tr');
+        const fila = document.createElement('tr');
 
-      for (let i = 0; i < 7; i++) {
-        const celda = document.createElement('td');
-        celda.textContent = fecha.getDate();
+        for (let i = 0; i < 7; i++) {
+            const celda = document.createElement('td');
+            celda.textContent = fecha.getDate();
 
-        // Verificar si la fecha está disponible o no
-        const fechaISO = fecha.toISOString().split('T')[0];
-        if (fechasDisponibles.includes(fechaISO)) {
-            celda.classList.add('available', 'custom-cell');
-        } else{
-            celda.classList.add('not-available', 'custom-cell');
-        } 
+            // Verificar si la fecha está disponible o no
+            const fechaISO = fecha.toISOString().split('T')[0];
+            if (fechasDisponibles.includes(fechaISO)) {
+                celda.classList.add('available', 'custom-cell');
+            } else {
+                celda.classList.add('not-available', 'custom-cell');
+            }
 
-        fila.appendChild(celda);
+            fila.appendChild(celda);
 
-        fecha.setDate(fecha.getDate() + 1);
-        diasEnFila++;
+            fecha.setDate(fecha.getDate() + 1);
+            diasEnFila++;
 
-        if (diasEnFila === 7) {
-          diasEnFila = 0;
-          break;
+            if (diasEnFila === 7) {
+                diasEnFila = 0;
+                break;
+            }
         }
-      }
 
-      calendarBody.appendChild(fila);
+        calendarBody.appendChild(fila);
     }
 
-    document.getElementById('mes-actual').textContent = `${obtenerNombreMes(fechaActual.getMonth())} ${fechaActual.getFullYear()}`;
-  }
+    document.getElementById('mes-actual').textContent = `${obtenerNombreMes(primerDiaMes.getMonth())} ${primerDiaMes.getFullYear()}`;
+}
 
   function cambiarMes(delta) {
     fechaActual.setMonth(fechaActual.getMonth() + delta);

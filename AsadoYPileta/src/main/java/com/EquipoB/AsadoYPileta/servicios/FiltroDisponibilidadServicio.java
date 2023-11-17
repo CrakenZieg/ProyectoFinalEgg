@@ -6,6 +6,7 @@ import com.EquipoB.AsadoYPileta.repositorios.FiltroDisponibilidadRepositorio;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -110,6 +111,17 @@ public class FiltroDisponibilidadServicio {
     }
 
     public List<String> obtenerDiasHabilitados(FiltroDisponibilidad filtro) {
+        int[] arregloNuevo = filtro.getDiario().clone();
+        for (int i = 0; i < filtro.getDiario().length; i++) {
+            arregloNuevo[i] = arregloNuevo[i] + 1;
+            if (arregloNuevo[i] == 8) {
+                arregloNuevo[i] = 1;
+            }
+        }
+
+        if (filtro.getDiario()[filtro.getDiario().length - 1] == 7) {
+            arregloNuevo[filtro.getDiario().length - 1] = 1;
+        }
         List<String> diasHabilitados = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(filtro.getFechaInicio());
@@ -117,20 +129,21 @@ public class FiltroDisponibilidadServicio {
         fechaFinCalendar.setTime(filtro.getFechaFin());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         while (calendar.before(fechaFinCalendar) || calendar.equals(fechaFinCalendar)) {
-            int mesActual = calendar.get(Calendar.MONTH) + 1;
+            int mesActual = calendar.get(Calendar.MONTH);
             int diaSemanaActual = calendar.get(Calendar.DAY_OF_WEEK);
             if (contiene(filtro.getMensual(), mesActual)) {
-                if (contiene(filtro.getDiario(), diaSemanaActual)) {
+                if (contiene(arregloNuevo, diaSemanaActual)) {
                     diasHabilitados.add(dateFormat.format(calendar.getTime()));
                 }
             }
             calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
-        System.out.println("dias habilitados aca"+diasHabilitados);
+        System.out.println("dias habilitados aca" + diasHabilitados);
         return diasHabilitados;
     }
 
     private boolean contiene(int[] array, int valor) {
+        System.out.println(Arrays.toString(array));
         if (array != null) {
             for (int elemento : array) {
                 if (elemento == valor) {
