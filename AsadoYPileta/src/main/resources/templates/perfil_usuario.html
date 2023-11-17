@@ -185,8 +185,9 @@
                                                          <td th:text="${reserva.valor}"></td>
                                                          <td th:text="${reserva.serviciosElegidas[0] + ', '  +  reserva.serviciosElegidas[1] , + '...' }"></td>
                                                          <td sec:authorize="hasAnyRole('PROPIETARIO')"  th:if="${!reserva.disponible }"><a th:href='@{/reserva/aceptarReserva/__${reserva.id }__}'>Aceptar></a></td>
-                                                         <td th:if="${reserva.disponible}"> <a th:href='@{/reserva/borar/__${reserva.id }__}'>Cancelar></a></td>
+                                                         <td th:if="${reserva.disponible}"> <a th:href='@{/reserva/borar/__${reserva.id }__}' id="bton-cancel">Cancelar></a></td>
                                                          <td><a id="abrir-detalles" <a th:href='@{/reserva/ver/__${reserva.id }__}'>Ver detalles</a></td>
+                                                         <td th:if="${reserva.comentarioDisponible}"><a id="btn-comentar"  th:href='@{/reserva/ver/__${reserva.id }__}'>Califica y comenta</a></td>
                                                         </tr>
                                             </tbody>
                                             </table>
@@ -195,8 +196,7 @@
 
                     </div>
                 </div>
-            </div>
-            </div>
+           
         </main>
         <footer th:replace="fragmentos/frags :: footer"></footer>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
