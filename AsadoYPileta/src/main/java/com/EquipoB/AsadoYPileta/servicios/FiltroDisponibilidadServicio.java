@@ -138,12 +138,10 @@ public class FiltroDisponibilidadServicio {
             }
             calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
-        System.out.println("dias habilitados aca" + diasHabilitados);
         return diasHabilitados;
     }
 
     private boolean contiene(int[] array, int valor) {
-        System.out.println(Arrays.toString(array));
         if (array != null) {
             for (int elemento : array) {
                 if (elemento == valor) {
