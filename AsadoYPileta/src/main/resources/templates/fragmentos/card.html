@@ -6,11 +6,17 @@
             <a   th:href="@{/propiedad/__${propiedad.id}__}"><img class="carta-img" th:src="@{/imagen/__${propiedad.imagenes.get(0).id}__}" alt="imagen de propiedad" ></a>
             <div class="carta-cuerpo">
                 <h5 class="carta-titulo" th:text="${propiedad.titulo}"></h5>
-                <p class="carta-texto line-clamp" th:text="${propiedad.descripcion}"></p>
-                <p class="carta-texto" th:text="${propiedad.valor}"></p>
+                <div class=" carta-texto line-clamp">
+                    <p class="line-clamp"  th:text="${propiedad.descripcion}"></p>
+                </div>
+                
+               
+                     <p  class="carta-prec" th:text="${propiedad.valor}"></p>
+                
+               
                 <div class="carta-btn">
                     <a class="bton" th:href="@{/propiedad/__${propiedad.id}__}">ver propiedad</a>
-                    <a class="bton-modificar"  th:href="@{/propiedad/modificar/__${propiedad.id}__}">modificar</a>
+                    
                 </div>
 
             </div>

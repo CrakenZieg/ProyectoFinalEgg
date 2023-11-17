@@ -37,6 +37,7 @@ public class Propiedad {
     private List<Imagen> imagenes;
     @OneToOne(cascade = CascadeType.ALL)
     private Ubicacion ubicacion;
+    private String idPropietario;
 
     private Double puntuacion;
 

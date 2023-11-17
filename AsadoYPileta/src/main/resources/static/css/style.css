@@ -1,3 +1,4 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css");
 *{
     box-sizing: border-box;
     padding:0;
@@ -241,25 +242,23 @@ input:valid ~ label{
 }
 
 .contenedor-carta{
-    display: inline-block;
-    height: auto;
-    width: 100%;
-    margin-left:200px;
-    margin-right: 250px;
-    margin-top: .6rem; 
-    padding: .6rem;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    margin-left: 120px;
+    margin-right: 120px;
+    margin-top: 20px;
+    
 }
 
 .carta{
-    display: flex;
-    flex-direction: column;
-    float:left;
-    height:380px;
-    width: 300px;
-    background-color:#ffffff;
-    padding:.15rem;
-    margin:0.6rem;
-    border-radius: .80rem;
+  display: grid;
+    grid-template-columns: 100%;
+    padding: 1.2rem;
+    height: 450px;
+    
 }
 
 .carta-cuerpo{
@@ -286,8 +285,17 @@ input:valid ~ label{
 
 }
 .carta-texto{
+    font-size: .8rem;
   color:#050505;
   margin-bottom: .5rem;
+  height : 60px;
+  
+}
+.carta-texto p{
+    overflow: hidden;
+}
+.carta-prec{
+    height: 60px;
 }
 .carta-btn{
   width: 100%;
@@ -331,81 +339,49 @@ input:valid ~ label{
 }
 @media (max-width : 1536px ){
 
-  .carta{
-     transform: scale(0.8);
-  }
+ 
   
   .contenedor-carta{
-      margin-left: 150px;
-      margin-right: 170px;
+      grid-template-columns: repeat(4,1fr)
   }
 }
 
 @media (max-width : 1280px ){
   
-  .carta{
-     transform: scale(0.9);
-  }
-  
+ 
    .contenedor-carta{
-        margin-left: 90px;
-        margin-right: 120px;
+        grid-template-columns: repeat(3,1fr)
     }
   
 }
 @media (max-width : 1024px ){
   
-  .carta{
-     transform: scale(1);
-  }
+
    .contenedor-carta{
-        margin-left: 60px;
-        margin-right: 100px;
+        grid-template-columns: repeat(2,1fr)
     }
   
 }
 
 @media (max-width : 768px ){
   
-  .contenedor{
-     
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-  }
+ 
    .contenedor-carta{
-        margin-left: 80px;
-        margin-right: 80px;
+        grid-template-columns: repeat(1,1fr)
     }
-  .carta{
-     transform: scale(1.1);
-     margin-bottom: 60px; 
-  }
+ 
   
 }
 @media (max-width : 600px ){
   
-  .contenedor{
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-  }
-  .carta{
-     transform: scale(1.2);
-     margin-bottom: 80px; 
-  }
+ 
 
 
     .contenedor-carta{
-        margin-left: 100px;
-        margin-right: 50px;
+        grid-template-columns: 1fr;
     }
     
-    .propiedad-descrip{
-        display: block;
-    }
+ 
 }
 
 
@@ -590,27 +566,27 @@ input:valid ~ label{
 #imagen{
     display: flex;
     flex-direction: row;
-    
     width: 100%;
+     max-width: 1200px;
     height: 600px;
     justify-content: center;
     align-items: center;
     border-radius: 20px;
-    
     box-shadow: 0 30px 30px rgba(0, 0, 0, 0.1 ) ;
-
 }
 
 .imagen-oculta{
-    height: 600px;
+    height:600px;
     width: 100%;
-    transition: 1s;
+    
 }
 .imagen-oculta img{
     width: 100%;
     height: 100%;
+    object-fit: slice;
     border-radius:20px;
 }
+
 
 .propiedad-descrip{
     display: flex;
@@ -694,12 +670,17 @@ input:valid ~ label{
     width: 60%;
     background: #fff;
 }
+#contenedor-dtserv{
+    border-bottom: 1px solid #7d7d7d;
+}
 .servicios-propiedad{
+    display: grid;
+    grid-template-columns: 50% 50%;
     margin: .6rem;
     padding:1.2rem;
-    height: 300px;
+    height: auto;
     width: 100%;
-    border-bottom: 1px solid #7d7d7d;
+    
 }
 .servicios-propiedad ul, .dtalles-serv ul{
     display: grid;
@@ -715,6 +696,7 @@ input:valid ~ label{
   
     box-shadow: 0 6px 6px rgba(0,0,0,0.1);
 }
+
 .servicios-propiedad li:nth-child(n+7){
     display: none;
 }
@@ -905,15 +887,92 @@ input:valid ~ label{
     
 }
 
+/*Comentario */
+.contenedor-comentario-form {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("https://images.unsplash.com/photo-1451976426598-a7593bd6d0b2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background-position: center;
+  background-repeat: none;
+  background-size: cover;
+}
+.comentario-form {
+  height: 100%;
+  max-height: 1020px;
+  width: 400px;
+  padding: 1em;
+  border-radius: 0.9rem;
+  background-color: #fff;
+  box-shadow: 0 0 20rem #222222;
+}
+
+.input-cal {
+  display: grid;
+  gap: 1rem;
+  padding: 1em;
+}
+.input-cal ul {
+  display: flex;
+  list-style: none;
+  flex-direction: row;
+  gap: 1rem;
+}
+.star {
+  font-size: 2rem;
+  color: #bbb;
+  transition: color 0.3s;
+  cursor: pointer;
+}
+.star:hover,
+.star.checked {
+  color: gold;
+}
+.comentario-text{
+    
+    height: 100%;
+    max-height: 400px;
+    width: 100%;
+    max-width: 400px;
+}
+.comentario-text textarea{ 
+    height: 200px;
+    padding: 1rem;
+    text-align:justify;
+    box-shadow: 0 0 10rem rgba(0 0 0 / 0.2);
+    border-radius: 1rem;
+    width: 100%;
+    font-size: 1.2rem;
+}
+.comentario-form button{
+    display: block;
+    height: 60px;
+    width: 120px;
+    padding: .7em;
+    margin-right: auto;
+    margin-left: auto;
+    background-color: #222222;
+    color: #fff;
+    border-radius: .9rem;
+    cursor: pointer;
+}
+
 /*reserva*/
+.resultado-contenedor {
+    height: auto;
+    max-height: 1020px;
+    overflow: auto;
+    margin-top: 20px;
+}
 .resultado-contenedor table{
     width: 100%;
     text-align: center;
     color: #fff;
     background-color: #242323;
     border-collapse: collapse;
-    
 }
+
 .resultado-contenedor table thead, .resultado-contenedor table tbody {
     border-collapse: collapse;  
     
