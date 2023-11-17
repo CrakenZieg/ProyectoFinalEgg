@@ -124,7 +124,7 @@ public class ReservaControlador {
     @GetMapping("/aceptarReserva/{id}")
     public ModelAndView aceptar(@PathVariable String id, HttpSession session) throws PermisosException{
         Usuario usuario = (Usuario) session.getAttribute("usuariosession");
-        if(reservaServicio.getOne(id).getPropiedad().getIdPropietario()!=usuario.getId()){
+        if(!reservaServicio.getOne(id).getPropiedad().getIdPropietario().equals(usuario.getId())){
             throw new PermisosException("No es posible aceptar una reserva de una propiedad ajena");
         }
         reservaServicio.aceptarReserva(id);        
