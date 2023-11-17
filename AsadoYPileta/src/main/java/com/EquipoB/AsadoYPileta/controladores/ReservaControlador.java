@@ -66,10 +66,10 @@ public class ReservaControlador {
     }
 
     @PostMapping("/registro")
-    public ModelAndView registroReserva(String idPropiedad, String mensaje, String fechaInicio, String fechaFin, String[] serviciosElegidas, ModelMap modelo) throws MiException, ParseException {
+    public ModelAndView registroReserva(String idPropiedad, String mensaje, String fechaInicio, String fechaFin, String[] serviciosElegidas, ModelMap modelo,Usuario logueado) throws MiException, ParseException {
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");     
         reservaServicio.crearReserva(idPropiedad,mensaje, formato.parse(fechaInicio),formato.parse(fechaFin), 
-                servicioServicio.listarServiciosArray(serviciosElegidas));
+                servicioServicio.listarServiciosArray(serviciosElegidas), logueado);
         return new ModelAndView("redirect:/reserva/listar", modelo);        
     }
 
@@ -81,9 +81,10 @@ public class ReservaControlador {
     }
 
     @PostMapping("/modificar/{id}")
-    public String modificarReserva(@PathVariable String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, ModelMap modelo) {
+    public String modificarReserva(@PathVariable String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, ModelMap modelo,
+            Usuario logueado) {
         try {
-            reservaServicio.modificarReserva(id, mensaje, fechaInicio, fechaFin, serviciosElegidas);
+            reservaServicio.modificarReserva(id, mensaje, fechaInicio, fechaFin, serviciosElegidas,logueado);
             return "redirect:/reserva/listar";
         } catch (MiException e) {
             modelo.addAttribute("error", e.getMessage());
