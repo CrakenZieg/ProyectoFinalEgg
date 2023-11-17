@@ -62,12 +62,29 @@ public class ReservaServicio {
 
     }
 
-    @Transactional(readOnly = true)
-    public List<Reserva> listarReserva() {
+    @Transactional(readOnly = true) 
+    public List<Reserva> listarReservaCliente(String id) {
+
 
         List<Reserva> reservas = new ArrayList();
 
-        reservas = reservaRepositorio.findAll();
+        reservas = reservaRepositorio.buscarReservaPorCliente(id);
+
+        return reservas;
+    }
+    
+    @Transactional(readOnly = true) 
+    public List<Reserva> listarReservaPropiedadEnPerfil(List<Propiedad> propiedades) {
+        List <String> idPropiedades = new ArrayList();
+        for (Propiedad propiedad : propiedades) {
+            String idPropiedad = propiedad.getId();
+            idPropiedades.add(idPropiedad);
+        }
+
+
+        List<Reserva> reservas = new ArrayList();
+
+        reservas = reservaRepositorio.buscarReservaPorPropiedadPerfil(idPropiedades);
 
         return reservas;
     }

@@ -89,6 +89,7 @@ public class PropiedadServicio {
         propiedad.setFiltroDisponibilidad(filtroDisponibilidadServicio.crearFiltro(fechaInicioReserva,
                 fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva));
         propiedad.setPuntuacion(0.00);
+        propiedad.setIdPropietario(propietario.getId());
         propiedadRepositorio.save(propiedad);
         if (propietario.getPropiedades() != null) {
             propietario.getPropiedades().add(propiedad);

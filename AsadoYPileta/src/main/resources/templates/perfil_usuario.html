@@ -140,7 +140,27 @@
                         </div>
 
                         <div class="carousel-item">
-                            <div th:replace="fragmentos/card :: div"></div>                            
+                            
+                                <div th:replace="fragmentos/card :: div"></div>  
+                            
+                                    <div >
+                                            <table>
+                                            <thead>
+                                              <tr>
+                                                   <th>Nombre propiedad</th>
+                                                   
+                                               </tr>
+                                             </thead>
+                                             <tbody>
+                                                        <tr th:each="propiedad : ${propiedades}">
+                                                         <td th:text="${propiedad.titulo}"></td>
+                                                         <td th:each="reserva: ${reservas}" th:if="reserva.propiedad.id=propiedad.id" th:text="${reserva.cliente.contacto.tipo}"></td>
+                                                        </tr>
+                                            </tbody>
+                                            </table>
+                                          </div>
+                                    </div>
+                              
                         </div>
                          <div class="carousel-item">
                                           <div class="resultado-contenedor">
@@ -166,7 +186,7 @@
                                                          <td th:text="${reserva.serviciosElegidas[0] + ', '  +  reserva.serviciosElegidas[1] , + '...' }"></td>
                                                          <td sec:authorize="hasAnyRole('PROPIETARIO')"  th:if="${!reserva.disponible }"><a th:href='@{/reserva/aceptarReserva/__${reserva.id }__}'>Aceptar></a></td>
                                                          <td th:if="${reserva.disponible}"> <a th:href='@{/reserva/borar/__${reserva.id }__}'>Cancelar></a></td>
-                                                         <td><a id="abrir-detalles">Ver detalles</a></td>
+                                                         <td><a id="abrir-detalles" <a th:href='@{/reserva/ver/__${reserva.id }__}'>Ver detalles</a></td>
                                                         </tr>
                                             </tbody>
                                             </table>
