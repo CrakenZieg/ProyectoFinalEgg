@@ -16,7 +16,9 @@ import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
 import com.EquipoB.AsadoYPileta.servicios.TipoPropiedadServicio;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -130,6 +132,12 @@ public class PropiedadControlador {
         if (!propietarioServicio.comprobarPropietario(logueado, propiedad)) {
             throw new PermisosException("No es posible modificar la propiedad porque no te pertenece");
         }
+        List<Integer> fechasDisponibles = filtroDisponibilidadServicio.listaDeEnterosDiasReservados(propiedad);
+        List<Integer> mesesDisponibles = propiedad.getFiltroDisponibilidad() != null
+                ? Arrays.stream(propiedad.getFiltroDisponibilidad().getMensual()).boxed().collect(Collectors.toList())
+                : null;
+        modelo.addAttribute("mesesDisponibles", mesesDisponibles);
+        modelo.addAttribute("fechasDisponibles", fechasDisponibles);
         modelo.addAttribute("propiedad", propiedad);
         modelo.addAttribute("tipoPropiedades", tipoPropiedades);
         modelo.addAttribute("servicios", servicios);
