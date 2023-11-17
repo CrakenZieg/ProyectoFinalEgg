@@ -1,6 +1,5 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
-import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Contacto;
 import com.EquipoB.AsadoYPileta.entidades.TipoContacto;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
@@ -67,7 +66,10 @@ public class ContactoServicio {
         contacto.setContacto(valor);
         return contacto;
     }
-
+   /*
+    este método tiene la responsabilidad de filtrar y actualizar una lista de contactos en base a nuevos datos proporcionados,
+    manejando la creación de nuevos contactos y la eliminación de contactos que no tienen un tipo correspondiente en la nueva información
+    */
     @Transactional
     public List<Contacto> filtrar(List<Contacto> contactoActuales, String[] contactosInputNuevo, String[] tipoContactoInput) throws MiException, Exception {
         List<Contacto> nuevos = new ArrayList<>();

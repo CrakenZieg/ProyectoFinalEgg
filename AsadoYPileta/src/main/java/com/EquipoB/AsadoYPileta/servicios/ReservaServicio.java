@@ -1,22 +1,17 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
-import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
-import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.ClienteRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
-import com.EquipoB.AsadoYPileta.repositorios.PropietarioRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.ReservaRepositorio;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -30,11 +25,10 @@ public class ReservaServicio {
 
     @Autowired
     private ReservaRepositorio reservaRepositorio;
+
     @Autowired
     private PropiedadRepositorio propiedadRepositorio;
-    @Autowired
-
-    private PropietarioRepositorio propietarioRepositorio;
+  
     @Autowired
     ClienteRepositorio clienteRepositorio;
 
@@ -51,6 +45,7 @@ public class ReservaServicio {
         verificarSuperposicionReservas(idPropiedad,fechaInicio,fechaFin);
 
         Reserva reserva = new Reserva();
+
         reserva.setPropiedad(propiedadRepositorio.getById(idPropiedad));
         reserva.setCliente(clienteRepositorio.getById(idCliente));
         reserva.setMensaje(mensaje);
@@ -131,7 +126,8 @@ public class ReservaServicio {
 
     @Transactional
     public boolean validarReservasPropiedad(String id) {
-        return reservaRepositorio.buscarReservaPropiedad(id);
+        return reservaRepositorio.propiedadTieneReservasActivas(id);
+
     }
 
     @Transactional
@@ -148,7 +144,10 @@ public class ReservaServicio {
         }
 
     }
-
+    
+   /*este método ayuda a garantizar que no se creen reservas para una propiedad con fechas que se superpongan con reservas existentes. 
+    Si hay alguna superposición, se impide la creación de la nueva reserva.
+     */
     public boolean verificarSuperposicionReservas(String idPropiedad, Date fechaInicio, Date fechaFin) {
 
         List<Date> fechasInicioReservas = reservaRepositorio.buscarFechaInicioReserva(idPropiedad);        

@@ -90,7 +90,7 @@
                                 <div class="container">
                                     <div class="d-grid gap-2 d-md-flex justify-content-center">
                                         <button type="button" class="btn btn-secondary" onclick="cambiarMes(-1)">Mes Anterior</button>
-                                        <span id="mes-actual"></span>
+                                        <span id="mes-actual" class="h3"></span>
                                         <button type="button" class="btn btn-secondary justify-content-end" onclick="cambiarMes(1)">Mes Siguiente</button>
                                     </div>
                                     
@@ -134,17 +134,17 @@
 
                         </div>
                         <div class="calificacion">
-                            <input id="calificacion"  value="4"hidden>
+                            <input id="calificacion"  th:value="${propiedad.puntuacion}"hidden>
                             <ul>
                                  
-                        <li><i class="bi bi-star-fill star" id="starsp"></i></li>
-                        <li><i class="bi bi-star-fill star" id="starsp"></i></li>
-                        <li><i class="bi bi-star-fill star" id="starsp"></i></li>
-                        <li><i class="bi bi-star-fill star" id="starsp"></i></li>
-                        <li><i class="bi bi-star-fill star" id="starsp"></i></li>
+                        <li><i class="bi bi-star-fill starp" ></i></li>
+                        <li><i class="bi bi-star-fill starp"></i></li>
+                        <li><i class="bi bi-star-fill starp"></i></li>
+                        <li><i class="bi bi-star-fill starp" ></i></li>
+                        <li><i class="bi bi-star-fill starp" ></i></li>
                         
                         
-                        <h2 > Calificacion de 4.9</h2>
+                        <h2 th:text="${'Calificacion de ' +  propiedad.puntuacion}"></h2>
                     </ul>
                         </div>
                         <div class="comentario-contenedor">
