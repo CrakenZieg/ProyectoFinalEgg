@@ -2,14 +2,14 @@
 <html  lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head th:replace="/fragmentos/frags :: head"></head>
-    <body onload=" generarCalendario()">
+    <body onload="cargar()">
         <header th:replace="fragmentos/frags :: header"></header>
         <main>
-
+            
             <section>
                 <div class="contenedor-propiedad">
                     <div class="propiedad">
-
+                        <input type="hidden" id="fechasDisponiblesInput" th:value="${fechasDisponibles}" />
                         <div class="contenedor-img-propiedad">
 
                             <button id="atras"><img th:src="@{/imagenes/arrow.png}" alt=".."></button>
@@ -84,23 +84,30 @@
 
 
                             <div class="reserva">
-                                <div class="container-fluid">
-                                    <table class="table text-center">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Domingo</th>
-                                                <th scope="col">Lunes</th>
-                                                <th scope="col">Martes</th>
-                                                <th scope="col">Miércoles</th>
-                                                <th scope="col">Jueves</th>
-                                                <th scope="col">Viernes</th>
-                                                <th scope="col">Sábado</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="calendar-body">
-                                            <!-- Aquí se generará el contenido del calendario con JavaScript -->
-                                        </tbody>
-                                    </table>
+                                <div class="container">
+                                    <div class="d-grid gap-2 d-md-flex justify-content-center">
+                                        <button type="button" class="btn btn-secondary" onclick="cambiarMes(-1)">Mes Anterior</button>
+                                        <span id="mes-actual"></span>
+                                        <button type="button" class="btn btn-secondary justify-content-end" onclick="cambiarMes(1)">Mes Siguiente</button>
+                                    </div>
+                                    
+                                        <table class="table table-bordered" id="tablaFechas">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" class="custom-cell">Domingo</th>
+                                                    <th scope="col" class="custom-cell">Lunes</th>
+                                                    <th scope="col" class="custom-cell">Martes</th>
+                                                    <th scope="col" class="custom-cell">Miércoles</th>
+                                                    <th scope="col" class="custom-cell">Jueves</th>
+                                                    <th scope="col" class="custom-cell">Viernes</th>
+                                                    <th scope="col" class="custom-cell">Sábado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="calendar-body">
+                                                <!-- Aquí se generará el contenido del calendario con JavaScript -->
+                                            </tbody>
+                                        </table>
+                                   
                                 </div>
                                 <h2 th:text="${propiedad.valor}" > </h2>
                                 <form th:action="@{/reserva/registrar}"  method="POST"  >
