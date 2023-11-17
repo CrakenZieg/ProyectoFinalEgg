@@ -119,9 +119,6 @@ public class FiltroDisponibilidadServicio {
             }
         }
 
-        if (filtro.getDiario()[filtro.getDiario().length - 1] == 7) {
-            arregloNuevo[filtro.getDiario().length - 1] = 1;
-        }
         List<String> diasHabilitados = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(filtro.getFechaInicio());

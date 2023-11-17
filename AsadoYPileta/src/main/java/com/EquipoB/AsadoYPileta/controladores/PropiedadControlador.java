@@ -15,6 +15,7 @@ import com.EquipoB.AsadoYPileta.servicios.PropietarioServicio;
 import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
 import com.EquipoB.AsadoYPileta.servicios.TipoPropiedadServicio;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -76,9 +77,11 @@ public class PropiedadControlador {
         List<TipoPropiedad> tipoPropiedades = new ArrayList<>();
         tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
         List<Reserva> reservas = reservaServicio.reservasFuturas(id);
+        List<String> fechasReservadas = reservaServicio.diasReservados(reservas);
         List<String> fechasDisponibles = filtroDisponibilidadServicio.obtenerDiasHabilitados(propiedad.getFiltroDisponibilidad());
-        modelo.addAttribute("fechasDisponibles",fechasDisponibles);
-        modelo.addAttribute("propiedad",propiedad );
+        modelo.addAttribute("fechasReservadas", fechasReservadas);
+        modelo.addAttribute("fechasDisponibles", fechasDisponibles);
+        modelo.addAttribute("propiedad", propiedad);
         modelo.addAttribute("tipoPropiedades", tipoPropiedades);
         modelo.addAttribute("servicios", servicios);
         modelo.addAttribute("comentarios", comentarios);
@@ -145,7 +148,7 @@ public class PropiedadControlador {
             @RequestParam String calle, @RequestParam String numeracion, @RequestParam String observaciones,
             @RequestParam Double latitud, @RequestParam Double longitud, @RequestParam(required = false) String fechaInicioReserva,
             @RequestParam(required = false) String fechaFinReserva, @RequestParam(required = false) String[] mensualReserva,
-            @RequestParam(required = false) String[] diarioReserva, @RequestParam(required = false) String[] porFechaReserva,Usuario logueado) throws Exception {
+            @RequestParam(required = false) String[] diarioReserva, @RequestParam(required = false) String[] porFechaReserva, Usuario logueado) throws Exception {
 
         propiedadServicio.modificarPropiedad(id, titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, imagenesViejas, estado,
                 pais, provincia, departamento, localidad, calle, numeracion, observaciones, latitud, longitud,

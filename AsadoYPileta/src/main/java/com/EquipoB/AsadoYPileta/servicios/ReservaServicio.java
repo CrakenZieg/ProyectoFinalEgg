@@ -1,12 +1,18 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
+import com.EquipoB.AsadoYPileta.entidades.FiltroDisponibilidad;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.ReservaRepositorio;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +30,7 @@ public class ReservaServicio {
     private PropiedadRepositorio propiedadRepositorio;
 
     @Transactional
-    public void crearReserva(String idPropiedad, String mensaje, Date fechaInicio, Date fechaFin, 
+    public void crearReserva(String idPropiedad, String mensaje, Date fechaInicio, Date fechaFin,
             List serviciosElegidas) throws MiException {
 
         validar(mensaje, fechaInicio, fechaFin);
@@ -41,9 +47,8 @@ public class ReservaServicio {
 
     }
 
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public List<Reserva> listarReservaCliente(String id) {
-
 
         List<Reserva> reservas = new ArrayList();
 
@@ -51,15 +56,14 @@ public class ReservaServicio {
 
         return reservas;
     }
-    
-    @Transactional(readOnly = true) 
+
+    @Transactional(readOnly = true)
     public List<Reserva> listarReservaPropiedadEnPerfil(List<Propiedad> propiedades) {
-        List <String> idPropiedades = new ArrayList();
+        List<String> idPropiedades = new ArrayList();
         for (Propiedad propiedad : propiedades) {
             String idPropiedad = propiedad.getId();
             idPropiedades.add(idPropiedad);
         }
-
 
         List<Reserva> reservas = new ArrayList();
 
@@ -175,9 +179,9 @@ public class ReservaServicio {
         }
 
     }
-    
+
     @Transactional
-    public void aceptarReserva(String id){
+    public void aceptarReserva(String id) {
         Reserva reserva = reservaRepositorio.getById(id);
         reserva.setDisponible(true);
         reservaRepositorio.save(reserva);
@@ -198,5 +202,29 @@ public class ReservaServicio {
 
             throw new MiException("La fecha de Inicio no puede ser posterior a la fecha de Fin");
         }
+    }
+
+    public List<String> diasPorReserva(Reserva reserva) {
+        List<String> fechas = new ArrayList<>();
+        LocalDate fechaInicio = reserva.getFechaInicio().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate fechaFin = reserva.getFechaFin().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        long diferencia = ChronoUnit.DAYS.between(fechaInicio, fechaFin);
+        for (int i = 0; i <= diferencia; i++) {
+            LocalDate intermedio = fechaInicio.plusDays(i);
+            String fechaFormateada = intermedio.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            fechas.add(fechaFormateada);
+        }
+
+        return fechas;
+    }
+
+    public List<String> diasReservados(List<Reserva> reservas) {
+        List<String> respuesta = new ArrayList<>();
+        for (Reserva reserva : reservas) {
+            for (String diasReservado : diasPorReserva(reserva)) {
+                respuesta.add(diasReservado);
+            }
+        }
+        return respuesta;
     }
 }

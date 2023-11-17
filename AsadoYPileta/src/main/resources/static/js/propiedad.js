@@ -14,13 +14,13 @@ function input(nombre,valor){
     return `<input type="checkbox" id="${nombre}${valor}" name="${nombre}" value="${valor}" hidden="true" checked="true"/>`;    
 }
 let fechaActual = new Date();
-var fechasDisponibles = JSON.parse(document.body.getAttribute('data-fechas-disponibles'));
-  function cargar(){
-     
+
+function cargar(){
     generarCalendario(fechasDisponibles);
 }
-  var fechasDisponibles = document.getElementById('fechasDisponiblesInput').value;
-  function generarCalendario(fechasDisponibles) {
+    var fechasDisponibles = document.getElementById('fechasDisponiblesInput').value;
+    var fechasReservadas = document.getElementById('fechasReservadasInput').value;
+    function generarCalendario(fechasDisponibles) {
     const calendarBody = document.getElementById('calendar-body');
     calendarBody.innerHTML = ''; 
 
@@ -49,7 +49,9 @@ var fechasDisponibles = JSON.parse(document.body.getAttribute('data-fechas-dispo
             const fechaISO = fecha.toISOString().split('T')[0];
             if (fechasDisponibles.includes(fechaISO)) {
                 celda.classList.add('available', 'custom-cell');
-            } else {
+            } else if(fechasReservadas.includes(fechaISO)){
+                celda.classList.add('not-available', 'custom-cell');
+            }else {
                 celda.classList.add('not-available', 'custom-cell');
             }
 
