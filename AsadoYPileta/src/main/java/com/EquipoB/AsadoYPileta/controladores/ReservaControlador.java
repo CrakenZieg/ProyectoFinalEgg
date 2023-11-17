@@ -7,9 +7,9 @@ import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
+import com.EquipoB.AsadoYPileta.excepciones.PermisosException;
 import com.EquipoB.AsadoYPileta.servicios.ClienteServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
-import com.EquipoB.AsadoYPileta.servicios.PropietarioServicio;
 import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
 import java.text.ParseException;
@@ -40,65 +40,67 @@ public class ReservaControlador {
     private ClienteServicio clienteServicio;
     @Autowired
     private ServicioServicio servicioServicio;
-    @Autowired
-    private PropietarioServicio propietarioServicio;
+    
 
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @PostMapping("/registrar") 
     public ModelAndView crearReserva(@RequestParam String idPropiedad, @RequestParam String fechaInicio,
             @RequestParam String fechaFinal, HttpSession session, ModelMap modelo) throws ParseException, MiException {
-        Reserva reserva = new Reserva();
         Usuario usuario = (Usuario) session.getAttribute("usuariosession");
         Cliente cliente = clienteServicio.getOne(usuario.getId());
         Propiedad propiedad = propiedadServicio.getOne(idPropiedad);   
         List<Servicio> servicios = servicioServicio.listarServicios();
         
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");     
-        reserva.setFechaInicio(formato.parse(fechaInicio));
-        reserva.setFechaFin(formato.parse(fechaFinal));
-        propiedad.getFiltroDisponibilidad().habilitado(reserva.getFechaInicio(), reserva.getFechaFin());
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");  
+        propiedad.getFiltroDisponibilidad().habilitado(formato.parse(fechaInicio), formato.parse(fechaFinal));
         
         modelo.addAttribute("servicios", servicios);
         modelo.addAttribute("propiedad", propiedad);
         modelo.addAttribute("cliente", cliente);
-        modelo.addAttribute("reserva", reserva);
+        modelo.addAttribute("fechaInicio", fechaInicio);
+        modelo.addAttribute("fechaFinal", fechaFinal);
         
         return new ModelAndView("confirmacion_reserva.html", modelo);
     }
-
+    
+    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @PostMapping("/registro")
-
-    public ModelAndView registroReserva(String idPropiedad, String mensaje, String fechaInicio, String fechaFin, String[] serviciosElegidas, ModelMap modelo) throws MiException, ParseException {
+    public ModelAndView registroReserva(String idPropiedad  , String idCliente, String mensaje, String fechaInicio, String fechaFin, String[] serviciosElegidas, ModelMap modelo,Usuario logueado) throws MiException, ParseException {
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");     
-        reservaServicio.crearReserva(idPropiedad,mensaje, formato.parse(fechaInicio),formato.parse(fechaFin), 
-                servicioServicio.listarServiciosArray(serviciosElegidas));
-        return new ModelAndView("redirect:/reserva/listar", modelo);        
-
+        reservaServicio.crearReserva(idPropiedad,idCliente ,mensaje, formato.parse(fechaInicio),formato.parse(fechaFin), 
+                servicioServicio.listarServiciosArray(serviciosElegidas), logueado);
+        return new ModelAndView("redirect:/cliente/perfil", modelo);        
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @GetMapping("/modificar/{id}")
     public ModelAndView modificarReserva(@PathVariable String id, ModelMap modelo) {
         modelo.put("reserva", reservaServicio.getOne(id));
         return new ModelAndView("reserva_modificar.html", modelo);
-
     }
     
+    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @GetMapping("/ver/{id}")
-    public String verReserva(@PathVariable String id, ModelMap modelo) {
-        Reserva reserva =reservaServicio.getOne(id);
-        List<Contacto> contactosPropietario= propietarioServicio.mostrarContactos(reserva.getPropiedad().getId());
-        modelo.addAttribute("contactoPropietatio",contactosPropietario);
-        modelo.put("reserva", reserva);
-        
-        return "reserva.html";
-
+    public ModelAndView verReserva(@PathVariable String id, HttpSession session, ModelMap modelo) throws PermisosException {
+        Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+        Reserva reserva = reservaServicio.getOne(id);
+        if(!reserva.getCliente().getId().equals(usuario.getId()) && !reserva.getPropiedad().getIdPropietario().equals(usuario.getId())){
+            throw new PermisosException("No tienes permiso para acceder a estos datos");
+        }
+        List<Contacto> contactosPropietario = clienteServicio.getOne(reserva.getPropiedad().getIdPropietario()).getContactos();
+        List<Contacto> contactosCliente = reserva.getCliente().getContactos();
+        modelo.addAttribute("contactosPropietario",contactosPropietario);
+        modelo.addAttribute("contactosCliente",contactosCliente);
+        modelo.put("reserva", reserva);        
+        return new ModelAndView("reserva.html", modelo);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @PostMapping("/modificar/{id}")
-    public String modificarReserva(@PathVariable String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, ModelMap modelo) {
-
+    public String modificarReserva(@PathVariable String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas, ModelMap modelo,
+            Usuario logueado) {
         try {
-            reservaServicio.modificarReserva(id, mensaje, fechaInicio, fechaFin, serviciosElegidas);
+            reservaServicio.modificarReserva(id, mensaje, fechaInicio, fechaFin, serviciosElegidas,logueado);
             return "redirect:/reserva/listar";
         } catch (MiException e) {
             modelo.addAttribute("error", e.getMessage());
@@ -106,14 +108,25 @@ public class ReservaControlador {
         }
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @GetMapping("/borrar/{id}")
-    public ModelAndView borrarReserva(@PathVariable String id) {
+    public ModelAndView borrarReserva(@PathVariable String id, HttpSession session) throws PermisosException {
+        Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+        Reserva reserva = reservaServicio.getOne(id);
+        if(reserva.getPropiedad().getIdPropietario()!=usuario.getId()&&reserva.getCliente().getId()!=usuario.getId()){
+            throw new PermisosException("No es posible borrar una reserva de una propiedad ajena");
+        }
         reservaServicio.borrar(id);
-        return new ModelAndView("redirect:/reserva/listar");
+        return new ModelAndView("redirect:/cliente/perfil");
     }
     
-    @PostMapping("/aceptarReserva/{id}")
-    public ModelAndView aceptar(@PathVariable String id) throws MiException{
+    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
+    @GetMapping("/aceptarReserva/{id}")
+    public ModelAndView aceptar(@PathVariable String id, HttpSession session) throws PermisosException{
+        Usuario usuario = (Usuario) session.getAttribute("usuariosession");
+        if(reservaServicio.getOne(id).getPropiedad().getIdPropietario()!=usuario.getId()){
+            throw new PermisosException("No es posible aceptar una reserva de una propiedad ajena");
+        }
         reservaServicio.aceptarReserva(id);        
         return new ModelAndView("redirect:/cliente/perfil");        
     }    

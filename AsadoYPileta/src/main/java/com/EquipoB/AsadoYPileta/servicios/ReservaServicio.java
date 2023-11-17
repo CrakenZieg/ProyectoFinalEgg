@@ -2,9 +2,15 @@ package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
+import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
+import com.EquipoB.AsadoYPileta.repositorios.ClienteRepositorio;
+import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.ReservaRepositorio;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,12 +26,28 @@ public class ReservaServicio {
     @Autowired
     private ReservaRepositorio reservaRepositorio;
 
+    @Autowired
+    private PropiedadRepositorio propiedadRepositorio;
+  
+    @Autowired
+    ClienteRepositorio clienteRepositorio;
+
     @Transactional
-    public void crearReserva(String idPropiedad, String mensaje, Date fechaInicio, Date fechaFin,
-            List serviciosElegidas) throws MiException {
+    public void crearReserva(String idPropiedad, String idCliente, String mensaje, Date fechaInicio, Date fechaFin,
+            List serviciosElegidas, Usuario logueado) throws MiException {
+
+        Propiedad propiedad = propiedadRepositorio.getOne(idPropiedad);
+        if(propiedad.getIdPropietario()==logueado.getId()){
+            throw new MiException("No es posible generar reservas sobre tus propiedades");
+        }
 
         validar(mensaje, fechaInicio, fechaFin);
+        verificarSuperposicionReservas(idPropiedad,fechaInicio,fechaFin);
+
         Reserva reserva = new Reserva();
+
+        reserva.setPropiedad(propiedadRepositorio.getById(idPropiedad));
+        reserva.setCliente(clienteRepositorio.getById(idCliente));
         reserva.setMensaje(mensaje);
         reserva.setFechaInicio(fechaInicio);
         reserva.setFechaFin(fechaFin);
@@ -63,15 +85,23 @@ public class ReservaServicio {
     }
 
     @Transactional
-    public void modificarReserva(String id, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas) throws MiException {
+    public void modificarReserva(String idReserva, String mensaje, Date fechaInicio, Date fechaFin, List serviciosElegidas,
+            Usuario logueado) throws MiException {
 
         validar(mensaje, fechaInicio, fechaFin);
 
-        Optional<Reserva> respuesta = reservaRepositorio.findById(id);
+        Optional<Reserva> respuesta = reservaRepositorio.findById(idReserva);
+        if (respuesta.isPresent()) {
+            Reserva reserva = respuesta.get();
+            if (!reserva.getCliente().getId().equals(logueado.getId())) {
+                throw new MiException("Solo puede modificar una reserva que usted realizo");
+            }
+        }
 
         if (respuesta.isPresent()) {
 
             Reserva reserva = respuesta.get();
+            verificarSuperposicionReservas(reserva.getPropiedad().getId(),fechaInicio,fechaFin);
             reserva.getPropiedad().getFiltroDisponibilidad().habilitado(fechaInicio, fechaFin);
             reserva.setMensaje(mensaje);
             reserva.setFechaInicio(fechaInicio);
@@ -120,12 +150,14 @@ public class ReservaServicio {
      */
     public boolean verificarSuperposicionReservas(String idPropiedad, Date fechaInicio, Date fechaFin) {
 
-        List<Date> fechasInicioReservas = reservaRepositorio.buscarFechaInicioReserva(idPropiedad);
+        List<Date> fechasInicioReservas = reservaRepositorio.buscarFechaInicioReserva(idPropiedad);        
         List<Date> fechasFinReservas = reservaRepositorio.buscarFechaFinReserva(idPropiedad);
 
-        for (int i = 0; i < fechasInicioReservas.size(); i++) {
+        for (int i = 0; i < fechasInicioReservas.size(); i++) {            
             Date inicioReserva = fechasInicioReservas.get(i);
+            System.out.println("inicioReserva: "+inicioReserva);
             Date finReserva = fechasFinReservas.get(i);
+            System.out.println("finReserva: "+finReserva);
 
             if ((inicioReserva.before(fechaFin) || inicioReserva.equals(fechaFin))
                     && (finReserva.after(fechaInicio) || finReserva.equals(fechaInicio))) {
@@ -192,9 +224,30 @@ public class ReservaServicio {
 
             throw new MiException("La fechas de reserva no pueden ser nulas ");
         }
-        if (fechaInicio.before(fechaFin)) {
+        if (fechaFin.before(fechaInicio)) {
 
             throw new MiException("La fecha de Inicio no puede ser posterior a la fecha de Fin");
         }
+    }
+
+    public List<String> diasPorReserva(Reserva reserva) {
+        List<String> fechas = new ArrayList<>();
+        LocalDate ini = LocalDate.of(reserva.getFechaInicio().getYear() + 1900, reserva.getFechaInicio().getMonth() + 1, reserva.getFechaInicio().getDate());
+        LocalDate fini = LocalDate.of(reserva.getFechaFin().getYear() + 1900, reserva.getFechaFin().getMonth() + 1, reserva.getFechaFin().getDate());
+        long diferencia = ChronoUnit.DAYS.between(ini, fini);
+        for (int i = 0; i <= diferencia; i++) {
+            LocalDate intermedio = ini.plusDays(i);
+            String fechaFormateada = intermedio.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            fechas.add(fechaFormateada);
+        }
+        return fechas;
+    }
+
+    public List<String> diasReservados(List<Reserva> reservas) {
+        List<String> respuesta = new ArrayList<>();
+        for (Reserva reserva : reservas) {
+            respuesta.addAll(diasPorReserva(reserva));
+        }
+        return respuesta;
     }
 }

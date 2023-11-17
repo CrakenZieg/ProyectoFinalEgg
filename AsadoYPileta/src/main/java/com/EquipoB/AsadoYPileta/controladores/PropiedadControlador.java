@@ -9,6 +9,7 @@ import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.excepciones.PermisosException;
 import com.EquipoB.AsadoYPileta.servicios.ComentarioServicio;
+import com.EquipoB.AsadoYPileta.servicios.FiltroDisponibilidadServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropietarioServicio;
 import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
@@ -48,7 +49,8 @@ public class PropiedadControlador {
     @Autowired
     private TipoPropiedadServicio tipoPropiedadServicio;
 
-
+    @Autowired
+    private FiltroDisponibilidadServicio filtroDisponibilidadServicio;
 
     @Autowired
     private ReservaServicio reservaServicio;
@@ -67,6 +69,7 @@ public class PropiedadControlador {
 
     @GetMapping("/{id}")
     public ModelAndView propiedad(@PathVariable String id, ModelMap modelo) {
+        Propiedad propiedad = propiedadServicio.getOne(id);
         List<Servicio> servicios = new ArrayList<>();
         servicios = servicioServicio.listarServicios();
         List<Comentario> comentarios = new ArrayList<>();
@@ -75,7 +78,11 @@ public class PropiedadControlador {
         tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
        
         List<Reserva> reservas = reservaServicio.reservasFuturas(id);
-        modelo.addAttribute("propiedad", propiedadServicio.getOne(id));
+        List<String> fechasReservadas = reservaServicio.diasReservados(reservas);
+        List<String> fechasDisponibles = filtroDisponibilidadServicio.obtenerDiasHabilitados(propiedad.getFiltroDisponibilidad());
+        modelo.addAttribute("fechasReservadas", fechasReservadas);
+        modelo.addAttribute("fechasDisponibles", fechasDisponibles);
+        modelo.addAttribute("propiedad", propiedad);
         modelo.addAttribute("tipoPropiedades", tipoPropiedades);
         modelo.addAttribute("servicios", servicios);
         modelo.addAttribute("comentarios", comentarios);
@@ -97,7 +104,7 @@ public class PropiedadControlador {
 
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @PostMapping("/registro")
-    public String registro(@RequestParam String titulo, @RequestParam String descripcion,
+    public ModelAndView registro(@RequestParam String titulo, @RequestParam String descripcion,
             @RequestParam String tipo, @RequestParam(required = false) String[] serviciosInput,
             @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor, HttpSession session,
             @RequestParam String pais, @RequestParam String provincia, @RequestParam String departamento, @RequestParam String localidad,
@@ -111,7 +118,7 @@ public class PropiedadControlador {
         propiedadServicio.crearPropiedad(titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, logueado, pais, provincia,
                 departamento, localidad, calle, numeracion, observaciones, latitud, longitud, fechaInicioReserva,
                 fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva);
-        return "index.html";
+        return new ModelAndView("redirect:/");
     }
 
     @PreAuthorize("hasRole('ROLE_PROPIETARIO')")
@@ -143,11 +150,11 @@ public class PropiedadControlador {
             @RequestParam String calle, @RequestParam String numeracion, @RequestParam String observaciones,
             @RequestParam Double latitud, @RequestParam Double longitud, @RequestParam(required = false) String fechaInicioReserva,
             @RequestParam(required = false) String fechaFinReserva, @RequestParam(required = false) String[] mensualReserva,
-            @RequestParam(required = false) String[] diarioReserva, @RequestParam(required = false) String[] porFechaReserva) throws Exception {
+            @RequestParam(required = false) String[] diarioReserva, @RequestParam(required = false) String[] porFechaReserva, Usuario logueado) throws Exception {
 
         propiedadServicio.modificarPropiedad(id, titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, imagenesViejas, estado,
                 pais, provincia, departamento, localidad, calle, numeracion, observaciones, latitud, longitud,
-                fechaInicioReserva, fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva);
+                fechaInicioReserva, fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva, logueado);
 
         return "index.html";
     }

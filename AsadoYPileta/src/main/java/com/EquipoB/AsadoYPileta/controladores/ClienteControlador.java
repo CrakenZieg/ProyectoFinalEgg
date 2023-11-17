@@ -13,7 +13,6 @@ import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.TipoContactoServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
 import java.util.List;
-import java.util.Optional;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,6 +33,7 @@ public class ClienteControlador {
 
     @Autowired
     private ClienteServicio clienteServicio;
+    
     @Autowired
     private TipoContactoServicio tipoContactoServicio;
 
@@ -75,24 +75,15 @@ public class ClienteControlador {
     @GetMapping("/perfil")
     public ModelAndView perfil(ModelMap modelo, HttpSession session) throws MiException {
         Usuario usuario = (Usuario) session.getAttribute("usuariosession");
-        if (usuario.getRol().equals(Rol.CLIENTE)) {
-            Cliente cliente = clienteServicio.getOne(usuario.getId());
-            List<Reserva> reservasCliente = reservaServicio.listarReservaCliente(usuario.getId());
-            modelo.put("cliente", cliente);
-            modelo.addAttribute("reservas",reservasCliente);
-            modelo.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContactoUsuario(cliente));
-        } else if (usuario.getRol().equals(Rol.PROPIETARIO)) {
-            Propietario propietario = new Propietario();
-            Optional<Propietario> respuesta = propietarioServicio.getOne(usuario.getId());
-            if(respuesta.isPresent()){
-                propietario = respuesta.get();                
-            } else {
-                propietario = propietarioServicio.crearPropietario(usuario);
-            }
-            modelo.put("cliente", propietario.getCliente());
+        Cliente cliente = clienteServicio.getOne(usuario.getId());
+        List<Reserva> reservasCliente = reservaServicio.listarReservaCliente(usuario.getId());
+        modelo.put("cliente", cliente);
+        modelo.addAttribute("reservas",reservasCliente);
+        modelo.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContactoUsuario(cliente));
+        if (usuario.getRol().equals(Rol.PROPIETARIO)) {
+            Propietario propietario = propietarioServicio.getOne(usuario.getId()).get();
             modelo.put("propiedades", propietario.getPropiedades());
-            modelo.addAttribute("reservas",reservaServicio.listarReservaPropiedadEnPerfil(propietario.getPropiedades()));
-            modelo.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContactoUsuario(propietario.getCliente()));
+            modelo.addAttribute("reservasPropiedades",reservaServicio.listarReservaPropiedadEnPerfil(propietario.getPropiedades()));
         }
         return new ModelAndView("perfil_usuario.html", modelo);
     }

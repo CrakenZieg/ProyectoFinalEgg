@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html  lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="fragmentos/frags :: head"></head>
+    <body>
+        <header th:replace="fragmentos/frags :: header"></header>
+    <body>
+        <div class="contenedor-comentario-form">
+        <div class="comentario-form">
+
+            <form action="" >
+                <div class="input-cal">
+                    <h2>¿Que le parecio su estadia en general?</h2>
+                    <input type="number"  name="calificacion-prop" id="inp-cal-prop" hidden >
+                    <ul>
+                        <li><i class="bi bi-star-fill star" id="stars"></i></li>
+                        <li><i class="bi bi-star-fill star" id="stars"></i></li>
+                        <li><i class="bi bi-star-fill star" id="stars"></i></li>
+                        <li><i class="bi bi-star-fill star" id="stars"></i></li>
+                        <li><i class="bi bi-star-fill star" id="stars"></i></li>
+                        
+                        
+                        
+                    </ul>
+                </div>
+                <label for="imagenes">Imagenes:<input type="file" multiple="multiple" id="imagenes" name="imagenes"></label>
+                <div class="comentario-text" >
+                    <h2>Dejanos un comentario!</h2>
+                    <textarea>
+
+                    </textarea>
+                </div>
+                <button type="submit">Enviar comentario</button>
+            </form>
+
+        </div>
+    </div>
+        <script th:href="@{/js/comentario.js}" type="text/javascript"></script>
+    </body>
+</html>

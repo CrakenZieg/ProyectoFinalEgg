@@ -53,7 +53,7 @@ public class PropietarioServicio {
     public Optional<Propietario> getOne(String id) throws MiException {
         return propietarioRepositorio.findById(id);
     }
-    
+  
      public List<Contacto> mostrarContactos (String idUsuario){
         Propietario propietario = propietarioRepositorio.getOne(idUsuario);
          

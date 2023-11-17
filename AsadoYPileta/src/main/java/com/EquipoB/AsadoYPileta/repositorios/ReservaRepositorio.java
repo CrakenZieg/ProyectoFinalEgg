@@ -35,8 +35,9 @@ public interface ReservaRepositorio extends JpaRepository <Reserva,String> {
     @Query("SELECT r FROM Reserva r WHERE r.disponible = true AND r.fechaFin <= CURRENT_DATE") 
     public List<Reserva> buscarFinReserva(@Param("fechaFin") Date fechaFin);
    
-    @Query("SELECT r FROM Reserva r WHERE r.disponible=true AND r.fechaFin<'fechaActual'") 
+    @Query("SELECT r FROM Reserva r WHERE r.disponible=true AND r.fechaFin<:fechaActual") 
     public List <Reserva> buscarFinalizadas(@Param("fechaActual") String fechaActual);    
+
     
     /**
      * Devuelve una lista de fechas de inicio de las reservas asociadas a la propiedad con el ID proporcionado
@@ -59,7 +60,7 @@ public interface ReservaRepositorio extends JpaRepository <Reserva,String> {
      * @return Cantidad de Reservas Activas
      */
     @Query("SELECT COUNT(r) FROM Reserva r WHERE r.fechaInicio <= CURRENT_DATE") 
-    public int buscarCuantasReservasActivas();
+    public long buscarCuantasReservasActivas();
 
     /**
      * Devuelve reservas futuras por id de propiedad

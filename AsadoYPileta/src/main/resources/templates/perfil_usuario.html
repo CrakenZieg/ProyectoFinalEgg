@@ -15,19 +15,24 @@
                                     Usuarios
                                 </button>
                             </li>
-                            <li class="nav-item" role="presentation" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" sec:authorize="hasAnyRole('PROPIETARIO')">
-                                <button class="nav-link rounded-5" id="profile-tab2" data-bs-toggle="tab" type="button" role="tab"
-                                        aria-selected="false">
-                                    Propiedades
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" >
+                            <li class="nav-item" role="presentation" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" >
                                 <button class="nav-link rounded-5" id="profile-tab3" data-bs-toggle="tab" type="button" role="tab"
                                         aria-selected="false">
                                     Reservas
                                 </button>
                             </li>
-
+                            <li class="nav-item" role="presentation" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" sec:authorize="hasAnyRole('PROPIETARIO')">
+                                <button class="nav-link rounded-5" id="profile-tab2" data-bs-toggle="tab" type="button" role="tab"
+                                        aria-selected="false">
+                                    Propiedades
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" sec:authorize="hasAnyRole('PROPIETARIO')">
+                                <button class="nav-link rounded-5" id="profile-tab2" data-bs-toggle="tab" type="button" role="tab"
+                                        aria-selected="false">
+                                    Reservas <small>(propiedades)</small>
+                                </button>
+                            </li>
                         </ul>
                     </div>
                     <div class="carousel-inner">
@@ -64,13 +69,11 @@
                                 </dialog>
                             </div>
                             <div class="right tab-content">
-
                                 <form class="row g-3" th:action="@{/cliente/perfil/__${cliente.id}__}" method="POST" enctype="multipart/form-data">
                                     <input hidden th:value="${cliente.id}" name="id">
                                         <div class="col-md-4">
                                             <label for="nombre" class="form-label">Nombre</label>
                                             <input type="text" class="form-control cambio" name="nombre" th:value="${cliente.nombre}" required disabled>
-
                                         </div>
                                         <div class="col-md-4">
                                             <label for="apellido" class="form-label">Apellido</label>
@@ -138,65 +141,75 @@
                                 </form>
                             </div>
                         </div>
-
                         <div class="carousel-item">
-                            
-                                <div th:replace="fragmentos/card :: div"></div>  
-                            
-                                    <div >
-                                            <table>
-                                            <thead>
-                                              <tr>
-                                                   <th>Nombre propiedad</th>
-                                                   
-                                               </tr>
-                                             </thead>
-                                             <tbody>
-                                                        <tr th:each="propiedad : ${propiedades}">
-                                                         <td th:text="${propiedad.titulo}"></td>
-                                                         <td th:each="reserva: ${reservas}" th:if="reserva.propiedad.id=propiedad.id" th:text="${reserva.cliente.contacto.tipo}"></td>
-                                                        </tr>
-                                            </tbody>
-                                            </table>
-                                          </div>
-                                    </div>
-                              
+                            <div class="resultado-contenedor">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre propiedad</th>
+                                            <th>Check In</th>
+                                            <th>Check out</th>
+                                            <th>Ubicacion</th>
+                                            <th>Valor total</th>
+                                            <th>Servicios</th>
+                                            <th>Detalles</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="reserva : ${reservas}">
+                                            <th th:text="${reserva.propiedad.titulo}"   >titulo</th>
+                                            <td th:text="${reserva.fechaInicio.toString()}">titulo</td>
+                                            <td th:text="${reserva.fechaFin.toString()}">titulo</td>
+                                            <td th:text="${reserva.propiedad.ubicacion.pais +  ', ' + reserva.propiedad.ubicacion.provincia }">Mendoza</td>
+                                            <td th:text="${reserva.montoTotal}"></td>
+                                            <td><small th:each="servicio : ${reserva.serviciosElegidas}">[[${servicio.tipoComodidad}]] </small></td>                                            
+                                            <td><a class="btn btn-info" th:href='@{/reserva/ver/__${reserva.id }__}'><i class="bi bi-info-circle"></i></a></td>
+                                            <td><a class="btn btn-danger" th:if="${reserva.disponible}" th:href='@{/reserva/borrar/__${reserva.id }__}'><i class="bi bi-trash"></i></a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                         <div class="carousel-item">
-                                          <div class="resultado-contenedor">
-                                            <table>
-                                            <thead>
-                                              <tr>
-                                                   <th>Nombre propiedad</th>
-                                                   <th>Check In</th>
-                                                   <th>Check out</th>
-                                                   <th>Ubicacion</th>
-                                                   <th>Valor total</th>
-                                                   <th>Servicios</th>
-                                                   <th>Estado</th>
-                                                 </tr>
-                                             </thead>
-                                             <tbody>
-                                                        <tr th:each="reserva : ${reservas}">
-                                                          <th  th:text="${reserva.propiedad.titulo}"   >titulo</th>
-                                                          <td th:text="${reserva.fechaInicio.toString()}">titulo</td>
-                                                          <td th:text="${reserva.fechaFinal.toString()}">titulo</td>
-                                                          <td th:text="${reserva.propiedad.ubicacion.pais +  ', ' + reserva.propiedad.ubicacion.provincia }">Mendoza</td>
-                                                         <td th:text="${reserva.valor}"></td>
-                                                         <td th:text="${reserva.serviciosElegidas[0] + ', '  +  reserva.serviciosElegidas[1] , + '...' }"></td>
-                                                         <td sec:authorize="hasAnyRole('PROPIETARIO')"  th:if="${!reserva.disponible }"><a th:href='@{/reserva/aceptarReserva/__${reserva.id }__}'>Aceptar></a></td>
-                                                         <td th:if="${reserva.disponible}"> <a th:href='@{/reserva/borar/__${reserva.id }__}'>Cancelar></a></td>
-                                                         <td><a id="abrir-detalles" <a th:href='@{/reserva/ver/__${reserva.id }__}'>Ver detalles</a></td>
-                                                        </tr>
-                                            </tbody>
-                                            </table>
-                                          </div>
-                                    </div>
+                        <div class="carousel-item" sec:authorize="hasAnyRole('PROPIETARIO')">
 
+                            <div th:replace="fragmentos/card :: div"></div>  
+
+                        </div>
+                        <div class="carousel-item" sec:authorize="hasAnyRole('PROPIETARIO')">
+                            <div class="resultado-contenedor">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre propiedad</th>
+                                            <th>Check In</th>
+                                            <th>Check out</th>                                            
+                                            <th>Valor total</th>
+                                            <th>Servicios</th>
+                                            <th>Detalles</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="reserva : ${reservasPropiedades}">
+                                            <th th:text="${reserva.propiedad.titulo}"   >titulo</th>
+                                            <td th:text="${reserva.fechaInicio.toString()}">titulo</td>
+                                            <td th:text="${reserva.fechaFin.toString()}">titulo</td>                                            
+                                            <td th:text="${reserva.montoTotal}"></td>
+                                            <td><small th:each="servicio : ${reserva.serviciosElegidas}">[[${servicio.tipoComodidad}]] </small></td>
+                                            <td><a class="btn btn-info" th:href='@{/reserva/ver/__${reserva.id }__}'><i class="bi bi-info-circle"></i></a></td>
+                                            <td><a class="btn btn-success" th:if="${!reserva.disponible}" th:href='@{/reserva/aceptarReserva/__${reserva.id }__}'><i class="bi bi-check-lg"></i></a></td>
+                                            <td><a class="btn btn-danger" th:if="${reserva.disponible}" th:href='@{/reserva/borrar/__${reserva.id }__}'><i class="bi bi-trash"></i></a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
-            </div>
+
         </main>
         <footer th:replace="fragmentos/frags :: footer"></footer>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"

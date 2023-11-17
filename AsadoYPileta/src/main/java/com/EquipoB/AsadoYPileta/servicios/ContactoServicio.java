@@ -22,6 +22,9 @@ public class ContactoServicio {
 
     @Transactional
     public void crearContacto(String valor, TipoContacto tipoContacto) throws MiException, Exception {
+
+        validar(tipoContacto, valor);
+
         Contacto contacto = new Contacto();
         contacto.setContacto(valor);
         contacto.setTipo(tipoContacto);
@@ -30,6 +33,9 @@ public class ContactoServicio {
 
     @Transactional
     public void modificar(String id, String valor, TipoContacto tipoContacto) throws MiException, Exception {
+
+        validar(tipoContacto, valor);
+
         Optional<Contacto> respuesta = contactoRepositorio.findById(id);
         if (respuesta.isPresent()) {
             Contacto contacto = respuesta.get();
@@ -105,6 +111,18 @@ public class ContactoServicio {
             }
         }
         return nuevos;
+    }
+
+    public void validar(TipoContacto tipo, String contacto) throws MiException {
+
+        if (tipo == null) {
+            throw new MiException("El tipo de contacto no puede ser nulo o estar vacio");
+        }
+
+        if (contacto == null || contacto.trim().isEmpty()) {
+            throw new MiException("El contacto no puede ser nulo o estar vacio");
+        }
+
     }
 
 }

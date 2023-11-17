@@ -34,7 +34,6 @@ public class ComentarioControlador {
         if (usuario.getRol().equals(Rol.CLIENTE)) {
             Cliente cliente = clienteServicio.getOne(usuario.getId());
             modelo.put("cliente", cliente);
-
         }
         return "comentario_form.html";
     }
@@ -111,10 +110,7 @@ public class ComentarioControlador {
 
     @GetMapping("/borrar/{id}")
     public String borrarComentario(@PathVariable String id) throws MiException {
-
         comentarioServicio.eliminarComentrario(id);
-
         return "redirect:/comentario/lista";
-
     }
 }
