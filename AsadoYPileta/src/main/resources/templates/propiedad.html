@@ -51,9 +51,10 @@
 
                                 </div>
 
-                                <div id="contenedor-dts-serv">
+                                <div id="contenedor-dtserv">
+                                    <h2>¿Que ofrecemos?</h2>
                                     <div class="servicios-propiedad">
-                                        <h2>¿Que ofrecemos?</h2>
+                                        
 
                                         <ul th:each="servicio : ${propiedad.servicios}">
                                             <li th:text="${servicio.tipoComodidad}">Limpieza</li>
@@ -61,8 +62,9 @@
 
 
                                         </ul>
-                                        <button id="mostrar-servicios">Mostrar mas</button>
+                                        
                                     </div>
+                                    <button id="mostrar-servicios">Mostrar mas</button>
                                 </div>
 
                                 <div class="descrip line-clamp">
