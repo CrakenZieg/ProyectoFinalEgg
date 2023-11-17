@@ -111,11 +111,14 @@ public class FiltroDisponibilidadServicio {
     }
 
     public List<String> obtenerDiasHabilitados(FiltroDisponibilidad filtro) {
-        int[] arregloNuevo = filtro.getDiario().clone();
-        for (int i = 0; i < filtro.getDiario().length; i++) {
-            arregloNuevo[i] = arregloNuevo[i] + 1;
-            if (arregloNuevo[i] == 8) {
-                arregloNuevo[i] = 1;
+        int[] arregloNuevo = null;
+        if(filtro.getDiario()!=null){
+            arregloNuevo = filtro.getDiario().clone();
+            for (int i = 0; i < filtro.getDiario().length; i++) {
+                arregloNuevo[i] = arregloNuevo[i] + 1;
+                if (arregloNuevo[i] == 8) {
+                    arregloNuevo[i] = 1;
+                }
             }
         }
 

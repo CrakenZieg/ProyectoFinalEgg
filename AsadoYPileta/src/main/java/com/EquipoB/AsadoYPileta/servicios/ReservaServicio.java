@@ -43,20 +43,14 @@ public class ReservaServicio {
     public void crearReserva(String idPropiedad , String idCliente, String mensaje, Date fechaInicio, Date fechaFin,
             List serviciosElegidas, Usuario logueado) throws MiException {
 
-        Optional<Propiedad> propiedadRepo = propiedadRepositorio.findById(idPropiedad);
-        Optional<Propietario> propietarioRepo = propietarioRepositorio.findById(logueado.getId());
-
-        if (propiedadRepo.isPresent() && propietarioRepo.isPresent()) {
-            Propiedad propiedad = propiedadRepo.get();
-            Propietario propietario = propietarioRepo.get();
-            List<Propiedad> propiedades = propietario.getPropiedades();
-            if (propiedades.contains(propiedad)) {
-                throw new MiException("No puede reservar una propiedad que le pertenece");
-            }
+        Propiedad propiedad = propiedadRepositorio.getOne(idPropiedad);
+        if(propiedad.getIdPropietario()==logueado.getId()){
+            throw new MiException("No es posible generar reservas sobre tus propiedades");
         }
-
-
+        
         validar(mensaje, fechaInicio, fechaFin);
+        verificarSuperposicionReservas(idPropiedad,fechaInicio,fechaFin);
+
         Reserva reserva = new Reserva();
         reserva.setPropiedad(propiedadRepositorio.getById(idPropiedad));
         reserva.setCliente(clienteRepositorio.getById(idCliente));
@@ -113,6 +107,7 @@ public class ReservaServicio {
         if (respuesta.isPresent()) {
 
             Reserva reserva = respuesta.get();
+            verificarSuperposicionReservas(reserva.getPropiedad().getId(),fechaInicio,fechaFin);
             reserva.getPropiedad().getFiltroDisponibilidad().habilitado(fechaInicio, fechaFin);
             reserva.setMensaje(mensaje);
             reserva.setFechaInicio(fechaInicio);
@@ -157,12 +152,14 @@ public class ReservaServicio {
 
     public boolean verificarSuperposicionReservas(String idPropiedad, Date fechaInicio, Date fechaFin) {
 
-        List<Date> fechasInicioReservas = reservaRepositorio.buscarFechaInicioReserva(idPropiedad);
+        List<Date> fechasInicioReservas = reservaRepositorio.buscarFechaInicioReserva(idPropiedad);        
         List<Date> fechasFinReservas = reservaRepositorio.buscarFechaFinReserva(idPropiedad);
 
-        for (int i = 0; i < fechasInicioReservas.size(); i++) {
+        for (int i = 0; i < fechasInicioReservas.size(); i++) {            
             Date inicioReserva = fechasInicioReservas.get(i);
+            System.out.println("inicioReserva: "+inicioReserva);
             Date finReserva = fechasFinReservas.get(i);
+            System.out.println("finReserva: "+finReserva);
 
             if ((inicioReserva.before(fechaFin) || inicioReserva.equals(fechaFin))
                     && (finReserva.after(fechaInicio) || finReserva.equals(fechaInicio))) {

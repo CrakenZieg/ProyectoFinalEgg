@@ -30,7 +30,7 @@ public class AdminServicio {
         datos.put("numeroClientes", clienteRepositorio.buscarCuantosClientes());
         datos.put("numeroPropietarios", propietarioRepositorio.buscarCuantosPropietarios());
         datos.put("numeroPropiedades", propiedadRepositorio.buscarCuantasPropiedades());
-        datos.put("numeroReservas", reservaRepositorio.buscarCuantasReservasActivas());
+        datos.put("numeroReservas", Long.valueOf(reservaRepositorio.buscarCuantasReservasActivas()).intValue());
         return datos;
     }
     

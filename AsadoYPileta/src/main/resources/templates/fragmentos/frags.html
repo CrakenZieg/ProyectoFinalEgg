@@ -33,8 +33,8 @@
                 </li>
             </ul>
             <div class="text-end">
-                <a th:if="${session.usuariosession == null}" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/login}">Ingresar</a>
-                <a th:if="${session.usuariosession == null}" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/cliente/registrar}">Registrarse</a>
+                <a sec:authorize="isAnonymous()" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/login}">Ingresar</a>
+                <a sec:authorize="isAnonymous()" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/cliente/registrar}">Registrarse</a>
                 
                 <a th:if="${session.usuariosession != null}" sec:authorize="hasRole('ADMIN')" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/admin/dashboard}" >Panel Admin</a>
                 <a th:if="${session.usuariosession != null}" sec:authorize="hasRole('ADMIN')" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/logout}" >Cerrar sesión</a>

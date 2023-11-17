@@ -15,7 +15,6 @@ import com.EquipoB.AsadoYPileta.servicios.PropietarioServicio;
 import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
 import com.EquipoB.AsadoYPileta.servicios.TipoPropiedadServicio;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -102,7 +101,7 @@ public class PropiedadControlador {
 
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @PostMapping("/registro")
-    public String registro(@RequestParam String titulo, @RequestParam String descripcion,
+    public ModelAndView registro(@RequestParam String titulo, @RequestParam String descripcion,
             @RequestParam String tipo, @RequestParam(required = false) String[] serviciosInput,
             @RequestParam MultipartFile[] imagenesInput, @RequestParam Double valor, HttpSession session,
             @RequestParam String pais, @RequestParam String provincia, @RequestParam String departamento, @RequestParam String localidad,
@@ -116,7 +115,7 @@ public class PropiedadControlador {
         propiedadServicio.crearPropiedad(titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, logueado, pais, provincia,
                 departamento, localidad, calle, numeracion, observaciones, latitud, longitud, fechaInicioReserva,
                 fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva);
-        return "index.html";
+        return new ModelAndView("redirect:/");
     }
 
     @PreAuthorize("hasRole('ROLE_PROPIETARIO')")
