@@ -11,7 +11,7 @@ and open the template in the editor.
         <header th:replace="fragmentos/frags :: header"></header>        
         <div class="contenedor-comentario-form">
             <div class="comentario-form">
-                <form  th:action="@{/propiedad/registro}" method="POST" enctype="multipart/form-data">
+                <form  th:action="@{/comentario/registro}" method="POST" enctype="multipart/form-data">
                     <input type="text" name="idCliente" th:value="${cliente.id}" hidden="true"/>
                     <input type="text" name="idPropiedad" th:value="${reserva.propiedad.id}" hidden="true"/>
                     <input type="text" name="idReserva" th:value="${reserva.id}" hidden="true"/>
