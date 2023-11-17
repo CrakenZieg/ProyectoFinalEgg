@@ -38,8 +38,6 @@ public class ReservaControlador {
     @Autowired
     private PropiedadServicio propiedadServicio;
     @Autowired
-    private UsuarioServicio usuarioServicio;
-    @Autowired
     private ClienteServicio clienteServicio;
     @Autowired
     private ServicioServicio servicioServicio;
@@ -50,31 +48,29 @@ public class ReservaControlador {
     @PostMapping("/registrar") 
     public ModelAndView crearReserva(@RequestParam String idPropiedad, @RequestParam String fechaInicio,
             @RequestParam String fechaFinal, HttpSession session, ModelMap modelo) throws ParseException, MiException {
-        Reserva reserva = new Reserva();
         Usuario usuario = (Usuario) session.getAttribute("usuariosession");
         Cliente cliente = clienteServicio.getOne(usuario.getId());
         Propiedad propiedad = propiedadServicio.getOne(idPropiedad);   
         List<Servicio> servicios = servicioServicio.listarServicios();
         
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");     
-        reserva.setFechaInicio(formato.parse(fechaInicio));
-        reserva.setFechaFin(formato.parse(fechaFinal));
-        propiedad.getFiltroDisponibilidad().habilitado(reserva.getFechaInicio(), reserva.getFechaFin());
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");  
+        propiedad.getFiltroDisponibilidad().habilitado(formato.parse(fechaInicio), formato.parse(fechaFinal));
         
         modelo.addAttribute("servicios", servicios);
         modelo.addAttribute("propiedad", propiedad);
         modelo.addAttribute("cliente", cliente);
-        modelo.addAttribute("reserva", reserva);
+        modelo.addAttribute("fechaInicio", fechaInicio);
+        modelo.addAttribute("fechaFinal", fechaFinal);
         
         return new ModelAndView("confirmacion_reserva.html", modelo);
     }
 
     @PostMapping("/registro")
-    public ModelAndView registroReserva(String idPropiedad, String mensaje, String fechaInicio, String fechaFin, String[] serviciosElegidas, ModelMap modelo) throws MiException, ParseException {
+    public ModelAndView registroReserva(String idPropiedad, String idCliente, String mensaje, String fechaInicio, String fechaFin, String[] serviciosElegidas, ModelMap modelo) throws MiException, ParseException {
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");     
-        reservaServicio.crearReserva(idPropiedad,mensaje, formato.parse(fechaInicio),formato.parse(fechaFin), 
+        reservaServicio.crearReserva(idPropiedad, idCliente, mensaje, formato.parse(fechaInicio),formato.parse(fechaFin), 
                 servicioServicio.listarServiciosArray(serviciosElegidas));
-        return new ModelAndView("redirect:/reserva/listar", modelo);        
+        return new ModelAndView("redirect:/cliente/perfil", modelo);        
     }
 
     @GetMapping("/modificar/{id}")

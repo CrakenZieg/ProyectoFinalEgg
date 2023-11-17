@@ -8,8 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -40,7 +40,7 @@ public class Reserva {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date fechaFin;
    
-    @OneToMany
+    @ManyToMany
     private List<Servicio>serviciosElegidas;  
     
     @ManyToOne
