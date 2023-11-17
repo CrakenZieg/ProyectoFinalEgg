@@ -5,7 +5,11 @@ import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.FiltroDisponibilidadRepositorio;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +25,8 @@ public class FiltroDisponibilidadServicio {
     public FiltroDisponibilidad crearFiltro(String fechaInicioReserva, String fechaFinReserva,
             String[] mensualReserva, String[] diarioReserva, String[] porFechaReserva) throws ParseException {
         FiltroDisponibilidad filtro = new FiltroDisponibilidad();
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");  
-        
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+
         if (fechaInicioReserva != null && !fechaInicioReserva.trim().isEmpty()) {
             Date fechaInicio = formato.parse(fechaInicioReserva);
             filtro.setFechaInicio(fechaInicio);
@@ -61,7 +65,7 @@ public class FiltroDisponibilidadServicio {
                 filtro.setFechaFin(fechaFinal);
             }
             if (mensualReserva != null && mensualReserva.length > 0) {
-            filtro.setMensual(parsearArregloString(mensualReserva));
+                filtro.setMensual(parsearArregloString(mensualReserva));
             }
             if (diarioReserva != null && diarioReserva.length > 0) {
                 filtro.setDiario(parsearArregloString(diarioReserva));
@@ -73,7 +77,7 @@ public class FiltroDisponibilidadServicio {
         }
         return filtro;
     }
-    
+
     @Transactional(readOnly = true)
     public void eliminarFiltro(String id) throws MiException {
         Optional<FiltroDisponibilidad> respuesta = filtroDisponibilidadRepositorio.findById(id);
@@ -93,8 +97,8 @@ public class FiltroDisponibilidadServicio {
         } else {
             return new FiltroDisponibilidad();
         }
-    }    
-    
+    }
+
     public int[] parsearArregloString(String[] arreglo) {
         if (arreglo != null) {
             int[] enteros = new int[arreglo.length];
@@ -104,6 +108,45 @@ public class FiltroDisponibilidadServicio {
             return enteros;
         }
         return null;
+    }
+
+    public List<String> obtenerDiasHabilitados(FiltroDisponibilidad filtro) {
+        int[] arregloNuevo = filtro.getDiario().clone();
+        for (int i = 0; i < filtro.getDiario().length; i++) {
+            arregloNuevo[i] = arregloNuevo[i] + 1;
+            if (arregloNuevo[i] == 8) {
+                arregloNuevo[i] = 1;
+            }
+        }
+
+        List<String> diasHabilitados = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(filtro.getFechaInicio());
+        Calendar fechaFinCalendar = Calendar.getInstance();
+        fechaFinCalendar.setTime(filtro.getFechaFin());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        while (calendar.before(fechaFinCalendar) || calendar.equals(fechaFinCalendar)) {
+            int mesActual = calendar.get(Calendar.MONTH);
+            int diaSemanaActual = calendar.get(Calendar.DAY_OF_WEEK);
+            if (contiene(filtro.getMensual(), mesActual)) {
+                if (contiene(arregloNuevo, diaSemanaActual)) {
+                    diasHabilitados.add(dateFormat.format(calendar.getTime()));
+                }
+            }
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        return diasHabilitados;
+    }
+
+    private boolean contiene(int[] array, int valor) {
+        if (array != null) {
+            for (int elemento : array) {
+                if (elemento == valor) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

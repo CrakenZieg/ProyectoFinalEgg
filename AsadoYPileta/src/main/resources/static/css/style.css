@@ -1072,3 +1072,27 @@ th{
   height: 350px;
 
 }
+#tablaFechas {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+#tablaFechas th, #tablaFechas td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+#tablaFechas th {
+    
+    background-color: #f2f2f2;
+}
+#tablaFechas td.available {
+    background-color: #c8e6c9; 
+}
+#tablaFechas td.not-available {
+    background-color: #ffcdd2;
+}
+th.custom-cell,td.custom-cell {
+    width: 14%;
+    text-align: center;
+}
+
