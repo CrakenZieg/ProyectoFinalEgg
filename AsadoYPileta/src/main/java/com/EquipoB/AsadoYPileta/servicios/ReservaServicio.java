@@ -253,6 +253,7 @@ public class ReservaServicio {
                 respuesta.add(diasReservado);
             }
         }
+        System.out.println(respuesta);
         return respuesta;
     }
 }
