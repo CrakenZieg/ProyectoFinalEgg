@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -28,7 +29,9 @@ public class Comentario {
     @ManyToOne
     private Propiedad propiedad;
     @ManyToOne
-    private Usuario usuario;
+    private Cliente cliente;
+    @OneToOne
+    private Reserva Reserva;
 
     private double puntuacion;
     

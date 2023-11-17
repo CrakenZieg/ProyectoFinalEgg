@@ -1,12 +1,15 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
+import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Comentario;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
+import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.ComentarioRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
+import com.EquipoB.AsadoYPileta.repositorios.ReservaRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,27 +27,33 @@ public class ComentarioServicio {
     @Autowired
     private PropiedadRepositorio PropiedadRepositorio;
     @Autowired
+    private ReservaRepositorio reservaRepositorio;
+    @Autowired
     private ImagenServicio imagenServicio;
     @Autowired
     private PropiedadServicio propiedadServicio;
-  
-    @Transactional
-    public void crearComentario(HttpSession session, MultipartFile[] archivos, String cuerpo, String stringIdpropiedad, Integer puntuacion) throws MiException, Exception {
-        validar(session, cuerpo, archivos, stringIdpropiedad,puntuacion);
+    @Autowired
+    private ClienteServicio clienteServicio;
 
+    @Transactional
+    public void crearComentario(String cuerpo, String idReserva, String idCliente, MultipartFile[] archivos, 
+                             String idPropiedad,  double puntuacion, HttpSession session) throws MiException, Exception {
+        validar(session, idCliente, cuerpo, archivos, idPropiedad,puntuacion);
 
         Comentario comentario = new Comentario();
+        Reserva reserva = reservaRepositorio.getById(idReserva);
+        comentario.setReserva(reserva);
         comentario.setCuerpo(cuerpo);
         List<Imagen> imagenes = new ArrayList<>();
         imagenes = imagenServicio.guardarVarias(archivos);
         comentario.setImagenes(imagenes);
-        Propiedad propiedad = propiedadServicio.getOne(stringIdpropiedad);
+        Propiedad propiedad = propiedadServicio.getOne(idPropiedad);
         comentario.setPropiedad(propiedad);
-        Usuario logueado = (Usuario) session.getAttribute("usuariosession");
+        Cliente cliente = clienteServicio.getOne(idCliente);
+        comentario.setCliente(cliente);
         comentario.setPuntuacion(puntuacion);
-        comentario.setUsuario(logueado);
         comentarioRepositorio.save(comentario);
-        propiedadServicio.setPuntuacion(obtenerPromedioPuntuacionPorPropiedad(stringIdpropiedad),stringIdpropiedad);
+        propiedadServicio.setPuntuacion(puntuacion,idPropiedad);
 
     }
 
@@ -66,12 +75,13 @@ public class ComentarioServicio {
     }
 
 
-    public void modificarComentario(HttpSession session, MultipartFile[] archivos, String id, String cuerpo, String stringIdpropiedad, String[] imagenesViejas, Integer puntuacion) throws MiException, Exception {
-        validar(session, cuerpo, archivos, stringIdpropiedad,puntuacion);
+    public void modificarComentario(HttpSession session, MultipartFile[] archivos, String id, String cuerpo, 
+            String idPropiedad, String[] imagenesViejas, Integer puntuacion) throws MiException, Exception {        
         Optional<Comentario> respuesta = comentarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
 
             Comentario comentario = respuesta.get();
+            validar(session, comentario.getCliente().getId(), cuerpo, archivos, idPropiedad,puntuacion);
             comentario.setCuerpo(cuerpo);
             List<Imagen> imagenes = comentario.getImagenes();
 
@@ -86,15 +96,13 @@ public class ComentarioServicio {
                     imagenes.addAll(imagenServicio.guardarVarias(archivos));
                 }
             }
-            Propiedad propiedad = propiedadServicio.getOne(stringIdpropiedad);
+            Propiedad propiedad = propiedadServicio.getOne(idPropiedad);
             comentario.setPropiedad(propiedad);
             comentario.setImagenes(imagenes);
-            comentario.setPuntuacion(puntuacion);
-            Usuario logueado = (Usuario) session.getAttribute("usuariosession");
-            comentario.setUsuario(logueado);
+            comentario.setPuntuacion(puntuacion);            
 
             comentarioRepositorio.save(comentario);
-            propiedadServicio.setPuntuacion(obtenerPromedioPuntuacionPorPropiedad(stringIdpropiedad),stringIdpropiedad);
+            propiedadServicio.setPuntuacion(obtenerPromedioPuntuacionPorPropiedad(idPropiedad),idPropiedad);
         }
     }
 
@@ -116,9 +124,9 @@ public class ComentarioServicio {
         return PropiedadRepositorio.obtenerPromedioPuntuacionPorPropiedad(stringIdpropiedad);
     }
 
-    private void validar(HttpSession session, String cuerpo, MultipartFile[] imagenes, String stringIdpropiedad, double puntuacion) throws MiException {
+    private void validar(HttpSession session, String idCliente, String cuerpo, MultipartFile[] imagenes, String stringIdpropiedad, double puntuacion) throws MiException {
         Usuario logueado = (Usuario) session.getAttribute("usuariosession");
-        if (logueado == null) {
+        if (logueado == null || !logueado.getId().equals(idCliente)) {
             throw new MiException("el usuario debe estar logueado");
         }
         if (cuerpo.isEmpty() || cuerpo == null) {

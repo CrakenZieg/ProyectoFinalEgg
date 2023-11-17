@@ -11,12 +11,12 @@
                     <p>[[${reserva.fechaInicio.toString()}]] hasta el [[${reserva.fechaFin.toString()}]]</p>
                     <hr/>
                     <p>Pais: [[${reserva.propiedad.ubicacion.pais}]]</p>
-                    <p th:if="${reserva.propiedad.ubicacion.provincia!=null}">Provincia: [[${reserva.propiedad.ubicacion.provincia}]]</p>
-                    <p th:if="${reserva.propiedad.ubicacion.departamento!=null}">Departamento: [[${reserva.propiedad.ubicacion.departamento}]]</p>
+                    <p th:if="${reserva.propiedad.ubicacion.provincia!=null AND reserva.propiedad.ubicacion.provincia.length!=0}">Provincia: [[${reserva.propiedad.ubicacion.provincia}]]</p>
+                    <p th:if="${reserva.propiedad.ubicacion.departamento!=null AND reserva.propiedad.ubicacion.departamento.length!=0}">Departamento: [[${reserva.propiedad.ubicacion.departamento}]]</p>
                     <p>Localidad: [[${reserva.propiedad.ubicacion.localidad}]]</p>
-                    <p th:if="${reserva.propiedad.ubicacion.calle!=null}">Calle: [[${reserva.propiedad.ubicacion.calle}]]</p>
-                    <p th:if="${reserva.propiedad.ubicacion.numeracion!=null}">Numeracion: [[${reserva.propiedad.ubicacion.numeracion}]]</p>
-                    <p th:if="${reserva.propiedad.ubicacion.observaciones!=null}">Observaciones: [[${reserva.propiedad.ubicacion.observaciones}]]</p>
+                    <p th:if="${reserva.propiedad.ubicacion.calle!=null AND reserva.propiedad.ubicacion.calle.length!=0}">Calle: [[${reserva.propiedad.ubicacion.calle}]]</p>
+                    <p th:if="${reserva.propiedad.ubicacion.numeracion!=null AND reserva.propiedad.ubicacion.numeracion.length!=0}">Numeracion: [[${reserva.propiedad.ubicacion.numeracion}]]</p>
+                    <p th:if="${reserva.propiedad.ubicacion.observaciones!=null AND reserva.propiedad.ubicacion.observaciones.length!=0}">Observaciones: [[${reserva.propiedad.ubicacion.observaciones}]]</p>
                     <hr/>
                     <div th:if="${reserva.serviciosElegidas!=null} OR ${#lists.size(reserva.serviciosElegidas)!=0}">
                         <h3>Servicios</h3>
@@ -42,7 +42,7 @@
                         </ul>
                         <hr/>
                     </div>
-                    <a th:if="${reserva.comentarioHabilitado==true}" sec:authorize="hasAnyRole('CLIENTE')" class="btn btn-info" th:href="@{/comentario/registrar}"></a>
+                    <a th:if="${reserva.comentarioHabilitado==true}" sec:authorize="hasAnyRole('CLIENTE')" class="btn btn-info" th:href="@{/comentario/registrar/__${reserva.id}__}">Has tu reseña <i class="bi bi-pen"></i></a>
                 </div>
             </div>
         </section>

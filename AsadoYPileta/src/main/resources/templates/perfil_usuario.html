@@ -164,8 +164,8 @@
                                             <td th:text="${reserva.propiedad.ubicacion.pais +  ', ' + reserva.propiedad.ubicacion.provincia }">Mendoza</td>
                                             <td th:text="${reserva.montoTotal}"></td>
                                             <td><small th:each="servicio : ${reserva.serviciosElegidas}">[[${servicio.tipoComodidad}]] </small></td>                                            
-                                            <td><a class="btn btn-info" th:href='@{/reserva/ver/__${reserva.id }__}'><i class="bi bi-info-circle"></i></a></td>
-                                            <td><a class="btn btn-danger" th:if="${reserva.disponible}" th:href='@{/reserva/borrar/__${reserva.id }__}'><i class="bi bi-trash"></i></a></td>
+                                            <td><a class="btn btn-info" th:href='@{/reserva/ver/__${reserva.id }__}'><i class="bi bi-info-circle"></i></a>
+                                                <a class="btn btn-danger" th:if="${reserva.disponible}" th:href='@{/reserva/borrar/__${reserva.id}__}'><i class="bi bi-trash"></i></a></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -198,8 +198,8 @@
                                             <td th:text="${reserva.montoTotal}"></td>
                                             <td><small th:each="servicio : ${reserva.serviciosElegidas}">[[${servicio.tipoComodidad}]] </small></td>
                                             <td><a class="btn btn-info" th:href='@{/reserva/ver/__${reserva.id }__}'><i class="bi bi-info-circle"></i></a></td>
-                                            <td><a class="btn btn-success" th:if="${!reserva.disponible}" th:href='@{/reserva/aceptarReserva/__${reserva.id }__}'><i class="bi bi-check-lg"></i></a></td>
-                                            <td><a class="btn btn-danger" th:if="${reserva.disponible}" th:href='@{/reserva/borrar/__${reserva.id }__}'><i class="bi bi-trash"></i></a></td>
+                                            <td><a class="btn btn-success" th:if="${!reserva.disponible}" th:href='@{/reserva/aceptarReserva/__${reserva.id }__}'><i class="bi bi-check-lg"></i></a>
+                                                <a class="btn btn-danger" th:if="${reserva.disponible}" th:href='@{/reserva/borrar/__${reserva.id }__}'><i class="bi bi-trash"></i></a></td>
                                         </tr>
                                     </tbody>
                                 </table>
