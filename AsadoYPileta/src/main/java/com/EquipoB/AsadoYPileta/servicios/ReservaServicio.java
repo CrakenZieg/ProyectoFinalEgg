@@ -1,8 +1,8 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
-import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
+import com.EquipoB.AsadoYPileta.repositorios.ClienteRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
 import com.EquipoB.AsadoYPileta.repositorios.ReservaRepositorio;
 import java.text.SimpleDateFormat;
@@ -22,14 +22,17 @@ public class ReservaServicio {
     private ReservaRepositorio reservaRepositorio;
     @Autowired
     private PropiedadRepositorio propiedadRepositorio;
+    @Autowired
+    private ClienteRepositorio clienteRepositorio;
 
     @Transactional
-    public void crearReserva(String idPropiedad, String mensaje, Date fechaInicio, Date fechaFin, 
-            List serviciosElegidas) throws MiException {
-
+    public void crearReserva(String idPropiedad, String idCliente, String mensaje, Date fechaInicio, 
+            Date fechaFin, List serviciosElegidas) throws MiException {
+        
         validar(mensaje, fechaInicio, fechaFin);
         Reserva reserva = new Reserva();
         reserva.setPropiedad(propiedadRepositorio.getById(idPropiedad));
+        reserva.setCliente(clienteRepositorio.getById(idCliente));
         reserva.setMensaje(mensaje);
         reserva.setFechaInicio(fechaInicio);
         reserva.setFechaFin(fechaFin);
@@ -177,7 +180,7 @@ public class ReservaServicio {
 
             throw new MiException("La fechas de reserva no pueden ser nulas ");
         }
-        if (fechaInicio.before(fechaFin)) {
+        if (fechaFin.before(fechaInicio)) {
 
             throw new MiException("La fecha de Inicio no puede ser posterior a la fecha de Fin");
         }
