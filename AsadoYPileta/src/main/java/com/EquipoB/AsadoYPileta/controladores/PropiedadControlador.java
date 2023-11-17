@@ -142,11 +142,11 @@ public class PropiedadControlador {
             @RequestParam String calle, @RequestParam String numeracion, @RequestParam String observaciones,
             @RequestParam Double latitud, @RequestParam Double longitud, @RequestParam(required = false) String fechaInicioReserva,
             @RequestParam(required = false) String fechaFinReserva, @RequestParam(required = false) String[] mensualReserva,
-            @RequestParam(required = false) String[] diarioReserva, @RequestParam(required = false) String[] porFechaReserva) throws Exception {
+            @RequestParam(required = false) String[] diarioReserva, @RequestParam(required = false) String[] porFechaReserva,Usuario logueado) throws Exception {
 
         propiedadServicio.modificarPropiedad(id, titulo, descripcion, tipo, serviciosInput, imagenesInput, valor, imagenesViejas, estado,
                 pais, provincia, departamento, localidad, calle, numeracion, observaciones, latitud, longitud,
-                fechaInicioReserva, fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva);
+                fechaInicioReserva, fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva, logueado);
 
         return "index.html";
     }
