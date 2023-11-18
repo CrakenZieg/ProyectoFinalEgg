@@ -1,7 +1,6 @@
 package com.EquipoB.AsadoYPileta.controladores;
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
-import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.servicios.ClienteServicio;
 import com.EquipoB.AsadoYPileta.servicios.ImagenServicio;
 import org.springframework.beans.factory.annotation.Autowired;

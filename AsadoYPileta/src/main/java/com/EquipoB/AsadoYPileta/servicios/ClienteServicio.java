@@ -127,9 +127,11 @@ public class ClienteServicio {
     }
 
     private void validar(String email, String nombre, String apellido, String descripcion,
+
             MultipartFile[] imagenesInput, String[] tipoContactoInput,
-            String[] contactosInput) throws MiException {
+            String[] contactosInput) throws MiException { //Nos aseguramos que los parametros no esten vacios
         if (email == null || email.trim().isEmpty()) {
+
             throw new MiException("El email no puede ser nulo o estar vacio");
         }
         if (nombre == null || nombre.trim().isEmpty()) {
@@ -157,7 +159,9 @@ public class ClienteServicio {
         }
     }
 
-    private void validarPasword(String password, String password2) throws MiException {
+
+    private void validarPasword(String password, String password2) throws MiException { // Al cambiar la contraseña tiene que validarse 2 veces la nueva contraseña ingresada
+
         if (password == null || password.trim().isEmpty()) {
             throw new MiException("El password no puede ser nulo o estar vacio");
         }

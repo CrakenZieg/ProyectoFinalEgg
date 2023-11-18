@@ -55,8 +55,10 @@ public class PropiedadServicio {
             String fechaInicioReserva, String fechaFinReserva, String[] mensualReserva,
             String[] diarioReserva, String[] porFechaReserva) throws MiException, Exception {
 
-        validar(titulo, descripcion, tipo, imagenesInput, valor);
 
+        validar(titulo, descripcion, tipo, imagenesInput, valor, pais, localidad);
+        
+        
         Optional<Propietario> respuesta = propietarioRepositorio.findById(usuario.getId());
 
         Propietario propietario = null;
@@ -103,11 +105,22 @@ public class PropiedadServicio {
     public void modificarPropiedad(String id, String titulo, String descripcion, String tipo, String[] serviciosInput, MultipartFile[] imagenesInput,
             Double valor, String[] imagenesViejas, String estado, String pais, String provincia, String departamento, String localidad, String calle, String numeracion,
             String observaciones, Double latitud, Double longitud, String fechaInicioReserva, String fechaFinReserva, String[] mensualReserva,
-            String[] diarioReserva, String[] porFechaReserva) throws MiException, Exception {
+            String[] diarioReserva, String[] porFechaReserva , Usuario logueado) throws MiException, Exception {
 
-        validar(titulo, descripcion, tipo, imagenesInput, valor);
+
+        validar(titulo, descripcion, tipo, imagenesInput, valor, provincia, localidad);
 
         Optional<Propiedad> propiedadRepo = propiedadRepositorio.findById(id);
+        Optional<Propietario> propietarioRepo = propietarioRepositorio.findById(logueado.getId());
+        
+        if (propiedadRepo.isPresent() && propietarioRepo.isPresent()){
+            Propiedad propiedad = propiedadRepo.get();
+            Propietario propietario = propietarioRepo.get();
+            List<Propiedad> propiedades = propietario.getPropiedades();
+            if(!propiedades.contains(propiedad)){
+               throw new MiException("Esta propiedad no le pertenece, no la puede modificar");
+            }
+        } 
 
         List<Servicio> servicios = new ArrayList<>();
         if (serviciosInput != null) {
@@ -224,8 +237,8 @@ public class PropiedadServicio {
         }
     }
 
-    public void validar(String titulo, String descripcion,
-            String tipo, MultipartFile[] imagenes, Double valor) throws MiException {
+    public void validar(String titulo, String descripcion, String tipo, MultipartFile[] imagenes, 
+            Double valor, String pais, String localidad) throws MiException {
 
         if (titulo == null || titulo.trim().isEmpty()) {
             throw new MiException("El titulo no puede ser nulo o estar vacio");
@@ -244,6 +257,14 @@ public class PropiedadServicio {
 
         if (valor == null) {
             throw new MiException("El valor no puede ser 0");
+        }
+        
+        if (pais == null || pais.trim().isEmpty()) {
+            throw new MiException("La Provincia no puede ser nula o estar vacia");
+        }
+        
+        if (localidad == null || localidad.trim().isEmpty()) {
+            throw new MiException("La Localidad no puede ser nula o estar vacia");
         }
     }
 

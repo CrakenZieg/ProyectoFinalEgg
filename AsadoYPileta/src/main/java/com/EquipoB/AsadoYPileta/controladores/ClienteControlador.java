@@ -1,8 +1,8 @@
 package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
-import com.EquipoB.AsadoYPileta.entidades.Contacto;
-import com.EquipoB.AsadoYPileta.entidades.Propiedad;
+
+
 import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
@@ -10,16 +10,11 @@ import com.EquipoB.AsadoYPileta.enumeraciones.Rol;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.excepciones.PermisosException;
 import com.EquipoB.AsadoYPileta.servicios.ClienteServicio;
-import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropietarioServicio;
 import com.EquipoB.AsadoYPileta.servicios.ReservaServicio;
 import com.EquipoB.AsadoYPileta.servicios.TipoContactoServicio;
 import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
@@ -41,6 +35,7 @@ public class ClienteControlador {
 
     @Autowired
     private ClienteServicio clienteServicio;
+    
     @Autowired
     private TipoContactoServicio tipoContactoServicio;
 
@@ -54,7 +49,6 @@ public class ClienteControlador {
     private ReservaServicio reservaServicio;
 
 
-    private Rol rol;
 
     @GetMapping("/registrar")
     public ModelAndView registrar(ModelMap modelo) {
@@ -84,24 +78,15 @@ public class ClienteControlador {
     @GetMapping("/perfil")
     public ModelAndView perfil(ModelMap modelo, HttpSession session) throws MiException {
         Usuario usuario = (Usuario) session.getAttribute("usuariosession");
-        if (usuario.getRol().equals(Rol.CLIENTE)) {
-            Cliente cliente = clienteServicio.getOne(usuario.getId());
-            List<Reserva> reservasCliente = reservaServicio.listarReservaCliente(usuario.getId());
-            modelo.put("cliente", cliente);
-            modelo.addAttribute("reservas",reservasCliente);
-            modelo.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContactoUsuario(cliente));
-        } else if (usuario.getRol().equals(Rol.PROPIETARIO)) {
-            Propietario propietario = new Propietario();
-            Optional<Propietario> respuesta = propietarioServicio.getOne(usuario.getId());
-            if(respuesta.isPresent()){
-                propietario = respuesta.get();                
-            } else {
-                propietario = propietarioServicio.crearPropietario(usuario);
-            }
-            modelo.put("cliente", propietario.getCliente());
+        Cliente cliente = clienteServicio.getOne(usuario.getId());
+        List<Reserva> reservasCliente = reservaServicio.listarReservaCliente(usuario.getId());
+        modelo.put("cliente", cliente);
+        modelo.addAttribute("reservas",reservasCliente);
+        modelo.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContactoUsuario(cliente));
+        if (usuario.getRol().equals(Rol.PROPIETARIO)) {
+            Propietario propietario = propietarioServicio.getOne(usuario.getId()).get();
             modelo.put("propiedades", propietario.getPropiedades());
-            modelo.addAttribute("reservas",reservaServicio.listarReservaPropiedadEnPerfil(propietario.getPropiedades()));
-            modelo.addAttribute("tipoContacto", tipoContactoServicio.listarTipoContactoUsuario(propietario.getCliente()));
+            modelo.addAttribute("reservasPropiedades",reservaServicio.listarReservaPropiedadEnPerfil(propietario.getPropiedades()));
         }
         return new ModelAndView("perfil_usuario.html", modelo);
     }

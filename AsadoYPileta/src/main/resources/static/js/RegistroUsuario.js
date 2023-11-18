@@ -32,24 +32,22 @@ let posicionActual = 0;
 const btnMostrarServicios = document.getElementById("mostrar-servicios");
 const divMostrarServicios = document.getElementById("mostrar-td-serv");
 const btnSalir = document.getElementById("salir");
+const btnComentario = document.getElementById("ver-comentarios");
+const btnCerrarComentario = document.getElementById("cerrar-comentarios");
+const comentarios = document.getElementById("modalc");
+const estrellas = document.getElementsByClassName('starp');
+const puntuacion = Number(document.getElementById("calificacion").value);
+
 
 
 
 renderizarImagen();
 
 function salir(){
-if (divMostrarServicios.style.display === "none") {
-    divMostrarServicios.style.display = "flex";
-  } else {
-    divMostrarServicios.style.display = "none";
-  }
+divMostrarServicios.close();
 }
 function escalarServicios() {
-  if (divMostrarServicios.style.display === "none") {
-    divMostrarServicios.style.display = "flex";
-  } else {
-    divMostrarServicios.style.display = "none";
-  }
+ divMostrarServicios.showModal();
 }
 function atrasimagen() {
   if (posicionActual === 0) {
@@ -90,7 +88,20 @@ function renderizarImagen() {
     
   }
 }
+agregarPuntuacion();
+function agregarPuntuacion() {
 
+    for(let i=0; i<=puntuacion-1; i++){
+      estrellas[i].style.color = "gold";
+    }
+}
+
+btnComentario.addEventListener("click", () =>{
+    comentarios.showModal();
+})
+btnCerrarComentario.addEventListener("click", () =>{
+    comentarios.close();
+})
 atras.addEventListener("click", atrasimagen);
 adelante.addEventListener("click", adelanteimagen);
 btnMostrarServicios.addEventListener("click", escalarServicios);

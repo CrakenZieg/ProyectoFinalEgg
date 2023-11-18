@@ -1,6 +1,5 @@
 package com.EquipoB.AsadoYPileta.servicios;
 
-import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Contacto;
 import com.EquipoB.AsadoYPileta.entidades.TipoContacto;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
@@ -23,6 +22,9 @@ public class ContactoServicio {
 
     @Transactional
     public void crearContacto(String valor, TipoContacto tipoContacto) throws MiException, Exception {
+
+        validar(tipoContacto, valor);
+
         Contacto contacto = new Contacto();
         contacto.setContacto(valor);
         contacto.setTipo(tipoContacto);
@@ -31,6 +33,9 @@ public class ContactoServicio {
 
     @Transactional
     public void modificar(String id, String valor, TipoContacto tipoContacto) throws MiException, Exception {
+
+        validar(tipoContacto, valor);
+
         Optional<Contacto> respuesta = contactoRepositorio.findById(id);
         if (respuesta.isPresent()) {
             Contacto contacto = respuesta.get();
@@ -61,7 +66,10 @@ public class ContactoServicio {
         contacto.setContacto(valor);
         return contacto;
     }
-
+   /*
+    este método tiene la responsabilidad de filtrar y actualizar una lista de contactos en base a nuevos datos proporcionados,
+    manejando la creación de nuevos contactos y la eliminación de contactos que no tienen un tipo correspondiente en la nueva información
+    */
     @Transactional
     public List<Contacto> filtrar(List<Contacto> contactoActuales, String[] contactosInputNuevo, String[] tipoContactoInput) throws MiException, Exception {
         List<Contacto> nuevos = new ArrayList<>();
@@ -103,6 +111,18 @@ public class ContactoServicio {
             }
         }
         return nuevos;
+    }
+
+    public void validar(TipoContacto tipo, String contacto) throws MiException {
+
+        if (tipo == null) {
+            throw new MiException("El tipo de contacto no puede ser nulo o estar vacio");
+        }
+
+        if (contacto == null || contacto.trim().isEmpty()) {
+            throw new MiException("El contacto no puede ser nulo o estar vacio");
+        }
+
     }
 
 }

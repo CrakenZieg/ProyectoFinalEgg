@@ -2,7 +2,6 @@ package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
 import com.EquipoB.AsadoYPileta.entidades.TipoPropiedad;
-import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
 import com.EquipoB.AsadoYPileta.servicios.TipoPropiedadServicio;
 import java.util.List;
@@ -25,7 +24,7 @@ public class PortalControlador {
     private TipoPropiedadServicio tipopropiedadServicio;
     
     @GetMapping("/")
-    public String index(ModelMap model){         
+    public String index(ModelMap model, HttpSession session){
         List<Propiedad> propiedades = propiedadServicio.listarPropiedadesActivas();
         List<TipoPropiedad> tipoPropiedades = tipopropiedadServicio.listarTipoPropiedad();
         model.addAttribute("propiedades", propiedades);        

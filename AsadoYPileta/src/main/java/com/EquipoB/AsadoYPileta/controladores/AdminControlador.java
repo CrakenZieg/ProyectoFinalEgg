@@ -9,11 +9,9 @@ import com.EquipoB.AsadoYPileta.entidades.TipoPropiedad;
 import com.EquipoB.AsadoYPileta.servicios.AdminServicio;
 import com.EquipoB.AsadoYPileta.servicios.ClienteServicio;
 import com.EquipoB.AsadoYPileta.servicios.PropiedadServicio;
-import com.EquipoB.AsadoYPileta.servicios.PropietarioServicio;
 import com.EquipoB.AsadoYPileta.servicios.ServicioServicio;
 import com.EquipoB.AsadoYPileta.servicios.TipoContactoServicio;
 import com.EquipoB.AsadoYPileta.servicios.TipoPropiedadServicio;
-import com.EquipoB.AsadoYPileta.servicios.UsuarioServicio;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +36,7 @@ public class AdminControlador {
     private ServicioServicio servicioServicio;
     
     @Autowired
-    private UsuarioServicio usuarioServicio;
-    
-    @Autowired
     private ClienteServicio clienteServicio;
-    
-    @Autowired
-    private PropietarioServicio propietarioServicio;
     
     @Autowired
     private PropiedadServicio propiedadServicio;

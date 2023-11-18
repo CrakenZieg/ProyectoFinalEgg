@@ -6,7 +6,6 @@ import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
@@ -67,7 +66,7 @@ public class FiltroDisponibilidad {
      * @param fin: fecha final, en LocalDate para aprovechar ventajas
      */
     public void porFecha(LocalDate inicio, LocalDate fin) throws MiException {
-        if (porFecha[0] >= inicio.getDayOfMonth() || porFecha[1] <= fin.getDayOfMonth()) {
+        if (!(porFecha[0] <= inicio.getDayOfMonth()) || !(porFecha[1] >= fin.getDayOfMonth())) {
             throw new MiException("Error: la reserva debe ser entre el " + porFecha[0] + " y el " + porFecha[1] + " de cada mes");
         }
     }
@@ -172,73 +171,17 @@ public class FiltroDisponibilidad {
      */
     public void meses(Date fecha) throws MiException {
         int mes = fecha.getMonth();
+        boolean excep = true;
         for (int i = 0; i < mensual.length; i++) {
-            switch (mensual[i]) {
-                case 0: {
-                    if (mes == 0) {
-                        break;
-                    }
-                }
-                case 1: {
-                    if (mes == 1) {
-                        break;
-                    }
-                }
-                case 2: {
-                    if (mes == 2) {
-                        break;
-                    }
-                }
-                case 3: {
-                    if (mes == 3) {
-                        break;
-                    }
-                }
-                case 4: {
-                    if (mes == 4) {
-                        break;
-                    }
-                }
-                case 5: {
-                    if (mes == 5) {
-                        break;
-                    }
-                }
-                case 6: {
-                    if (mes == 6) {
-                        break;
-                    }
-                }
-                case 7: {
-                    if (mes == 7) {
-                        break;
-                    }
-                }
-                case 8: {
-                    if (mes == 8) {
-                        break;
-                    }
-                }
-                case 9: {
-                    if (mes == 9) {
-                        break;
-                    }
-                }
-                case 10: {
-                    if (mes == 10) {
-                        break;
-                    }
-                }
-                case 11: {
-                    if (mes == 11) {
-                        break;
-                    }
-                }
-                default: {
-                    throw new MiException("Error: de la reserva no puede ser " + Meses.getMes(mes).getMes());
-                }
-            }
+            if(mensual[i] == mes){
+                excep = false;
+                i = mensual.length;
+            }                
         }
+        if(excep){
+            throw new MiException("Error: de la reserva no puede ser " + Meses.getMes(mes).getMes());
+        }    
     }
+    
 
 }

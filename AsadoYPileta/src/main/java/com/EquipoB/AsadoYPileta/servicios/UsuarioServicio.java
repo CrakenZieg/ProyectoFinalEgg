@@ -39,13 +39,11 @@ public class UsuarioServicio implements UserDetailsService {
     
     @Autowired
     private PropietarioRepositorio propietarioRepositorio;
-    
+
     @Autowired
     private PropiedadServicio propiedadServicio;
 
-
     private Rol rol;
-
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -64,7 +62,6 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     @Transactional
-
     public void crearUsuario(String email, String password, Rol rol) throws MiException, Exception {
 
         validar(email, password, rol);
@@ -198,11 +195,11 @@ public class UsuarioServicio implements UserDetailsService {
             usuario.setAlta(false);
             if (usuario.getRol().equals(rol.PROPIETARIO)) {
                 Propietario propietario = propietarioRepositorio.getOne(id);
-                if(propietario.getPropiedades().size() != 0){
+                if (propietario.getPropiedades().size() != 0) {
                     List<Propiedad> propiedades = propietario.getPropiedades();
                     for (Propiedad propiedad : propiedades) {
                         propiedadServicio.darDeBaja(propiedad.getId());
-                    }              
+                    }
                 }
             }
             usuarioRepositorio.save(usuario);
@@ -212,7 +209,6 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     @Transactional
-
     public void altaUsuario(String id) throws MiException {
 
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
@@ -267,8 +263,9 @@ public class UsuarioServicio implements UserDetailsService {
             usuarioRepositorio.delete(usuario);
         }
     }
-    
+
     @Transactional
+
     public void cambiarPassword(Usuario usuario,String password, String passwordNuevo,String passwordNuevo2 ) throws MiException{
         
         
@@ -279,22 +276,23 @@ public class UsuarioServicio implements UserDetailsService {
             if(passwordNuevo.equals(passwordNuevo2)){ //Si newPasword esta igual a equalPassword nos da acceso para poder encriptar la nueva contraseña
                usuario.setPassword(new BCryptPasswordEncoder()// Si la contraseña antigua coincide, esta línea establece la nueva contraseña proporcionada por el usuario después de codificarla con BCryptPasswordEncoder. Esto garantiza que la contraseña se almacene de forma segura en la base de datos.
                     .encode(passwordNuevo)); //encode: proporciona en la forma que se va a ingresar la contraseña, en este caso String
+
                 usuarioRepositorio.save(usuario);
             } else {
                 throw new MiException("Las contraseñas nuevas no coinciden.");
             }
-            
-        }else{
+
+        } else {
             throw new MiException("La contraseña antigua es incorrecta.");
         }
-        
+
     }
-    
+
     private void validar(String email, String password, Rol rol) throws MiException {
         String regex = "^(?=.*[0-9])(?=.*[A-Z]).*$";
         if (email == null || email.trim().isEmpty()) {
             throw new MiException("El Email no puede ser nulo o estar vacio");
-        }
+        } // Verifica que la contraseña no sea nula, esté vacía, tenga al menos 8 caracteres y cumpla con un patrón específico (números y mayúsculas)
         if (password == null || password.trim().isEmpty()|| password.length() <= 7 || !password.matches(regex)) {
             throw new MiException("La contraseña no puede ser nulo o estar vacio");
         }
