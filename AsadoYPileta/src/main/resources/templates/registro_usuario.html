@@ -69,9 +69,9 @@
                         <div class="form-control">
                             <label for="prepararArrayInput" class="form-label"><span class="h4">Acepto los terminos y condiciones: </span></label>
                             <a id="prepararArray" target="_blank">Terminos y condiciones.</a>
-                            <input type="checkbox" id="prepararArrayInput" name="contactosInput" onchange="prepararArray()" required="true"/>
+                            <input type="checkbox" id="prepararArrayInput" name="contactosInput" required="true"/>
                         </div>
-                        <button type="submit">Registrarse</button>
+                        <button type="submit" onclick="prepararArray()">Registrarse</button>
                         <p>Tienes cuenta? <a th:href="@{/login}">Ingresa</a></p>
                     </form>
                 </div>
