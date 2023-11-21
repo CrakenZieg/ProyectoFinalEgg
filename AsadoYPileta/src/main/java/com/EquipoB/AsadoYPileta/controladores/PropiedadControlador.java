@@ -78,7 +78,6 @@ public class PropiedadControlador {
         comentarios = comentarioServicio.findComentariosByPropiedadId(id);
         List<TipoPropiedad> tipoPropiedades = new ArrayList<>();
         tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
-       
         List<Reserva> reservas = reservaServicio.reservasFuturas(id);
         List<String> fechasReservadas = reservaServicio.diasReservados(reservas);
         List<String> fechasDisponibles = filtroDisponibilidadServicio.obtenerDiasHabilitados(propiedad.getFiltroDisponibilidad());
@@ -182,6 +181,7 @@ public class PropiedadControlador {
 
     }
 
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
     @GetMapping("/puntuacion/{id}")
     public ModelAndView puntuacion(@PathVariable String id, ModelMap modelo) {
         Double promedioPuntuacion = comentarioServicio.obtenerPromedioPuntuacionPorPropiedad(id);
