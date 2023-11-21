@@ -20,8 +20,8 @@ stars.forEach(function(star,index){
     for(let i=index+1; i<stars.length ; i++){
         stars[i].style.color = "#bbb";
     }
-    inptCalProp.value = index+1;
-    console.log(inptCalProp.value);
+    inptCalProp.value = index+1;    
+    console.log(inptCalProp.value)
   })
  
 })
