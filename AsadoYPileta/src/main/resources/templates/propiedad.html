@@ -1,78 +1,213 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html  lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head th:replace="/fragmentos/frags :: head"></head>
-    <body>
+    <body onload="cargar()">
         <header th:replace="fragmentos/frags :: header"></header>
         <main>
-            <section class="volver-eliminar">
-                <div class="container-fluid d-flex flex-wrap justify-content-between">
-                    <div class="volver">
-                        <a class="btn btn-outline-secondary" th:href="@{/}">
-                            <i class="bi bi-arrow-left"></i>
-                        </a>
-                    </div>
-                    <div class="eliminar">
-                        <a class="btn btn-outline-danger" th:href="@{/propiedad/eliminar/__${propiedad.id}__}">
-                            <i class="bi bi-trash3"></i>
-                        </a>
-                    </div>
-                </div>
-            </section>
+
             <section>
-                <div class="container mb-2">
-                    <div class="row mb_1">
-                        <div id="carouselPropiedad" class="carousel slide carousel-fade" data-bs-theme="dark">
-                            <div class="carousel-inner">
-                                <div class="carousel-item" th:each="imagen : ${propiedad.imagenes}" th:classappend="${imagenStat.index == 0}? active">
-                                    <img th:src="@{/imagen/__${imagen.id}__}" class="d-block w-100"/>
-                                </div>                            
+                <div class="contenedor-propiedad">
+                    <div class="propiedad">
+                        <input type="hidden" id="fechasDisponiblesInput" th:value="${fechasDisponibles}" />
+                        <input type="hidden" id="fechasReservadasInput" th:value="${fechasReservadas}" />
+                        <div class="contenedor-img-propiedad">
+
+                            <button id="atras"><img th:src="@{/imagenes/arrow.png}" alt=".."></button>
+                            <div id="imagen">
+                                <div class="imagen-oculta" th:each="imagen : ${propiedad.imagenes}" hidden>
+                                    <img th:src="@{/imagen/__${imagen.id}__}"   alt="">
+                                </div>
+
+
                             </div>
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselPropiedad" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselPropiedad" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
+                            <button id="adelante" ><img th:src="@{/imagenes/arrow_forward.png}" alt=".."></button>
                         </div>
+                        <dialog id="mostrar-td-serv">
+
+                            <div class="dtalles-serv">
+                                <div class="salir-cont">
+                                    <button><img  id="salir" th:src="@{/imagenes/x.png}"></button>
+                                </div>
+
+                                <div class="titulo-dtl-serv">
+                                    <h2>¿Que ofrecemos?</h2>
+
+                                </div>
+
+                                <ul th:each="servicio : ${propiedad.servicios}" >
+                                    <li  th:text="${servicio.tipoComodidad}"> Limpieza</li>
+
+
+
+                                </ul>
+
+                            </div>
+                        </dialog>
+                        <div class="propiedad-descrip">
+                            <div class="datos-propiedad">
+                                <div class="descripcion">
+                                    <h2 th:text="${propiedad.titulo}"></h2>
+
+
+                                </div>
+
+                                <div id="contenedor-dtserv">
+                                    <h2>¿Que ofrecemos?</h2>
+                                    <div class="servicios-propiedad">
+
+
+                                        <ul th:each="servicio : ${propiedad.servicios}">
+                                            <li th:text="${servicio.tipoComodidad}">Limpieza</li>
+
+
+
+                                        </ul>
+
+                                    </div>
+                                    <button id="mostrar-servicios">Mostrar mas</button>
+                                </div>
+
+                                <div class="descrip line-clamp">
+                                    <p th:text="${propiedad.descripcion}">descripcion</p>
+                                </div>
+
+                                <div class="ubicacion">
+                                    <p th:text="${propiedad.ubicacion.pais}">pais</p>
+                                    <p th:text="${propiedad.ubicacion.provincia}">pais</p>
+                                    <p th:text="${propiedad.ubicacion.departamento}">pais</p>
+                                    <p th:text="${propiedad.ubicacion.localidad}">pais</p>
+                                    <p th:text="${propiedad.ubicacion.calle}">pais</p>
+                                    <p th:text="${propiedad.ubicacion.numeracion}">pais</p>
+                                    <p th:text="${propiedad.ubicacion.observaciones}">pais</p>
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="reserva">
+                                <div class="container">
+                                    <div class="d-grid gap-2 d-md-flex justify-content-center">
+                                        <button type="button" class="btn btn-secondary" onclick="cambiarMes(-1)">Mes Anterior</button>
+                                        <span id="mes-actual" class="h3"></span>
+                                        <button type="button" class="btn btn-secondary justify-content-end" onclick="cambiarMes(1)">Mes Siguiente</button>
+                                    </div>
+
+                                    <table class="table table-bordered" id="tablaFechas">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="custom-cell">Domingo</th>
+                                                <th scope="col" class="custom-cell">Lunes</th>
+                                                <th scope="col" class="custom-cell">Martes</th>
+                                                <th scope="col" class="custom-cell">Miércoles</th>
+                                                <th scope="col" class="custom-cell">Jueves</th>
+                                                <th scope="col" class="custom-cell">Viernes</th>
+                                                <th scope="col" class="custom-cell">Sábado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="calendar-body">
+                                            <!-- Aquí se generará el contenido del calendario con JavaScript -->
+                                        </tbody>
+                                    </table>
+                                    <span class="badge text-bg-success h2">Disponible</span>
+                                    <span class="badge text-bg-danger h2">No Disponible</span>
+                                </div>
+                                <h2 th:text="'$ ' +${propiedad.valor}" > </h2>
+                                <form th:action="@{/reserva/registrar}"  method="POST"  >
+
+                                    <input th:value="${propiedad.id}"  name="idPropiedad" type="text" hidden>
+                                        <div class="check-in">
+                                            <div class="fechainicio">
+                                                <label for="fechainicio">Check In</label>
+                                                <input type="date" id="fechainicio" name="fechaInicio" required/>
+
+                                            </div>
+                                            <div class="fechafinal">
+                                                <label for="fechafinal">Check out</label>
+                                                <input type="date" id="fechafinal" name="fechaFinal" required/>
+
+                                            </div>
+                                        </div>
+                                        <button class="reservar-btn"  type="submit">Reservar</button>
+                                </form>
+                            </div>
+
+                        </div>
+                        <div class="calificacion">
+
+                            <input id="calificacion"  th:value="${propiedad.puntuacion}"hidden>
+                                <ul>
+
+                                    <li><i class="bi bi-star-fill starp" ></i></li>
+                                    <li><i class="bi bi-star-fill starp"></i></li>
+                                    <li><i class="bi bi-star-fill starp"></i></li>
+                                    <li><i class="bi bi-star-fill starp" ></i></li>
+                                    <li><i class="bi bi-star-fill starp" ></i></li>
+
+
+                                    <h2 th:text="${'Calificacion de ' +  propiedad.puntuacion}"></h2>
+                                </ul>
+
+                        </div>
+                        <div class="comentario-contenedor">
+
+
+
+
+                            <div class="comentario" th:each="comentario : ${comentarios}"  >
+                                <div class="perfil-coment">
+                                    <div class="imagen-perfil">
+                                        <img th:src="@{/imagen/__${comentario.cliente.imagenes[0].id}__}" alt="">
+                                    </div>
+
+                                    <div class="perfil-data">
+                                        <p th:text="${comentario.cliente.nombre}"></p>
+                                        <p th:text="${comentario.cliente.apellido}"></p>
+                                    </div>
+                                    <a th:href="@{/propiedad/eliminar/__${propiedad.id}__}" sec:authorize="hasRole('ADMIN')" id="eliminar-btn">Eliminar Comentario</a> 
+                                </div>
+                                <div class="comentario-par">
+                                    <p th:text="${comentario.cuerpo}"></p>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <button id="ver-comentarios">Ver todos</button>
+
+                        <dialog class="td-coment" id="modalc">
+                            <div class="salir-cont">
+                                <button><img  id="cerrar-comentarios" th:src="@{/imagenes/x.png}"></button>
+                            </div>
+                            <div class="comentario dos" th:each="comentario : ${comentarios}"  >
+                                <div class="perfil-coment">
+                                    <div class="imagen-perfil">
+                                        <img th:src="@{/imagen/__${comentario.cliente.imagenes[0].id}__}" alt="">
+                                    </div>
+
+                                    <div class="perfil-data">
+                                        <p th:text="${comentario.cliente.nombre}"></p>
+                                        <p th:text="${comentario.cliente.apellido}"></p>
+                                    </div>
+                                </div>
+                                <div class="comentario-par">
+                                    <p th:text="${comentario.cuerpo}"></p>
+                                </div>
+                            </div>
+
+                        </dialog>
                     </div>
-                    <div class="row mb-1">
-                        <div class="col-9">
-                            <h2 class="text-center" th:text="${propiedad.titulo}"></h2>                              
-                        </div>
-                        <div class="col-3">
-                            <p class="fs-6 text-end" th:text="${propiedad.tipo}"></p>                             
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <ul class="list-group list-group-horizontal d-flex flex-wrap justify-content-around">
-                            <li th:each="servicio : ${propiedad.servicios}" class="list-group-item text-center" th:text="${servicio.tipoComodidad}">Servicio</li>
-                        </ul>
-                    </div>
-                    <div class="row mb-1">
-                        <div class="col text-center">
-                            <p>$ <span th:text="${propiedad.valor}"></span></p>
-                        </div>
-                        <div class="col text-center">                            
-                            <p th:text="${propiedad.direccion}"></p>
-                        </div>
-                        <div class="col text-center">                            
-                            <p th:text="${propiedad.ubicacion}"></p>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <div class="col">                            
-                            <p th:text="${propiedad.descripcion}"></p>
-                        </div>                       
-                    </div>                    
                 </div>
+
             </section>
         </main>
         <footer th:replace="fragmentos/frags :: footer"></footer>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>        
+        crossorigin="anonymous"></script>   
+        <script th:src="@{/js/RegistroUsuario.js}" type="text/javascript"></script>
+        <script th:src="@{/js/propiedad.js}" type="text/javascript"></script>
     </body>
 </html>

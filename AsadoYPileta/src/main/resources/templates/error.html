@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head th:replace="/fragmentos/frags :: head"></head>
     <body>
@@ -8,8 +8,12 @@
             <section>
                 <div class="container">
                     <div class="row">
+                        <hr/>
                         <h2 th:text="'Error: ' + ${codigo}">AYP</h2>
-                        <p th:text="${mensaje}"></p>                    
+                        <p th:text="${mensaje}"></p> 
+                        <hr/>
+                        <h3>Causa:</h3>
+                        <p th:text="${excepcion}"></p>
                     </div>
                     <div class="row volver">
                         <a class="btn btn-outline-secondary" th:href="@{/}">

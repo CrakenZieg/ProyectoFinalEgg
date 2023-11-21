@@ -1,4 +1,3 @@
-
 package com.EquipoB.AsadoYPileta.entidades;
 
 import javax.persistence.Entity;
@@ -15,10 +14,7 @@ public class Servicio {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid" , strategy = "uuid2")
     private String id;
-    
     private String tipoComodidad;
     private Double valor;
 
-    
-    
 }

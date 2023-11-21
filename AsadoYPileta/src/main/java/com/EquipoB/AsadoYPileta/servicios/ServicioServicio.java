@@ -3,19 +3,23 @@ package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
+import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.EquipoB.AsadoYPileta.repositorios.ServicioRepositorio;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ServicioServicio {
     
     @Autowired
     private ServicioRepositorio servicioRepositorio;
+    
+    @Autowired
+    private PropiedadRepositorio propiedadRepositorio;
     
     @Transactional
     public void crearSercicio(String tipoComodidad, Double valor) throws MiException{
@@ -41,7 +45,7 @@ public class ServicioServicio {
     }
     
     @Transactional
-    public void modificarServicio(String tipoComodidad, String id, Double valor) throws MiException {
+    public void modificarServicio(String id, String tipoComodidad, Double valor) throws MiException {
 
         validar(tipoComodidad, valor);
 
@@ -61,7 +65,7 @@ public class ServicioServicio {
     
     private void validar(String tipoComodidad, Double valor) throws MiException {
 
-        if (tipoComodidad.isEmpty() || tipoComodidad == null) {
+        if ( tipoComodidad == null || tipoComodidad.trim().isEmpty() ) {
 
             throw new MiException("El tipo de comodidad no puede ser nulo o estar vacio");
         }
@@ -82,29 +86,25 @@ public class ServicioServicio {
     }
     
     public List<Servicio> listarServiciosArray(String[] serviciosInput){
-        List<Servicio> servicios = new ArrayList<>();            
-        for (String servicioElem : serviciosInput) {
-            Servicio servicio = servicioPorTipo(servicioElem);
-            servicios.add(servicio);
+        List<Servicio> servicios = null;  
+        if(serviciosInput!=null){
+            servicios = new ArrayList<>();
+            for (String servicioElem : serviciosInput) {
+                Servicio servicio = servicioPorTipo(servicioElem);
+                servicios.add(servicio);
+            }
         }
         return servicios;
     }
     
     @Transactional
-    public void eliminarServicio(String id, String tipoComodidad, Double valor) throws MiException{
-    
-        try {
-            validar(tipoComodidad, valor);
-        } catch (MiException ex) {
-            ex.getMessage();
+    public void eliminarServicio(String id) throws MiException{
+        if(!propiedadRepositorio.buscarPorServicio(id).isEmpty()){
+            throw new MiException("No se puede eliminar el servicio si está siendo utilizado.");
+        } else {
+            servicioRepositorio.deleteById(id);    
         }
-        
-        servicioRepositorio.deleteById(id);
-    
     }
-    
-    
-    
     
 }
 
