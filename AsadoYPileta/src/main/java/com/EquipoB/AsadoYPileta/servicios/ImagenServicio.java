@@ -100,7 +100,7 @@ public class ImagenServicio {
                 borrar(imagen.getId());
             }
         }
-        return imagenesRepo;        
+        return imagenesRepo;
     }
 
     @Transactional
