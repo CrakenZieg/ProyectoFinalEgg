@@ -72,6 +72,7 @@ public class ClienteControlador {
         return new RedirectView("/");
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_PROPIETARIO','ROLE_CLIENTE')")
     @GetMapping("/perfil")
     public ModelAndView perfil(ModelMap modelo, HttpSession session) throws MiException {
         Usuario usuario = (Usuario) session.getAttribute("usuariosession");
@@ -87,7 +88,8 @@ public class ClienteControlador {
         }
         return new ModelAndView("perfil_usuario.html", modelo);
     }
-
+    
+    @PreAuthorize("hasAnyRole('ROLE_PROPIETARIO','ROLE_CLIENTE')")
     @PostMapping("/perfil/{id}")
     public RedirectView modificar(@RequestParam String nombre, @PathVariable String id, @RequestParam String apellido,
             @RequestParam String email, @RequestParam MultipartFile[] imagenesInput,
@@ -98,6 +100,7 @@ public class ClienteControlador {
         return new RedirectView("/");
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_PROPIETARIO','ROLE_CLIENTE')")
     @PostMapping("/cambiar_password")
     public ModelAndView cambiandoPassword(HttpSession session, @RequestParam String password, 
             @RequestParam String passwordNuevo, @RequestParam String passwordNuevo2, ModelMap modelo) throws MiException {

@@ -178,6 +178,7 @@ public class PropiedadControlador {
         return "index.html";
     }
 
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
     @GetMapping("/puntuacion/{id}")
     public ModelAndView puntuacion(@PathVariable String id, ModelMap modelo) {
         Double promedioPuntuacion = comentarioServicio.obtenerPromedioPuntuacionPorPropiedad(id);
