@@ -1,6 +1,7 @@
 package com.EquipoB.AsadoYPileta.controladores;
-
+import com.EquipoB.AsadoYPileta.entidades.Cliente;
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
+import com.EquipoB.AsadoYPileta.servicios.ClienteServicio;
 import com.EquipoB.AsadoYPileta.servicios.ImagenServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +19,9 @@ public class ImagenControlador {
 
     @Autowired
     private ImagenServicio imagenServicio;
+    
+    @Autowired
+    private ClienteServicio clienteServicio;
 
     @GetMapping("/{id}")
     public ResponseEntity<byte[]> imagen(@PathVariable String id) {
@@ -26,6 +30,15 @@ public class ImagenControlador {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf(imagen.getMime()));
         return new ResponseEntity<>(imagen1, headers, HttpStatus.OK);
+    }
+    
+    @GetMapping("/perfil/{id}")
+    public ResponseEntity<byte[]> imagenPerfil(@PathVariable String id) {
+        Cliente cliente = clienteServicio.getOne(id);
+        byte[] imagen = cliente.getImagenes().get(0).getContenido();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        return new ResponseEntity<>(imagen, headers, HttpStatus.OK);
     }
     
 }

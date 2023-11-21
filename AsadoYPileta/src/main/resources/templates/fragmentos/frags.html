@@ -15,7 +15,7 @@
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-black text-decoration-none">
-                <img src="/AYPIcon.jpg" alt="icono" style="width: 6rem; height: 3rem"/>
+                <img src="/AYPIcon.jpg" alt="icono" style="width: 6rem; height: 3rem"/> &emsp;
                 <span class="h1">Asado y pileta</span>
             </a>
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
@@ -25,41 +25,54 @@
                             Buscá tu dia ideal
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Quincho</a></li>
-                            <li><a class="dropdown-item" href="#">Jardin</a></li>
-                            <li><a class="dropdown-item" href="#">Fin de semana</a></li>
-                            <li><a class="dropdown-item" href="#">Quinta</a></li>
-                            <li><a class="dropdown-item" href="#">Casa con Pileta</a></li>
-                            <li><a class="dropdown-item" href="#">Chacra</a></li>
-                            <li><a class="dropdown-item" href="#">Estancia</a></li>
+                            <li th:each="tipo : ${tipoPropiedades}">
+                                <a class="dropdown-item" th:text="${tipo.getTitulo()}" th:href="@{/propiedad/tipo/__${tipo.getTipo()}__}">Quincho</a>
+                            </li>                            
                         </ul>
                     </div>
                 </li>
-                <li><a href="#" class="nav-link px-2 text-white">Preguntas Frecuentes</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">Nosotros</a></li>
             </ul>
             <div class="text-end">
-                 <a th:if="${session.usuariosession == null}" class="btn btn-outline-white" style="border: 0px" role="button">Ingresar</a>
-                 <a th:if="${session.usuariosession == null}" class="btn btn-outline-warning" style="border: 0px" role="button" th:href="@{/propiedad/registrar}">Registrar Propiedad</a>
+                <a sec:authorize="isAnonymous()" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/login}">Ingresar</a>
+                <a sec:authorize="isAnonymous()" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/cliente/registrar}">Registrarse</a>
+                
+                <a th:if="${session.usuariosession != null}" sec:authorize="hasRole('ADMIN')" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/admin/dashboard}" >Panel Admin</a>
+                <a th:if="${session.usuariosession != null}" sec:authorize="hasRole('ADMIN')" class="btn btn-outline-white" style="border: 0px" role="button" th:href="@{/logout}" >Cerrar sesión</a>
+                <div class="dropdown text-end">
+                    <a th:if="${session.usuariosession != null}" sec:authorize="hasAnyRole('CLIENTE','PROPIETARIO')"
+                      th:href="@{#}" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img th:src="@{/imagen/perfil/__${session.usuariosession.id}__}" alt="Foto de perfil" width="50" height="50" class="rounded-circle"/>
+                    </a>
+                    <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                        <li><a sec:authorize="hasAnyRole('CLIENTE','PROPIETARIO')" class="dropdown-item" th:href="@{/cliente/perfil}">Perfil</a></li>
+                        <li><a sec:authorize="hasAnyRole('CLIENTE','PROPIETARIO')" class="dropdown-item" th:href="@{/propiedad/registrar}">Registrar Propiedad</a></li>
+                        <li><hr class="dropdown-divider"/></li>
+                        <li><a sec:authorize="hasAnyRole('CLIENTE','PROPIETARIO')" class="dropdown-item" th:href="@{/logout}">Cerrar Sesión</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 </header>
 
+
+
+
+
 <footer th:fragments="footer" class="py-2 text-bg-secondary">
     <div class="row w-100 py-3 d-flex justify-content-around">
         <div class="col-6 col-md-2 mb-3">
-            <h5>Section</h5>
+            <h5>Centro de ayuda</h5>
             <ul class="nav flex-column">
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Ayuda</a></li>
-                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Centro de ayuda</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Ayuda al cliente</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">problemas con reservas</a></li>
                 <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Ayuda en caso de discapacidad</a></li>
                 <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Opciones de cancelación</a></li>
                 <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Problemnas en el barrio</a></li>
             </ul>
         </div>
         <div class="col-6 col-md-2 mb-3">
-            <h5>Section</h5>
+            <h5>Anfitriones</h5>
             <ul class="nav flex-column">
                 <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Cómo ser anfitrión</a></li>
                 <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Poné tu espacio</a></li>
@@ -69,7 +82,7 @@
             </ul>
         </div>
         <div class="col-6 col-md-2 mb-3">
-            <h5>Section</h5>
+            <h5>Noticias</h5>
             <ul class="nav flex-column">
                 <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Asado y Parrilla</a></li>
                 <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Noticias</a></li>

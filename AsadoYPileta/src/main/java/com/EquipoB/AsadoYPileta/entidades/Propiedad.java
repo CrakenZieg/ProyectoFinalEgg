@@ -1,15 +1,17 @@
 
 package com.EquipoB.AsadoYPileta.entidades;
 
-import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -22,33 +24,25 @@ public class Propiedad {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
     private String titulo;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String descripcion;
-    private String ubicacion;
-    private String direccion;
-    private Boolean estado;    
-    @Enumerated(EnumType.STRING)
-    private TipoPropiedad tipo;   
+    private Boolean estado;
     private Double valor;
+    @ManyToOne
+    private TipoPropiedad tipo;   
     @ManyToMany
     private List<Servicio> servicios;
     @OneToMany
     private List<Imagen> imagenes;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Ubicacion ubicacion;
+    private String idPropietario;
 
-    public Propiedad() {
-    }
 
-    public Propiedad(String id, String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo, Double valor, List<Servicio> servicios, List<Imagen> imagenes) {
-        this.id = id;
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.ubicacion = ubicacion;
-        this.direccion = direccion;
-        this.tipo = tipo;
-        this.valor = valor;
-        this.servicios = servicios;
-        this.imagenes = imagenes;
-    }
-    
-    
-    
+    private Double puntuacion;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private FiltroDisponibilidad filtroDisponibilidad;
+
 }

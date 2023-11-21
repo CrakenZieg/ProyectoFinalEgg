@@ -1,53 +1,62 @@
+
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head th:replace="fragmentos/frags :: head"></head>
     <body>
         <header th:replace="fragmentos/frags :: header"></header>
-        <main>
-            <section class="volver-eliminar">
-                <div class="container-fluid d-flex flex-wrap justify-content-between">
-                    <div class="volver">
-                        <a class="btn btn-outline-secondary" th:href="@{/}">
-                            <i class="bi bi-arrow-left"></i>
-                        </a>
-                    </div>
-                    <div class="eliminar">
-                        <a class="btn btn-outline-danger" th:href="@{/propiedad/borrar/__${propiedad.id}__}">
-                            <i class="bi bi-trash3"></i>
-                        </a>
-                    </div>
-                </div>
-            </section>
+        <main>          
             <div class="main_container">
                 <h2 class="h1 text-center">Modificar Propiedad</h2>
-                <div  class="container">
-                    <form th:action="@{/propiedad/modificar/__${propiedad.id}__}" method="POST" enctype="multipart/form-data">
+                <div  class="container border border-black rounded-4">
+                    <form class="row d-flex justify-content-between align-items-center" th:action="@{/propiedad/modificar/__${propiedad.id}__}" method="POST" enctype="multipart/form-data">
                         <input hidden="true" th:value="${propiedad.id}" name="id"/>
-                        <div class="row g-2 align-items-center">
-                            <div class="form-group">
+                        <div class="row d-flex justify-content-between align-items-center">
+                            <div class="col-md-4">
                                 <label for="titulo" class="form-label"><span class="h3">Título</span></label>                           
                                 <input type="text" class="form-control" id="titulo" name="titulo" th:value="${propiedad.titulo}"/>
                             </div>
-                            <div class="form-group">
-                                <label for="direccion" class="form-label"><span class="h3">Dirección</span></label>                           
-                                <input type="text" class="form-control" id="direccion" name="direccion" th:value="${propiedad.direccion}"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="ubicacion" class="form-label"><span class="h3">Ubicación</span></label>                           
-                                <input type="text" class="form-control" id="ubicacion" name="ubicacion" th:value="${propiedad.ubicacion}"/>
-                            </div>
-                            <div class="form-group">
+                            <div class="col-md-4">
                                 <label for="valor" class="form-label"><span class="h3">Valor</span></label>                           
                                 <input type="number" class="form-control" id="valor" name="valor" th:value="${propiedad.valor}" min="0"/>
                             </div>
-                            <div class="form-group">                           
-                                <select class="form-select" aria-label="Tipo de propiedad" name="tipo" th:field="*{propiedad.tipo}">
-                                    <option th:each="tipo : ${T(com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad).values()}" th:value="${tipo}" th:text="${tipo.getTipo()}" ></option>
+                            <div class="col-md-4">
+                                <label for="tipo" class="form-label"><span class="h3">Tipo de propiedad</span></label> 
+                                <select class="form-select col-md-4" aria-label="Tipo de propiedad" name="tipo">
+                                    <option th:each="tipo : ${tipoPropiedades}" th:value="${tipo.getTipo()}" th:text="${tipo.getTitulo()}" th:selected="${tipo==propiedad.tipo}"></option>
                                 </select>
                             </div>
+                            <div class="col-md-4">
+                                <label for="pais" class="form-label"><span class="h3">País</span></label>                           
+                                <input type="text" class="form-control" id="pais" name="pais" placeholder="pais" th:value="${propiedad.ubicacion.pais}" required="true"/>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="provincia" class="form-label"><span class="h3">Provincia</span></label>                           
+                                <input type="text" class="form-control" id="provincia" name="provincia" placeholder="provincia" th:value="${propiedad.ubicacion.provincia}"/>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="departamento" class="form-label"><span class="h3">Departamento</span></label>                           
+                                <input type="text" class="form-control" id="departamento" name="departamento" placeholder="departamento" th:value="${propiedad.ubicacion.departamento}"/>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="localidad" class="form-label"><span class="h3">Localidad</span></label>                           
+                                <input type="text" class="form-control" id="localidad" name="localidad" placeholder="localidad" th:value="${propiedad.ubicacion.localidad}" required="true"/>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="calle" class="form-label"><span class="h3">Calle</span></label>                           
+                                <input type="text" class="form-control" id="calle" name="calle" placeholder="calle" th:value="${propiedad.ubicacion.calle}"/>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="numeracion" class="form-label"><span class="h3">Numeración</span></label>                           
+                                <input type="text" class="form-control" id="numeracion" name="numeracion" placeholder="numeracion" th:value="${propiedad.ubicacion.numeracion}"/>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="observaciones" class="form-label"><span class="h3">Observaciones</span></label>                           
+                                <input type="text" class="form-control" id="observaciones" name="observaciones" placeholder="observaciones" th:value="${propiedad.ubicacion.observaciones}"/>
+                            </div>
+
+                            <span class="h3 form-group">Servicios</span>
                             <div class="form-group">
-                                <span class="h3 form-label">Servicios</span>                
                                 <div th:each="servicioElem : ${servicios}" class="form-check form-check-inline">
                                     <input class="form-check-input" type="checkbox" th:id="${servicioElem.tipoComodidad}" th:value="${servicioElem.tipoComodidad}" 
                                            name="serviciosInput" th:checked="${#lists.contains(propiedad.servicios, servicioElem)}"/>
@@ -61,28 +70,104 @@
                             <div class="form-group">
                                 <label for="descripcion" class="form-label"><span class="h3">Descripción</span></label>                            
                                 <textarea class="form-control" rows="6" id="descripcion" name="descripcion" th:field="*{propiedad.descripcion}"></textarea>
+                                </br>
                             </div>
-                        </div>
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary"><span class="h3">Guardar</span></button>
-                        </div>
-                        <h4>Selecciona las imagenes a eliminar:</h4>
-                        <div class="row row-cols-3 form-group">
-                            <div class="col card" th:each="imagen : ${propiedad.imagenes}">
-                                <img th:src="@{/imagen/__${imagen.id}__}" class="card-img"/>
-                                <div class="card-img-overlay">
-                                    <input class="form-check-input" type="checkbox" th:id="${imagen.id}" th:value="${imagen.id}" name="imagenesViejas"/>
-                                    <label class="form-check-label" th:for="${imagen.id}" th:text="${imagen.nombre}">Imagen</label>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </main>
-        <footer th:replace="fragmentos/frags :: footer"></footer>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>        
-    </body>
-</html>
+                            <div class="form-group" th:if="${propiedad.estado}==true">
+                                </br>
+                                <span class="h3">Alta/Baja de la propiedad</span></br>
+                                <input th:value="true" type="radio"  id="estado" name="estado" th:checked="true">
+                                    <label th:for="alta">Alta</label> 
+                                    <br>
+                                        <input th:value="false" type="radio" id="estado2" name="estado"  >
+                                            <label th:for="alta2" >Baja</label>  
+                                            </div>   
+                                            <div class="form-group form-check-inline" th:if="${propiedad.estado}!=true">
+                                                <input th:value="true" type="radio"  id="estado" name="estado">
+                                                    <label th:for="alta" >Alta</label> 
+                                                    <input th:value="false" type="radio" id="estado2" name="estado" th:checked="true" >
+                                                        <label th:for="alta2" >Baja</label> 
+                                                        </div>
+                                                        <h4>Selecciona las imagenes a eliminar:</h4>
+                                                        <div class="row row-cols-3 form-group">
+                                                            <div class="col card" th:each="imagen : ${propiedad.imagenes}">
+                                                                <img th:src="@{/imagen/__${imagen.id}__}" class="card-img"/>
+                                                                <div class="card-img-overlay m-3 ">
+                                                                    <input class="form-check-input" type="checkbox" th:id="${imagen.id}" th:value="${imagen.id}" name="imagenesViejas"/>
+                                                                    <label class="form-check-label bg-black m-0 rounded" th:for="${imagen.id}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" style=" color: red;"viewBox="0 0 16 16">
+                                                                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+                                                                        </svg></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <span class="h3 text-center border-3 border-top border-success">Opcionales</span>
+                                                        <div class="col-md-5 p-3">
+                                                            <label for="fechaInicioReserva" class="form-label "><span class="h3">Fecha Inicio disponibilidad</span></label>
+                                                            <input class="form-control" type="date" id="fechaInicioReserva" name="fechaInicioReserva" th:value="${propiedad.filtroDisponibilidad.fechaInicio}"/>
+                                                        </div>
+                                                        <div class="col-md-5 p-3">
+                                                            <label for="fechaFinReserva" class="form-label "><span class="h3">Fecha fin disponibilidad</span></label>
+                                                            <input class="form-control" type="date" id="fechaFinReserva" name="fechaFinReserva" th:value="${propiedad.filtroDisponibilidad.fechaFin}"/>
+                                                        </div>
+                                                        <div class="form-group p-3">
+                                                            <span class="h3">En que Meses lo alquilarias</span></br>
+                                                            <div th:each="mesesOpt : ${T(com.EquipoB.AsadoYPileta.enumeraciones.Meses).values()}" class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" th:id="${mesesOpt.getMes()}" th:value="${mesesOpt.getNumMes()}" 
+                                                                       name="mensualReserva" th:checked="${mesesDisponibles != null and mesesDisponibles.contains(mesesOpt.getNumMes())}" />
+                                                                <label class="form-check-label" th:for="${mesesOpt.getMes()}" th:text="${mesesOpt.getMes()}"></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group p-3">
+                                                            <span class="h3">Dias Disponible</span></br>
+                                                            <div th:each="diasOpt : ${T(com.EquipoB.AsadoYPileta.enumeraciones.Dias).values()}" class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" th:id="${diasOpt.getDia()}" th:value="${diasOpt.getNumDia()}" 
+                                                                       name="diarioReserva" th:checked="${fechasDisponibles != null and fechasDisponibles.contains(diasOpt.getNumDia())}"/>
+                                                                <label class="form-check-label" th:for="${diasOpt.getDia()}" th:text="${diasOpt.getDia()}"></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-auto" >
+                                                                <label for="inicio" class="form-label"><span class="h3">Dia del Mes Inicio</span></label>                           
+                                                                <input type="number" class="form-control" id="inicio" name="inicio" min="0"/>
+                                                            </div>
+                                                            <div class="col-auto">
+                                                                <label for="fin" class="form-label"><span class="h3">Dia del Mes Fin</span></label>                           
+                                                                <input type="number" class="form-control" id="fin" name="fin" min="0" onchange="enviarDatos()" />
+                                                            </div>
+                                                            <div id="checkboxInicioFin">                                    
+                                                            </div>
+                                                        </div>
+                                                        <span class="p-1 border-3 border-bottom border-success"></span>
+
+                                                        <div class="d-grid gap-2 d-md-flex justify-content-md-start p-3">
+
+                                                            <button type="submit" class="btn btn-primary" onclick="enviarDatos()"><span class="h3">Editar Reserva</span></button>
+                                                        </div>
+                                                        </div>
+                                                        <div class="eliminar d-grid gap-2 d-md-flex justify-content-md-end">
+                                                            <a class="btn btn-outline-danger" th:href="@{/propiedad/eliminar/__${propiedad.id}__}">
+                                                                Eliminar Propiedad<i class="bi bi-trash3"></i>
+                                                            </a>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input hidden type="number" class="form-control" id="latitud" name="latitud" th:value="${propiedad.ubicacion.latitud}"/>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input hidden type="number" class="form-control" id="longitud" name="longitud" th:value="${propiedad.ubicacion.longitud}"/>
+                                                        </div>
+
+                                                        </form>
+                                                        </br>
+                                                        </br>
+                                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                            <a th:href="@{/}" class="btn btn-primary"><span class="h3">Atras</span></a>
+                                                        </div>
+                                                        </div>
+                                                        </div>
+                                                        </main>
+                                                        <footer th:replace="fragmentos/frags :: footer"></footer>
+                                                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+                                                                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+                                                        crossorigin="anonymous"></script>
+                                                        <script th:src="@{/js/propiedad.js}" type="text/javascript"></script>
+                                                        </body>
+                                                        </html>

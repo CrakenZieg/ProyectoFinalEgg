@@ -20,11 +20,13 @@ public class ImagenServicio {
     public Imagen guardar(MultipartFile archivo) throws Exception {
         if (archivo != null) {
             try {
-                Imagen imagen = new Imagen();
-                imagen.setMime(archivo.getContentType());
-                imagen.setNombre(archivo.getOriginalFilename());
-                imagen.setContenido(archivo.getBytes());
-                return imagenRepositorio.save(imagen);
+                if(!archivo.getContentType().contains("octet-stream")){
+                    Imagen imagen = new Imagen();
+                    imagen.setMime(archivo.getContentType());
+                    imagen.setNombre(archivo.getOriginalFilename());
+                    imagen.setContenido(archivo.getBytes());
+                    return imagenRepositorio.save(imagen);
+                }
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -38,11 +40,13 @@ public class ImagenServicio {
             List<Imagen> imagenes = new ArrayList<>();
             try {
                 for (MultipartFile imagenElem : imagenInput) {
-                    Imagen imagen = new Imagen();
-                    imagen.setMime(imagenElem.getContentType());
-                    imagen.setNombre(imagenElem.getOriginalFilename());
-                    imagen.setContenido(imagenElem.getBytes());
-                    imagenes.add(imagenRepositorio.save(imagen));
+                    if(!imagenElem.getContentType().contains("octet-stream")){
+                        Imagen imagen = new Imagen();
+                        imagen.setMime(imagenElem.getContentType());
+                        imagen.setNombre(imagenElem.getOriginalFilename());
+                        imagen.setContenido(imagenElem.getBytes());
+                        imagenes.add(imagenRepositorio.save(imagen));
+                    }
                 }
                 return imagenes;
             } catch (Exception e) {
@@ -85,7 +89,7 @@ public class ImagenServicio {
     }
     
     @Transactional
-    public void filtrar(List<Imagen> imagenesRepo, String[] imagenesViejas){
+    public List<Imagen> filtrar(List<Imagen> imagenesRepo, String[] imagenesViejas){
         for (String imagenVieja : imagenesViejas) {
             Optional<Imagen> respuesta = imagenRepositorio.findById(imagenVieja);
             if (respuesta.isPresent()) {
@@ -93,8 +97,10 @@ public class ImagenServicio {
                 if(imagenesRepo.contains(imagen)){
                     imagenesRepo.remove(imagen);
                 }
+                borrar(imagen.getId());
             }
         }
+        return imagenesRepo;
     }
 
     @Transactional

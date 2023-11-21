@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="/fragmentos/frags :: head"></head>
+    <body>
+        <header th:replace="fragmentos/frags :: header"></header>
+        <section>
+            <div class="reserva-contenedor">
+                <div class="reserva" >
+                    <h2 th:text="${reserva.propiedad.titulo}" ></h2>
+                    <p>[[${reserva.fechaInicio.toString()}]] hasta el [[${reserva.fechaFin.toString()}]]</p>
+                    <hr/>
+                    <p>Pais: [[${reserva.propiedad.ubicacion.pais}]]</p>
+                    <p th:if="${reserva.propiedad.ubicacion.provincia!=null AND reserva.propiedad.ubicacion.provincia.length!=0}">Provincia: [[${reserva.propiedad.ubicacion.provincia}]]</p>
+                    <p th:if="${reserva.propiedad.ubicacion.departamento!=null AND reserva.propiedad.ubicacion.departamento.length!=0}">Departamento: [[${reserva.propiedad.ubicacion.departamento}]]</p>
+                    <p>Localidad: [[${reserva.propiedad.ubicacion.localidad}]]</p>
+                    <p th:if="${reserva.propiedad.ubicacion.calle!=null AND reserva.propiedad.ubicacion.calle.length!=0}">Calle: [[${reserva.propiedad.ubicacion.calle}]]</p>
+                    <p th:if="${reserva.propiedad.ubicacion.numeracion!=null AND reserva.propiedad.ubicacion.numeracion.length!=0}">Numeracion: [[${reserva.propiedad.ubicacion.numeracion}]]</p>
+                    <p th:if="${reserva.propiedad.ubicacion.observaciones!=null AND reserva.propiedad.ubicacion.observaciones.length!=0}">Observaciones: [[${reserva.propiedad.ubicacion.observaciones}]]</p>
+                    <hr/>
+                    <div th:if="${reserva.serviciosElegidas!=null} OR ${#lists.size(reserva.serviciosElegidas)!=0}">
+                        <h3>Servicios</h3>
+                        <ul th:each="servicio : ${reserva.serviciosElegidas}">
+                            <li th:text="${servicio.tipoComodidad}"></li>
+                        </ul>
+                        <hr/>
+                    </div>                    
+                    <h3>Valor total:</h3>
+                    <p>$[[${reserva.montoTotal}]]</p>
+                    <hr/>
+                    <div th:if="${reserva.disponible==true}">
+                        <h4>Contactos del propietario:</h4>
+                        <ul th:each="contacto : ${contactosPropietario}">
+                            <li>[[${contacto.tipo.tipo}]]: [[${contacto.contacto}]]</li>
+                        </ul>
+                        <hr/>
+                    </div>
+                    <div th:if="${reserva.disponible==true}">
+                        <h4>Contactos del cliente</h4>
+                        <ul th:each="contacto : ${contactosCliente}">
+                            <li>[[${contacto.tipo.tipo}]]: [[${contacto.contacto}]]</li>
+                        </ul>
+                        <hr/>
+                    </div>
+                    <a th:if="${reserva.comentarioHabilitado==true}" sec:authorize="hasAnyRole('CLIENTE')" class="btn btn-info" th:href="@{/comentario/registrar/__${reserva.id}__}">Has tu reseña <i class="bi bi-pen"></i></a>
+                </div>
+            </div>
+        </section>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    </body>
+</html>
