@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="main.java.com.EquipoB.AsadoYPileta.entidades">
+  <ClassDiagramComponents>
+    <Class name="Cliente" package="com.EquipoB.AsadoYPileta.entidades" visibility="public" xPosition="544.0" yPosition="191.0">
+      <Fields>
+        <Field name="id" type="String" visibility="private"/>
+        <Field name="usuario" type="Usuario" visibility="private"/>
+        <Field name="nombre" type="String" visibility="private"/>
+        <Field name="apellido" type="String" visibility="private"/>
+        <Field name="descripcion" type="String" visibility="private"/>
+        <Field name="imagenes" type="List&lt;Imagen&gt;" visibility="private"/>
+        <Field name="contactos" type="List&lt;Contacto&gt;" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="onCreate" returnType="void" visibility="private"/>
+      </Methods>
+    </Class>
+    <Class name="Comentario" package="com.EquipoB.AsadoYPileta.entidades" visibility="public" xPosition="585.0" yPosition="706.0">
+      <Fields>
+        <Field name="id" type="String" visibility="private"/>
+        <Field name="cuerpo" type="String" visibility="private"/>
+        <Field name="imagenes" type="List&lt;Imagen&gt;" visibility="private"/>
+        <Field name="propiedad" type="Propiedad" visibility="private"/>
+        <Field name="cliente" type="Cliente" visibility="private"/>
+        <Field name="Reserva" type="Reserva" visibility="private"/>
+        <Field name="puntuacion" type="double" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Contacto" package="com.EquipoB.AsadoYPileta.entidades" visibility="public" xPosition="155.0" yPosition="810.0">
+      <Fields>
+        <Field name="id" type="String" visibility="private"/>
+        <Field name="tipo" type="TipoContacto" visibility="private"/>
+        <Field name="contacto" type="String" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="FiltroDisponibilidad" package="com.EquipoB.AsadoYPileta.entidades" visibility="public" xPosition="1339.0" yPosition="1169.0">
+      <Fields>
+        <Field name="id" type="String" visibility="private"/>
+        <Field name="fechaInicio" type="Date" visibility="private"/>
+        <Field name="fechaFin" type="Date" visibility="private"/>
+        <Field name="mensual" type="int[]" visibility="private"/>
+        <Field name="diario" type="int[]" visibility="private"/>
+        <Field name="porFecha" type="int[]" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="habilitado" returnType="boolean" visibility="public">
+          <Argument type="Date" name="inicio"/>
+          <Argument type="Date" name="fin"/>
+        </Method>
+        <Method name="porFecha" returnType="void" visibility="public">
+          <Argument type="LocalDate" name="inicio"/>
+          <Argument type="LocalDate" name="fin"/>
+        </Method>
+        <Method name="dias" returnType="void" visibility="public">
+          <Argument type="LocalDate" name="inicio"/>
+          <Argument type="LocalDate" name="fin"/>
+        </Method>
+        <Method name="dePrincipioAFin" returnType="List&lt;LocalDate&gt;" visibility="public">
+          <Argument type="LocalDate" name="inicio"/>
+          <Argument type="LocalDate" name="fin"/>
+        </Method>
+        <Method name="meses" returnType="void" visibility="public">
+          <Argument type="Date" name="fecha"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Imagen" package="com.EquipoB.AsadoYPileta.entidades" visibility="public" xPosition="957.0" yPosition="446.0">
+      <Fields>
+        <Field name="id" type="String" visibility="private"/>
+        <Field name="mime" type="String" visibility="private"/>
+        <Field name="nombre" type="String" visibility="private"/>
+        <Field name="contenido" type="byte[]" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Propiedad" package="com.EquipoB.AsadoYPileta.entidades" visibility="public" xPosition="1409.0" yPosition="725.0">
+      <Fields>
+        <Field name="id" type="String" visibility="private"/>
+        <Field name="titulo" type="String" visibility="private"/>
+        <Field name="descripcion" type="String" visibility="private"/>
+        <Field name="estado" type="Boolean" visibility="private"/>
+        <Field name="valor" type="Double" visibility="private"/>
+        <Field name="tipo" type="TipoPropiedad" visibility="private"/>
+        <Field name="servicios" type="List&lt;Servicio&gt;" visibility="private"/>
+        <Field name="imagenes" type="List&lt;Imagen&gt;" visibility="private"/>
+        <Field name="ubicacion" type="Ubicacion" visibility="private"/>
+        <Field name="idPropietario" type="String" visibility="private"/>
+        <Field name="puntuacion" type="Double" visibility="private"/>
+        <Field name="filtroDisponibilidad" type="FiltroDisponibilidad" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Propietario" package="com.EquipoB.AsadoYPileta.entidades" visibility="public" xPosition="1224.0" yPosition="308.0">
+      <Fields>
+        <Field name="id" type="String" visibility="private"/>
+        <Field name="cliente" type="Cliente" visibility="private"/>
+        <Field name="propiedades" type="List&lt;Propiedad&gt;" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="onCreate" returnType="void" visibility="private"/>
+      </Methods>
+    </Class>
+    <Class name="Reserva" package="com.EquipoB.AsadoYPileta.entidades" visibility="public" xPosition="1997.0" yPosition="153.0">
+      <Fields>
+        <Field name="id" type="String" visibility="private"/>
+        <Field name="mensaje" type="String" visibility="private"/>
+        <Field name="montoTotal" type="Double" visibility="private"/>
+        <Field name="disponible" type="Boolean" visibility="private"/>
+        <Field name="comentarioHabilitado" type="Boolean" visibility="private"/>
+        <Field name="fechaInicio" type="Date" visibility="private"/>
+        <Field name="fechaFin" type="Date" visibility="private"/>
+        <Field name="serviciosElegidas" type="List&lt;Servicio&gt;" visibility="private"/>
+        <Field name="propiedad" type="Propiedad" visibility="private"/>
+        <Field name="cliente" type="Cliente" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="onCreate" returnType="void" visibility="private"/>
+        <Method name="montoTotal" returnType="double" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Servicio" package="com.EquipoB.AsadoYPileta.entidades" visibility="public" xPosition="2024.0" yPosition="754.0">
+      <Fields>
+        <Field name="id" type="String" visibility="private"/>
+        <Field name="tipoComodidad" type="String" visibility="private"/>
+        <Field name="valor" type="Double" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="TipoContacto" package="com.EquipoB.AsadoYPileta.entidades" visibility="public" xPosition="155.0" yPosition="1132.0">
+      <Fields>
+        <Field name="id" type="String" visibility="private"/>
+        <Field name="tipo" type="String" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="TipoPropiedad" package="com.EquipoB.AsadoYPileta.entidades" visibility="public" xPosition="618.0" yPosition="1343.0">
+      <Fields>
+        <Field name="id" type="String" visibility="private"/>
+        <Field name="tipo" type="String" visibility="private"/>
+        <Field name="titulo" type="String" visibility="private"/>
+        <Field name="emoji" type="String" visibility="private"/>
+        <Field name="descripcion" type="String" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Ubicacion" package="com.EquipoB.AsadoYPileta.entidades" visibility="public" xPosition="596.0" yPosition="1001.0">
+      <Fields>
+        <Field name="id" type="String" visibility="private"/>
+        <Field name="pais" type="String" visibility="private"/>
+        <Field name="provincia" type="String" visibility="private"/>
+        <Field name="departamento" type="String" visibility="private"/>
+        <Field name="localidad" type="String" visibility="private"/>
+        <Field name="calle" type="String" visibility="private"/>
+        <Field name="numeracion" type="String" visibility="private"/>
+        <Field name="observaciones" type="String" visibility="private"/>
+        <Field name="latitud" type="Double" visibility="private"/>
+        <Field name="longitud" type="Double" visibility="private"/>
+        <Field name="estado" type="boolean" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Usuario" package="com.EquipoB.AsadoYPileta.entidades" visibility="public" xPosition="63.0" yPosition="408.0">
+      <Fields>
+        <Field name="id" type="String" visibility="protected"/>
+        <Field name="email" type="String" visibility="protected"/>
+        <Field name="password" type="String" visibility="protected"/>
+        <Field name="rol" type="Rol" visibility="protected"/>
+        <Field name="fechaAlta" type="Date" visibility="protected"/>
+        <Field name="alta" type="Boolean" visibility="protected"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="onCreate" returnType="void" visibility="protected"/>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <HasRelation name="propiedades" source="com.EquipoB.AsadoYPileta.entidades.Propietario" target="com.EquipoB.AsadoYPileta.entidades.Propiedad" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List&lt;Propiedad&gt;"/>
+    <HasRelation name="tipo" source="com.EquipoB.AsadoYPileta.entidades.Propiedad" target="com.EquipoB.AsadoYPileta.entidades.TipoPropiedad" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="filtroDisponibilidad" source="com.EquipoB.AsadoYPileta.entidades.Propiedad" target="com.EquipoB.AsadoYPileta.entidades.FiltroDisponibilidad" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="cliente" source="com.EquipoB.AsadoYPileta.entidades.Comentario" target="com.EquipoB.AsadoYPileta.entidades.Cliente" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="ubicacion" source="com.EquipoB.AsadoYPileta.entidades.Propiedad" target="com.EquipoB.AsadoYPileta.entidades.Ubicacion" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="imagenes" source="com.EquipoB.AsadoYPileta.entidades.Comentario" target="com.EquipoB.AsadoYPileta.entidades.Imagen" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List&lt;Imagen&gt;"/>
+    <HasRelation name="imagenes" source="com.EquipoB.AsadoYPileta.entidades.Cliente" target="com.EquipoB.AsadoYPileta.entidades.Imagen" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List&lt;Imagen&gt;"/>
+    <HasRelation name="usuario" source="com.EquipoB.AsadoYPileta.entidades.Cliente" target="com.EquipoB.AsadoYPileta.entidades.Usuario" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="propiedad" source="com.EquipoB.AsadoYPileta.entidades.Reserva" target="com.EquipoB.AsadoYPileta.entidades.Propiedad" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="tipo" source="com.EquipoB.AsadoYPileta.entidades.Contacto" target="com.EquipoB.AsadoYPileta.entidades.TipoContacto" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="Reserva" source="com.EquipoB.AsadoYPileta.entidades.Comentario" target="com.EquipoB.AsadoYPileta.entidades.Reserva" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="imagenes" source="com.EquipoB.AsadoYPileta.entidades.Propiedad" target="com.EquipoB.AsadoYPileta.entidades.Imagen" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List&lt;Imagen&gt;"/>
+    <HasRelation name="servicios" source="com.EquipoB.AsadoYPileta.entidades.Propiedad" target="com.EquipoB.AsadoYPileta.entidades.Servicio" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List&lt;Servicio&gt;"/>
+    <HasRelation name="cliente" source="com.EquipoB.AsadoYPileta.entidades.Reserva" target="com.EquipoB.AsadoYPileta.entidades.Cliente" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="propiedad" source="com.EquipoB.AsadoYPileta.entidades.Comentario" target="com.EquipoB.AsadoYPileta.entidades.Propiedad" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="serviciosElegidas" source="com.EquipoB.AsadoYPileta.entidades.Reserva" target="com.EquipoB.AsadoYPileta.entidades.Servicio" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List&lt;Servicio&gt;"/>
+    <HasRelation name="cliente" source="com.EquipoB.AsadoYPileta.entidades.Propietario" target="com.EquipoB.AsadoYPileta.entidades.Cliente" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="contactos" source="com.EquipoB.AsadoYPileta.entidades.Cliente" target="com.EquipoB.AsadoYPileta.entidades.Contacto" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List&lt;Contacto&gt;"/>
+  </ClassDiagramRelations>
+</ClassDiagram>
