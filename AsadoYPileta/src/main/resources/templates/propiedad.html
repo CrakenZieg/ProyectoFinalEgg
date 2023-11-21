@@ -137,40 +137,24 @@
                         <div class="calificacion">
 
                             <input id="calificacion"  th:value="${propiedad.puntuacion}"hidden>
-                            <ul>
-                                 
-                        <li><i class="bi bi-star-fill starp" ></i></li>
-                        <li><i class="bi bi-star-fill starp"></i></li>
-                        <li><i class="bi bi-star-fill starp"></i></li>
-                        <li><i class="bi bi-star-fill starp" ></i></li>
-                        <li><i class="bi bi-star-fill starp" ></i></li>
-                        
-                        
-                        <h2 th:text="${'Calificacion de ' +  propiedad.puntuacion}"></h2>
-                    </ul>
+                                <ul>
+
+                                    <li><i class="bi bi-star-fill starp" ></i></li>
+                                    <li><i class="bi bi-star-fill starp"></i></li>
+                                    <li><i class="bi bi-star-fill starp"></i></li>
+                                    <li><i class="bi bi-star-fill starp" ></i></li>
+                                    <li><i class="bi bi-star-fill starp" ></i></li>
+
+
+                                    <h2 th:text="${'Calificacion de ' +  propiedad.puntuacion}"></h2>
+                                </ul>
 
                         </div>
                         <div class="comentario-contenedor">
 
 
 
-                            <div class="comentario">
-                                <div class="perfil-coment">
-                                    <div class="imagen-perfil">
-                                        <img src="https://images.unsplash.com/photo-1599837826158-79e79f6e032f?auto=format&fit=crop&q=80&w=2078&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
-                                    </div>
 
-                                    <div class="perfil-data">
-                                        <p>Nombre y apellido</p>
-                                        <p>fecha de publicacion de comentario</p>
-                                    </div>
-                                    <a th:href="@{/propiedad/eliminar/__${propiedad.id}__}" sec:authorize="hasRole('ADMIN')" id="eliminar-btn">Eliminar Comentario</a> 
-                                </div>
-                                <div class="comentario-par">
-                                    <p >lore</p>
-                                </div>
-
-                            </div>
                             <div class="comentario" th:each="comentario : ${comentarios}"  >
                                 <div class="perfil-coment">
                                     <div class="imagen-perfil">
@@ -181,6 +165,7 @@
                                         <p th:text="${comentario.cliente.nombre}"></p>
                                         <p th:text="${comentario.cliente.apellido}"></p>
                                     </div>
+                                    <a th:href="@{/propiedad/eliminar/__${propiedad.id}__}" sec:authorize="hasRole('ADMIN')" id="eliminar-btn">Eliminar Comentario</a> 
                                 </div>
                                 <div class="comentario-par">
                                     <p th:text="${comentario.cuerpo}"></p>
@@ -196,24 +181,7 @@
                             <div class="salir-cont">
                                 <button><img  id="cerrar-comentarios" th:src="@{/imagenes/x.png}"></button>
                             </div>
-                            <div class="comentario">
-                                <div class="perfil-coment">
-                                    <div class="imagen-perfil">
-                                        <img src="https://images.unsplash.com/photo-1599837826158-79e79f6e032f?auto=format&fit=crop&q=80&w=2078&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
-                                    </div>
-
-                                    <div class="perfil-data">
-                                        <p>Nombre y apellido</p>
-                                        <p>fecha de publicacion de comentario</p>
-                                    </div>
-                                    <a th:href="@{/propiedad/eliminar/__${propiedad.id}__}" sec:authorize="hasRole('ADMIN')" id="eliminar-btn">Eliminar Comentario</a> 
-                                </div>
-                                <div class="comentario-par">
-                                    <p >lore</p>
-                                </div>
-
-                            </div>
-                            <div class="comentario" th:each="comentario : ${comentarios}"  >
+                            <div class="comentario dos" th:each="comentario : ${comentarios}"  >
                                 <div class="perfil-coment">
                                     <div class="imagen-perfil">
                                         <img th:src="@{/imagen/__${comentario.cliente.imagenes[0].id}__}" alt="">

@@ -39,7 +39,6 @@ public class ComentarioServicio {
     public void crearComentario(String cuerpo, String idReserva, String idCliente, MultipartFile[] archivos, 
                              String idPropiedad,  double puntuacion, HttpSession session) throws MiException, Exception {
         validar(session, idCliente, cuerpo, archivos, idPropiedad,puntuacion);
-
         Comentario comentario = new Comentario();
         Reserva reserva = reservaRepositorio.getById(idReserva);
         comentario.setReserva(reserva);
@@ -53,8 +52,7 @@ public class ComentarioServicio {
         comentario.setCliente(cliente);
         comentario.setPuntuacion(puntuacion);
         comentarioRepositorio.save(comentario);
-        propiedadServicio.setPuntuacion(puntuacion,idPropiedad);
-
+        calcularPuntuacion(propiedad.getId());
     }
 
     public List<Comentario> listarComentario() {
@@ -74,6 +72,14 @@ public class ComentarioServicio {
         return comentarioRepositorio.buscarPorPropiedad(propId);
     }
 
+    private void calcularPuntuacion(String id){
+        double suma=0;
+        List<Comentario> comentarios = comentarioRepositorio.buscarPorPropiedad(id);
+        for (Comentario comentario : comentarios) {
+            suma += comentario.getPuntuacion();
+        }
+        propiedadServicio.setPuntuacion(suma/comentarios.size(), id);      
+    }
 
     public void modificarComentario(HttpSession session, MultipartFile[] archivos, String id, String cuerpo, 
             String idPropiedad, String[] imagenesViejas, Integer puntuacion) throws MiException, Exception {        

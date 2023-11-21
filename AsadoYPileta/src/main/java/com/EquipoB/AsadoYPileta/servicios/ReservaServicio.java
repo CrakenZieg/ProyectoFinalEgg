@@ -35,9 +35,9 @@ public class ReservaServicio {
     @Transactional
     public void crearReserva(String idPropiedad, String idCliente, String mensaje, Date fechaInicio, Date fechaFin,
             List serviciosElegidas, Usuario logueado) throws MiException {
-
+        Usuario usuario = logueado;
         Propiedad propiedad = propiedadRepositorio.getOne(idPropiedad);
-        if(propiedad.getIdPropietario()==logueado.getId()){
+        if(propiedad.getIdPropietario().equals(usuario)){
             throw new MiException("No es posible generar reservas sobre tus propiedades");
         }
 

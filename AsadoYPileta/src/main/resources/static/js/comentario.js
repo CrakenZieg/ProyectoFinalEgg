@@ -11,7 +11,7 @@ stars.forEach(function(star,index){
         stars[i].style.color = "#bbb";
     }
     inptCalProp.value = index+1;
-    console.log(inptCalProp.value)
+    console.log(inptCalProp.value);
   })
   star.addEventListener('mouseover', () =>{
     for(let i=0; i<=index; i++){
@@ -20,7 +20,7 @@ stars.forEach(function(star,index){
     for(let i=index+1; i<stars.length ; i++){
         stars[i].style.color = "#bbb";
     }
-    
+    inptCalProp.value = index+1;    
     console.log(inptCalProp.value)
   })
  
