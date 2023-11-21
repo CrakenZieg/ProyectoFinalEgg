@@ -114,10 +114,12 @@ public class ComentarioControlador {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_CLIENTE')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/borrar/{id}")
     public String borrarComentario(@PathVariable String id) throws MiException {
+        Comentario com = comentarioServicio.getOne(id);
+        String idProp = com.getPropiedad().getId();
         comentarioServicio.eliminarComentrario(id);
-        return "redirect:/comentario/lista";
+        return "redirect:/propiedad/"+idProp;
     }
 }
