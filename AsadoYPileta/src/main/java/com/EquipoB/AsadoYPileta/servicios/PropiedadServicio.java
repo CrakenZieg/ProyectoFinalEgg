@@ -2,16 +2,19 @@ package com.EquipoB.AsadoYPileta.servicios;
 
 import com.EquipoB.AsadoYPileta.entidades.Imagen;
 import com.EquipoB.AsadoYPileta.entidades.Propiedad;
+import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Servicio;
-import com.EquipoB.AsadoYPileta.enumeraciones.TipoPropiedad;
+import com.EquipoB.AsadoYPileta.entidades.TipoPropiedad;
+import com.EquipoB.AsadoYPileta.entidades.Usuario;
 import com.EquipoB.AsadoYPileta.excepciones.MiException;
 import com.EquipoB.AsadoYPileta.repositorios.PropiedadRepositorio;
+import com.EquipoB.AsadoYPileta.repositorios.PropietarioRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -21,16 +24,50 @@ public class PropiedadServicio {
     private PropiedadRepositorio propiedadRepositorio;
 
     @Autowired
+    private PropietarioServicio propietarioServicio;
+
+    @Autowired
+    private PropietarioRepositorio propietarioRepositorio;
+
+    @Autowired
     private ServicioServicio servicioServicio;
 
     @Autowired
     private ImagenServicio imagenServicio;
 
-    @Transactional
-    public void crearPropiedad(String titulo, String descripcion, String ubicacion, String direccion, TipoPropiedad tipo,
-            String[] serviciosInput, MultipartFile[] imagenesInput, Double valor) throws MiException, Exception {
+    @Autowired
+    private ReservaServicio reservaServicio;
 
-        validar(titulo, descripcion, ubicacion, direccion, tipo, imagenesInput, valor);
+    @Autowired
+    private UbicacionServicio ubicacionServicio;
+
+    @Autowired
+    private TipoPropiedadServicio tipoPropiedadServicio;
+
+    @Autowired
+    private FiltroDisponibilidadServicio filtroDisponibilidadServicio;
+
+    @Transactional
+    public void crearPropiedad(String titulo, String descripcion, String tipo,
+            String[] serviciosInput, MultipartFile[] imagenesInput, Double valor, Usuario usuario,
+            String pais, String provincia, String departamento, String localidad, String calle,
+            String numeracion, String observaciones, Double latitud, Double longitud,
+            String fechaInicioReserva, String fechaFinReserva, String[] mensualReserva,
+            String[] diarioReserva, String[] porFechaReserva) throws MiException, Exception {
+
+
+        validar(titulo, descripcion, tipo, imagenesInput, valor, pais, localidad);
+        
+        
+        Optional<Propietario> respuesta = propietarioRepositorio.findById(usuario.getId());
+
+        Propietario propietario = null;
+
+        if (respuesta.isPresent()) {
+            propietario = respuesta.get();
+        } else {
+            propietario = propietarioServicio.crearPropietario(usuario);
+        }
 
         List<Servicio> servicios = new ArrayList<>();
         if (serviciosInput != null) {
@@ -43,21 +80,45 @@ public class PropiedadServicio {
 
         propiedad.setTitulo(titulo);
         propiedad.setDescripcion(descripcion);
-        propiedad.setUbicacion(ubicacion);
-        propiedad.setDireccion(direccion);
-        propiedad.setTipo(tipo);
+        propiedad.setUbicacion(ubicacionServicio.crearUbicacion(pais, provincia, departamento, localidad, calle, numeracion, observaciones, latitud, longitud));
+        propiedad.setTipo(tipoPropiedadServicio.getOnePorTipo(tipo));
+        propiedad.setEstado(true);
         propiedad.setServicios(servicios);
         propiedad.setImagenes(imagenes);
         propiedad.setValor(valor);
+        propiedad.setFiltroDisponibilidad(filtroDisponibilidadServicio.crearFiltro(fechaInicioReserva,
+                fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva));
+        propiedad.setPuntuacion(0.00);
+        propiedad.setIdPropietario(propietario.getId());
         propiedadRepositorio.save(propiedad);
+        if (propietario.getPropiedades() != null) {
+            propietario.getPropiedades().add(propiedad);
+        } else {
+            List<Propiedad> propiedades = new ArrayList<>();
+            propiedades.add(propiedad);
+            propietario.setPropiedades(propiedades);
+        }
+        propietarioRepositorio.save(propietario);
     }
 
     @Transactional
-    public void modificarPropiedad(String id, String titulo, String descripcion, String ubicacion,
-            String direccion, TipoPropiedad tipo, String[] serviciosInput, MultipartFile[] imagenesInput,
-            Double valor, String[] imagenesViejas) throws MiException, Exception {
+    public void modificarPropiedad(String id, String titulo, String descripcion, String tipo, String[] serviciosInput, MultipartFile[] imagenesInput,
+            Double valor, String[] imagenesViejas, String estado, String pais, String provincia, String departamento, String localidad, String calle, String numeracion,
+            String observaciones, Double latitud, Double longitud, String fechaInicioReserva, String fechaFinReserva, String[] mensualReserva,
+            String[] diarioReserva, String[] porFechaReserva , Usuario logueado) throws MiException, Exception {
 
+        validar(titulo, descripcion, tipo, imagenesInput, valor, provincia, localidad);
         Optional<Propiedad> propiedadRepo = propiedadRepositorio.findById(id);
+        Optional<Propietario> propietarioRepo = propietarioRepositorio.findById(logueado.getId());
+        
+        if (propiedadRepo.isPresent() && propietarioRepo.isPresent()){
+            Propiedad propiedad = propiedadRepo.get();
+            Propietario propietario = propietarioRepo.get();
+            List<Propiedad> propiedades = propietario.getPropiedades();
+            if(!propiedades.contains(propiedad)){
+               throw new MiException("Esta propiedad no le pertenece, no la puede modificar");
+            }
+        } 
 
         List<Servicio> servicios = new ArrayList<>();
         if (serviciosInput != null) {
@@ -68,33 +129,51 @@ public class PropiedadServicio {
 
             Propiedad propiedad = propiedadRepo.get();
             List<Imagen> imagenes = propiedad.getImagenes();
-            
-            if(imagenesViejas != null){ 
-                if(imagenesViejas.length != 0){
-                    imagenServicio.filtrar(imagenes, imagenesViejas);
+
+            if (imagenesViejas != null) {
+                if (imagenesViejas.length != 0) {
+                    imagenes = imagenServicio.filtrar(imagenes,
+                            imagenesViejas);
                 }
-            }     
-            if(imagenesInput != null){
-                if(imagenesInput.length != 0){
-                    if(imagenes == null){
-                        imagenes = new ArrayList<>();
-                    }
+            }
+            if (imagenesInput != null) {
+                if (imagenesInput.length != 0) {
                     imagenes.addAll(imagenServicio.guardarVarias(imagenesInput));
-                } 
+                }
             }
 
-            validarM(titulo, descripcion, ubicacion, direccion, tipo, imagenes, valor);
             
             propiedad.setTitulo(titulo);
             propiedad.setDescripcion(descripcion);
-            propiedad.setUbicacion(ubicacion);
-            propiedad.setDireccion(direccion);
-            propiedad.setTipo(tipo);
+
+            if ("true".equals(estado)) {
+                propiedad.setEstado(true);
+            } else {
+                boolean busqueda = reservaServicio.validarReservasPropiedad(id);
+                if (busqueda == true) {
+                    throw new MiException("No puede darse de baja si tiene reservas activas!");
+                } else {
+                    propiedad.setEstado(false);
+                }
+
+            }
+            propiedad.setEstado(Boolean.valueOf(estado));
+            propiedad.setUbicacion(ubicacionServicio.modificarUbicacion(propiedad.getUbicacion().getId(), pais, provincia, departamento, localidad, calle, numeracion, observaciones, latitud, longitud, estado));
+            propiedad.setTipo(tipoPropiedadServicio.getOnePorTipo(tipo));
             propiedad.setServicios(servicios);
             propiedad.setImagenes(imagenes);
             propiedad.setValor(valor);
+            propiedad.setFiltroDisponibilidad(filtroDisponibilidadServicio.modificarFiltro(propiedad.getFiltroDisponibilidad().getId(),
+                    fechaInicioReserva, fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva));
             propiedadRepositorio.save(propiedad);
         }
+    }
+
+    @Transactional
+    public void setPuntuacion(Double puntuacion, String id) {
+        Propiedad propiedad = propiedadRepositorio.getOne(id);
+        propiedad.setPuntuacion(puntuacion);
+        propiedadRepositorio.save(propiedad);
     }
 
     public List<Propiedad> listarPropiedades() {
@@ -103,9 +182,20 @@ public class PropiedadServicio {
         return propiedades;
     }
 
-    public List<Propiedad> listarPropiedadesPorTipo(String tipo) {
+    public List<Propiedad> listarPropiedadesActivas() {
         List<Propiedad> propiedades = new ArrayList<>();
-        propiedades = propiedadRepositorio.buscarPorTipo(tipo);
+        propiedades = propiedadRepositorio.buscarPropiedadesActivas();
+        return propiedades;
+    }
+
+    public List<Propiedad> listarPropiedadesPorTipo(String tipo) throws MiException {
+        List<Propiedad> propiedades = new ArrayList<>();
+        try {
+            TipoPropiedad tipoPropiedad = tipoPropiedadServicio.getOnePorTipo(tipo);
+            propiedades = propiedadRepositorio.buscarPorTipo(tipoPropiedad.getId());
+        } catch (MiException ex) {
+            throw ex;
+        }
         return propiedades;
     }
 
@@ -113,35 +203,51 @@ public class PropiedadServicio {
         return propiedadRepositorio.getOne(id);
     }
 
-    public void eliminar(String id) {
-        Optional<Propiedad> propiedadRepo = propiedadRepositorio.findById(id);
-        if (propiedadRepo.isPresent()){
-            Propiedad propiedad = propiedadRepo.get();
-            propiedadRepositorio.delete(propiedad);
-        }        
+    @Transactional
+    public void darDeBaja(String id) throws MiException {
+        Propiedad propiedad = propiedadRepositorio.getOne(id);
+        propiedad.setEstado(false);
+        ubicacionServicio.cambiarEstadoUbicacion(propiedad.getUbicacion().getId(), "false");
+        propiedadRepositorio.save(propiedad);
     }
 
-    public void validar(String titulo, String descripcion, String ubicacion, String direccion,
-            TipoPropiedad tipo, MultipartFile[] imagenes, Double valor) throws MiException {
-        
-        if (titulo.isEmpty() || titulo == null) {
+    @Transactional
+    public void darDeAlta(String id) throws MiException {
+        Propiedad propiedad = propiedadRepositorio.getOne(id);
+        propiedad.setEstado(true);
+        ubicacionServicio.cambiarEstadoUbicacion(propiedad.getUbicacion().getId(), "true");
+        propiedadRepositorio.save(propiedad);
+    }
+
+    @Transactional
+    public void eliminar(String id, Usuario logueado) {
+        Optional<Propiedad> propiedadRepo = propiedadRepositorio.findById(id);
+        Optional<Propietario> propietarioRepo = propietarioRepositorio.findById(logueado.getId());
+        if (propiedadRepo.isPresent() && propietarioRepo.isPresent()) {
+            Propiedad propiedad = propiedadRepo.get();
+            Propietario propietario = propietarioRepo.get();
+            List<Propiedad> propiedades = propietario.getPropiedades();
+            if (propiedades.contains(propiedad)) {
+                propiedades.remove(propiedad);
+                propietario.setPropiedades(propiedades);
+                propietarioRepositorio.save(propietario);
+                propiedadRepositorio.delete(propiedad);
+            }
+        }
+    }
+
+    public void validar(String titulo, String descripcion, String tipo, MultipartFile[] imagenes, 
+            Double valor, String pais, String localidad) throws MiException {
+
+        if (titulo == null || titulo.trim().isEmpty()) {
             throw new MiException("El titulo no puede ser nulo o estar vacio");
         }
-
-        if (descripcion.isEmpty() || descripcion == null) {
-            throw new MiException("La descripcion no puede ser nulo o estar vacio");
+        if (descripcion == null || descripcion.trim().isEmpty()) {
+            throw new MiException("La descripcion no puede ser nula o estar vacio");
         }
 
-        if (ubicacion.isEmpty() || ubicacion == null) {
-            throw new MiException("La ubicacion no puede ser nulo o estar vacio");
-        }
-
-        if (direccion.isEmpty() || direccion == null) {
-            throw new MiException("La direccion no puede ser nulo o estar vacio");
-        }
-
-        if (tipo == null) {
-            throw new MiException("El tipo no puede ser nulo");
+        if (tipo == null || descripcion.trim().isEmpty()) {
+            throw new MiException("El tipo no puede ser nulo o estar vacio");
         }
 
         if (imagenes.length == 0 || imagenes == null) {
@@ -151,37 +257,13 @@ public class PropiedadServicio {
         if (valor == null) {
             throw new MiException("El valor no puede ser 0");
         }
-    }
-
-    public void validarM(String titulo, String descripcion, String ubicacion, String direccion,
-            TipoPropiedad tipo, List<Imagen> imagenes, Double valor) throws MiException {
         
-        if (titulo.isEmpty() || titulo == null) {
-            throw new MiException("El titulo no puede ser nulo o estar vacio");
+        if (pais == null || pais.trim().isEmpty()) {
+            throw new MiException("La Provincia no puede ser nula o estar vacia");
         }
-
-        if (descripcion.isEmpty() || descripcion == null) {
-            throw new MiException("La descripcion no puede ser nulo o estar vacio");
-        }
-
-        if (ubicacion.isEmpty() || ubicacion == null) {
-            throw new MiException("La ubicacion no puede ser nulo o estar vacio");
-        }
-
-        if (direccion.isEmpty() || direccion == null) {
-            throw new MiException("La direccion no puede ser nulo o estar vacio");
-        }
-
-        if (tipo == null) {
-            throw new MiException("El tipo no puede ser nulo");
-        }
-
-        if (imagenes.size() == 0 || imagenes == null) {
-            throw new MiException("Las imagenes no puede ser nulas o estar vacias");
-        }
-
-        if (valor == null) {
-            throw new MiException("El valor no puede ser 0");
+        
+        if (localidad == null || localidad.trim().isEmpty()) {
+            throw new MiException("La Localidad no puede ser nula o estar vacia");
         }
     }
     
