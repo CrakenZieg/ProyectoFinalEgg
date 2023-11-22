@@ -48,12 +48,12 @@ function cargar(){
             // Verificar si la fecha está disponible o no
             const fechaISO = fecha.toISOString().split('T')[0];
             if (fechasDisponibles.includes(fechaISO)) {
-                celda.classList.add('available', 'custom-cell');
+                celda.classList.add('disponible', 'custom-cell');
             }else {
-                celda.classList.add('not-available', 'custom-cell');
+                celda.classList.add('no-disponible', 'custom-cell');
             }
             if(fechasReservadas.includes(fechaISO)){
-                celda.classList.add('not-available', 'custom-cell');
+                celda.classList.add('reservado', 'custom-cell');
                 }
             fila.appendChild(celda);
 
