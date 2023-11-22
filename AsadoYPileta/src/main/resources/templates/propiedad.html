@@ -165,7 +165,7 @@
                                         <p th:text="${comentario.cliente.nombre}"></p>
                                         <p th:text="${comentario.cliente.apellido}"></p>
                                     </div>
-                                    <a th:href="@{/propiedad/eliminar/__${propiedad.id}__}" sec:authorize="hasRole('ADMIN')" id="eliminar-btn">Eliminar Comentario</a> 
+                                    <a th:href="@{/comentario/borrar/__${comentario.id}__}" sec:authorize="hasRole('ADMIN')" id="eliminar-btn">Eliminar Comentario</a> 
                                 </div>
                                 <div class="comentario-par">
                                     <p th:text="${comentario.cuerpo}"></p>

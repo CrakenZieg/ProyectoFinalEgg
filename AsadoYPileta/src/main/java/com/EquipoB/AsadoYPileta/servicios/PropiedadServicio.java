@@ -107,9 +107,7 @@ public class PropiedadServicio {
             String observaciones, Double latitud, Double longitud, String fechaInicioReserva, String fechaFinReserva, String[] mensualReserva,
             String[] diarioReserva, String[] porFechaReserva , Usuario logueado) throws MiException, Exception {
 
-
         validar(titulo, descripcion, tipo, imagenesInput, valor, provincia, localidad);
-
         Optional<Propiedad> propiedadRepo = propiedadRepositorio.findById(id);
         Optional<Propietario> propietarioRepo = propietarioRepositorio.findById(logueado.getId());
         
@@ -144,6 +142,7 @@ public class PropiedadServicio {
                 }
             }
 
+            
             propiedad.setTitulo(titulo);
             propiedad.setDescripcion(descripcion);
 
@@ -267,5 +266,5 @@ public class PropiedadServicio {
             throw new MiException("La Localidad no puede ser nula o estar vacia");
         }
     }
-
+    
 }
