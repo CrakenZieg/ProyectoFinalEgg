@@ -31,12 +31,12 @@ public class SeguridadWeb extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                         .antMatchers("/admin/*","/negocio/*")
                             .hasRole("ADMIN")
-                        .antMatchers("/cliente/modificar/*","/propiedad/registrar/*","/propiedad/registro/*")
-                            .hasAnyRole("ADMIN","CLIENTE","PROPIETARIO")
-                        .antMatchers("/propietario/modificar/*")
-                            .hasAnyRole("ADMIN","PROPIETARIO")
-                        .antMatchers("/propiedad/modificar/*")
-                            .hasAnyRole("ADMIN","PROPIETARIO")
+                        .antMatchers("/cliente/modificar/*","/cliente/eliminar/*",
+                                "/propiedad/registrar/*","/propiedad/registro/*",
+                                "comentario/*")
+                            .hasAnyRole("CLIENTE","PROPIETARIO")
+                        .antMatchers("/propietario/modificar/*","/propiedad/modificar/*")
+                            .hasAnyRole("PROPIETARIO")
                         .antMatchers("/reserva/*")
                             .hasAnyRole("CLIENTE","PROPIETARIO")
                         .antMatchers("/cliente/*","/propietario/*","/propiedad/*")

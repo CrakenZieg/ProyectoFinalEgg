@@ -120,6 +120,7 @@ public class PropiedadControlador {
                 departamento, localidad, calle, numeracion, observaciones, latitud, longitud, fechaInicioReserva,
                 fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva);
         return new ModelAndView("redirect:/");
+
     }
 
     @PreAuthorize("hasRole('ROLE_PROPIETARIO')")
@@ -164,6 +165,7 @@ public class PropiedadControlador {
                 fechaInicioReserva, fechaFinReserva, mensualReserva, diarioReserva, porFechaReserva, logueado);
 
         return "index.html";
+
     }
 
     @PreAuthorize("hasRole('ROLE_PROPIETARIO')")
@@ -176,8 +178,10 @@ public class PropiedadControlador {
         }
         propiedadServicio.eliminar(id, logueado);
         return "index.html";
+
     }
 
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
     @GetMapping("/puntuacion/{id}")
     public ModelAndView puntuacion(@PathVariable String id, ModelMap modelo) {
         Double promedioPuntuacion = comentarioServicio.obtenerPromedioPuntuacionPorPropiedad(id);

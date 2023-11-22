@@ -39,6 +39,7 @@ public class Propiedad {
     private Ubicacion ubicacion;
     private String idPropietario;
 
+
     private Double puntuacion;
 
     @OneToOne(cascade = CascadeType.ALL)

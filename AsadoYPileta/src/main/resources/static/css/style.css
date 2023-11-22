@@ -343,6 +343,7 @@ input:valid ~ label{
 .bton:hover{
     transform: scale(.9);
 }
+
 @media (max-width : 1536px ){
 
  
@@ -1087,11 +1088,14 @@ th{
     
     background-color: #f2f2f2;
 }
-#tablaFechas td.available {
+#tablaFechas td.disponible {
     background-color: #c8e6c9; 
 }
-#tablaFechas td.not-available {
+#tablaFechas td.no-disponible {
     background-color: #ffcdd2;
+}
+#tablaFechas td.reservado {
+    background-color: #7d7d7d;
 }
 th.custom-cell,td.custom-cell {
     width: 14%;
