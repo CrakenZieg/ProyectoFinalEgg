@@ -8,8 +8,6 @@
             <div class="registro-contenedor">
                 <div class="registro">
                     <h2>Registrate!</h2>
-                    <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}">
-                    </div>
                     <div class="registro-form">
                         <form th:action="@{/cliente/registro}" method="POST" enctype="multipart/form-data">
                             <div class="registro-inptcont">
@@ -68,14 +66,14 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-control">
-                            <label for="prepararArrayInput" class="form-label"><span class="h4">Acepto los terminos y condiciones: </span></label>
-                            <a id="prepararArray" target="_blank">Terminos y condiciones.</a>
-                            <input type="checkbox" id="prepararArrayInput" name="contactosInput" required="true"/>
-                        </div>
-                        <button type="submit" onclick="prepararArray()">Registrarse</button>
-                        <p>Tienes cuenta? <a th:href="@{/login}">Ingresa</a></p>
+                    </div>
+                    <div class="form-control">
+                        <label for="prepararArrayInput" class="form-label"><span class="h4">Acepto los terminos y condiciones: </span></label>
+                        <a id="prepararArray" target="_blank">Terminos y condiciones.</a>
+                        <input type="checkbox" id="prepararArrayInput" name="contactosInput" required="true"/>
+                    </div>
+                    <button type="submit" onclick="prepararArray()">Registrarse</button>
+                    <p>Tienes cuenta? <a th:href="@{/login}">Ingresa</a></p>
                     </form>
                 </div>
             </div>

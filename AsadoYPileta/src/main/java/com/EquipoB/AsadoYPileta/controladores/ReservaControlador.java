@@ -98,17 +98,6 @@ public class ReservaControlador {
         modelo.put("reserva", reserva);
         return new ModelAndView("reserva.html", modelo);
     }
-    
-    @GetMapping("/ver/{id}")
-    public String verReserva(@PathVariable String id, ModelMap modelo) {
-        Reserva reserva =reservaServicio.getOne(id);
-        List<Contacto> contactosPropietario= propietarioServicio.mostrarContactos(reserva.getPropiedad().getId());
-        modelo.addAttribute("contactoPropietatio",contactosPropietario);
-        modelo.put("reserva", reserva);
-        
-        return "reserva.html";
-
-    }
 
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @PostMapping("/modificar/{id}")
