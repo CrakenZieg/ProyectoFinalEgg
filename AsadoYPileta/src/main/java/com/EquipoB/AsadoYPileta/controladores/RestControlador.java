@@ -62,10 +62,8 @@ public class RestControlador {
         
         RestTemplate restTemplate = new RestTemplate();
         
-        ResponseEntity<List<Object>> response = restTemplate.exchange("https://"
-                 + "referential.p.rapidapi.com/v1/country?fields=currency%"
-                 + "2Ccurrency_num_code%2Ccurrency_code%2Ccontinent_code%"
-                 + "2Ccurrency%2Ciso_a3%2Cdial_code&continent_code=sa&limit=250",
+        ResponseEntity<List<Object>> response = restTemplate.exchange("https://referential"
+                + ".p.rapidapi.com/v1/state?fields=iso_a2&iso_a2=ar&lang=en&limit=250",
         HttpMethod.GET,entity, new ParameterizedTypeReference<List<Object>>() {});
         
         List<Object> paises = response.getBody();

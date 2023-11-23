@@ -21,6 +21,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -29,10 +34,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-@Controller
+@RestController
 @RequestMapping("/propiedad")
 public class PropiedadControlador {
 
@@ -98,6 +105,25 @@ public class PropiedadControlador {
         servicios = servicioServicio.listarServicios();
         List<TipoPropiedad> tipoPropiedades = new ArrayList<>();
         tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
+        
+        //------------------------------------------------------------
+        HttpHeaders headers = new HttpHeaders();
+        
+        headers.set("X-RapidAPI-Key", "cf086a7032mshb0b00a743026eafp1f49d4jsn6bde0abfbf55");
+        headers.set("X-RapidAPI-Host", "referential.p.rapidapi.com");
+        
+        HttpEntity<String> entity = new HttpEntity<String>(headers);
+        
+        RestTemplate restTemplate = new RestTemplate();
+        
+        ResponseEntity<List<Object>> response = restTemplate.exchange("https://referential"
+                + ".p.rapidapi.com/v1/state?fields=iso_a2&iso_a2=ar&lang=en&limit=250",
+        HttpMethod.GET,entity, new ParameterizedTypeReference<List<Object>>() {});
+        
+        List<Object> provincias = response.getBody();
+        
+        modelo.addAttribute("provincias", provincias);
+        //------------------------------------------------------------
         modelo.addAttribute("tipoPropiedades", tipoPropiedades);
         modelo.addAttribute("servicios", servicios);
         return new ModelAndView("registro_propiedad.html", modelo);

@@ -30,8 +30,13 @@
                             <input type="text" class="form-control" id="pais" name="pais" placeholder="pais" required="true"/>
                         </div>
                         <div class="col-md-4">
-                            <label for="provincia" class="form-label"><span class="h3">Provincia</span></label>                           
-                            <input type="text" class="form-control" id="provincia" name="provincia" placeholder="provincia"/>
+                            <!--  <label for="provincia" class="form-label"><span class="h3">Provincia</span></label>                           
+                              <input type="text" class="form-control" id="provincia" name="provincia" placeholder="provincia"/>  -->
+                            <select class="form-select" aria-label="provinciasSelect" name="provincia">
+                                <option selected >Seleccione la provincia</option>
+                                <option th:each="provincia : ${provincias}" th:value="${provincia.value.replaceAll('Province',''}" th:text="${provincia.value.replaceAll('Province','')}">Provincias</option>
+                            </select>
+
                         </div>
                         <div class="col-md-4">
                             <label for="departamento" class="form-label"><span class="h3">Departamento</span></label>                           
@@ -104,7 +109,7 @@
                                 <input type="number" class="form-control" id="fin" name="fin" min="0"/>
                             </div>
                             <div id="checkboxInicioFin">                                    
-                                                        </div>
+                            </div>
                         </div>
                         <span class="p-1 border-3 border-bottom border-success"></span>
                         <div class="form-group">
