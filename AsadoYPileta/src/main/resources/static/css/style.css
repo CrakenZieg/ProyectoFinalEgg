@@ -236,7 +236,8 @@ input:valid ~ label{
 
 .contenedor{
     padding: 1.2rem; 
-    height: auto;
+    min-height: 100vh;
+    min-height: 100vw;
     width: 100%;
     overflow: hidden;
 }
@@ -268,14 +269,6 @@ input:valid ~ label{
     justify-content: space-between;
     overflow: hidden;
 }
-.carta-img{
-  width: 100%;
-  height:200px;
-  margin-bottom: .5rem;
-  border-radius: .4rem;
-  box-shadow: 1px 1px 1px 1px #222222;
-}
-
 
 .carta-titulo{
 
@@ -547,52 +540,6 @@ input:valid ~ label{
     
     width: 80%;
 }
-.contenedor-img-propiedad{
-    
-    display: flex;
-    height: 600px;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    
-}
-#adelante{
-    position: relative;
-    background:none ;
-    border: none;
-    cursor: pointer;
-}
-#atras{
-    padding-left: 10px;
-    position: relative;
-    background:none ;
-    border: none;
-    cursor: pointer;
-}
-
-#imagen{
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-     max-width: 1200px;
-    height: 600px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 20px;
-    box-shadow: 0 30px 30px rgba(0, 0, 0, 0.1 ) ;
-}
-
-.imagen-oculta{
-    height:600px;
-    width: 100%;
-    
-}
-.imagen-oculta img{
-    width: 100%;
-    height: 100%;
-    object-fit: slice;
-    border-radius:20px;
-}
 
 
 .propiedad-descrip{
@@ -728,7 +675,7 @@ input:valid ~ label{
     height: 15px;
    margin-bottom: 40px;
 }
-.salir-cont button{
+.salir-cont button, .abrir-modal-img-coment{
     border: none;
     background-color: #ffffff;
 }
@@ -915,6 +862,103 @@ input:valid ~ label{
     
 }
 
+/*Carusel */
+.carusel{
+    position: relative;
+    height:650px;
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+.carusel.carusel-carta{
+    height:250px;
+    width: 90%;
+}
+.carusel__imagen{
+    width: 100%;
+    height: 100%;
+    object-fit: inherit;
+}
+
+.carusel__track-contenedor{
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+.carusel__track{
+    list-style: none;
+    position: relative;
+    height: 100%;
+    transition: transform 100ms ease-in;
+}
+.carusel__caja{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.carusel__boton{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+}
+.carusel__boton--left{
+    left:-24px;
+}
+.carusel__boton--right{
+    right:-24px;
+}
+.carusel__boton img{
+    width: 24px;
+}
+.carusel__nav{
+    display: flex;
+    justify-content: center;
+    gap:5px;
+    padding: 4px 0;
+}
+.carusel__indicador{
+    border:0;
+    border-radius:50%;
+    width: 14px;
+    height: 14px;
+    background: rgba(0 0 0 / .3);
+    cursor: pointer;
+}
+
+.carusel__indicador.actual-indicador{background-color: rgba(0 0 0 / .75);}
+
+.is-hidden{display : none;}
+
+.modal-img-coment::backdrop{
+    background: rgba(0 0 0 / .75);
+}
+.cerrar-comentarios-imagenes{
+    height:60px;
+    background: none;
+    cursor: pointer;
+}
+.modal-img-coment{
+    left: 25%;
+    top:20%;
+    height: 550px;
+    
+    width: 650px;
+}
+.abrir-modal-img-coment{
+    float: left;
+    height: 70px;
+    width:90px;
+    margin-right: 10px;
+}
+.abrir-modal-img-coment img{
+    width: 100%;
+    height: 100%;
+}
 /*Comentario */
 .contenedor-comentario-form {
   min-height: 100vh;
