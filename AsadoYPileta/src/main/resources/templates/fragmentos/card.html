@@ -2,18 +2,35 @@
 <div class="contenedor">
     <div class="contenedor-carta">
         <div class="carta"  th:each="propiedad: ${propiedades}">
+            <div class="carusel carusel-carta">
 
-            <a   th:href="@{/propiedad/__${propiedad.id}__}"><img class="carta-img" th:src="@{/imagen/__${propiedad.imagenes.get(0).id}__}" alt="imagen de propiedad" ></a>
+                <button class="carusel__boton carusel__boton--left is-hidden"><img th:src="@{/imagenes/arrow.png}" alt="flecha img left"></button>
+                <div class="carusel__track-contenedor">
+
+                    <ul class="carusel__track" >
+                        <li class="carusel__caja actual-indicador"  th:each="imagen : ${propiedad.imagenes}"><img class="carusel__imagen" th:src="@{/imagen/__${imagen.id}__}" alt=""></li>
+                    </ul>
+                </div>
+
+                <button class="carusel__boton carusel__boton--right" ><img th:src="@{/imagenes/arrow_forward.png}" alt="flecha img right"></button>
+
+                <div class="carusel__nav" >
+                    <button class="carusel__indicador actual-indicador" ></button>
+                       
+                </div>
+
+            </div>
+
             <div class="carta-cuerpo">
                 <h5 class="carta-titulo" th:text="${propiedad.titulo}"></h5>
                 <div class=" carta-texto line-clamp">
                     <p class="line-clamp"  th:text="${propiedad.descripcion}"></p>
                 </div>
-                
-               
-                     <p  class="carta-prec" th:text="${' $'+ propiedad.valor}"></p>
-                
-               
+
+
+                <p  class="carta-prec" th:text="${' $'+ propiedad.valor}"></p>
+
+
                 <div class="carta-btn">
                     <a class="bton" th:href="@{/propiedad/__${propiedad.id}__}">ver propiedad</a>
                     <a  class="bton-modificar" th:href="@{/propiedad/modificar/__${propiedad.id}__} " hidden>Modificar</a>
