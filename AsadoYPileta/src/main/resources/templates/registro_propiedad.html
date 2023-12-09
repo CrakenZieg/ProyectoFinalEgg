@@ -30,6 +30,7 @@
                             <input type="text" class="form-control" id="pais" name="pais" placeholder="pais" required="true"/>
                         </div>
                         <div class="col-md-4">
+                            <label for="provinciasSelect" class="form-label"><span class="h3">Provincia</span></label>
                             <select class="form-select" aria-label="provinciasSelect" name="provincia" id="selectProvincia" onchange="obtenerProvincia();">
                                 <option th:if="${provinciaSelected} == null" selected disabled >Seleccione la provincia</option>
                                 <option th:if="${provinciaSelected} != null" selected th:value="${provinciaSelected}" th:text="${provinciaSelected}"></option>
@@ -45,6 +46,7 @@
                             <input type="text" class="form-control" id="departamento" name="departamento" placeholder="departamento"/>
                         </div>
                         <div class="col-md-4">
+                            <label for="ciudadesSelect" class="form-label"><span class="h3">Localidad</span></label>
                          <select class="form-select" aria-label="ciudadesSelect" name="localidad">
                              <option selected>Seleccione la ciudad</option>
                              <option th:each="ciudades : ${ciudad}" th:value="${ciudades.nombre}" th:text="${ciudades.nombre}"></option>
