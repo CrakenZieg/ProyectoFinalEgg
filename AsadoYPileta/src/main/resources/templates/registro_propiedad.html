@@ -30,11 +30,13 @@
                             <input type="text" class="form-control" id="pais" name="pais" placeholder="pais" required="true"/>
                         </div>
                         <div class="col-md-4">
-                            <!--  <label for="provincia" class="form-label"><span class="h3">Provincia</span></label>                           
-                              <input type="text" class="form-control" id="provincia" name="provincia" placeholder="provincia"/>  -->
-                            <select class="form-select" aria-label="provinciasSelect" name="provincia">
-                                <option selected >Seleccione la provincia</option>
-                                <option th:each="provincia : ${provincias}" th:value="${provincia.value.replaceAll('Province',''}" th:text="${provincia.value.replaceAll('Province','')}">Provincias</option>
+                            <select class="form-select" aria-label="provinciasSelect" name="provincia" id="selectProvincia" onchange="obtenerProvincia();">
+                                <option th:if="${provinciaSelected} == null" selected disabled >Seleccione la provincia</option>
+                                <option th:if="${provinciaSelected} != null" selected th:value="${provinciaSelected}" th:text="${provinciaSelected}"></option>
+                                <option id="option" th:each="provinciaList : ${provincias}"
+                                        th:value="${provinciaList.nombre}" th:text="${provinciaList.nombre}">
+                                </option>
+                                
                             </select>
 
                         </div>
@@ -43,8 +45,10 @@
                             <input type="text" class="form-control" id="departamento" name="departamento" placeholder="departamento"/>
                         </div>
                         <div class="col-md-4">
-                            <label for="localidad" class="form-label"><span class="h3">Localidad</span></label>                           
-                            <input type="text" class="form-control" id="localidad" name="localidad" placeholder="localidad" required="true"/>
+                         <select class="form-select" aria-label="ciudadesSelect" name="localidad">
+                             <option selected>Seleccione la ciudad</option>
+                             <option th:each="ciudades : ${ciudad}" th:value="${ciudades.nombre}" th:text="${ciudades.nombre}"></option>
+                         </select>
                         </div>
                         <div class="col-md-4">
                             <label for="calle" class="form-label"><span class="h3">Calle</span></label>                           

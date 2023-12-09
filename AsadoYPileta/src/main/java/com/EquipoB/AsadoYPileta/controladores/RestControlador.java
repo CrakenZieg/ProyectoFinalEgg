@@ -1,73 +1,75 @@
 package com.EquipoB.AsadoYPileta.controladores;
 
-
-import java.net.URI;
-import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
-import javax.xml.ws.Response;
+import java.util.Set;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import sun.net.www.http.HttpClient;
 
 @RestController
 public class RestControlador {
+    
+    @GetMapping(value = "/provincias2")
+    public List<Object> verProvincias2() throws NoSuchFieldException{
 
-    @RequestMapping("/hello")
-    public String hello() {
-
-        return "Hello World";
-    }
-    
-    @GetMapping(value = "/GetHelloClient")
-    public String getHelloClient(){
-    
-        String uri = "http://localhost:8070/hello";
-        
-        RestTemplate restTemplate = new RestTemplate();
-        
-        String result = restTemplate.getForObject(uri, String.class);
-        
-        return result;
-    }
-    
-    @GetMapping(value = "/paises")
-    public List<Object> verPaises(){
-    
-        String uri = "https://restcountries.eu/rest/v2/all";
-        
-        RestTemplate restTemplate = new RestTemplate();
-        
-        Object[] paises = restTemplate.getForObject(uri, Object[].class);
-        
-        return Arrays.asList(paises);
-    }
-    
-    @GetMapping(value = "/paises2")
-    public List<Object> verPaises2(){
-    
         HttpHeaders headers = new HttpHeaders();
         
-        headers.set("X-RapidAPI-Key", "cf086a7032mshb0b00a743026eafp1f49d4jsn6bde0abfbf55");
-        headers.set("X-RapidAPI-Host", "referential.p.rapidapi.com");
+        headers.set("Accept", "*/*");
+        headers.set("User-Agent", "PostmanRuntime/7.28.4");
+        headers.set("Connection", "keep-alive");
+        headers.set("Cache-Control", "no-cache");
+        headers.set("Content-Type","application/json");
         
         HttpEntity<String> entity = new HttpEntity<String>(headers);
         
         RestTemplate restTemplate = new RestTemplate();
         
-        ResponseEntity<List<Object>> response = restTemplate.exchange("https://referential"
-                + ".p.rapidapi.com/v1/state?fields=iso_a2&iso_a2=ar&lang=en&limit=250",
-        HttpMethod.GET,entity, new ParameterizedTypeReference<List<Object>>() {});
-        
-        List<Object> paises = response.getBody();
+        ResponseEntity<LinkedHashMap<String, Object>> response = restTemplate.exchange("https://apis.datos.gob.ar/georef/api/provincias",
+        HttpMethod.GET,entity, new ParameterizedTypeReference<LinkedHashMap<String, Object>>() {});
          
-        return paises;
+         Set<String> keySet = response.getBody().keySet();
+         
+         String[] arrayKey = keySet.toArray(new String[keySet.size()]);
+         
+         Object provincias = response.getBody().get(arrayKey[3]);
+         
+        return (List<Object>) provincias;
     }
+    
+    @GetMapping(value = "/ciudades")
+    public List<Object> verCiudades(@RequestParam String provincia, @RequestParam String orden,
+            @RequestParam String max, @RequestParam String exacto) throws NoSuchFieldException{
+        
+        HttpHeaders headers = new HttpHeaders();
+        
+        headers.set("Accept", "*/*");
+        headers.set("User-Agent", "PostmanRuntime/7.28.6");
+        headers.set("Connection", "keep-alive");
+        headers.set("Cache-Control", "no-cache");
+        headers.set("Content-Type","application/json");
+        
+        HttpEntity<String> entity = new HttpEntity<String>(headers);
+        
+        RestTemplate restTemplate = new RestTemplate();
+        
+        ResponseEntity<LinkedHashMap<String, Object>> response = restTemplate.exchange(
+        "https://apis.datos.gob.ar/georef/api/departamentos?provincia="+provincia+"&orden="+orden+"&max="+max+"&exacto="+exacto+"",
+        HttpMethod.GET,entity, new ParameterizedTypeReference<LinkedHashMap<String, Object>>() {});
+         
+        Set<String> keySet = response.getBody().keySet();
+         
+        String[] arrayKey = keySet.toArray(new String[keySet.size()]);
+         
+        Object ciudades = response.getBody().get(arrayKey[1]);
+         
+        return (List<Object>)ciudades;
+    }
+    
 }
