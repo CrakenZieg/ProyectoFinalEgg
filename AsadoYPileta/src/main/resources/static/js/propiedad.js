@@ -82,14 +82,13 @@ function cargar(){
     return meses[numeroMes];
   }
 
-<<<<<<< HEAD
   function obtenerProvincia(){
     let select = document.getElementById('selectProvincia');
     let proSelected = select.options[select.selectedIndex].value;
     let provinciaUrl = proSelected.replaceAll(' ','%20');
     window.location.href = '/propiedad/registrar/'+provinciaUrl+'&nombre&200&true';
 }
-=======
+
 // Propiedad detalles
 
 const btnMostrarServicios = document.getElementById("mostrar-servicios");
@@ -126,4 +125,3 @@ btnCerrarComentario.addEventListener("click", () =>{
 
 btnMostrarServicios.addEventListener("click", escalarServicios);
 btnSalir.addEventListener("click", salir);
->>>>>>> main
