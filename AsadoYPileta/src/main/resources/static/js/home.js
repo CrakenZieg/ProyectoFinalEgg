@@ -14,7 +14,7 @@ const btnmodalImgComents = Array.from(
 const btnCerrarModalImgComents = Array.from(
   document.getElementsByClassName("cerrar-comentarios-imagenes")
 );
-
+let stopTrack = [];
 const setCajas = () =>{
 tracks.forEach(function (track, ind) {
   const cajas = Array.from(track.children);
@@ -35,6 +35,45 @@ tracks.forEach(function (track, ind) {
 }
 setCajas();
 
+//Carusel activo 
+const caruselActivo = () => {
+  tracks.forEach(function (track) {
+    if(!stopTrack.includes(track)){
+      let actualCaja = track.querySelector('.actual-indicador');
+      let indexActualCaja = Array.from(track.children).findIndex((caja) => caja === actualCaja);
+      let indicadores = track.parentElement.nextElementSibling.nextElementSibling;
+      let indicadorActual = indicadores.querySelector('.actual-indicador');
+    
+      if(indexActualCaja < track.children.length - 1){
+        track.style.transform = "translateX(-" + actualCaja.nextElementSibling.style.left + ")";
+        actualCaja.classList.remove("actual-indicador");
+        actualCaja.nextElementSibling.classList.add("actual-indicador");
+        indicadorActual.classList.remove("actual-indicador");
+        indicadorActual.nextElementSibling.classList.add("actual-indicador"); 
+        if(indexActualCaja === track.children.length - 2){
+        track.parentElement.previousElementSibling.classList.remove("is-hidden");
+        track.parentElement.nextElementSibling.classList.add("is-hidden");
+        }else{
+        track.parentElement.previousElementSibling.classList.remove("is-hidden");
+        track.parentElement.nextElementSibling.classList.remove("is-hidden");
+        }
+      }
+      else{
+      track.style.transform = "translateX(-" + track.children[0].style.left + ")";
+      actualCaja.classList.remove("actual-indicador");
+      track.children[0].classList.add("actual-indicador");
+      indicadorActual.classList.remove("actual-indicador");
+      indicadores.children[0].classList.add("actual-indicador");
+      track.parentElement.previousElementSibling.classList.add("is-hidden");
+      track.parentElement.nextElementSibling.classList.remove("is-hidden");
+      }
+  }
+  });
+};
+const caruselActivacion = setInterval(caruselActivo, 2200);
+
+
+//Mover Caja 
 const moverCaja = (track, actualCaja, objetivoCaja) => {
   track.style.transform = "translateX(-" + objetivoCaja.style.left + ")";
   actualCaja.classList.remove("actual-indicador");
@@ -63,6 +102,7 @@ const hiddeArrow = (index, cajas, btS, btP) => {
 botonSiguiente.forEach(function(btnSiguiente){
     btnSiguiente.addEventListener('click',()=>{
         const trackTe = btnSiguiente.previousElementSibling.children[0];
+        stopTrack[0] = trackTe;
         const indicador = trackTe.parentElement.nextElementSibling.nextElementSibling;
         const actualCaja = trackTe.querySelector(".actual-indicador");
 console.log(actualCaja.nextElementSibling);
@@ -84,7 +124,7 @@ console.log(actualCaja.nextElementSibling);
 botonPrevio.forEach(function (btnPrev) {
   btnPrev.addEventListener('click', () => {
     const trackTe = btnPrev.nextElementSibling.children[0];
-    
+    stopTrack[0] = trackTe;
     const indicador = trackTe.parentElement.nextElementSibling.nextElementSibling;
     const actualCaja = trackTe.querySelector(".actual-indicador");
     const previaCaja = actualCaja.previousElementSibling;
@@ -110,6 +150,7 @@ indicadorNav.forEach(function(indicador){
         
         if (!objetivoIndicador) return;
         const trackTe = indicador.previousElementSibling.previousElementSibling.children[0];
+        stopTrack[0] = trackTe;
         const actualCaja = trackTe.querySelector(".actual-indicador");
         const actualIndicador = indicador.querySelector(".actual-indicador");
         const objetivoIndex = Array.from(indicador.children).findIndex(

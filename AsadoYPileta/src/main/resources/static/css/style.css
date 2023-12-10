@@ -236,12 +236,11 @@ input:valid ~ label{
 
 .contenedor{
     padding: 1.2rem; 
-    min-height: 100vh;
-    min-height: 100vw;
     width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh
     overflow: hidden;
 }
-
 .contenedor-carta{
     display: grid;
     grid-template-columns: repeat(4,1fr);
