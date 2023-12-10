@@ -147,7 +147,7 @@
                                                 <p class="fw-bold">Total</p>
                                                 <p class="fw-bold">
                                                     <i class="bi bi-currency-dollar"></i>
-                                                    <span id="monto_total" th:text="${propiedad.valor}"></span>
+                                                    <input id="monto_total" type="number" th:data-valor="${propiedad.valor}" step="0.01" th:value="${propiedad.valor}" readonly="true" style="text-align: right;"/>                                                   
                                                 </p>
                                             </div>
                                             <input type="date" name="fechaInicio" th:value="${fechaInicio}" readonly="true" required="true"/> <!--  input fechaInicio  -->

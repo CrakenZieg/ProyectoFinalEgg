@@ -63,7 +63,7 @@
                                             <label for="passwordNuevo2">Repita contraseña</label>
                                         </div>
 
-                                        <button type="submit">Guardar</button>  <button id="cerrar-modal">Cerrar</button>
+                                        <button type="submit">Guardar</button>  <button type="button" id="cerrar-modal">Cerrar</button>
                                     </form>
 
                                 </dialog>
@@ -201,7 +201,7 @@
                                             <td><a class="btn btn-info" th:href='@{/reserva/ver/__${reserva.id }__}'><i class="bi bi-info-circle"></i></a></td>
                                             <td><a class="btn btn-success" th:if="${!reserva.disponible}" th:href='@{/reserva/aceptarReserva/__${reserva.id }__}'><i class="bi bi-check-lg"></i></a>
                                                 <a class="btn btn-danger" th:if="${reserva.disponible}" th:href='@{/reserva/borrar/__${reserva.id }__}'><i class="bi bi-trash"></i></a></td>
-                                            <td><a class="btn btn-success" th:if="${reserva.comentario_habilitado}" th:href='@{/comentario__form.html}'><i class="bi bi-check-lg"></i></a></td>
+                                            <td><a class="btn btn-success" th:if="${reserva.comentarioHabilitado}" th:href='@{/comentario__form.html}'><i class="bi bi-check-lg"></i></a></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -218,6 +218,7 @@
                 integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
         <script th:src="@{/js/perfilUsuario.js}" type="text/javascript"></script>
+        <script th:src="@{/js/RegistroUsuario.js}" type="text/javascript"></script>
         <script th:src="@{/js/home.js}" type="text/javascript"></script>
     </body>
 </html>
