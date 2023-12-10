@@ -72,6 +72,7 @@ public interface ReservaRepositorio extends JpaRepository <Reserva,String> {
     
     @Query("SELECT r FROM Reserva r WHERE r.cliente.id = :idCliente")
     public List<Reserva> buscarReservaPorCliente(@Param("idCliente") String idCliente);
+
     
     /**
      * esto sirve para mostrar las reservas asociadas a una propiedad en el perfil
