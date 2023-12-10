@@ -76,9 +76,7 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Transactional(readOnly = true)
     public List<Usuario> listarUsuarios() {
-        List<Usuario> usuarios = new ArrayList();
-        usuarios = usuarioRepositorio.findAll();
-        return usuarios;
+        return usuarioRepositorio.findAll();
     }
 
     @Transactional
@@ -103,7 +101,6 @@ public class UsuarioServicio implements UserDetailsService {
 
     @Transactional(readOnly = true)
     public Usuario getOne(String id) {
-
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
             return usuarioRepositorio.getOne(id);
@@ -126,7 +123,7 @@ public class UsuarioServicio implements UserDetailsService {
             usuario = respuestaUsuario.get();
             switch (rol) {
                 case ADMIN: {
-                    usuario.setRol(rol.ADMIN);
+                    usuario.setRol(Rol.ADMIN);
                     Optional<Cliente> respuestaCli = clienteRepositorio.findById(id);
                     if (!respuestaCli.isPresent()) {
                         Cliente cliente = new Cliente();
@@ -143,27 +140,27 @@ public class UsuarioServicio implements UserDetailsService {
                     break;
                 }
                 case CLIENTE: {
-                    if (usuario.getRol().equals(rol.CLIENTE)) {
+                    if (usuario.getRol().equals(Rol.CLIENTE)) {
                         throw new MiException("Su rol ya es de Cliente!");
                     }
-                    if (usuario.getRol().equals(rol.PROPIETARIO) || usuario.getRol().equals(rol.ADMIN)) {
+                    if (usuario.getRol().equals(Rol.PROPIETARIO) || usuario.getRol().equals(Rol.ADMIN)) {
                         Propietario propietario = propietarioRepositorio.getById(id);
-                        if (propietario.getPropiedades().size() != 0) {
+                        if (!propietario.getPropiedades().isEmpty()) {
                             throw new MiException("No es posible modificar el rol del cliente si este tiene propiedades");
                         }
                         propietarioRepositorio.delete(propietario);
-                        usuario.setRol(rol.CLIENTE);
+                        usuario.setRol(Rol.CLIENTE);
                         usuarioRepositorio.save(usuario);
                         break;
                     }
                 }
                 case PROPIETARIO: {
-                    if (usuario.getRol().equals(rol.PROPIETARIO)) {
+                    if (usuario.getRol().equals(Rol.PROPIETARIO)) {
                         throw new MiException("Su rol ya es de Propietario!");
                     } else {
                         Optional<Propietario> respuestaProp = propietarioRepositorio.findById(id);
                         if (respuestaProp.isPresent()) {
-                            usuario.setRol(rol.PROPIETARIO);
+                            usuario.setRol(Rol.PROPIETARIO);
                             usuarioRepositorio.save(usuario);
                         } else {
                             Propietario propietario = new Propietario();
@@ -189,11 +186,9 @@ public class UsuarioServicio implements UserDetailsService {
 
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
-            Usuario usuario = new Usuario();
-            usuario = respuesta.get();
-
+            Usuario usuario = respuesta.get();
             usuario.setAlta(false);
-            if (usuario.getRol().equals(rol.PROPIETARIO)) {
+            if (usuario.getRol().equals(Rol.PROPIETARIO)) {
                 Propietario propietario = propietarioRepositorio.getOne(id);
                 if (propietario.getPropiedades().size() != 0) {
                     List<Propiedad> propiedades = propietario.getPropiedades();
@@ -213,8 +208,7 @@ public class UsuarioServicio implements UserDetailsService {
 
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
         if (respuesta.isPresent()) {
-            Usuario usuario = new Usuario();
-            usuario = respuesta.get();
+            Usuario usuario = respuesta.get();
             usuario.setAlta(true);
             usuarioRepositorio.save(usuario);
         } else {
@@ -226,7 +220,7 @@ public class UsuarioServicio implements UserDetailsService {
     public void eliminarUsuario(String id, HttpSession session) throws MiException, PermisosException {
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
         Usuario logueado = (Usuario) session.getAttribute("usuariosession");
-        if (!logueado.getId().equals(id) && !logueado.getRol().equals(rol.ADMIN)) {
+        if (!logueado.getId().equals(id) && !logueado.getRol().equals(Rol.ADMIN)) {
             throw new PermisosException("No es posible eliminar la usuario porque no te pertenece");
         }
         if (respuesta.isPresent()) {

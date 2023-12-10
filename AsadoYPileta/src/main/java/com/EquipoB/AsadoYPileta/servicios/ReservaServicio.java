@@ -37,7 +37,7 @@ public class ReservaServicio {
             List serviciosElegidas, Usuario logueado) throws MiException {
         Usuario usuario = logueado;
         Propiedad propiedad = propiedadRepositorio.getOne(idPropiedad);
-        if(propiedad.getIdPropietario().equals(usuario)){
+        if(propiedad.getIdPropietario().equals(usuario.getId())){
             throw new MiException("No es posible generar reservas sobre tus propiedades");
         }
 
