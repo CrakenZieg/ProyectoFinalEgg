@@ -5,9 +5,13 @@
     <body>
         <header th:replace="fragmentos/frags :: header"></header>
         <main>
+            <div th:if="${exito}" th:text="${exito}" class="alert alert-success" role="alert">
+            </div>
             <div class="login-contenedor">
                 <div class="login">
                     <h2>INGRESAR</h2>
+                    <div th:if="${error}" class="alert alert-danger text-center h5" role="alert" th:text="${error}">
+                    </div>
                     <div class="login-form">
                         <form th:action="@{/logincheck}" method="POST">
                             <div class="inpt-cont">

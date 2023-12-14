@@ -7,6 +7,8 @@
         <main>
             <div class="main_container">
                 <h2 class="h1 text-center">Registrar Propiedad</h2>
+                <div th:if="${error}" th:text="${error}" class="alert alert-danger" role="alert">
+                </div>
                 <div  class="container border border-black rounded-4">
                     <form class="row d-flex justify-content-between align-items-center" th:action="@{/propiedad/registro}" method="POST" enctype="multipart/form-data">
                         <div class="col-md-4">
@@ -28,16 +30,27 @@
                             <input type="text" class="form-control" id="pais" name="pais" placeholder="pais" required="true"/>
                         </div>
                         <div class="col-md-4">
-                            <label for="provincia" class="form-label"><span class="h3">Provincia</span></label>                           
-                            <input type="text" class="form-control" id="provincia" name="provincia" placeholder="provincia"/>
+                            <label for="provinciasSelect" class="form-label"><span class="h3">Provincia</span></label>
+                            <select class="form-select" aria-label="provinciasSelect" name="provincia" id="selectProvincia" onchange="obtenerProvincia();">
+                                <option th:if="${provinciaSelected} == null" selected disabled >Seleccione la provincia</option>
+                                <option th:if="${provinciaSelected} != null" selected th:value="${provinciaSelected}" th:text="${provinciaSelected}"></option>
+                                <option id="option" th:each="provinciaList : ${provincias}"
+                                        th:value="${provinciaList.nombre}" th:text="${provinciaList.nombre}">
+                                </option>
+                                
+                            </select>
+
                         </div>
                         <div class="col-md-4">
                             <label for="departamento" class="form-label"><span class="h3">Departamento</span></label>                           
                             <input type="text" class="form-control" id="departamento" name="departamento" placeholder="departamento"/>
                         </div>
                         <div class="col-md-4">
-                            <label for="localidad" class="form-label"><span class="h3">Localidad</span></label>                           
-                            <input type="text" class="form-control" id="localidad" name="localidad" placeholder="localidad" required="true"/>
+                            <label for="ciudadesSelect" class="form-label"><span class="h3">Localidad</span></label>
+                         <select class="form-select" aria-label="ciudadesSelect" name="localidad">
+                             <option selected>Seleccione la ciudad</option>
+                             <option th:each="ciudades : ${ciudad}" th:value="${ciudades.nombre}" th:text="${ciudades.nombre}"></option>
+                         </select>
                         </div>
                         <div class="col-md-4">
                             <label for="calle" class="form-label"><span class="h3">Calle</span></label>                           
@@ -102,7 +115,7 @@
                                 <input type="number" class="form-control" id="fin" name="fin" min="0"/>
                             </div>
                             <div id="checkboxInicioFin">                                    
-                                                        </div>
+                            </div>
                         </div>
                         <span class="p-1 border-3 border-bottom border-success"></span>
                         <div class="form-group">

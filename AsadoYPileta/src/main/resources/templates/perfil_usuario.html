@@ -172,8 +172,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="carousel-item" sec:authorize="hasAnyRole('PROPIETARIO')" onclick="setCajas()">
-
+                        <div class="carousel-item" sec:authorize="hasAnyRole('PROPIETARIO')">
                             <div th:replace="fragmentos/card :: div"></div>  
 
                         </div>

@@ -6,6 +6,8 @@
         <header th:replace="fragmentos/frags :: header"></header>
 
         <main>
+            <div th:if="${exito}" th:text="${exito}" class="alert alert-success text-center h5" role="alert">
+            </div>
             <div th:replace="fragmentos/card :: div"></div>
 
         </main>

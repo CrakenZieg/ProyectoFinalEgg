@@ -56,7 +56,9 @@ public class PropiedadControlador {
 
     @Autowired
     private ReservaServicio reservaServicio;
-
+    
+    @Autowired
+    private RestControlador restControlador;
 
     @GetMapping("/tipo/{tipo}")
     public ModelAndView listar(@PathVariable String tipo, ModelMap modelo) throws MiException {
@@ -93,11 +95,40 @@ public class PropiedadControlador {
 
     @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
     @GetMapping("/registrar")
-    public ModelAndView registrar(ModelMap modelo) {
+    public ModelAndView registrar(ModelMap modelo) throws NoSuchFieldException {
         List<Servicio> servicios = new ArrayList<>();
         servicios = servicioServicio.listarServicios();
+        
         List<TipoPropiedad> tipoPropiedades = new ArrayList<>();
         tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
+        
+        List<Object> provincias = restControlador.verProvincias2();
+        modelo.addAttribute("provincias", provincias);
+
+        modelo.addAttribute("tipoPropiedades", tipoPropiedades);
+        modelo.addAttribute("servicios", servicios);
+        
+        return new ModelAndView("registro_propiedad.html", modelo);
+    }
+    
+    @PreAuthorize("hasAnyRole('ROLE_CLIENTE','ROLE_PROPIETARIO')")
+    @GetMapping("/registrar/{provincia}&{orden}&{max}&{exacto}")
+    public ModelAndView registrarProvincia(@PathVariable String provincia, @PathVariable String orden,
+            @PathVariable String max, @PathVariable String exacto,ModelMap modelo) throws NoSuchFieldException {
+        List<Servicio> servicios = new ArrayList<>();
+        servicios = servicioServicio.listarServicios();
+        
+        List<TipoPropiedad> tipoPropiedades = new ArrayList<>();
+        tipoPropiedades = tipoPropiedadServicio.listarTipoPropiedad();
+        
+        List<Object> provincias = restControlador.verProvincias2();
+        modelo.addAttribute("provincias", provincias);
+        
+        modelo.addAttribute("provinciaSelected", provincia);
+        
+        List<Object> ciudades = restControlador.verCiudades(provincia,orden,max,exacto);
+        modelo.addAttribute("ciudad", ciudades);
+
         modelo.addAttribute("tipoPropiedades", tipoPropiedades);
         modelo.addAttribute("servicios", servicios);
         return new ModelAndView("registro_propiedad.html", modelo);
