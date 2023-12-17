@@ -9,19 +9,22 @@ function reserva(){
   }, 3000);
 
 }
-
+var inicial = 0;
 function cambiarMonto(valor,elem){
     let monto = document.getElementById("monto_total");
+    if(inicial == 0){
+        inicial = Number.parseFloat(monto.dataset.valor);
+    }
+    let base = Number.parseFloat(monto.dataset.valor);
     if(elem.checked){        
-        let base = Number.parseFloat(monto.innerHTML);
-        base += base*Number.parseFloat(valor);
-        monto.innerHTML = Math.floor(base);
+        base += inicial*Number.parseFloat(valor);
     } else {
-        let base = Number.parseFloat(monto.innerHTML);
-        base -= base*Number.parseFloat(valor);
-        monto.innerHTML = Math.floor(base);        
-    }    
+        base -= inicial*Number.parseFloat(valor);             
+    }     
+    monto.value= Math.floor(base);
+    monto.dataset.valor= base;
 }
+
 
 function hacerSubmit(){
     document.getElementById("submitForm").click();
