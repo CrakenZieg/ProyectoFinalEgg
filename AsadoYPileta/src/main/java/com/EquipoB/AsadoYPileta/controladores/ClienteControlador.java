@@ -1,8 +1,6 @@
 package com.EquipoB.AsadoYPileta.controladores;
 
 import com.EquipoB.AsadoYPileta.entidades.Cliente;
-
-
 import com.EquipoB.AsadoYPileta.entidades.Propietario;
 import com.EquipoB.AsadoYPileta.entidades.Reserva;
 import com.EquipoB.AsadoYPileta.entidades.Usuario;
@@ -47,7 +45,6 @@ public class ClienteControlador {
     
     @Autowired
     private ReservaServicio reservaServicio;
-
 
 
     @GetMapping("/registrar")
